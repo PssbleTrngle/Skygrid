@@ -10,6 +10,7 @@ This mod overrides the world providers for all supported dimensions, which can b
 * [Erebus](https://minecraft.curseforge.com/projects/the-erebus)
 * [Aether I](https://minecraft.curseforge.com/projects/aether-legacy)
 * [Tropics](https://minecraft.curseforge.com/projects/tropicraft)
+
 This mod also adds 3 dimensions. These can be viewed below too, the Limbo is something special though.
 
 Another Feature of this mod is falling from dimension to dimension. There are several "Falls" predefined in the mod config, where custom ones can also be added. When a player drops out of the world, there is an 80% chance that instead of falling to death the player is teleported to the dimension below (ex.: Overworld --> Nether). But there is also a 10% chance he/she lands in the Limbo, a dimension made of bedrocks which can only be escaped by dying or teleportation. 
