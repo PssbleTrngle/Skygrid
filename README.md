@@ -18,7 +18,7 @@ Another Feature of this mod is falling from dimension to dimension. There are se
  A player can "climb" into the dimension above too, by reaching 10 blocks above build level.
 
 ### The Overworld
-![](https://i.imgur.com/u5MOTDf.png)
+![](https://i.imgur.com/JwJTnFt.png)
 ### Nether
 ![](https://i.imgur.com/RJdQdv5.png)
 ### End
