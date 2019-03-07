@@ -1,4 +1,4 @@
-# Skygrid
+# Skygrid [🔗](https://minecraft.curseforge.com/projects/skygrid)
 A Minecraft mod realizing the [Skygrid](https://www.youtube.com/watch?v=5dhs3ithXDA) map by Sethbling as an entire world generator.
 
 This mod overrides the world providers for all supported dimensions, which can be viewed below and are listed here:
