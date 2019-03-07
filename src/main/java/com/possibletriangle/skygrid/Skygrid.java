@@ -1,13 +1,10 @@
 package com.possibletriangle.skygrid;
 
 import com.possibletriangle.skygrid.generation.DimensionHelper;
-import com.possibletriangle.skygrid.random.RandomManager;
+import com.possibletriangle.skygrid.random.SkygridOptions;
 import com.possibletriangle.skygrid.travel.TravelManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,11 +15,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
-
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 @Mod.EventBusSubscriber
 @Mod(modid = Skygrid.MODID, name = Skygrid.NAME, version = Skygrid.VERSION, dependencies = Skygrid.DEPENDENCIES)
@@ -41,15 +35,15 @@ public class Skygrid {
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
 
-        ConfigOptions.init(event.getModConfigurationDirectory());
-        ConfigOptions.reload();
+        ConfigSkygrid.init(event.getModConfigurationDirectory());
+        ConfigSkygrid.reload();
     }
 
     @EventHandler
     public void setup(FMLInitializationEvent event){
         LOGGER.info("Skygrid says hi!");
 
-        RandomManager.reload();
+        SkygridOptions.reload();
         TravelManager.registerDefaults();
     }
 
@@ -79,12 +73,9 @@ public class Skygrid {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void fall(LivingFallEvent event) {
 
-        if(event.getEntityLiving() instanceof EntityPlayer) {
+        if(event.getEntityLiving() instanceof EntityPlayer)
+            event.setDamageMultiplier(ConfigSkygrid.FALL_FACTOR);
 
-            if(event.getDistance() <= 4.5)
-                event.setDamageMultiplier(0);
-
-        }
     }
 
 }

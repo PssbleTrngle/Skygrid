@@ -1,7 +1,7 @@
 package com.possibletriangle.skygrid.generation;
 
 import com.possibletriangle.skygrid.Skygrid;
-import com.possibletriangle.skygrid.random.RandomManager;
+import com.possibletriangle.skygrid.random.SkygridOptions;
 import com.possibletriangle.skygrid.defaults.Defaults;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
@@ -17,7 +17,7 @@ public class DimensionHelper {
 
     public static void overwriteDimensions() {
 
-        for(ResourceLocation dim : RandomManager.dimensions())
+        for(ResourceLocation dim : SkygridOptions.dimensions())
             register(dim);
 
     }

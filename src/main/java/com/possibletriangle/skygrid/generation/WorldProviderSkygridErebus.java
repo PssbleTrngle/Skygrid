@@ -1,13 +1,11 @@
 package com.possibletriangle.skygrid.generation;
 
 import com.possibletriangle.skygrid.Skygrid;
-import com.possibletriangle.skygrid.random.RandomManager;
+import com.possibletriangle.skygrid.random.SkygridOptions;
 import erebus.world.WorldProviderErebus;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 
 import javax.annotation.Nonnull;
@@ -18,7 +16,7 @@ public class WorldProviderSkygridErebus extends WorldProviderErebus {
     @Override
     protected void init() {
         super.init();
-        BlockPos offset = RandomManager.getOffset(getName());
+        BlockPos offset = SkygridOptions.getOffset(getName());
     }
 
     @Override
@@ -30,7 +28,7 @@ public class WorldProviderSkygridErebus extends WorldProviderErebus {
     public final IChunkGenerator createChunkGenerator() {
 
         ResourceLocation dimension = getName();
-        BlockPos offset = RandomManager.getOffset(dimension);
+        BlockPos offset = SkygridOptions.getOffset(dimension);
 
         return new ChunkGeneratorSkygrid(world, getName(), new Random(world.getSeed()), offset, getSpawnCoordinate().down(), null, getGridHeight());
     }
@@ -57,7 +55,7 @@ public class WorldProviderSkygridErebus extends WorldProviderErebus {
 
     public int getGridHeight() {
 
-        int height = RandomManager.getHeight(getName());
+        int height = SkygridOptions.getHeight(getName());
         return Math.min(Skygrid.WORLD_HEIGHT-3, height);
 
     }

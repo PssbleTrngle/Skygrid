@@ -1,5 +1,6 @@
 package com.possibletriangle.skygrid.defaults;
 
+import com.possibletriangle.skygrid.generation.WorldProviderLimbo;
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
 import net.minecraft.init.Blocks;
@@ -8,6 +9,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class DefaultsLimbo extends Defaults {
+
+    @Override
+    public Class providerClass(boolean overwriting) {
+        return WorldProviderLimbo.class;
+    }
 
     @Override
     public int getHeight() {

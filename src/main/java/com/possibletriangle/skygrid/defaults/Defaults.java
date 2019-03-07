@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.DimensionManager;
@@ -25,7 +26,7 @@ import javax.annotation.Nullable;
 @Mod.EventBusSubscriber
 public abstract class Defaults implements IForgeRegistryEntry<Defaults> {
 
-    public Class providerClass(boolean overwriting) {
+    public Class<? extends WorldProvider> providerClass(boolean overwriting) {
         return overwriting ? WorldProviderSkygridOverwritten.class : WorldProviderSkygrid.class;
     }
 
@@ -45,6 +46,10 @@ public abstract class Defaults implements IForgeRegistryEntry<Defaults> {
 
     public int getOffset(EnumFacing.Axis axis) {
         return 4;
+    }
+
+    public final BlockPos getOffset() {
+        return new BlockPos(getOffset(EnumFacing.Axis.X), getOffset(EnumFacing.Axis.Y), getOffset(EnumFacing.Axis.Z));
     }
 
     private ResourceLocation name;

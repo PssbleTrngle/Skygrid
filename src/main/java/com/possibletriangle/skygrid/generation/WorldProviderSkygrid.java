@@ -1,21 +1,14 @@
 package com.possibletriangle.skygrid.generation;
 
 import com.possibletriangle.skygrid.Skygrid;
-import com.possibletriangle.skygrid.random.RandomManager;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.audio.MusicTicker;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
+import com.possibletriangle.skygrid.random.SkygridOptions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraftforge.client.IRenderHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class WorldProviderSkygrid extends WorldProvider {
@@ -30,7 +23,7 @@ public class WorldProviderSkygrid extends WorldProvider {
     protected void init() {
         super.init();
 
-        BlockPos offset = RandomManager.getOffset(getName());
+        BlockPos offset = SkygridOptions.getOffset(getName());
 
         random = world == null ? new Random() : new Random(world.getSeed());
         int r = 1024;
@@ -47,8 +40,9 @@ public class WorldProviderSkygrid extends WorldProvider {
     public final IChunkGenerator createChunkGenerator() {
 
         ResourceLocation dimension = getName();
-        BlockPos offset = RandomManager.getOffset(dimension);
+        BlockPos offset = SkygridOptions.getOffset(dimension);
 
+        if(random == null) random = new Random(world.getSeed());
         return new ChunkGeneratorSkygrid(world, getName(), random, offset, getSpawnCoordinate(), end_portal, getGridHeight());
     }
 
@@ -74,13 +68,13 @@ public class WorldProviderSkygrid extends WorldProvider {
 
     public final int getGridHeight() {
 
-        int height = RandomManager.getHeight(getName());
+        int height = SkygridOptions.getHeight(getName());
         return Math.min(Skygrid.WORLD_HEIGHT-3, height);
 
     }
 
     public static BlockPos spawn(ResourceLocation name, int gridHeight) {
-        BlockPos offset = RandomManager.getOffset(name);
+        BlockPos offset = SkygridOptions.getOffset(name);
         int y = (gridHeight / 2);
         y -= y % offset.getY();
         return new BlockPos(0, y+1, 0).add(1, 1, 1);

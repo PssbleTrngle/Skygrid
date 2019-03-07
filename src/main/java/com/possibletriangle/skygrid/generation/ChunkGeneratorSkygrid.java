@@ -1,10 +1,8 @@
 package com.possibletriangle.skygrid.generation;
 
-import com.possibletriangle.skygrid.Skygrid;
 import com.possibletriangle.skygrid.defaults.DefaultsEnd;
 import com.possibletriangle.skygrid.random.RandomCollection;
-import com.possibletriangle.skygrid.random.RandomManager;
-import mcp.MethodsReturnNonnullByDefault;
+import com.possibletriangle.skygrid.random.SkygridOptions;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -17,12 +15,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.ChunkGeneratorHell;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 
 import javax.annotation.Nonnull;
@@ -57,7 +52,7 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
             for(int z = 0; z < 16; z++)
                 for (int y = 0; y < gridHeight; y++) {
                     BlockPos p = new BlockPos((x+1)%16, y+1, (z+1)%16);
-                    IBlockState fillBlock = RandomManager.getFillBlock(dimension, y);
+                    IBlockState fillBlock = SkygridOptions.getFillBlock(dimension, y);
 
                     if(primer.getBlockState(p.getX(), p.getY(), p.getZ()).getBlock() != Blocks.AIR)
                         continue;
@@ -71,7 +66,7 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
                         else if(y == 0)
                             primer.setBlockState(p.getX(), p.getY(), p.getZ(), Blocks.BEDROCK.getDefaultState());
                         else
-                            RandomManager.next(dimension, random, y).generateAt(primer, p.getX(), p.getZ(), p.getY(), random);
+                            SkygridOptions.next(dimension, random, y).generateAt(primer, p.getX(), p.getZ(), p.getY(), random);
 
                     } else if (primer.getBlockState(p.getX(), p.getY(), p.getZ()).getBlock() == Blocks.AIR)
                         primer.setBlockState(p.getX(), p.getY(), p.getZ(), fillBlock);
@@ -110,8 +105,8 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
                             nbt.setInteger("z", pos.getZ());
                             te.readFromNBT(nbt);
 
-                            RandomCollection<ResourceLocation> loot = RandomManager.getLoot(dimension);
-                            RandomCollection<ResourceLocation> mobs = RandomManager.getMobs(dimension);
+                            RandomCollection<ResourceLocation> loot = SkygridOptions.getLoot(dimension);
+                            RandomCollection<ResourceLocation> mobs = SkygridOptions.getMobs(dimension);
 
                             if (te instanceof TileEntityLockableLoot && loot.size() != 0) {
                                 ResourceLocation l = loot.next(random);

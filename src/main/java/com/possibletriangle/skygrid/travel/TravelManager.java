@@ -1,35 +1,26 @@
 package com.possibletriangle.skygrid.travel;
 
-import com.possibletriangle.skygrid.ConfigOptions;
+import com.possibletriangle.skygrid.ConfigSkygrid;
 import com.possibletriangle.skygrid.Skygrid;
 import com.possibletriangle.skygrid.generation.DimensionHelper;
-import com.possibletriangle.skygrid.random.RandomCollection;
-import com.possibletriangle.skygrid.random.RandomManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.server.command.CommandSetDimension;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +34,8 @@ public class TravelManager {
     public static boolean registerFall(ResourceLocation from, ResourceLocation to, boolean overwrite) {
         if(!FROM_TO.containsKey(from))
             FROM_TO.put(from, new ArrayList<>());
+
+        Skygrid.LOGGER.info("Registering fall from {} to {}", from, to);
 
         boolean exists = !FROM_TO.get(from).isEmpty();
         if(exists && overwrite) FROM_TO.get(from).clear();
@@ -93,7 +86,9 @@ public class TravelManager {
 
         if("limbo".equals(from)) {
 
-            event.player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:weakness"), 20*60*5, 2, true, false));
+            Potion weakness = Potion.getPotionFromResourceLocation("minecraft:weakness");
+            if(weakness != null)
+                event.player.addPotionEffect(new PotionEffect(weakness, 20*60*5, 2, true, false));
 
         }
 
@@ -113,7 +108,7 @@ public class TravelManager {
             if(event.player.getDataManager().get(LIMBO_COUNTDOWN) > 0) {
 
                 if(event.player.getDataManager().get(LIMBO_COUNTDOWN) == 1) {
-                    event.player.sendMessage(new TextComponentString("Spooooky"));
+                    /* TODO Limbo sickness effects */
                 }
 
                 event.player.getDataManager().set(LIMBO_COUNTDOWN, event.player.getDataManager().get(LIMBO_COUNTDOWN)-1);
@@ -127,16 +122,16 @@ public class TravelManager {
 
         }
 
-        if(event.player.posY <= ConfigOptions.LOWER && !event.player.getDataManager().get(FALL_TO_DEATH)) {
+        if(event.player.posY <= ConfigSkygrid.LOWER && !event.player.getDataManager().get(FALL_TO_DEATH)) {
             Skygrid.LOGGER.info("{} fell", event.player.getDisplayName().getFormattedText());
 
             ResourceLocation from = new ResourceLocation(DimensionManager.getProviderType(event.player.dimension).getName());
             Random r = new Random();
             ResourceLocation to = new ResourceLocation(Skygrid.MODID, "limbo");
-            if(r.nextFloat() >= ConfigOptions.LIMBO_CHANCE_FALL)
+            if(r.nextFloat() >= ConfigSkygrid.LIMBO_CHANCE_FALL)
                 to = fallDimension(from, r);
 
-            boolean die = to == null || r.nextDouble() < ConfigOptions.VOID_CHANCE;
+            boolean die = to == null || r.nextDouble() < ConfigSkygrid.VOID_CHANCE;
 
             if(from.getResourcePath().equals("limbo")) {
                 die = false;
@@ -145,7 +140,7 @@ public class TravelManager {
 
             event.player.getDataManager().set(FALL_TO_DEATH, true);
             if(!die)
-                event.player.changeDimension(DimensionHelper.getIDFor(to), new FallTeleporter(new BlockPos(event.player.posX, Skygrid.WORLD_HEIGHT + ConfigOptions.UPPER, event.player.posZ)));
+                event.player.changeDimension(DimensionHelper.getIDFor(to), new FallTeleporter(new BlockPos(event.player.posX, Skygrid.WORLD_HEIGHT + ConfigSkygrid.UPPER, event.player.posZ)));
 
         }
 
@@ -154,13 +149,13 @@ public class TravelManager {
             event.player.getDataManager().set(FALL_TO_DEATH, false);
         }
 
-        if(event.player.posY >= Skygrid.WORLD_HEIGHT + ConfigOptions.UPPER && !event.player.getDataManager().get(FALL_TO_DEATH)) {
+        if(event.player.posY >= Skygrid.WORLD_HEIGHT + ConfigSkygrid.UPPER && !event.player.getDataManager().get(FALL_TO_DEATH)) {
             Skygrid.LOGGER.info("{} climbed", event.player.getDisplayName().getFormattedText());
 
                 ResourceLocation from = new ResourceLocation(DimensionManager.getProviderType(event.player.dimension).getName());
 
                 ResourceLocation to = new ResourceLocation(Skygrid.MODID, "limbo");
-            if(new Random().nextFloat() >= ConfigOptions.LIMBO_CHANCE_CLIMB)
+            if(new Random().nextFloat() >= ConfigSkygrid.LIMBO_CHANCE_CLIMB)
                     to = climbDimension(from);
 
                 if(from.getResourcePath().equals("limbo")) {
@@ -192,11 +187,13 @@ public class TravelManager {
 
     public static void registerDefaults() {
 
+        /*
         registerFall(new ResourceLocation("overworld"), new ResourceLocation("the_nether"), false);
         registerFall(new ResourceLocation("AetherI"), new ResourceLocation("overworld"), false);
         registerFall(new ResourceLocation("twilight_forest"), new ResourceLocation("EREBUS"), false);
         registerFall(new ResourceLocation("Tropics"), new ResourceLocation("ocean"), false);
         registerFall(new ResourceLocation("teletory"), new ResourceLocation("the_end"), false);
+        */
 
     }
 
