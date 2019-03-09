@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber
 public class BlockFrame extends BlockStructureVoid {
 
-    public static final BlockFrame FRAME = new BlockFrame();
+    public static BlockFrame FRAME;
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {

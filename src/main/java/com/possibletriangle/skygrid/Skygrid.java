@@ -1,5 +1,6 @@
 package com.possibletriangle.skygrid;
 
+import com.possibletriangle.skygrid.blocks.BlockFrame;
 import com.possibletriangle.skygrid.generation.DimensionHelper;
 import com.possibletriangle.skygrid.random.SkygridOptions;
 import com.possibletriangle.skygrid.travel.TravelManager;
@@ -26,8 +27,13 @@ public class Skygrid {
 
     public static final String MODID = "skygrid";
     public static final String NAME = "Skygrid";
-    public static final String VERSION = "1.0";
-    public static final String DEPENDENCIES = "after:biomesoplenty;after:natura;after:aether_legacy;after:teletoro;after:twilightforest;";
+    public static final String VERSION = "1.1";
+    public static final String DEPENDENCIES
+            = "after:biomesoplenty;"
+            + "after:natura;"
+            + "after:aether_legacy;"
+            + "after:teletoro;"
+            + "after:twilightforest;";
 
     public static Logger LOGGER;
 
@@ -37,6 +43,7 @@ public class Skygrid {
 
         ConfigSkygrid.init(event.getModConfigurationDirectory());
         ConfigSkygrid.reload();
+        BlockFrame.FRAME = new BlockFrame();
     }
 
     @EventHandler

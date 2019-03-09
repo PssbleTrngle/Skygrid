@@ -117,6 +117,8 @@ public class BlockInfo {
                 int age = values[random.nextInt(values.length)];
                 block = block.withProperty(prop, age);
             }
+            else if(BlockLeaves.DECAYABLE.equals(prop))
+                block = block.withProperty(BlockLeaves.DECAYABLE, false);
 
         }
         return block.withRotation(rot);
