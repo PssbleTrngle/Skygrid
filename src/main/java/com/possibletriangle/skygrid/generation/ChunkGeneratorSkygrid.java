@@ -110,7 +110,7 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
 
                             if (te instanceof TileEntityLockableLoot && loot.size() != 0) {
                                 ResourceLocation l = loot.next(random);
-                                ((TileEntityLockableLoot) te).setLootTable(l, world.getSeed());
+                                ((TileEntityLockableLoot) te).setLootTable(l, random.nextLong());
                             } else if (te instanceof TileEntityMobSpawner && mobs.size() != 0) {
                                 ResourceLocation mob = mobs.next(random);
                                 ((TileEntityMobSpawner) te).getSpawnerBaseLogic().setEntityId(mob);
