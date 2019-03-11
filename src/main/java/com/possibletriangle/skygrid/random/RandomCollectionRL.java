@@ -11,6 +11,14 @@ import java.util.Map;
 public class RandomCollectionRL extends RandomCollection<ResourceLocation> implements IJsonAble {
 
     @Override
+    public boolean isValid() {
+        return size() > 0;
+    }
+
+    @Override
+    public void validate() {}
+
+    @Override
     public String key() {
         return "values";
     }
@@ -37,10 +45,12 @@ public class RandomCollectionRL extends RandomCollection<ResourceLocation> imple
 
         JsonArray array = new JsonArray();
 
+        double total = 0;
         for (Map.Entry<Double, Object> entry : map.entrySet()) {
 
             JsonObject o = new JsonObject();
-            o.addProperty("weight", entry.getKey());
+            o.addProperty("weight", entry.getKey()-total);
+            total = entry.getKey();
 
             if (entry.getValue() instanceof RandomCollectionRL) {
 

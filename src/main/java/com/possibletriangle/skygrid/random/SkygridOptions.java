@@ -115,6 +115,15 @@ public class SkygridOptions {
         return info;
     }
 
+    public static void validate() {
+
+        for(ResourceLocation name : OPTIONS.keySet()) {
+            for(RandomCollectionJson<BlockInfo> blocks : OPTIONS.get(name).BLOCKS.values())
+                blocks.validate();
+        }
+
+    }
+
     public static void reload(boolean reset) {
 
         IForgeRegistry<Defaults> REGISTRY = GameRegistry.findRegistry(Defaults.class);
@@ -144,6 +153,8 @@ public class SkygridOptions {
             if(!reset && SkygridJSONConverter.existsConfig(name)) {
 
                 SkygridJSONConverter.readFromConfig(options, name);
+                SkygridJSONConverter.createDefaultFile(options, name);
+
 
             } else if(defaults != null) {
 

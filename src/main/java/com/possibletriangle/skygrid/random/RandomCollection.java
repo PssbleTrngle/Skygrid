@@ -1,40 +1,25 @@
 package com.possibletriangle.skygrid.random;
 
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 
-public class RandomCollection<E> {
+public class RandomCollection<E> implements Iterable<E> {
     protected final NavigableMap<Double, Object> map = new TreeMap<>();
     private double total = 0;
 
-    RandomCollection() {}
+    @Override
+    public Iterator<E> iterator() {
+        ArrayList<E> list = new ArrayList<>();
+        for(Object o : map.values())
+            if(o instanceof RandomCollection)
+                for(E e : ((RandomCollection<E>) o))
+                    list.add(e);
+            else
+                list.add((E) o);
 
-    public static <E> RandomCollection<E> merge(RandomCollection<E>... eeees) {
-
-        RandomCollection<E> merged = new RandomCollection<>();
-
-        int max_size = 0;
-        for(RandomCollection<E> eeee : eeees)
-            max_size = Math.max(max_size, eeee.size());
-
-        for(RandomCollection<E> eeee : eeees) {
-            int size = eeee.size();
-            for(Map.Entry<Double, Object> entry : eeee.map.entrySet()) {
-                double weight = (double) max_size / size * entry.getKey();
-                Object value = entry.getValue();
-                if(value instanceof RandomCollection)
-                    merged.add(weight, (RandomCollection<E>) value);
-                if(!merged.map.containsValue(value))
-                    merged.add(weight, (E) value);
-
-            }
-        }
-
-        return merged;
-
+        return list.iterator();
     }
+
+    RandomCollection() {}
 
     public RandomCollection<E> add(double weight, E result) {
         if (weight <= 0) return this;

@@ -6,8 +6,20 @@ import com.google.gson.JsonObject;
 import com.possibletriangle.skygrid.IJsonAble;
 
 import java.util.Map;
+import java.util.Random;
 
 public class RandomCollectionJson<E extends IJsonAble> extends RandomCollection<E> implements IJsonAble {
+
+    @Override
+    public boolean isValid() {
+        return size() > 0;
+    }
+
+    @Override
+    public void validate() {
+        for(E e : this)
+            e.validate();
+    }
 
     @Override
     public String key() {
@@ -21,6 +33,18 @@ public class RandomCollectionJson<E extends IJsonAble> extends RandomCollection<
         try {
             key = clazz.newInstance().key();
         } catch (Exception e) {}
+    }
+
+    @Override
+    public E next(Random random) {
+        E e;
+        int i = 0;
+
+        do {
+            e = super.next(random);
+        } while ( i++ < 100 && (e == null || !e.isValid()));
+
+        return e.isValid() ? e : null;
     }
 
     @Override
@@ -51,10 +75,12 @@ public class RandomCollectionJson<E extends IJsonAble> extends RandomCollection<
 
         JsonArray array = new JsonArray();
 
+        double total = 0;
         for (Map.Entry<Double, Object> entry : map.entrySet()) {
 
             JsonObject o = new JsonObject();
-            o.addProperty("weight", entry.getKey());
+            o.addProperty("weight", entry.getKey()-total);
+            total = entry.getKey();
 
             if(entry.getValue() instanceof IJsonAble) {
                 o.add(((IJsonAble) entry.getValue()).key(), ((IJsonAble) entry.getValue()).toJSON());

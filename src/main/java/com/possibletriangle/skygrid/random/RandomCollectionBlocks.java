@@ -7,6 +7,7 @@ import com.possibletriangle.skygrid.IJsonAble;
 import com.possibletriangle.skygrid.Skygrid;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -17,6 +18,14 @@ import java.util.Map;
 import java.util.Random;
 
 public class RandomCollectionBlocks extends RandomCollection<Object> implements IJsonAble {
+
+    @Override
+    public boolean isValid() {
+        return size() > 0;
+    }
+
+    @Override
+    public void validate() {}
 
     @Override
     public String key() {
@@ -76,18 +85,21 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
 
         ResourceLocation name = r.getResourcePath().contains(":") ? new ResourceLocation(r.getResourceDomain(), r.getResourcePath().substring(0, r.getResourcePath().indexOf(':'))) : r;
         Block block = Block.REGISTRY.getObject(name);
-        if(block == null) return null;
+        if(block == Blocks.AIR) return null;
 
         ArrayList<Integer> metas = new ArrayList<>();
         for(IBlockState state : block.getBlockState().getValidStates())
             metas.add(block.getMetaFromState(state));
         int meta = metas.isEmpty() ? 0 : metas.get(random.nextInt(metas.size()));
 
-        if(r.getResourcePath().contains(":"))
+        if(r.getResourcePath().contains(":")) {
+            String m = r.getResourcePath().substring(r.getResourcePath().indexOf(':')+1);
             try {
-                meta = Integer.parseInt(r.getResourcePath().substring(r.getResourcePath().indexOf(':')+1));
+                meta = Integer.parseInt(m);
             } catch (NumberFormatException ex) {
+                Skygrid.LOGGER.error("{} is not a valid metada (\"{}\")", m, r);
             }
+        }
 
         return block.getStateFromMeta(meta);
     }
@@ -110,7 +122,6 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
                 ResourceLocation block = o.has("block") ? new ResourceLocation(o.get("block").getAsString()) : null;
                 if(meta != -1 && block != null) {
                     block = new ResourceLocation(block.getResourceDomain(), block.getResourcePath() + ":" + meta);
-                    Skygrid.LOGGER.info(block);
                 }
 
                 if(ore != null)
@@ -128,10 +139,12 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
 
         JsonArray array = new JsonArray();
 
+        double total = 0;
         for(Map.Entry<Double, Object> entry : map.entrySet()) {
 
             JsonObject o = new JsonObject();
-            o.addProperty("weight", entry.getKey());
+            o.addProperty("weight", entry.getKey()-total);
+            total = entry.getKey();
 
             if(entry.getValue() instanceof RandomCollectionBlocks) {
 

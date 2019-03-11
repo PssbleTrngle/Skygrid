@@ -62,11 +62,11 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
                         if (p.up().equals(spawnBlock))
                             primer.setBlockState(p.getX(), p.getY(), p.getZ(), Blocks.BEDROCK.getDefaultState());
                         else if (endPortal != null && new BlockPos(x + chunkX * 16, y, z + chunkZ * 16).equals(endPortal))
-                            DefaultsEnd.PORTAL.generateAt(primer, p.getX(), p.getZ(), p.getY(), random);
+                            DefaultsEnd.PORTAL.generateAt(primer, p.getX(), p.getZ(), p.getY(), random, fillBlock);
                         else if(y == 0)
                             primer.setBlockState(p.getX(), p.getY(), p.getZ(), Blocks.BEDROCK.getDefaultState());
                         else
-                            SkygridOptions.next(dimension, random, y).generateAt(primer, p.getX(), p.getZ(), p.getY(), random);
+                            SkygridOptions.next(dimension, random, y).generateAt(primer, p.getX(), p.getZ(), p.getY(), random, fillBlock);
 
                     } else if (primer.getBlockState(p.getX(), p.getY(), p.getZ()).getBlock() == Blocks.AIR)
                         primer.setBlockState(p.getX(), p.getY(), p.getZ(), fillBlock);

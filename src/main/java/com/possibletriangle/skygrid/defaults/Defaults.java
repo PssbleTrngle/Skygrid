@@ -5,7 +5,6 @@ import com.possibletriangle.skygrid.generation.WorldProviderSkygrid;
 import com.possibletriangle.skygrid.generation.WorldProviderSkygridOverwritten;
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -25,8 +24,6 @@ public abstract class Defaults implements IForgeRegistryEntry<Defaults> {
     public Class<? extends WorldProvider> providerClass(boolean overwriting) {
         return overwriting ? WorldProviderSkygridOverwritten.class : WorldProviderSkygrid.class;
     }
-
-    public static final Block FRAME_BLOCK = Blocks.GLASS;
 
     public int getHeight() {
         return Math.min(150, Skygrid.WORLD_HEIGHT);

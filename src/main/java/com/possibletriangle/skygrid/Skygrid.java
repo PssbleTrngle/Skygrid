@@ -60,6 +60,7 @@ public class Skygrid {
     public void postinit(FMLPostInitializationEvent event){
         DimensionHelper.overwriteDimensions();
         TravelManager.validate();
+        SkygridOptions.validate();
     }
 
     @EventHandler

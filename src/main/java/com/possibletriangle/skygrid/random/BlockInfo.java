@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.possibletriangle.skygrid.ConfigSkygrid;
 import com.possibletriangle.skygrid.IJsonAble;
 import com.possibletriangle.skygrid.Skygrid;
-import com.possibletriangle.skygrid.defaults.Defaults;
+import com.possibletriangle.skygrid.blocks.BlockFrame;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockLog;
@@ -33,6 +33,10 @@ public class BlockInfo implements IJsonAble {
     private final RandomCollectionBlocks block = new RandomCollectionBlocks();
     private final HashMap<BlockPos, RandomCollectionBlocks> at = new HashMap<>();
     private Condition condition;
+    private boolean valid = false;
+
+    @Override
+    public boolean isValid() { return valid; }
 
     public BlockInfo cond(Condition condition) {
         this.condition = condition;
@@ -76,7 +80,7 @@ public class BlockInfo implements IJsonAble {
         return addAt(face, result, 1);
     }
 
-    public void generateAt(ChunkPrimer primer, int x, int z, int y, Random random) {
+    public void generateAt(ChunkPrimer primer, int x, int z, int y, Random random, IBlockState fillblock) {
 
         if(x < 0 || x > 15 || y < 0 || y > 255 || z < 0 || z > 15) {
             Skygrid.LOGGER.error("Illegal block generation at {}/{}/{}", x, y, z);
@@ -94,16 +98,17 @@ public class BlockInfo implements IJsonAble {
 
             }
 
-            if(random.nextDouble() <= ConfigSkygrid.FRAME_CHANCE)
-                if(block.getBlock() instanceof BlockLiquid || block.getBlock() instanceof IFluidBlock) {
-                    for(EnumFacing face : EnumFacing.values()) {
-                        BlockPos p = new BlockPos(0,0,0).offset(face);
-                        if(!at.containsKey(p))
-                            primer.setBlockState(p.getX() + x, p.getY() + y, p.getZ() + z, Defaults.FRAME_BLOCK.getDefaultState());
+            if(random.nextDouble() <= ConfigSkygrid.FRAME_CHANCE) {
+                if (block.getBlock() instanceof BlockLiquid || block.getBlock() instanceof IFluidBlock) {
+                    for (EnumFacing face : EnumFacing.values()) {
+                        BlockPos p = new BlockPos(0, 0, 0).offset(face);
+                        if (primer.getBlockState(p.getX() + x, p.getY() + y, p.getZ() + z).getBlock() == fillblock.getBlock())
+                            primer.setBlockState(p.getX() + x, p.getY() + y, p.getZ() + z, BlockFrame.FRAME.getDefaultState());
 
                     }
                 }
-        }
+            } else Skygrid.LOGGER.error("WTF");
+        } else Skygrid.LOGGER.error("BlockInfo is empty or does not contain any existing blocks: {}", this::toJSON);
 
     }
 
@@ -128,7 +133,7 @@ public class BlockInfo implements IJsonAble {
                 block = block.withProperty(prop, age);
             }
             else if(BlockLeaves.DECAYABLE.equals(prop))
-                block = block.withProperty(BlockLeaves.DECAYABLE, false);
+                block = block.withProperty(BlockLeaves.CHECK_DECAY, false);
 
         }
         return block.withRotation(rot);
@@ -173,6 +178,10 @@ public class BlockInfo implements IJsonAble {
 
         return json;
 
+    }
+
+    public void validate() {
+        valid = block.next(new Random()) != null;
     }
 
 }
