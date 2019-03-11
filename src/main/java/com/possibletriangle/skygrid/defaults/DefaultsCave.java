@@ -2,6 +2,7 @@ package com.possibletriangle.skygrid.defaults;
 
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -16,7 +17,7 @@ public class DefaultsCave extends Defaults {
     @Override
     public void registerBlocks(RandomCollection<BlockInfo> blocks, int floor) {
 
-        blocks.add(10, new RandomCollection<BlockInfo>()
+        blocks.add(10, new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, DefaultsOverworld.ores())
                 .add(1, DefaultsTwilight.ores()));
         blocks.add(30, DefaultsOverworld.rock());

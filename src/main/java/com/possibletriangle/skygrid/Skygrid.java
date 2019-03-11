@@ -16,6 +16,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +52,7 @@ public class Skygrid {
     public void setup(FMLInitializationEvent event){
         LOGGER.info("Skygrid says hi!");
 
-        SkygridOptions.reload();
+        SkygridOptions.reload(false);
         TravelManager.registerDefaults();
     }
 
@@ -65,6 +67,7 @@ public class Skygrid {
         event.registerServerCommand(new CommandReload());
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void tooltip(ItemTooltipEvent event) {
 
@@ -81,7 +84,10 @@ public class Skygrid {
     public static void fall(LivingFallEvent event) {
 
         if(event.getEntityLiving() instanceof EntityPlayer)
-            event.setDamageMultiplier(ConfigSkygrid.FALL_FACTOR);
+            if(event.getDistance() <= ConfigSkygrid.FALL_CAP)
+                event.setDamageMultiplier(0);
+            else
+                event.setDamageMultiplier(event.getDamageMultiplier() * ConfigSkygrid.FALL_FACTOR);
 
     }
 

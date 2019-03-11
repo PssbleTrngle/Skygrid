@@ -2,8 +2,8 @@ package com.possibletriangle.skygrid.defaults;
 
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -56,7 +56,7 @@ public class DefaultsOres extends Defaults {
 
 
     public static RandomCollection<BlockInfo> oreBlocks() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.EMERALD_BLOCK))
                 .add(1, new BlockInfo().add(Blocks.DIAMOND_BLOCK))
                 .add(1, new BlockInfo().add(Blocks.REDSTONE_BLOCK))

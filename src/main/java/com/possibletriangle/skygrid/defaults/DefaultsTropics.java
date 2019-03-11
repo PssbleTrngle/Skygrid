@@ -2,6 +2,7 @@ package com.possibletriangle.skygrid.defaults;
 
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
@@ -32,12 +33,12 @@ public class DefaultsTropics extends Defaults {
     @Override
     public void registerBlocks(RandomCollection<BlockInfo> blocks, int floor) {
 
-        RandomCollection<BlockInfo> ground = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> ground = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, DefaultsOverworld.rock())
                 .add(1, grass())
                 .add(0.5, sand());
 
-        RandomCollection<BlockInfo> trees = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> trees = new RandomCollectionJson<>(BlockInfo.class)
                 .add(2, logs())
                 .add(1, planks())
                 .add(2, leaves());
@@ -85,7 +86,7 @@ public class DefaultsTropics extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> ores() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.EMERALD_ORE))
                 .add(2, new BlockInfo().add(Blocks.DIAMOND_ORE))
                 .add(8, new BlockInfo().add(Blocks.REDSTONE_ORE))
@@ -108,7 +109,7 @@ public class DefaultsTropics extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> oceanFloor() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(8, new BlockInfo().add(new ResourceLocation("tropicraft", "sand")))
                 .add(1, new BlockInfo().add(new ResourceLocation("tropicraft", "sand"))
                     .addAt(EnumFacing.UP, new ResourceLocation("tropicraft", "coral")))
@@ -117,12 +118,12 @@ public class DefaultsTropics extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> sand() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(10, new BlockInfo().add(new ResourceLocation("tropicraft", "sand")));
     }
 
     public static RandomCollection<BlockInfo> grass() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(10, new BlockInfo().add(Blocks.GRASS.getDefaultState())
                         .addAt(EnumFacing.UP, Blocks.AIR, 3)
                         .addAt(EnumFacing.UP, Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS)))
@@ -138,19 +139,19 @@ public class DefaultsTropics extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> logs() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.OAK)))
                 .add(1, new BlockInfo().add(new ResourceLocation("tropicraft", "log")));
     }
 
     public static RandomCollection<BlockInfo> leaves() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(new ResourceLocation("tropicraft", "leaves")))
                 .add(2, new BlockInfo().add(new ResourceLocation("tropicraft", "leaves_fruit")));
     }
 
     public static RandomCollection<BlockInfo> planks() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.OAK)))
                 .add(1, new BlockInfo().add(new ResourceLocation("tropicraft", "plank")));
     }

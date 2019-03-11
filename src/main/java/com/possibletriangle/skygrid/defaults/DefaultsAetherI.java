@@ -2,13 +2,10 @@ package com.possibletriangle.skygrid.defaults;
 
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.init.Blocks;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.storage.loot.LootTableList;
 
 public class DefaultsAetherI extends Defaults {
 
@@ -25,7 +22,7 @@ public class DefaultsAetherI extends Defaults {
     @Override
     public void registerBlocks(RandomCollection<BlockInfo> blocks, int floor) {
 
-        RandomCollection<BlockInfo> building = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> building = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(new ResourceLocation("aether_legacy", "skyroot_bookshelf")))
                 .add(1, new BlockInfo().add(new ResourceLocation("aether_legacy", "holystone_brick")))
                 .add(0.5, new BlockInfo().add(new ResourceLocation("aether_legacy", "aerogel")))
@@ -51,7 +48,7 @@ public class DefaultsAetherI extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> trees() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.5, new BlockInfo().add(new ResourceLocation("aether_legacy", "skyroot_plank")))
                 .add(1, new BlockInfo().add(new ResourceLocation("aether_legacy", "aether_log:0")))
                 .add(0.1, new BlockInfo().add(new ResourceLocation("aether_legacy", "aether_log:1")))
@@ -61,7 +58,7 @@ public class DefaultsAetherI extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> grass() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(4, new BlockInfo().add(new ResourceLocation("aether_legacy", "aether_dirt")))
                 .add(0.5, new BlockInfo().add(new ResourceLocation("aether_legacy", "enchanted_aether_grass")))
                 .add(0.08, new BlockInfo().add(new ResourceLocation("aether_legacy", "enchanted_aether_grass"))
@@ -78,7 +75,7 @@ public class DefaultsAetherI extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> rock() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.6, new BlockInfo().add(new ResourceLocation("aether_legacy", "quicksoil")))
                 .add(0.05, new BlockInfo().add(new ResourceLocation("aether_legacy", "icestone")))
                 .add(1, new BlockInfo().add(new ResourceLocation("aether_legacy", "holystone")))
@@ -86,14 +83,14 @@ public class DefaultsAetherI extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> ores() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(10, new BlockInfo().add(new ResourceLocation("aether_legacy", "ambrosium_ore")))
                 .add(4, new BlockInfo().add(new ResourceLocation("aether_legacy", "zanite_ore")))
                 .add(1, new BlockInfo().add(new ResourceLocation("aether_legacy", "gravitite_ore")));
     }
 
     public static RandomCollection<BlockInfo> oreBlocks() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(10, new BlockInfo().add(new ResourceLocation("aether_legacy", "zanite_block")))
                 .add(1, new BlockInfo().add(new ResourceLocation("aether_legacy", "enchanted_gravitite")));
     }

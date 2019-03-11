@@ -3,7 +3,7 @@ package com.possibletriangle.skygrid.defaults;
 import com.possibletriangle.skygrid.generation.WorldProviderSkygridErebus;
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
-import jdk.nashorn.internal.ir.Block;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.init.Blocks;
@@ -21,10 +21,10 @@ public class DefaultsErebus extends Defaults {
     @Override
     public void registerBlocks(RandomCollection<BlockInfo> blocks, int floor) {
 
-        RandomCollection<BlockInfo> fluids = new RandomCollection<BlockInfo>()
-                .add(1, new BlockInfo().add(Blocks.WATER).addAtAll(FRAME_BLOCK));
+        RandomCollection<BlockInfo> fluids = new RandomCollectionJson<>(BlockInfo.class)
+                .add(1, new BlockInfo().add(Blocks.WATER));
 
-        RandomCollection<BlockInfo> container = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> container = new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.2, new BlockInfo().add(new ResourceLocation("erebus", "giant_lily_pad")))
                 .add(0.2, new BlockInfo().add(new ResourceLocation("erebus", "wasp_nest")))
                 .add(1, new BlockInfo().add(new ResourceLocation("erebus", "umber_furnace")))
@@ -32,7 +32,7 @@ public class DefaultsErebus extends Defaults {
                 .add(0.2, new BlockInfo().add(new ResourceLocation("erebus", "bamboo_crate")))
                 .add(1, new BlockInfo().add(new ResourceLocation("erebus", "petrified_crafting_table")));
 
-        RandomCollection<BlockInfo> building = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> building = new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.2, new BlockInfo().add(new ResourceLocation("erebus", "honey_comb")))
                 .add(0.5, new BlockInfo().add(new ResourceLocation("erebus", "mud_brick")))
                 .add(0.5, new BlockInfo().add(new ResourceLocation("erebus", "temple_brick")))
@@ -55,7 +55,7 @@ public class DefaultsErebus extends Defaults {
                 .addAt(new BlockPos(0, 3, 0), new ResourceLocation("erebus", "temple_pillar"))
                 .addAt(new BlockPos(0, 4, 0), new ResourceLocation("erebus", "temple_tile"));
 
-        RandomCollection<BlockInfo> bridge = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> bridge = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo()
                     .add(new ResourceLocation("erebus", "bamboo_bridge:4"))
                     .addAt(new BlockPos(-3, 0, 0), new ResourceLocation("erebus", "bamboo_bridge:4"))
@@ -91,7 +91,7 @@ public class DefaultsErebus extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> plants() {
-        return  new RandomCollection<BlockInfo>()
+        return  new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.DIRT.getDefaultState())
                         .addAt(EnumFacing.UP, new ResourceLocation("erebus", "small_plant:3"))
                         .addAt(EnumFacing.UP, new ResourceLocation("erebus", "small_plant:4")))
@@ -113,7 +113,7 @@ public class DefaultsErebus extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> trees() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(20, new BlockInfo().add(new ResourceLocation("erebus", "planks")))
                 .add(1, new BlockInfo().add("plankPetrified"))
                 .add(2, new BlockInfo().add(new ResourceLocation("erebus", "log_baobab")))
@@ -130,7 +130,7 @@ public class DefaultsErebus extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> mushrooms() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(new ResourceLocation("erebus", "sarcastic_czech_mushroom_block")))
                 .add(1, new BlockInfo().add(new ResourceLocation("erebus", "grandmas_shoes_mushroom_block")))
                 .add(1, new BlockInfo().add(new ResourceLocation("erebus", "dutch_cap_mushroom_block")))
@@ -140,7 +140,7 @@ public class DefaultsErebus extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> grass() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(2, new BlockInfo().add(Blocks.DIRT.getDefaultState()))
                 .add(2, new BlockInfo().add(Blocks.GRASS))
                 .add(2, new BlockInfo().add(Blocks.GRASS)
@@ -158,7 +158,7 @@ public class DefaultsErebus extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> rock() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add("stoneUmber"))
                 .add(0.2, new BlockInfo().add(new ResourceLocation("erebus", "umberstone:1")))
                 .add(0.3, new BlockInfo().add(new ResourceLocation("erebus", "umberstone:2")))
@@ -175,7 +175,7 @@ public class DefaultsErebus extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> ores() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(5, new BlockInfo().add(new ResourceLocation("erebus", "ore_iron")))
                 .add(3, new BlockInfo().add(new ResourceLocation("erebus", "ore_gold")))
                 .add(10, new BlockInfo().add(new ResourceLocation("erebus", "ore_coal")))
@@ -198,7 +198,7 @@ public class DefaultsErebus extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> oreBlocks() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(3, new BlockInfo().add("blockJade"))
                 .add(1, new BlockInfo().add(new ResourceLocation("erebus", "silk")))
                 .add(1, new BlockInfo().add(new ResourceLocation("erebus", "rein_exo")));

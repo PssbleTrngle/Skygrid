@@ -2,6 +2,7 @@ package com.possibletriangle.skygrid.defaults;
 
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -13,14 +14,14 @@ public class DefaultsNether extends Defaults {
     @Override
     public void registerBlocks(RandomCollection<BlockInfo> blocks, int floor) {
 
-        RandomCollection<BlockInfo> fluids = new RandomCollection<BlockInfo>()
-                .add(6, new BlockInfo().add(Blocks.LAVA).addAtAll(FRAME_BLOCK))
-                .add(0.3, new BlockInfo().add(new ResourceLocation("thermalfoundation", "fluid_glowstone")).addAtAll(FRAME_BLOCK))
-                .add(0.1, new BlockInfo().add(new ResourceLocation("thermalfoundation", "fluid_pyrotheum")).addAtAll(FRAME_BLOCK))
-                .add(0.6, new BlockInfo().add(new ResourceLocation("biomesoplenty", "blood")).addAtAll(FRAME_BLOCK))
-                .add(0.2, new BlockInfo().add(new ResourceLocation("biomesoplenty", "honey")).addAtAll(FRAME_BLOCK));
+        RandomCollection<BlockInfo> fluids = new RandomCollectionJson<>(BlockInfo.class)
+                .add(6, new BlockInfo().add(Blocks.LAVA))
+                .add(0.3, new BlockInfo().add(new ResourceLocation("thermalfoundation", "fluid_glowstone")))
+                .add(0.1, new BlockInfo().add(new ResourceLocation("thermalfoundation", "fluid_pyrotheum")))
+                .add(0.6, new BlockInfo().add(new ResourceLocation("biomesoplenty", "blood")))
+                .add(0.2, new BlockInfo().add(new ResourceLocation("biomesoplenty", "honey")));
 
-        RandomCollection<BlockInfo> bricks = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> bricks = new RandomCollectionJson<>(BlockInfo.class)
                 .add(6, new BlockInfo().add(Blocks.NETHER_BRICK))
                 .add(1, new BlockInfo().add(Blocks.RED_NETHER_BRICK))
                 .add(2, new BlockInfo().add(new ResourceLocation("quark", "magma_bricks")))
@@ -49,7 +50,7 @@ public class DefaultsNether extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> ground() {
-            return new RandomCollection<BlockInfo>()
+            return new RandomCollectionJson<>(BlockInfo.class)
                 .add(4, new BlockInfo().add(new ResourceLocation("biomesoplenty", "grass:6")))
                 .add(8, new BlockInfo().add(new ResourceLocation("biomesoplenty", "ash_block")))
                 .add(6, new BlockInfo().add(new ResourceLocation("biomesoplenty", "flesh")))
@@ -88,7 +89,7 @@ public class DefaultsNether extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> ores() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(20, new BlockInfo().add(Blocks.QUARTZ_ORE))
                 .add(16, new BlockInfo().add("oreNetherCoal"))
                 .add(12, new BlockInfo().add("oreNetherIron"))
@@ -100,7 +101,7 @@ public class DefaultsNether extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> oreBlocks() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(2, new BlockInfo().add(Blocks.COAL_BLOCK))
                 .add(4, new BlockInfo().add(Blocks.REDSTONE_BLOCK))
                 .add(1, new BlockInfo().add(Blocks.GOLD_BLOCK))

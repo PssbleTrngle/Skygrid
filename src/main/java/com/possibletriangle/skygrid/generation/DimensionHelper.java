@@ -1,8 +1,8 @@
 package com.possibletriangle.skygrid.generation;
 
 import com.possibletriangle.skygrid.Skygrid;
-import com.possibletriangle.skygrid.random.SkygridOptions;
 import com.possibletriangle.skygrid.defaults.Defaults;
+import com.possibletriangle.skygrid.random.SkygridOptions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -25,8 +25,6 @@ public class DimensionHelper {
     private static void register(ResourceLocation dim) {
 
         Defaults defaults = GameRegistry.findRegistry(Defaults.class).getValue(dim);
-        if(defaults == null)
-            return;
 
         int ID = getIDFor(dim);
         if(ID != DimensionManager.getNextFreeDimId()) {
@@ -35,12 +33,14 @@ public class DimensionHelper {
             WorldProvider old = DimensionManager.getProviderType(ID).createDimension();
             OLD.put(dim, old);
             DimensionManager.unregisterDimension(ID);
-            DimensionManager.registerDimension(ID, DimensionType.register(dim.getResourcePath(), "_" + dim.getResourcePath(), ID, defaults.providerClass(true), false));
+            Class clazz = defaults == null ? WorldProviderSkygrid.class : defaults.providerClass(true);
+            DimensionManager.registerDimension(ID, DimensionType.register(dim.getResourcePath(), "_" + dim.getResourcePath(), ID, clazz, false));
 
-        } else if(!defaults.onlyOverwrite()) {
+        } else if(!SkygridOptions.onlyOverride(dim)) {
 
             Skygrid.LOGGER.info("Creating dimension {}", dim.getResourcePath());
-            DimensionManager.registerDimension(ID, DimensionType.register(dim.getResourcePath(), "_" + dim.getResourcePath(), ID, defaults.providerClass(false), false));
+            Class clazz = defaults == null ? WorldProviderSkygrid.class : defaults.providerClass(false);
+            DimensionManager.registerDimension(ID, DimensionType.register(dim.getResourcePath(), "_" + dim.getResourcePath(), ID, clazz, false));
 
         } else
             Skygrid.LOGGER.info("There is no dimension with the name {}", dim.getResourcePath());

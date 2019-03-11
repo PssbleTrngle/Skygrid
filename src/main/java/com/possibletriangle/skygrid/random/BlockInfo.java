@@ -1,35 +1,34 @@
 package com.possibletriangle.skygrid.random;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.possibletriangle.skygrid.ConfigSkygrid;
+import com.possibletriangle.skygrid.IJsonAble;
 import com.possibletriangle.skygrid.Skygrid;
-import com.sun.javafx.beans.IDProperty;
-import net.minecraft.block.*;
+import com.possibletriangle.skygrid.defaults.Defaults;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.EnumFaceDirection;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.storage.loot.RandomValueRange;
-import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.registries.ForgeRegistry;
-import scala.sys.PropImpl;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import java.util.function.Predicate;
 
-public class BlockInfo {
+public class BlockInfo implements IJsonAble {
+
+    @Override
+    public String key() {
+        return "blockinfo";
+    }
 
     private final RandomCollectionBlocks block = new RandomCollectionBlocks();
     private final HashMap<BlockPos, RandomCollectionBlocks> at = new HashMap<>();
@@ -85,14 +84,25 @@ public class BlockInfo {
         }
 
         IBlockState block = this.block.next(random);
-        if(block != null)
+        if(block != null) {
             primer.setBlockState(x, y, z, randomizeState(block, random));
 
-        for(BlockPos p : at.keySet()) if(!(p.getX()+x < 0 || p.getX()+x > 15 || p.getY()+y < 0 || p.getY()+y > 255 || p.getZ()+z < 0 || p.getZ()+z > 15)) {
-            IBlockState blockAt = at.get(p).next(random);
-            if(blockAt != null)
-                primer.setBlockState(p.getX() + x, p.getY() + y, p.getZ() + z, randomizeState(blockAt, random));
+            for(BlockPos p : at.keySet()) if(!(p.getX()+x < 0 || p.getX()+x > 15 || p.getY()+y < 0 || p.getY()+y > 255 || p.getZ()+z < 0 || p.getZ()+z > 15)) {
+                IBlockState blockAt = at.get(p).next(random);
+                if(blockAt != null)
+                    primer.setBlockState(p.getX() + x, p.getY() + y, p.getZ() + z, randomizeState(blockAt, random));
 
+            }
+
+            if(random.nextDouble() <= ConfigSkygrid.FRAME_CHANCE)
+                if(block.getBlock() instanceof BlockLiquid || block.getBlock() instanceof IFluidBlock) {
+                    for(EnumFacing face : EnumFacing.values()) {
+                        BlockPos p = new BlockPos(0,0,0).offset(face);
+                        if(!at.containsKey(p))
+                            primer.setBlockState(p.getX() + x, p.getY() + y, p.getZ() + z, Defaults.FRAME_BLOCK.getDefaultState());
+
+                    }
+                }
         }
 
     }
@@ -132,4 +142,37 @@ public class BlockInfo {
     public interface Condition {
         double factorAt(int y);
     }
+
+    @Override
+    public void fromJSON(JsonElement json) {
+
+        block.clear();
+        at.clear();
+
+        block.fromJSON(json.getAsJsonObject().get("blocks"));
+        for(Map.Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) if(entry.getKey().startsWith("at")) {
+            String[] i = entry.getKey().replace("at[", "").replace("]", "").split(",");
+            BlockPos p = new BlockPos(Integer.parseInt(i[0]), Integer.parseInt(i[1]), Integer.parseInt(i[2]));
+            RandomCollectionBlocks r = new RandomCollectionBlocks();
+            r.fromJSON(entry.getValue());
+            at.put(p, r);
+        }
+
+    }
+
+    @Override
+    public JsonElement toJSON() {
+
+        JsonObject json = new JsonObject();
+
+        json.add("blocks", block.toJSON());
+        for(BlockPos pos : at.keySet()) {
+            String key = "at[" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]";
+            json.add(key, at.get(pos).toJSON());
+        }
+
+        return json;
+
+    }
+
 }

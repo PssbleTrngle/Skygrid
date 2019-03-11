@@ -5,11 +5,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class ConfigSkygrid extends Configuration {
 
-    public static float FALL_FACTOR = 0.8F;
+    public static float FRAME_CHANCE = 1F;
+    public static String DIR = null;
+    public static float FALL_FACTOR = 1F;
+    public static float FALL_CAP = 4.5F;
     public static String[] BLACKLISTED = new String[0];
     public static int LOWER = -30, UPPER = 10;
     public static float VOID_CHANCE = 0.1F, LIMBO_CHANCE_FALL = 0.1F, LIMBO_CHANCE_CLIMB = 0.1F;
@@ -21,7 +23,8 @@ public class ConfigSkygrid extends Configuration {
     }
 
     public static void init(File dir) {
-        File file = new File(dir.getPath() + File.separator + Skygrid.MODID + File.separator + "config.cfg");
+        DIR = dir.getPath() + File.separator + Skygrid.MODID + File.separator;
+        File file = new File(DIR + "config.cfg");
         Skygrid.LOGGER.info("Config file path: {}", file.getAbsolutePath());
         config = new ConfigSkygrid(file);
     }
@@ -38,8 +41,10 @@ public class ConfigSkygrid extends Configuration {
 
         String MAIN = "Main";
         BLACKLISTED = getStringList("blacklist", MAIN, BLACKLISTED, "Dimension for that skygrid creation/overwriting is disabled");
+        FRAME_CHANCE = getFloat("fluid_frames", MAIN, FRAME_CHANCE, 0F, 1F, "The chance at which fluids are floating still in the air without flowing down");
 
-        FALL_FACTOR = getFloat("fall_damage_factor", MAIN, FALL_FACTOR, 0, 1, "This factor is applied to player fall damage. " + FALL_FACTOR + " protects one from a 4 block fall");
+        FALL_FACTOR = getFloat("fall_damage_factor", MAIN, FALL_FACTOR, 0, 1, "This factor is applied to player fall damage. Enter 0 for no damage at all");
+        FALL_CAP = getFloat("fall_damage_cap", MAIN, FALL_CAP, 0, Float.MIN_VALUE, "The height at which players will not get any fall damage");
 
         String FALL = "Falling";
         VOID_CHANCE = getFloat("void_chance", FALL, VOID_CHANCE, 0, 1, "The chance that a players just falls to death instead of traveling somewhere when falling [0 to disable]");

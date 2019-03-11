@@ -1,59 +1,49 @@
 package com.possibletriangle.skygrid.random;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.possibletriangle.skygrid.IJsonAble;
 import com.possibletriangle.skygrid.Skygrid;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-public class RandomCollectionBlocks extends RandomCollection<Object> {
+public class RandomCollectionBlocks extends RandomCollection<Object> implements IJsonAble {
+
+    @Override
+    public String key() {
+        return "values";
+    }
 
     @Override
     public RandomCollectionBlocks add(double weight, Object result) {
 
-        if(result instanceof ResourceLocation) {
-
-            ResourceLocation r = (ResourceLocation) result;
-            ResourceLocation name = r.getResourcePath().contains(":") ? new ResourceLocation(r.getResourceDomain(), r.getResourcePath().substring(0, r.getResourcePath().indexOf(':'))) : r;
-
-            Block block = Block.REGISTRY.getObject(name);
-            if(block == Blocks.AIR) {
-                Skygrid.LOGGER.error("Block does not exist: \"{}\"", result);
-                return this;
-            }
-
-            return (RandomCollectionBlocks) super.add(weight, result);
-
-        } else if(result instanceof Block || result instanceof IBlockState || result instanceof String)
-            return (RandomCollectionBlocks) super.add(weight, result);
-
-        return this;
+        return (RandomCollectionBlocks) super.add(weight, result);
     }
 
     @Override
     public IBlockState next(Random random) {
 
-        Object o = super.next(random);
-
-        IBlockState ret = null;
-
         for(int i = 0; i < 100; i++) {
+            Object o = super.next(random);
+            IBlockState rs = null;
 
             if (o instanceof ResourceLocation)
-                return stateFrom((ResourceLocation) o, random);
+                rs = stateFrom((ResourceLocation) o, random);
 
             if (o instanceof IBlockState)
-                return (IBlockState) o;
+                rs =  (IBlockState) o;
 
             else if (o instanceof Block)
-                return stateFrom(((Block) o).getRegistryName(), random);
+                rs =  stateFrom(((Block) o).getRegistryName(), random);
 
             else if (o instanceof String) {
 
@@ -71,9 +61,12 @@ public class RandomCollectionBlocks extends RandomCollection<Object> {
                         ores.add(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()));
                 if (!ores.isEmpty()) {
                     int index = r ? random.nextInt(ores.size()) : 0;
-                    return ores.get(index);
+                    rs =  ores.get(index);
                 }
             }
+
+            if(rs != null) return rs;
+
         }
 
         return null;
@@ -83,6 +76,7 @@ public class RandomCollectionBlocks extends RandomCollection<Object> {
 
         ResourceLocation name = r.getResourcePath().contains(":") ? new ResourceLocation(r.getResourceDomain(), r.getResourcePath().substring(0, r.getResourcePath().indexOf(':'))) : r;
         Block block = Block.REGISTRY.getObject(name);
+        if(block == null) return null;
 
         ArrayList<Integer> metas = new ArrayList<>();
         for(IBlockState state : block.getBlockState().getValidStates())
@@ -96,6 +90,94 @@ public class RandomCollectionBlocks extends RandomCollection<Object> {
             }
 
         return block.getStateFromMeta(meta);
+    }
+
+    @Override
+    public void fromJSON(JsonElement json) {
+
+        for(JsonElement e : json.getAsJsonArray()) {
+
+            JsonObject o = e.getAsJsonObject();
+
+            double weight = o.get("weight").getAsDouble();
+            if(o.has("values")) {
+                RandomCollectionBlocks sub = new RandomCollectionBlocks();
+                sub.fromJSON(o.get("values"));
+                add(weight, sub);
+            } else {
+                int meta = o.has("meta") ? o.get("meta").getAsInt() : -1;
+                String ore = o.has("ore") ? o.get("ore").getAsString() : null;
+                ResourceLocation block = o.has("block") ? new ResourceLocation(o.get("block").getAsString()) : null;
+                if(meta != -1 && block != null) {
+                    block = new ResourceLocation(block.getResourceDomain(), block.getResourcePath() + ":" + meta);
+                    Skygrid.LOGGER.info(block);
+                }
+
+                if(ore != null)
+                    add(weight, ore);
+                else if(block != null)
+                    add(weight, block);
+            }
+
+        }
+
+    }
+
+    @Override
+    public JsonElement toJSON() {
+
+        JsonArray array = new JsonArray();
+
+        for(Map.Entry<Double, Object> entry : map.entrySet()) {
+
+            JsonObject o = new JsonObject();
+            o.addProperty("weight", entry.getKey());
+
+            if(entry.getValue() instanceof RandomCollectionBlocks) {
+
+                o.add("values", ((RandomCollectionBlocks) entry.getValue()).toJSON());
+
+            } else {
+                String s = null;
+                ResourceLocation r = null;
+                int meta = -1;
+
+                if (entry.getValue() instanceof Block)
+                    r = ((Block) entry.getValue()).getRegistryName();
+                else if (entry.getValue() instanceof IBlockState) {
+                    r = ((IBlockState) entry.getValue()).getBlock().getRegistryName();
+                    meta = ((IBlockState) entry.getValue()).getBlock().getMetaFromState((IBlockState) entry.getValue());
+                }
+                else if (entry.getValue() instanceof ResourceLocation) {
+                    r = (ResourceLocation) entry.getValue();
+                    if(r.getResourcePath().contains(":"))
+                        try {
+                            meta = Integer.parseInt(r.getResourcePath().substring(r.getResourcePath().indexOf(':')+1));
+                        } catch (NumberFormatException ex) {
+                        }
+
+                    r = r.getResourcePath().contains(":") ? new ResourceLocation(r.getResourceDomain(), r.getResourcePath().substring(0, r.getResourcePath().indexOf(':'))) : r;
+
+                } else if(entry.getValue() instanceof String) {
+                    s = (String) entry.getValue();
+                }
+
+                if(r != null)
+                    o.addProperty("block", r.toString());
+                else if(s != null)
+                    o.addProperty("ore", s);
+
+                if(meta != -1)
+                    o.addProperty("meta", meta);
+
+            }
+
+            array.add(o);
+
+        }
+
+        return array;
+
     }
 
 }

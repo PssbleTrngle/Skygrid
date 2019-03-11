@@ -10,39 +10,38 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
 public class SkygridOptions {
 
-    private final HashMap<Integer, RandomCollection<BlockInfo>> BLOCKS = new HashMap<>();
-    private final BlockPos OFFSET;
-    private final HashMap<Integer, IBlockState> FILL_BLOCK = new HashMap<>();
-    private final int HEIGHT;
-    private final RandomCollection<ResourceLocation> MOBS = new RandomCollection<>();
-    private final RandomCollection<ResourceLocation> LOOT = new RandomCollection<>();
+    int HEIGHT;
+    BlockPos OFFSET;
+    final RandomCollectionRL MOBS = new RandomCollectionRL();
+    final RandomCollectionRL LOOT = new RandomCollectionRL();
+    final HashMap<Integer, IBlockState> FILL_BLOCK = new HashMap<>();
+    final HashMap<Integer, RandomCollectionJson<BlockInfo>> BLOCKS = new HashMap<>();
+    boolean onlyOverride;
 
     private static final HashMap<ResourceLocation, SkygridOptions> OPTIONS = new HashMap<>();
 
-    private SkygridOptions(BlockPos offset, int height) {
-        this.HEIGHT = height;
-        this.OFFSET = offset;
+    private SkygridOptions() {
+    }
+
+    public static boolean onlyOverride(ResourceLocation name) {
+        return !OPTIONS.containsKey(name) || OPTIONS.get(name).onlyOverride;
     }
 
     private static RandomCollection<BlockInfo> forDimension(ResourceLocation dimensionID, int atY) {
         if(dimensionID.getResourcePath().toLowerCase().equals("nether"))
             dimensionID = new ResourceLocation(dimensionID.getResourceDomain(), "the_nether");
 
-        Defaults defaults = GameRegistry.findRegistry(Defaults.class).getValue(dimensionID);
-        if(defaults == null) {
-            Skygrid.LOGGER.error("Could not find default for \"{}\"", dimensionID);
-            return null;
-        }
-
-        for(int i = defaults.floors().length-1; i>=0; i--)
-            if(defaults.floors()[i] <= atY)
-                return OPTIONS.get(dimensionID).BLOCKS.get(defaults.floors()[i]);
+        SkygridOptions options = OPTIONS.get(dimensionID);
+        for(int i = options.BLOCKS.size()-1; i>=0; i--)
+            if(options.BLOCKS.keySet().toArray(new Integer[0])[i] <= atY)
+                return options.BLOCKS.get(options.BLOCKS.keySet().toArray(new Integer[0])[i]);
 
         return null;
     }
@@ -116,33 +115,57 @@ public class SkygridOptions {
         return info;
     }
 
-    public static void reload() {
+    public static void reload(boolean reset) {
 
         IForgeRegistry<Defaults> REGISTRY = GameRegistry.findRegistry(Defaults.class);
 
-        for(Defaults defaults : REGISTRY) {
+        ArrayList<ResourceLocation> names = new ArrayList<>();
+        for(Defaults defaults : REGISTRY)
+            if(defaults.getRegistryName() != null)
+                names.add(defaults.getRegistryName());
 
-            ResourceLocation name = REGISTRY.getKey(defaults);
-            if(name == null || Arrays.asList(ConfigSkygrid.BLACKLISTED).contains(name.getResourcePath()))
-                continue;
+        for(String name : SkygridJSONConverter.getConfigs())
+            if(!names.contains(new ResourceLocation(name)))
+                names.add(new ResourceLocation(name));
 
-            SkygridOptions options = OPTIONS.containsKey(name) ? OPTIONS.get(name) : new SkygridOptions(defaults.getOffset(), defaults.getHeight());
+        for(ResourceLocation name : names) {
+
+            Defaults defaults = REGISTRY.getValue(name);
+            SkygridOptions options = OPTIONS.containsKey(name) ? OPTIONS.get(name) : new SkygridOptions();
 
             options.BLOCKS.clear();
-            for(int floor : defaults.floors()) {
-                RandomCollection<BlockInfo> info = new RandomCollection<>();
-                defaults.registerBlocks(info, floor);
-                options.BLOCKS.put(floor, info);
-                options.FILL_BLOCK.put(floor, defaults.getFillState(floor));
+            options.LOOT.clear();
+            options.MOBS.clear();
+            options.FILL_BLOCK.clear();
+
+            if(Arrays.asList(ConfigSkygrid.BLACKLISTED).contains(name.getResourcePath()))
+                continue;
+
+            if(!reset && SkygridJSONConverter.existsConfig(name)) {
+
+                SkygridJSONConverter.readFromConfig(options, name);
+
+            } else if(defaults != null) {
+
+                options.onlyOverride = defaults.onlyOverwrite();
+                options.HEIGHT = defaults.getHeight();
+                options.OFFSET = defaults.getOffset();
+
+                for(int floor : defaults.floors()) {
+                    RandomCollectionJson<BlockInfo> info = new RandomCollectionJson<>(BlockInfo.class);
+                    defaults.registerBlocks(info, floor);
+                    options.BLOCKS.put(floor, info);
+                    options.FILL_BLOCK.put(floor, defaults.getFillState(floor));
+                }
+
+                defaults.registerLoot(options.LOOT);
+                defaults.registerMobs(options.MOBS);
+
+                SkygridJSONConverter.createDefaultFile(options, name);
+
             }
 
-            options.LOOT.clear();
-            defaults.registerLoot(options.LOOT);
-            options.MOBS.clear();
-            defaults.registerMobs(options.MOBS);
-
             OPTIONS.put(name, options);
-
         }
 
     }

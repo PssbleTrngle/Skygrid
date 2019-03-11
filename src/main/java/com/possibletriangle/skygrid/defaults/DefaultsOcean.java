@@ -1,8 +1,8 @@
 package com.possibletriangle.skygrid.defaults;
 
-import com.possibletriangle.skygrid.Skygrid;
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.block.BlockPrismarine;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockSponge;
@@ -32,18 +32,18 @@ public class DefaultsOcean extends Defaults {
     @Override
     public void registerBlocks(RandomCollection<BlockInfo> blocks, int floor) {
 
-        RandomCollection<BlockInfo> ice = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> ice = new RandomCollectionJson<>(BlockInfo.class)
                 .add(4, new BlockInfo().add(Blocks.ICE))
                 .add(2, new BlockInfo().add(Blocks.PACKED_ICE))
                 .add(1, new BlockInfo().add(new ResourceLocation("quark", "biome_cobblestone:1")));
 
-        RandomCollection<BlockInfo> prismarine = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> prismarine = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.ROUGH)))
                 .add(0.4, new BlockInfo().add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.BRICKS)))
                 .add(0.2, new BlockInfo().add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.DARK)))
                 .add(0.3, new BlockInfo().add(Blocks.SEA_LANTERN));
 
-        RandomCollection<BlockInfo> ground = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> ground = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.CLAY)
                 .add(Blocks.GRAVEL)
                 .add(Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.SAND))

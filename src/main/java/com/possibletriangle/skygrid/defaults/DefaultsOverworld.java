@@ -2,35 +2,33 @@ package com.possibletriangle.skygrid.defaults;
 
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
+import com.possibletriangle.skygrid.random.RandomCollectionJson;
 import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraft.world.storage.loot.LootTableManager;
 
 public class DefaultsOverworld extends Defaults {
 
     @Override
     public void registerBlocks(RandomCollection<BlockInfo> blocks, int floor) {
 
-
-        RandomCollection<BlockInfo> fluids = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> fluids = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1.4, new BlockInfo()
                         .add(Blocks.WATER)
                         .add(new ResourceLocation("biomesoplenty", "hot_spring_water"), 0.1)
-                        .addAtAll(FRAME_BLOCK))
+                        )
                 .add(0.2, new BlockInfo()
                         .add(Blocks.WATER)
                         .add(new ResourceLocation("biomesoplenty", "hot_spring_water"), 0.1)
                         .addAt(EnumFacing.UP, Blocks.WATERLILY)
                         .addAt(EnumFacing.UP, new ResourceLocation("biomesoplenty", "waterlily"), 4)
-                        .addAtAll(FRAME_BLOCK))
-                .add(1, new BlockInfo().add(Blocks.LAVA).addAtAll(FRAME_BLOCK));
+                        )
+                .add(1, new BlockInfo().add(Blocks.LAVA));
 
-        RandomCollection<BlockInfo> containers = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> containers = new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.2, new BlockInfo().add(Blocks.DROPPER))
                 .add(0.2, new BlockInfo().add(Blocks.DISPENSER))
                 .add(2, new BlockInfo().add(Blocks.CRAFTING_TABLE))
@@ -39,12 +37,12 @@ public class DefaultsOverworld extends Defaults {
                 .add(0.1, new BlockInfo().add(Blocks.NOTEBLOCK))
                 .add(1, chest());
 
-        RandomCollection<BlockInfo> tree = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> tree = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, logs())
                 .add(0.5, planks())
                 .add(1, leaves());
 
-        RandomCollection<BlockInfo> ground = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> ground = new RandomCollectionJson<>(BlockInfo.class)
                 .add(3, rock())
                 .add(1, dirt())
                 .add(1, sand())
@@ -53,7 +51,7 @@ public class DefaultsOverworld extends Defaults {
                 .add(0.1, new BlockInfo().add(Blocks.SNOW))
                 .add(0.1, new BlockInfo().add(Blocks.ICE));
 
-        RandomCollection<BlockInfo> stonebricks = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> stonebricks = new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.2, new BlockInfo().add(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.MOSSY)))
                 .add(0.2, new BlockInfo().add(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CRACKED)))
                 .add(0.2, new BlockInfo().add(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED)))
@@ -62,13 +60,13 @@ public class DefaultsOverworld extends Defaults {
                 .add(0.02, new BlockInfo().add(new ResourceLocation("thaumcraft", "stone_arcane:0"))
                 .addAt(EnumFacing.UP, new ResourceLocation("thaumcraft", "nitor_orange")));
 
-        RandomCollection<BlockInfo> prismarine = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> prismarine = new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.ROUGH)))
                 .add(0.4, new BlockInfo().add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.BRICKS)))
                 .add(0.2, new BlockInfo().add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.DARK)))
                 .add(0.3, new BlockInfo().add(Blocks.SEA_LANTERN));
 
-        RandomCollection<BlockInfo> terracotta = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> terracotta = new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.2, new BlockInfo().add(Blocks.PURPLE_GLAZED_TERRACOTTA))
                 .add(0.2, new BlockInfo().add(Blocks.BROWN_GLAZED_TERRACOTTA))
                 .add(0.2, new BlockInfo().add(Blocks.MAGENTA_GLAZED_TERRACOTTA))
@@ -86,7 +84,7 @@ public class DefaultsOverworld extends Defaults {
                 .add(0.2, new BlockInfo().add(Blocks.SILVER_GLAZED_TERRACOTTA))
                 .add(0.3, new BlockInfo().add(Blocks.BLACK_GLAZED_TERRACOTTA));
 
-        RandomCollection<BlockInfo> building = new RandomCollection<BlockInfo>()
+        RandomCollection<BlockInfo> building = new RandomCollectionJson<>(BlockInfo.class)
                 .add(0.2, stonebricks)
                 .add(0.1, new BlockInfo().add(Blocks.WOOL))
                 .add(0.1, new BlockInfo().add(Blocks.STAINED_HARDENED_CLAY))
@@ -151,7 +149,7 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> leaves() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(4, new BlockInfo().add(Blocks.LEAVES))
                 .add(2, new BlockInfo().add(Blocks.LEAVES2))
 
@@ -160,7 +158,7 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> logs() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(4, new BlockInfo().add(Blocks.LOG))
                 .add(2, new BlockInfo().add(Blocks.LOG2))
 
@@ -172,14 +170,14 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> planks() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(6, new BlockInfo().add(Blocks.PLANKS))
 
                 .add(1, new BlockInfo().add(new ResourceLocation("natura", "overworld_planks")));
     }
 
     public static RandomCollection<BlockInfo> rock() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(12, new BlockInfo().add(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.STONE)))
                 .add(2, new BlockInfo().add(Blocks.OBSIDIAN))
                 .add(6, new BlockInfo().add(Blocks.COBBLESTONE))
@@ -197,7 +195,7 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> sand() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(10, new BlockInfo().add(Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.SAND)))
                 .add(10, new BlockInfo().add(Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.SAND))
                         .addAt(EnumFacing.UP, Blocks.REEDS, 0.5)
@@ -217,14 +215,14 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> dirt() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(10, new BlockInfo().add(Blocks.DIRT))
                 .add(3, new BlockInfo().add(Blocks.GRASS_PATH))
                 .add(2, new BlockInfo().add(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT)));
     }
 
     public static RandomCollection<BlockInfo> grass() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(10, new BlockInfo().add(Blocks.GRASS.getDefaultState())
                     .addAt(EnumFacing.UP, Blocks.AIR, 0.25)
                     .addAt(EnumFacing.UP, new ResourceLocation("botania", "flower")))
@@ -276,13 +274,13 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> chest() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.CHEST))
                 .add(6, new BlockInfo().add(new ResourceLocation("quark", "custom_chest")));
     }
 
     public static RandomCollection<BlockInfo> bookshelfs() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.BOOKSHELF))
                 .add(1, new BlockInfo().add("bookshelfSpruce"))
                 .add(1, new BlockInfo().add("bookshelfBirch"))
@@ -293,7 +291,7 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> ores() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.EMERALD_ORE))
                 .add(2, new BlockInfo().add(Blocks.DIAMOND_ORE))
                 .add(8, new BlockInfo().add(Blocks.REDSTONE_ORE))
@@ -318,7 +316,7 @@ public class DefaultsOverworld extends Defaults {
     }
 
     public static RandomCollection<BlockInfo> oreBlocks() {
-        return new RandomCollection<BlockInfo>()
+        return new RandomCollectionJson<>(BlockInfo.class)
                 .add(1, new BlockInfo().add(Blocks.EMERALD_BLOCK))
                 .add(2, new BlockInfo().add(Blocks.DIAMOND_BLOCK))
                 .add(8, new BlockInfo().add(Blocks.REDSTONE_BLOCK))
