@@ -107,7 +107,7 @@ public class BlockInfo implements IJsonAble {
 
                     }
                 }
-            } else Skygrid.LOGGER.error("WTF");
+            }
         } else Skygrid.LOGGER.error("BlockInfo is empty or does not contain any existing blocks: {}", this::toJSON);
 
     }
