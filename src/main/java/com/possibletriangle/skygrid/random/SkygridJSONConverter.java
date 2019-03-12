@@ -19,6 +19,8 @@ public class SkygridJSONConverter {
     public static String[] getConfigs() {
 
         File[] files = new File(ConfigSkygrid.DIR + DIR).listFiles();
+        if(files == null) return new String[0];
+
         String[] names = new String[files.length];
         for(int i = 0; i < files.length; i++)
             names[i] = files[i].getName().replaceAll(".json", "");
