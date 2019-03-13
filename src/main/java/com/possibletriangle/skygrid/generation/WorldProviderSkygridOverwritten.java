@@ -52,8 +52,8 @@ public class WorldProviderSkygridOverwritten extends WorldProviderSkygrid {
     }
 
     @Override
-    public Vec3d getFogColor(float p_76562_1_, float p_76562_2_) {
-        return old.getFogColor(p_76562_1_, p_76562_2_);
+    public Vec3d getFogColor(float x, float z) {
+        return old.getFogColor(x, z);
     }
 
     @Override

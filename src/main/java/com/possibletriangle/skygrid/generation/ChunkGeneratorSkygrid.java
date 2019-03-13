@@ -19,6 +19,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -123,8 +124,6 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
                     }
             }
 
-        BlockFalling.fallInstantly = true;
-
     }
 
     @Override
@@ -153,7 +152,8 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
     }
 
     @Override
-    public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos) {
-        return false;
+    public boolean isInsideStructure(World world, String name, BlockPos pos) {
+		BlockPos nearest = getNearestStructurePos(world, name, pos, true);
+        return nearest != null && new Vec3d(nearest).distanceTo(new Vec3d(pos)) <= 4;
     }
 }
