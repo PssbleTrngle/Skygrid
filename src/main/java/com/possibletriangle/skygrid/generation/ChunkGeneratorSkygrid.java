@@ -14,12 +14,12 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -114,6 +114,9 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
                                 ((TileEntityLockableLoot) te).setLootTable(l, random.nextLong());
                             } else if (te instanceof TileEntityMobSpawner && mobs.size() != 0) {
                                 ResourceLocation mob = mobs.next(random);
+                                te.writeToNBT(nbt);
+                                nbt.removeTag("SpawnPotentials");
+                                te.readFromNBT(nbt);
                                 ((TileEntityMobSpawner) te).getSpawnerBaseLogic().setEntityId(mob);
                             }
 
@@ -140,7 +143,7 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
     @Override
     public BlockPos getNearestStructurePos( @Nonnull World world, @Nonnull String name, @Nonnull BlockPos position, boolean findUnexplored) {
         if ("Stronghold".equals(name) && endPortal != null) {
-            return endPortal.add(1, position.getY(), 1);
+            return endPortal.add(1, findUnexplored ? 1 : position.getY(), 1);
         }
 
         return null;
@@ -154,6 +157,6 @@ public class ChunkGeneratorSkygrid implements IChunkGenerator {
     @Override
     public boolean isInsideStructure(World world, String name, BlockPos pos) {
 		BlockPos nearest = getNearestStructurePos(world, name, pos, true);
-        return nearest != null && new Vec3d(nearest).distanceTo(new Vec3d(pos)) <= 4;
+        return nearest != null && new Vec3d(nearest).distanceTo(new Vec3d(pos)) <= 2;
     }
 }

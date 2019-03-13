@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class DefaultsEnd extends Defaults {
 
     public static final BlockInfo PORTAL = new BlockInfo()
+            .ignoreValidation()
             .add(Blocks.AIR)
             
             .addAt(new BlockPos(+1, 0, -1), Blocks.END_PORTAL_FRAME.getDefaultState())

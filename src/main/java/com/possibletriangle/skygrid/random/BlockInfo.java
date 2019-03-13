@@ -6,6 +6,7 @@ import com.possibletriangle.skygrid.ConfigSkygrid;
 import com.possibletriangle.skygrid.IJsonAble;
 import com.possibletriangle.skygrid.Skygrid;
 import com.possibletriangle.skygrid.blocks.BlockFrame;
+import com.possibletriangle.skygrid.defaults.DefaultsEnd;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockLog;
@@ -33,10 +34,15 @@ public class BlockInfo implements IJsonAble {
     private final RandomCollectionBlocks block = new RandomCollectionBlocks();
     private final HashMap<BlockPos, RandomCollectionBlocks> at = new HashMap<>();
     private Condition condition;
-    private boolean valid = false;
+    private boolean valid = false, ignoreValidation = false;
 
     @Override
-    public boolean isValid() { return valid; }
+    public boolean isValid() { return valid || ignoreValidation; }
+
+    public BlockInfo ignoreValidation() {
+        ignoreValidation = true;
+        return this;
+    }
 
     public BlockInfo cond(Condition condition) {
         this.condition = condition;
@@ -88,6 +94,7 @@ public class BlockInfo implements IJsonAble {
         }
 
         IBlockState block = this.block.next(random);
+        if(this == DefaultsEnd.PORTAL) Skygrid.LOGGER.info("Portal: {}", block);
         if(block != null) {
             primer.setBlockState(x, y, z, randomizeState(block, random));
 

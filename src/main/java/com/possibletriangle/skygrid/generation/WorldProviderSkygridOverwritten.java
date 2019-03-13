@@ -1,26 +1,19 @@
 package com.possibletriangle.skygrid.generation;
 
-import com.possibletriangle.skygrid.Skygrid;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.*;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class WorldProviderSkygridOverwritten extends WorldProviderSkygrid {
 
@@ -214,8 +207,18 @@ public class WorldProviderSkygridOverwritten extends WorldProviderSkygrid {
     }
 
     @Override
+    public void setWorldTime(long time) {
+        super.setWorldTime(time);
+    }
+
+    @Override
     public boolean isDaytime() {
-        return old.isDaytime();
+        return super.isDaytime();
+    }
+
+    @Override
+    public long getWorldTime() {
+        return super.getWorldTime();
     }
 
     @Override
@@ -244,16 +247,6 @@ public class WorldProviderSkygridOverwritten extends WorldProviderSkygrid {
     }
 
     @Override
-    public void calculateInitialWeather() {
-        old.calculateInitialWeather();
-    }
-
-    @Override
-    public void updateWeather() {
-        old.updateWeather();
-    }
-
-    @Override
     public boolean canBlockFreeze(BlockPos pos, boolean byWater) {
         return old.canBlockFreeze(pos, byWater);
     }
@@ -265,7 +258,7 @@ public class WorldProviderSkygridOverwritten extends WorldProviderSkygrid {
 
     @Override
     public void setSpawnPoint(BlockPos pos) {
-        old.setSpawnPoint(pos);
+        super.setSpawnPoint(pos);
     }
 
     @Override
