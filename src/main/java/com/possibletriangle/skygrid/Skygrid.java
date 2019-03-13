@@ -29,7 +29,7 @@ public class Skygrid {
 
     public static final String MODID = "skygrid";
     public static final String NAME = "Skygrid";
-    public static final String VERSION = "1.2.1";
+    public static final String VERSION = "1.2.2";
     public static final String DEPENDENCIES
             = "after:biomesoplenty;"
             + "after:natura;"
