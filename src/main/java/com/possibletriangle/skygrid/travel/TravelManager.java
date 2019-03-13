@@ -198,20 +198,29 @@ public class TravelManager {
     }
 
     public static void validate() {
+		
+		ArrayList<ResourceLocation> remove_from = new ArrayList<>();
 
         for(ResourceLocation from : FROM_TO.keySet()) {
+			
+			if(DimensionHelper.getIDFor(from) == DimensionManager.getNextFreeDimId()) {
+				remove_from.add(from);
+			} else {
 
-            ArrayList<ResourceLocation> remove = new ArrayList<>();
-            for(ResourceLocation to : FROM_TO.get(from)) {
-                if(DimensionHelper.getIDFor(to) == DimensionManager.getNextFreeDimId()) {
-                    Skygrid.LOGGER.info("Removing fall to \"{}\", because it does not exist", to);
-                    remove.add(to);
-                }
-            }
+				ArrayList<ResourceLocation> remove = new ArrayList<>();
+				for(ResourceLocation to : FROM_TO.get(from)) {
+					if(DimensionHelper.getIDFor(to) == DimensionManager.getNextFreeDimId()) {
+						remove.add(to);
+					}
+				}
 
-            FROM_TO.get(from).removeAll(remove);
+				FROM_TO.get(from).removeAll(remove);
+				
+			}
 
         }
+		
+		FROM_TO.keySet().removeAll(remove_from);
 
     }
 
