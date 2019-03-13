@@ -6,7 +6,6 @@ import com.possibletriangle.skygrid.ConfigSkygrid;
 import com.possibletriangle.skygrid.IJsonAble;
 import com.possibletriangle.skygrid.Skygrid;
 import com.possibletriangle.skygrid.blocks.BlockFrame;
-import com.possibletriangle.skygrid.defaults.DefaultsEnd;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockLog;
@@ -58,15 +57,6 @@ public class BlockInfo implements IJsonAble {
         return add(result, 1);
     }
 
-    public BlockInfo addAtAll(Object result) {
-        return addAtAll(result, 1);
-    }
-
-    public BlockInfo addAtAll(Object result, double weight) {
-        for(EnumFacing side : EnumFacing.values()) if(at.get(new BlockPos(0, 0, 0).offset(side)) == null) addAt(side, result, weight);
-        return this;
-    }
-
     public BlockInfo addAt(BlockPos pos, Object result, double weight) {
         RandomCollectionBlocks r = at.containsKey(pos) ? at.get(pos) : new RandomCollectionBlocks();
         r.add(weight, result);
@@ -94,7 +84,7 @@ public class BlockInfo implements IJsonAble {
         }
 
         IBlockState block = this.block.next(random);
-        if(this == DefaultsEnd.PORTAL) Skygrid.LOGGER.info("Portal: {}", block);
+
         if(block != null) {
             primer.setBlockState(x, y, z, randomizeState(block, random));
 

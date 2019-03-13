@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
@@ -81,11 +82,16 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
         return null;
     }
 
-    private static IBlockState stateFrom(ResourceLocation r, Random random) {
+    @Nullable
+    private static IBlockState stateFrom(@Nullable ResourceLocation r, Random random) {
+
+        if(r == null) return null;
 
         ResourceLocation name = r.getResourcePath().contains(":") ? new ResourceLocation(r.getResourceDomain(), r.getResourcePath().substring(0, r.getResourcePath().indexOf(':'))) : r;
         Block block = Block.REGISTRY.getObject(name);
-        if(block == Blocks.AIR) return null;
+
+        if(!Block.REGISTRY.containsKey(name)) return null;
+        if(block == Blocks.AIR) return block.getDefaultState();
 
         ArrayList<Integer> metas = new ArrayList<>();
         for(IBlockState state : block.getBlockState().getValidStates())
@@ -97,7 +103,7 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
             try {
                 meta = Integer.parseInt(m);
             } catch (NumberFormatException ex) {
-                Skygrid.LOGGER.error("{} is not a valid metada (\"{}\")", m, r);
+                Skygrid.LOGGER.error("{} is not a valid metadata (\"{}\")", m, r);
             }
         }
 
@@ -166,7 +172,7 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
                     if(r.getResourcePath().contains(":"))
                         try {
                             meta = Integer.parseInt(r.getResourcePath().substring(r.getResourcePath().indexOf(':')+1));
-                        } catch (NumberFormatException ex) {
+                        } catch (NumberFormatException ignored) {
                         }
 
                     r = r.getResourcePath().contains(":") ? new ResourceLocation(r.getResourceDomain(), r.getResourcePath().substring(0, r.getResourcePath().indexOf(':'))) : r;
