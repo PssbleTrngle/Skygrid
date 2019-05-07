@@ -1,5 +1,6 @@
-package com.possibletriangle.skygrid.defaults;
+package com.possibletriangle.skygrid.defaults.vanilla;
 
+import com.possibletriangle.skygrid.defaults.Defaults;
 import com.possibletriangle.skygrid.random.BlockInfo;
 import com.possibletriangle.skygrid.random.RandomCollection;
 import com.possibletriangle.skygrid.random.RandomCollectionJson;

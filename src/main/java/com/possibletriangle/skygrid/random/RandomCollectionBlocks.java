@@ -11,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -35,6 +36,10 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
 
     @Override
     public RandomCollectionBlocks add(double weight, Object result) {
+
+        if(result instanceof ResourceLocation) {
+            if(!Loader.isModLoaded(((ResourceLocation) result).getResourceDomain())) return this;
+        }
 
         return (RandomCollectionBlocks) super.add(weight, result);
     }
@@ -90,7 +95,11 @@ public class RandomCollectionBlocks extends RandomCollection<Object> implements 
         ResourceLocation name = r.getResourcePath().contains(":") ? new ResourceLocation(r.getResourceDomain(), r.getResourcePath().substring(0, r.getResourcePath().indexOf(':'))) : r;
         Block block = Block.REGISTRY.getObject(name);
 
-        if(!Block.REGISTRY.containsKey(name)) return null;
+        if(!Block.REGISTRY.containsKey(name)) {
+            Skygrid.LOGGER.debug("No block for \"{}\"", r.toString());
+            return null;
+        }
+
         if(block == Blocks.AIR) return block.getDefaultState();
 
         ArrayList<Integer> metas = new ArrayList<>();

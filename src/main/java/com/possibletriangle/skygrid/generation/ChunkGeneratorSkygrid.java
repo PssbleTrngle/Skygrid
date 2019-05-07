@@ -1,6 +1,6 @@
 package com.possibletriangle.skygrid.generation;
 
-import com.possibletriangle.skygrid.defaults.DefaultsEnd;
+import com.possibletriangle.skygrid.defaults.vanilla.DefaultsEnd;
 import com.possibletriangle.skygrid.random.RandomCollection;
 import com.possibletriangle.skygrid.random.SkygridOptions;
 import net.minecraft.block.BlockFalling;

@@ -58,6 +58,8 @@ public class BlockInfo implements IJsonAble {
     }
 
     public BlockInfo addAt(BlockPos pos, Object result, double weight) {
+        if(result instanceof BlockInfo) return this;
+
         RandomCollectionBlocks r = at.containsKey(pos) ? at.get(pos) : new RandomCollectionBlocks();
         r.add(weight, result);
         at.put(pos, r);
@@ -99,13 +101,16 @@ public class BlockInfo implements IJsonAble {
                 if (block.getBlock() instanceof BlockLiquid || block.getBlock() instanceof IFluidBlock) {
                     for (EnumFacing face : EnumFacing.values()) {
                         BlockPos p = new BlockPos(0, 0, 0).offset(face);
-                        if (primer.getBlockState(p.getX() + x, p.getY() + y, p.getZ() + z).getBlock() == fillblock.getBlock())
-                            primer.setBlockState(p.getX() + x, p.getY() + y, p.getZ() + z, BlockFrame.FRAME.getDefaultState());
-
+                        try {
+                            if (primer.getBlockState(p.getX() + x, p.getY() + y, p.getZ() + z).getBlock() == fillblock.getBlock())
+                                primer.setBlockState(p.getX() + x, p.getY() + y, p.getZ() + z, BlockFrame.FRAME.getDefaultState());
+                        } catch (ArrayIndexOutOfBoundsException ex) {
+                            Skygrid.LOGGER.error("Illegal location: {}/{}/{}", p.getX() + x, p.getY() + y, p.getZ() + z);
+                        }
                     }
                 }
             }
-        } else Skygrid.LOGGER.error("BlockInfo is empty or does not contain any existing blocks: {}", this::toJSON);
+        } else Skygrid.LOGGER.debug("BlockInfo is empty or does not contain any existing blocks: {}", this::toJSON);
 
     }
 
