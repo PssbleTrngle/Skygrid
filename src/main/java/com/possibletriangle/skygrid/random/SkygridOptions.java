@@ -35,6 +35,11 @@ public class SkygridOptions {
     }
 
     private static RandomCollection<BlockInfo> forDimension(ResourceLocation dimensionID, int atY) {
+        if(dimensionID == null || !OPTIONS.containsKey(dimensionID)) {
+            Skygrid.LOGGER.error("Invalid dimension request for \"{}\"", dimensionID == null ? "null" : dimensionID.toString());
+            return new RandomCollectionJson<>(BlockInfo.class).add(1, new BlockInfo().add(Blocks.SPONGE));
+        }
+
         if(dimensionID.getResourcePath().toLowerCase().equals("nether"))
             dimensionID = new ResourceLocation(dimensionID.getResourceDomain(), "the_nether");
 
@@ -47,6 +52,10 @@ public class SkygridOptions {
     }
 
     public static BlockPos getOffset(ResourceLocation dimensionID) {
+        if(dimensionID == null || !OPTIONS.containsKey(dimensionID)) {
+            Skygrid.LOGGER.error("Invalid dimension request for \"{}\"", dimensionID == null ? "null" : dimensionID.toString());
+            return new BlockPos(3, 3, 3);
+        }
 
         if(dimensionID.getResourcePath().toLowerCase().equals("nether"))
             dimensionID = new ResourceLocation(dimensionID.getResourceDomain(), "the_nether");
@@ -62,6 +71,10 @@ public class SkygridOptions {
     }
 
     public static int getHeight(ResourceLocation dimensionID) {
+        if(dimensionID == null || !OPTIONS.containsKey(dimensionID)) {
+            Skygrid.LOGGER.error("Invalid dimension request for \"{}\"", dimensionID == null ? "null" : dimensionID.toString());
+            return 100;
+        }
 
         if(dimensionID.getResourcePath().toLowerCase().equals("nether"))
             dimensionID = new ResourceLocation(dimensionID.getResourceDomain(), "the_nether");
@@ -70,6 +83,10 @@ public class SkygridOptions {
     }
 
     public static RandomCollection<ResourceLocation> getLoot(ResourceLocation dimensionID) {
+        if(dimensionID == null || !OPTIONS.containsKey(dimensionID)) {
+            Skygrid.LOGGER.error("Invalid dimension request for \"{}\"", dimensionID == null ? "null" : dimensionID.toString());
+            return new RandomCollectionRL();
+        }
 
         if(dimensionID.getResourcePath().toLowerCase().equals("nether"))
             dimensionID = new ResourceLocation(dimensionID.getResourceDomain(), "the_nether");
@@ -78,6 +95,10 @@ public class SkygridOptions {
     }
 
     public static RandomCollection<ResourceLocation> getMobs(ResourceLocation dimensionID) {
+        if(dimensionID == null || !OPTIONS.containsKey(dimensionID)) {
+            Skygrid.LOGGER.error("Invalid dimension request for \"{}\"", dimensionID == null ? "null" : dimensionID.toString());
+            return new RandomCollectionRL();
+        }
 
         if(dimensionID.getResourcePath().toLowerCase().equals("nether"))
             dimensionID = new ResourceLocation(dimensionID.getResourceDomain(), "the_nether");
@@ -86,6 +107,10 @@ public class SkygridOptions {
     }
 
     public static IBlockState getFillBlock(ResourceLocation dimensionID, int atY) {
+        if(dimensionID == null || !OPTIONS.containsKey(dimensionID)) {
+            Skygrid.LOGGER.error("Invalid dimension request for \"{}\"", dimensionID == null ? "null" : dimensionID.toString());
+            return Blocks.AIR.getDefaultState();
+        }
 
         if(dimensionID.getResourcePath().toLowerCase().equals("nether"))
             dimensionID = new ResourceLocation(dimensionID.getResourceDomain(), "the_nether");
@@ -103,14 +128,18 @@ public class SkygridOptions {
         return fillBlock;
     }
 
-    public static BlockInfo next(ResourceLocation dimensionType, Random random, int atY) {
+    public static BlockInfo next(ResourceLocation dimensionID, Random random, int atY) {
+        if(dimensionID == null || !OPTIONS.containsKey(dimensionID)) {
+            Skygrid.LOGGER.error("Invalid dimension request for \"{}\"", dimensionID == null ? "null" : dimensionID.toString());
+            return new BlockInfo().add(Blocks.SPONGE);
+        }
 
-        RandomCollection<BlockInfo> blocks = forDimension(dimensionType, atY);
+        RandomCollection<BlockInfo> blocks = forDimension(dimensionID, atY);
         if(blocks == null) return new BlockInfo().add(Blocks.AIR);
 
         BlockInfo info = blocks.next(random);
         if(info == null)
-            throw new NullPointerException("No blocks defined for \"" + dimensionType.toString() + "\"");
+            throw new NullPointerException("No blocks defined for \"" + dimensionID.toString() + "\"");
 
         return info;
     }
