@@ -17,6 +17,11 @@ public class WorldProviderSkygrid extends WorldProvider {
     public WorldProviderSkygrid() {
     }
 
+    @Override
+    public boolean canRespawnHere() {
+        return false;
+    }
+
     private Random random;
 
     @Override
