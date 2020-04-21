@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+#issueTrackerURL="http://my.issue.tracker/" #optional
+[[mods]]
+modId="skygrid"
+version="${version}"
+displayName="Skygrid"
+#updateJSONURL="http://myurl.me/"
+#displayURL="http://example.com/"
+#logoFile="examplemod.png"
+# A text field displayed in the mod UI
+credits="Sethbling for the original idea"
+# A text field displayed in the mod UI
+authors="possible_triangle"
+description='''
+Skygrid generator
+'''
+[[dependencies.examplemod]] #optional
+    # the modid of the dependency
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+# Here's another dependency
+[[dependencies.examplemod]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
+           xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+
+    <create>
+        <biome id="ocean"/>
+        <biome id="lukewarm_ocean"/>
+        <biome id="deep_ocean"/>
+        <biome id="warm_ocean"/>
+    </create>
+    
+    <fill id="water" />
+
+    <reference weight="10" id="corals"/>
+
+    <collection>
+        <side on="up">
+            <block id="seagrass"/>
+            <block id="sea_pickle">
+                <cycle key="pickles"/>
+            </block>
+            <block id="tall_seagrass">
+                <set key="half" value="lower"/>
+                <side on="up">
+                    <block id="tall_seagrass">
+                        <set key="half" value="upper"/>
+                    </block>
+                </side>
+            </block>
+        </side>
+        <block id="sand"/>
+        <block id="gravel"/>
+    </collection>
+
+    <collection weight="10" name="prismarine">
+        <block id="prismarine"/>
+        <block id="dark_prismarine"/>
+        <block id="prismarine_bricks"/>
+        <block id="sea_lantern"/>
+    </collection>
+
+    <block id="dried_kelp_block"/>
+
+</dimension>

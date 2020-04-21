@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
+           xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+
+    <collection name="ground" weight="100">
+
+        <collection name="grass" weight="110">
+            <block id="dirt"/>
+            <block weight="0.1" id="grass_path"/>
+            <block weight="0.1" id="coarse_dirt"/>
+            <collection weight="4" name="grass">
+
+                <block weight="3" id="grass_block">
+                    <side probability="0.3" on="up">
+                        <tag weight="10" id="#small_flowers" />
+                        <block weight="20" id="grass" />
+                        <block id="fern" />
+                    </side>
+                </block>
+
+                <block id="grass_block">
+                    <side on="up">
+                        <tag id="#saplings" />
+                    </side>
+                </block>
+
+                <block weight="0.2" id="grass_block">
+                    <side on="up" shared="true">
+                        <reference id="double_flowers"/>
+                        <reference id="double_plants"/>
+                    </side>
+                </block>
+
+            </collection>
+            <block weight="0.05" id="mycelium">
+                <side probability="0.3" on="up">
+                    <block id="red_mushroom"/>
+                    <block id="brown_mushroom"/>
+                </side>
+            </block>
+        </collection>
+
+        <block id="obsidian" weight="5"/>
+
+        <collection name="cold">
+            <block weight="100" id="snow_block"/>
+            <block weight="100" id="ice"/>
+            <block weight="10" id="packed_ice"/>
+            <block weight="2" id="blue_ice"/>
+        </collection>
+
+        <collection name="terracotta">
+            <block weight="4" id="terracotta"/>
+            <block id="red_terracotta"/>
+            <block id="orange_terracotta"/>
+            <block id="brown_terracotta"/>
+            <block id="yellow_terracotta"/>
+            <block id="white_terracotta"/>
+        </collection>
+
+        <collection name="stone" weight="100">
+            <tag id="#generated_stone"/>
+            <tag id="#gravel"/>
+            <block id="clay"/>
+        </collection>
+
+        <collection name="sand" weight="20">
+            <collection weight="10">
+                <block weight="10" id="sand">
+                    <side probability="0.1" on="up">
+                        <block id="cactus" />
+                        <block id="dead_bush" />
+                    </side>
+                </block>
+                <block id="sandstone"/>
+                <block id="smooth_sandstone"/>
+                <block id="chiseled_sandstone"/>
+            </collection>
+            <collection>
+                <block weight="10" id="red_sand"/>
+                <block id="red_sandstone"/>
+                <block id="red_smooth_sandstone"/>
+                <block id="red_chiseled_sandstone"/>
+            </collection>
+        </collection>
+
+    </collection>
+
+    <collection name="crops" weight="5">
+        <block id="farmland" weight="10">
+            <offset y="1">
+                <tag id="#crops">
+                    <cycle key="age"/>
+                </tag>
+            </offset>
+        </block>
+        <block id="podzol">
+            <offset y="1">
+                <block id="bamboo_sapling"/>
+            </offset>
+        </block>
+        <collection weight="3">
+            <block id="melon"/>
+            <collection name="pumpkins">
+                <block id="pumpkin"/>
+                <block id="carved_pumpkin"/>
+            </collection>
+        </collection>
+    </collection>
+
+    <collection name="tree" weight="80">
+        <tag weight="3" id="#raw_logs">
+            <cycle key="axis"/>
+        </tag>
+        <block weight="0.03" id="bee_nest" />
+        <collection weight="0.1" name="mushrooms">
+            <block id="mushroom_stem" />
+            <block id="red_mushroom_block" />
+            <block id="brown_mushroom_block" />
+        </collection>
+        <tag id="#planks"/>
+        <tag weight="2" id="#leaves"/>
+    </collection>
+
+    <collection name="building" weight="14">
+
+        <collection weight="20" name="stone">
+            <block id="cobblestone"/>
+            <block weight="0.2" id="mossy_cobblestone"/>
+            <block weight="0.1" id="smooth_stone"/>
+            <tag id="#polished_stone"/>
+            <collection name="bricks">
+                <block weight="3" id="stone_bricks"/>
+                <block id="mossy_stone_bricks"/>
+                <block id="cracked_stone_bricks"/>
+                <block id="chiseled_stone_bricks"/>
+            </collection>
+
+            <block weight="0.2" id="bricks"/>
+            <tag id="#bookshelfs"/>
+            <tag id="#glass"/>
+            <tag id="#wool"/>
+
+            <collection name="redstone">
+                <cycle key="facing" />
+                <block id="observer" />
+                <block id="dispenser" />
+                <block id="dropper" />
+                <block id="note_block" />
+                <block id="piston" />
+                <block weight="0.2" id="sticky_piston" />
+                <block id="hopper" />
+                <block id="redstone_lamp" />
+                <block weight="2" id="tnt" />
+                <block weight="2" id="slime_block" />
+                <block id="honey_block" />
+            </collection>
+
+            <collection name="workstations">
+                <cycle key="facing" />
+
+                <block weight="20" id="crafting_table" />
+                <block weight="3" id="furnace" />
+                <block id="loom" />
+                <block id="smoker" />
+                <block id="blast_furnace" />
+                <block id="cauldron" />
+                <block id="cartography_table" />
+                <block id="fletching_table" />
+                <block id="smithing_table" />
+                <block id="stonecutter" />
+                <block id="lectern" />
+            </collection>
+
+            <block weight="0.2" id="cobweb" />
+
+        </collection>
+
+    </collection>
+
+    <collection name="loot">
+        <tag id="#chests/wooden" />
+        <block id="barrel" />
+    </collection>
+    <block id="spawner" />
+
+    <collection name="water">
+
+        <reference weight="10" id="corals" />
+
+        <collection>
+            <side on="up">
+                <block id="seagrass" />
+                <block id="sea_pickle">
+                    <cycle key="pickles" />
+                </block>
+                <block id="tall_seagrass">
+                    <set key="half" value="lower" />
+                    <side on="up">
+                        <block id="tall_seagrass">
+                            <set key="half" value="upper" />
+                        </block>
+                    </side>
+                </block>
+            </side>
+            <block id="sand" />
+            <block id="gravel" />
+        </collection>
+
+        <collection weight="10" name="prismarine">
+            <block id="prismarine" />
+            <block id="dark_prismarine" />
+            <block id="prismarine_bricks" />
+            <block id="sea_lantern" />
+        </collection>
+
+        <block id="dried_kelp_block" />
+    </collection>
+
+    <collection name="ores" weight="40">
+        <collection>
+            <block weight="100" id="coal_ore"/>
+            <block weight="80" id="iron_ore"/>
+            <block weight="45" id="lapis_ore"/>
+            <block weight="60" id="redstone_ore"/>
+            <block weight="60" id="gold_ore"/>
+            <block weight="10" id="diamond_ore"/>
+            <block weight="5" id="emerald_ore"/>
+        </collection>
+        <collection name="blocks" weight="0.05">
+            <block weight="100" id="coal_block"/>
+            <block weight="80" id="iron_block"/>
+            <block weight="45" id="lapis_block"/>
+            <block weight="60" id="redstone_block"/>
+            <block weight="60" id="gold_block"/>
+            <block weight="10" id="diamond_block"/>
+            <block weight="5" id="emerald_block"/>
+        </collection>
+    </collection>
+
+</dimension>
