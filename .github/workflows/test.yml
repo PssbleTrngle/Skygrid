@@ -1,0 +1,66 @@
+name: Test
+
+on:
+  pull_request:
+    branches: 
+      - master
+  repository_dispatch:
+    types: test
+  push:
+    branches-ignore:
+      - master
+      - website
+    paths:
+      - 'src/main/java'
+
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+      
+    - run: chmod +x ./gradlew
+    - name: Setup project
+      run: ./gradlew
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: built
+        path: ./
+
+  compile:
+    name: Will compile
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: built
+      - name: Compile Code
+        run: |
+          chmod +x ./gradlew
+          ./gradlew compileJava
+        working-directory: built
+
+  server:
+    name: Server starts
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: built
+      - name: Create EULA
+        run: |
+          touch eula.txt
+          echo "eula=true" > eula.txt
+        working-directory: built/run
+      - name: Run Server
+        run: |
+          chmod +x ./gradlew
+          ./gradlew runServer
+        working-directory: built
