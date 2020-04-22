@@ -8,7 +8,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.tags.NetworkTagManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
@@ -33,8 +33,8 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
 
     private final XMLLoader xmlLoader;
 
-    public DimensionLoader(NetworkTagManager tags) {
-        this.xmlLoader = new XMLLoader(tags);
+    public DimensionLoader(MinecraftServer server) {
+        this.xmlLoader = new XMLLoader(server.getNetworkTagManager(), server.getLootTableManager());
     }
 
     public static Optional<BlockProvider> findRef(ResourceLocation name) {

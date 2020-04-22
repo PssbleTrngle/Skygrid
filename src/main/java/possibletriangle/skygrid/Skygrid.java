@@ -51,7 +51,7 @@ public class Skygrid implements WorldPersistenceHooks.WorldPersistenceHook {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onServerWillStart(final FMLServerAboutToStartEvent event) {
         MinecraftServer server = event.getServer();
-        server.getResourceManager().addReloadListener(new DimensionLoader(server.getNetworkTagManager()));
+        server.getResourceManager().addReloadListener(new DimensionLoader(server));
     }
 
     private Set<ResourceLocation> getTags(Item item) {

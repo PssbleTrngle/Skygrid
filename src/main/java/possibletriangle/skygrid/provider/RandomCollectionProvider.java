@@ -13,11 +13,11 @@ public class RandomCollectionProvider extends CollectionProvider {
 
     @Override
     public BlockProvider getProvider(Random random) {
-        return this.children.next(random).orElseThrow(() -> new NullPointerException("Collection should no be empty"));
+        return this.children.next(random).orElseThrow(() -> new NullPointerException("Collection should no be isEmpty"));
     }
 
     @Override
     public boolean isValid() {
-        return !this.children.empty();
+        return !this.children.isEmpty();
     }
 }

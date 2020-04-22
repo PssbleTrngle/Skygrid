@@ -1,8 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+<dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
+           xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
 
-    <block id="netherrack" />
+    <loot>
+        <table id="nether_bridge"/>
+    </loot>
 
-    <block id="glowstone" />
+    <collection weight="10">
+
+        <block weight="10" id="netherrack">
+            <side probability="0.08" on="up">
+                <block weight="100" id="red_mushroom"/>
+                <block weight="100" id="brown_mushroom"/>
+                <block id="wither_rose"/>
+            </side>
+        </block>
+
+        <block weight="3" id="soul_sand">
+            <side probability="0.06" on="up">
+                <block id="nether_wart">
+                    <cycle key="age"/>
+                </block>
+            </side>
+        </block>
+
+        <block id="gravel"/>
+        <block id="magma_block"/>
+
+    </collection>
+
+    <block id="glowstone"/>
+
+    <collection>
+        <block weight="5" id="nether_wart_block"/>
+        <block id="red_mushroom_block"/>
+        <block id="brown_mushroom_block"/>
+    </collection>
+
+    <collection weight="0.05">
+        <block id="nether_brick_slab">
+            <set key="type" value="top"/>
+            <side on="up">
+                <block id="brewing_stand"/>
+            </side>
+        </block>
+        <block id="smithing_table"/>
+        <block id="jack_o_lantern">
+                    </block>
+    </collection>
+
+    <collection>
+        <block weight="3" id="nether_bricks">
+            <side probability="0.1" on="up">
+                <block id="wither_skeleton_skull">
+                    <cycle key="rotation"/>
+                </block>
+            </side>
+        </block>
+        <block id="red_nether_bricks"/>
+    </collection>
+
+    <collection>
+        <block weight="0.1" id="bone_block"/>
+        <block id="nether_quartz_ore"/>
+    </collection>
+
+    <collection name="loot" weight="0.07">
+                <tag id="#chests/wooden"/>
+    </collection>
 
 </dimension>

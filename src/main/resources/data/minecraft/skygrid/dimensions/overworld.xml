@@ -2,6 +2,26 @@
 <dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
            xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
 
+    <loot>
+        <table weight="10" id="abandoned_mineshaft"/>
+        <table weight="10" id="simple_dungeon"/>
+        <table weight="10" id="spawn_bonus_chest"/>
+        <table id="buried_treasure"/>
+        <table id="desert_pyramid"/>
+        <table id="igloo_chest"/>
+        <table id="jungle_temple"/>
+        <table id="pillager_outpost"/>
+        <table id="shipwreck_map"/>
+        <table id="shipwreck_supply"/>
+        <table id="shipwreck_treasure"/>
+        <table id="stronghold_corridor"/>
+        <table id="stronghold_crossing"/>
+        <table id="stronghold_library"/>
+        <table id="underwater_ruin_big"/>
+        <table id="underwater_ruin_small"/>
+        <table id="woodland_mansion"/>
+    </loot>
+
     <collection name="ground" weight="100">
 
         <collection name="grass" weight="110">
@@ -94,12 +114,32 @@
                 </tag>
             </offset>
         </block>
+
         <block id="podzol">
             <offset y="1">
                 <block id="bamboo_sapling"/>
             </offset>
         </block>
-        <collection weight="3">
+
+        <block weight="0.1" id="jungle_wood">
+            <side on="north">
+                <block id="cocoa">
+                    <set key="facing" value="south"/>
+                </block>
+            </side>
+        </block>
+
+        <block id="sand" weight="15">
+            <side on="up">
+                <block id="sugar_cane">
+                    <side probability="0.3" on="up">
+                        <block id="sugar_cane"/>
+                    </side>
+                </block>
+            </side>
+        </block>
+
+        <collection weight="4">
             <block id="melon"/>
             <collection name="pumpkins">
                 <block id="pumpkin"/>
@@ -142,8 +182,7 @@
             <tag id="#wool"/>
 
             <collection name="redstone">
-                <cycle key="facing" />
-                <block id="observer" />
+                                <block id="observer" />
                 <block id="dispenser" />
                 <block id="dropper" />
                 <block id="note_block" />
@@ -157,7 +196,6 @@
             </collection>
 
             <collection name="workstations">
-                <cycle key="facing" />
 
                 <block weight="20" id="crafting_table" />
                 <block weight="3" id="furnace" />
@@ -170,6 +208,7 @@
                 <block id="smithing_table" />
                 <block id="stonecutter" />
                 <block id="lectern" />
+                <block id="composter" />
             </collection>
 
             <block weight="0.2" id="cobweb" />
@@ -179,7 +218,7 @@
     </collection>
 
     <collection name="loot">
-        <tag id="#chests/wooden" />
+                <tag id="#chests/wooden" />
         <block id="barrel" />
     </collection>
     <block id="spawner" />
@@ -190,6 +229,7 @@
 
         <collection>
             <side on="up">
+                <block id="kelp" />
                 <block id="seagrass" />
                 <block id="sea_pickle">
                     <cycle key="pickles" />

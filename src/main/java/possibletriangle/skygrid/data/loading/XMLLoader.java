@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -36,9 +36,7 @@ import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -48,9 +46,11 @@ import java.util.stream.Stream;
 public class XMLLoader {
 
     private final NetworkTagManager tags;
+    private final LootTableManager loot;
 
-    public XMLLoader(NetworkTagManager tags) {
+    public XMLLoader(NetworkTagManager tags, LootTableManager loot) {
         this.tags = tags;
+        this.loot = loot;
     }
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -127,6 +127,7 @@ public class XMLLoader {
             boolean shared = e.hasAttribute("shared") && Boolean.parseBoolean(e.getAttribute("shared"));
             float probability = e.hasAttribute("probability") ? Float.parseFloat(e.getAttribute("probability")) : 0;
             RandomCollectionProvider provider = new RandomCollectionProvider(RandomCollection.from(findProviders(e)));
+            int by = e.hasAttribute("by") ? Integer.parseInt(e.getAttribute("by")) : 1;
 
             switch (e.getNodeName().toLowerCase()) {
 
@@ -134,18 +135,28 @@ public class XMLLoader {
                     int x = Integer.parseInt(e.getAttribute("x"));
                     int y = Integer.parseInt(e.getAttribute("y"));
                     int z = Integer.parseInt(e.getAttribute("z"));
-                    return Optional.of(new OffsetBlock(provider, new BlockPos(x, y, z), probability, shared));
+                    return Stream.of(new OffsetBlock(provider, new BlockPos(x, y, z), probability, shared));
 
                 case "side":
                     Direction side = Direction.byName(e.getAttribute("on"));
-                    int by = Integer.parseInt(e.getAttribute("by"));
-                    return Optional.ofNullable(side).map(s -> new OffsetBlock(provider, new BlockPos(0, 0, 0).offset(s, by), probability, shared));
+                    return Stream.of(side).filter(Objects::nonNull)
+                            .map(s -> new BlockPos(0, 0, 0).offset(s, by))
+                            .map(pos -> new OffsetBlock(provider, pos, probability, shared));
+
+                case "horizontal":
+                    return Arrays.stream(Direction.values())
+                            .filter(d -> d.getAxis() != Direction.Axis.Y)
+                            .map(s -> new OffsetBlock(
+                                    provider.addProperties(Stream.of(new SetProperty("facing",s.getOpposite().getName()))),
+                                    new BlockPos(0, 0, 0).offset(s, by),
+                                    probability / 4, shared
+                            ));
 
                 default:
-                    return Optional.<OffsetBlock>empty();
+                    return Stream.<OffsetBlock>of();
 
             }
-        }).filter(Optional::isPresent).map(Optional::get);
+        }).flatMap(Function.identity());
     }
 
     public Stream<PropertyProvider> findProperties(Element node) {
@@ -170,8 +181,8 @@ public class XMLLoader {
 
     public Stream<BlockProvider> parseProvider(Element e) {
         return parseRawProvider(e)
-                .peek(p -> p.setProperties(findProperties(e)))
-                .peek(p -> p.setOffets(findOffsets(e)));
+                .peek(p -> p.addProperties(findProperties(e)))
+                .peek(p -> p.addOffsets(findOffsets(e)));
     }
 
     public Stream<Pair<Float, BlockProvider>> findProviders(Element node) {
@@ -206,28 +217,6 @@ public class XMLLoader {
         }
     }
 
-    private <T> LazyOptional<T> parse(InputStream input, Function<Element, T> parser) {
-        try {
-
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            factory.setSchema(getSchema());
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            builder.setErrorHandler(new ErrorHandler());
-
-            Document xml = builder.parse(input);
-
-            Element node = xml.getDocumentElement();
-            node.normalize();
-
-            return LazyOptional.of(() -> parser.apply(node));
-
-        } catch (SAXException | IOException | ParserConfigurationException ex) {
-            LOGGER.error("Palette XML Error: {}", ex.getMessage());
-            return LazyOptional.empty();
-        }
-    }
-
     public BlockPos findPos(Element parent, String name) {
         return elements(parent, name).findFirst().map(e -> {
             int x = Integer.parseInt(e.getAttribute("x"));
@@ -235,6 +224,16 @@ public class XMLLoader {
             int z = Integer.parseInt(e.getAttribute("z"));
             return new BlockPos(x, y, z);
         }).orElseGet(() -> new BlockPos(0, 0, 0));
+    }
+
+    public Optional<ResourceLocation> findLootTable(String mod, String id) {
+        Set<ResourceLocation> lootKeys = loot.getLootTableKeys();
+
+        Optional<ResourceLocation> table = Optional.of(new ResourceLocation(mod, id)).filter(lootKeys::contains);
+
+        if (table.isPresent()) return table;
+        if (!id.startsWith("chests/")) return findLootTable(mod, "chests/" + id);
+        return Optional.empty();
     }
 
     public Optional<DimensionConfig> parseConfig(Element node) {
@@ -254,7 +253,17 @@ public class XMLLoader {
                 .flatMap(Function.identity())
                 .orElse(null);
 
-        return Optional.of(new DimensionConfig(replace, create, providers, distance, cluster, fill)).filter(DimensionConfig::isValid);
+        Element lootElement = elements(node, "loot").findFirst().orElseThrow(() -> new IllegalArgumentException("No loot defined"));
+        RandomCollection<ResourceLocation> tables = RandomCollection.from(elements(lootElement, "table").map(e -> {
+
+            String mod = e.getAttribute("mod");
+            String id = e.getAttribute("id");
+            Float weight = Float.parseFloat(e.getAttribute("weight"));
+            return findLootTable(mod, id).map(t -> new Pair<>(weight, t));
+
+        }).filter(Optional::isPresent).map(Optional::get));
+
+        return Optional.of(new DimensionConfig(replace, create, providers, distance, cluster, fill, tables)).filter(DimensionConfig::isValid);
     }
 
     public Optional<RandomCollectionProvider> parseSingleProvider(Element node) {

@@ -1,7 +1,9 @@
 package possibletriangle.skygrid.data.loading;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.storage.loot.LootTables;
 import possibletriangle.skygrid.RandomCollection;
 import possibletriangle.skygrid.generator.custom.CreateOptions;
 import possibletriangle.skygrid.provider.BlockProvider;
@@ -26,7 +28,8 @@ public class DimensionConfig {
             new RandomCollection<>(FALLBACK_PROVIDER),
             new BlockPos(DEFAULT_DISTANCE, DEFAULT_DISTANCE, DEFAULT_DISTANCE),
             new BlockPos(DEFAULT_CLUSTER, DEFAULT_CLUSTER, DEFAULT_CLUSTER),
-            DEFAULT_FILL
+            DEFAULT_FILL,
+            new RandomCollection<>(LootTables.EMPTY)
     );
 
     private final boolean replace;
@@ -44,6 +47,8 @@ public class DimensionConfig {
     public final BlockPos distance;
     public final BlockPos cluster;
 
+    private final RandomCollection<ResourceLocation> loot;
+
     private BlockPos defaultPos(BlockPos pos, int def) {
         int x = pos.getX();
         int y = pos.getY();
@@ -51,13 +56,14 @@ public class DimensionConfig {
         return new BlockPos(x == 0 ? def : x, y == 0 ? def : y, z == 0 ? def : z);
     }
 
-    public DimensionConfig(boolean replace, @Nullable  CreateOptions create, RandomCollection<BlockProvider> providers, BlockPos distance, BlockPos cluster, BlockProvider fill) {
+    public DimensionConfig(boolean replace, @Nullable  CreateOptions create, RandomCollection<BlockProvider> providers, BlockPos distance, BlockPos cluster, BlockProvider fill, RandomCollection<ResourceLocation> loot) {
         this.replace = replace;
         this.create = create;
         this.providers = providers;
         this.readDistance = distance;
         this.readCluster = cluster;
         this.fill = fill;
+        this.loot = loot;
 
         this.distance = defaultPos(distance, DEFAULT_DISTANCE);
         this.cluster = defaultPos(cluster, DEFAULT_CLUSTER);
@@ -74,21 +80,26 @@ public class DimensionConfig {
         if (b.replace) return b;
         if (a.replace) return a;
 
-        RandomCollection<BlockProvider> merged = new RandomCollection<BlockProvider>()
+        RandomCollection<BlockProvider> providers = new RandomCollection<BlockProvider>()
                 .addAll(a.providers)
                 .addAll(b.providers);
+
+        RandomCollection<ResourceLocation> loot = new RandomCollection<ResourceLocation>()
+                .addAll(a.loot)
+                .addAll(b.loot);
 
         return new DimensionConfig(
                 false,
                 CreateOptions.merge(a.create, b.create),
-                merged,
+                providers,
                 mergePos(a.readDistance, b.readDistance),
                 mergePos(a.readCluster, b.readCluster),
                 Optional.of(new RandomCollectionProvider(
                         new RandomCollection<>(Stream.of(a.fill, b.fill)
                                 .filter(Objects::nonNull)
                                 .toArray(BlockProvider[]::new)))
-                        ).filter(RandomCollectionProvider::isValid).orElse(null)
+                        ).filter(RandomCollectionProvider::isValid).orElse(null),
+                loot
         );
     }
 
@@ -97,7 +108,7 @@ public class DimensionConfig {
     }
 
     public boolean isValid() {
-        return !providers.empty();
+        return !providers.isEmpty() && !loot.isEmpty();
     }
 
     public BlockProvider getFill() {
@@ -105,7 +116,11 @@ public class DimensionConfig {
     }
 
     public BlockProvider randomProvider(Random random) {
-        return this.providers.next(random).orElseThrow(() -> new NullPointerException("Collection should not be empty"));
+        return this.providers.next(random).orElseThrow(() -> new NullPointerException("Provider collection should not be isEmpty"));
+    }
+
+    public ResourceLocation randomLoot(Random random) {
+        return this.loot.next(random).orElseThrow(() -> new NullPointerException("Loot collection should not be empty"));
     }
 
 }

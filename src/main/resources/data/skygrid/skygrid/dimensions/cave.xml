@@ -2,9 +2,16 @@
 <dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
            xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
 
-    <create daytime="night">
+    <create daytime="night" skylight="false">
         <biome id="mountains"/>
     </create>
+
+    <loot>
+        <table weight="5" id="spawn_bonus_chest"/>
+        <table weight="2" id="simple_dungeon"/>
+        <table id="abandoned_mineshaft"/>
+        <table id="desert_pyramid"/>
+    </loot>
 
     <reference id="ores" weight="10" />
 

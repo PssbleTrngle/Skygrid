@@ -26,7 +26,7 @@
                     <xsd:element minOccurs="0" maxOccurs="unbounded" ref="property"/>
                     <xsd:element minOccurs="0" maxOccurs="unbounded" ref="attach"/>
                 </xsd:sequence>
-                <xsd:attribute name="name" type="xsd:string" />
+                <xsd:attribute name="name" type="xsd:string"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -46,52 +46,59 @@
     </xsd:complexType>
 
     <xsd:complexType name="pos">
-        <xsd:attribute type="xsd:nonNegativeInteger" name="x" default="0" />
-        <xsd:attribute type="xsd:nonNegativeInteger" name="y" default="0" />
-        <xsd:attribute type="xsd:nonNegativeInteger" name="z" default="0" />
+        <xsd:attribute type="xsd:nonNegativeInteger" name="x" default="0"/>
+        <xsd:attribute type="xsd:nonNegativeInteger" name="y" default="0"/>
+        <xsd:attribute type="xsd:nonNegativeInteger" name="z" default="0"/>
     </xsd:complexType>
 
     <xsd:complexType name="color">
         <xsd:attribute name="hex" use="required">
             <xsd:simpleType>
                 <xsd:restriction base="xsd:string">
-                    <xsd:pattern value="#[a-zA-Z0-9]{6}" />
+                    <xsd:pattern value="#[a-zA-Z0-9]{6}"/>
                 </xsd:restriction>
             </xsd:simpleType>
         </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="resource">
+        <xsd:attribute default="minecraft" name="mod" type="xsd:string"/>
+        <xsd:attribute use="required" name="id" type="xsd:string"/>
     </xsd:complexType>
 
     <xsd:complexType name="create">
         <xsd:sequence>
-            <xsd:element name="fog" type="color" minOccurs="0" />
-            <xsd:element name="sky" type="color" minOccurs="0" />
-            <xsd:element name="biome" maxOccurs="unbounded">
-                <xsd:complexType>
-                    <xsd:attribute default="minecraft" name="mod" type="xsd:string" />
-                    <xsd:attribute use="required" name="id" type="xsd:string" />
-                </xsd:complexType>
-            </xsd:element>
+            <xsd:element name="fog" type="color" minOccurs="0"/>
+            <xsd:element name="sky" type="color" minOccurs="0"/>
+            <xsd:element name="biome" maxOccurs="unbounded" type="resource"/>
         </xsd:sequence>
-        <xsd:attribute default="false" name="respawn" type="xsd:boolean" />
-        <xsd:attribute default="false" name="hot" type="xsd:boolean" />
-        <xsd:attribute default="true" name="skylight" type="xsd:boolean" />
+        <xsd:attribute default="false" name="respawn" type="xsd:boolean"/>
+        <xsd:attribute default="false" name="hot" type="xsd:boolean"/>
+        <xsd:attribute default="true" name="skylight" type="xsd:boolean"/>
         <xsd:attribute default="unset" name="daytime">
             <xsd:simpleType>
                 <xsd:restriction base="xsd:string">
-                    <xsd:enumeration value="unset" />
-                    <xsd:enumeration value="day" />
-                    <xsd:enumeration value="night" />
+                    <xsd:enumeration value="unset"/>
+                    <xsd:enumeration value="day"/>
+                    <xsd:enumeration value="night"/>
                 </xsd:restriction>
             </xsd:simpleType>
         </xsd:attribute>
     </xsd:complexType>
 
+    <xsd:complexType name="resource-collection">
+        <xsd:sequence>
+            <xsd:element name="table" maxOccurs="unbounded" type="name"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:complexType name="dimension">
         <xsd:sequence>
-            <xsd:element minOccurs="0" name="create" type="create" />
-            <xsd:element minOccurs="0" name="distance" type="pos" />
-            <xsd:element minOccurs="0" name="cluster" type="pos" />
-            <xsd:element name="fill" minOccurs="0" type="block" />
+            <xsd:element minOccurs="0" name="create" type="create"/>
+            <xsd:element minOccurs="0" name="distance" type="pos"/>
+            <xsd:element minOccurs="0" name="cluster" type="pos"/>
+            <xsd:element name="fill" minOccurs="0" type="block"/>
+            <xsd:element name="loot" type="resource-collection"/>
             <xsd:element maxOccurs="unbounded" ref="provider"/>
             <xsd:element maxOccurs="unbounded" minOccurs="0" name="mob" type="name"/>
         </xsd:sequence>
@@ -160,14 +167,24 @@
                             </xsd:restriction>
                         </xsd:simpleType>
                     </xsd:attribute>
-                    <xsd:attribute default="1" name="by" type="xsd:integer" />
-                    <xsd:attribute default="false" name="shared" type="xsd:boolean" />
+                    <xsd:attribute default="1" name="by" type="xsd:integer"/>
+                    <xsd:attribute default="false" name="shared" type="xsd:boolean"/>
                 </xsd:extension>
             </xsd:complexContent>
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="block" substitutionGroup="provider" type="block" />
+    <xsd:element name="horizontal" substitutionGroup="attach">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="attach">
+                    <xsd:attribute default="1" name="by" type="xsd:integer"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="block" substitutionGroup="provider" type="block"/>
     <xsd:complexType name="block">
         <xsd:complexContent>
             <xsd:extension base="provider">
@@ -202,7 +219,7 @@
             <xsd:complexContent>
                 <xsd:extension base="tag">
                     <xsd:sequence>
-                        <xsd:element name="except" type="tag" minOccurs="0" maxOccurs="unbounded" />
+                        <xsd:element name="except" type="tag" minOccurs="0" maxOccurs="unbounded"/>
                     </xsd:sequence>
                 </xsd:extension>
             </xsd:complexContent>
