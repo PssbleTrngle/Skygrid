@@ -10,7 +10,7 @@ on:
 jobs:
       
   publish:
-    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'merge')
+    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'build')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
