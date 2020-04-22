@@ -51,8 +51,20 @@
         <xsd:attribute type="xsd:nonNegativeInteger" name="z" default="0" />
     </xsd:complexType>
 
+    <xsd:complexType name="color">
+        <xsd:attribute name="hex" use="required">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="#[a-zA-Z0-9]{6}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
     <xsd:complexType name="create">
         <xsd:sequence>
+            <xsd:element name="fog" type="color" minOccurs="0" />
+            <xsd:element name="sky" type="color" minOccurs="0" />
             <xsd:element name="biome" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute default="minecraft" name="mod" type="xsd:string" />
@@ -60,6 +72,18 @@
                 </xsd:complexType>
             </xsd:element>
         </xsd:sequence>
+        <xsd:attribute default="false" name="respawn" type="xsd:boolean" />
+        <xsd:attribute default="false" name="hot" type="xsd:boolean" />
+        <xsd:attribute default="true" name="skylight" type="xsd:boolean" />
+        <xsd:attribute default="unset" name="daytime">
+            <xsd:simpleType>
+                <xsd:restriction>
+                    <xsd:enumeration value="unset" />
+                    <xsd:enumeration value="day" />
+                    <xsd:enumeration value="night" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
     </xsd:complexType>
 
     <xsd:complexType name="dimension">

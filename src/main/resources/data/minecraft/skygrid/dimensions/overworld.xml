@@ -218,15 +218,7 @@
     </collection>
 
     <collection name="ores" weight="40">
-        <collection>
-            <block weight="100" id="coal_ore"/>
-            <block weight="80" id="iron_ore"/>
-            <block weight="45" id="lapis_ore"/>
-            <block weight="60" id="redstone_ore"/>
-            <block weight="60" id="gold_ore"/>
-            <block weight="10" id="diamond_ore"/>
-            <block weight="5" id="emerald_ore"/>
-        </collection>
+        <reference id="ores" />
         <collection name="blocks" weight="0.05">
             <block weight="100" id="coal_block"/>
             <block weight="80" id="iron_block"/>

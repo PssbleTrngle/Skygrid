@@ -3,6 +3,7 @@
            xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
 
     <create>
+        <sky hex="#4287f5" />
         <biome id="ocean"/>
         <biome id="lukewarm_ocean"/>
         <biome id="deep_ocean"/>
