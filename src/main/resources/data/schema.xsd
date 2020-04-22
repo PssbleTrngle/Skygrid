@@ -77,7 +77,7 @@
         <xsd:attribute default="true" name="skylight" type="xsd:boolean" />
         <xsd:attribute default="unset" name="daytime">
             <xsd:simpleType>
-                <xsd:restriction>
+                <xsd:restriction base="xsd:string">
                     <xsd:enumeration value="unset" />
                     <xsd:enumeration value="day" />
                     <xsd:enumeration value="night" />

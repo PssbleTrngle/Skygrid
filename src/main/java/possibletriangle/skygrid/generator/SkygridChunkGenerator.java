@@ -81,7 +81,7 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
                 for (int z = 0; z < 16; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
 
-                    if ((y % dy < cy) && ((x + chunkX) % dx < cx) && ((z + chunkZ) % dz < cz)) {
+                    if ((Math.abs(y % dy) < cy) && (Math.abs((x + chunkX) % dx) < cx) && (Math.abs((z + chunkZ) % dz) < cz)) {
                         if (y < dy) {
                             chunk.setBlockState(pos, BEDROCK, false);
                         } else {
