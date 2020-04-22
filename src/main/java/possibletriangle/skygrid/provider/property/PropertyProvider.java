@@ -1,10 +1,8 @@
 package possibletriangle.skygrid.provider.property;
 
-import com.sun.javafx.beans.IDProperty;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.IProperty;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;

@@ -3,6 +3,7 @@
            xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
 
     <create>
+        <sky hex="#4287f5" />
         <biome id="ocean"/>
         <biome id="lukewarm_ocean"/>
         <biome id="deep_ocean"/>
@@ -10,6 +11,15 @@
     </create>
     
     <fill id="water" />
+
+    <loot>
+        <table id="buried_treasure"/>
+        <table id="shipwreck_map"/>
+        <table id="shipwreck_supply"/>
+        <table id="shipwreck_treasure"/>
+        <table id="underwater_ruin_big"/>
+        <table id="underwater_ruin_small"/>
+    </loot>
 
     <reference weight="10" id="corals"/>
 
