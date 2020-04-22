@@ -1,44 +1,39 @@
 package possibletriangle.skygrid;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.storage.SaveHandler;
+import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.Logging;
+import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import possibletriangle.skygrid.data.loading.DimensionLoader;
 import possibletriangle.skygrid.generator.SkygridWorldType;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Skygrid.MODID)
-public class Skygrid {
+public class Skygrid implements WorldPersistenceHooks.WorldPersistenceHook {
     public static final String MODID = "skygrid";
 
     public Skygrid() {
+        WorldPersistenceHooks.addHook(this);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
@@ -78,4 +73,24 @@ public class Skygrid {
                     .forEachOrdered(tooltip::add);
     }
 
+    @Override
+    public String getModId() {
+        return MODID;
+    }
+
+    @Override
+    public CompoundNBT getDataForWriting(SaveHandler handler, WorldInfo info) {
+        CompoundNBT data = new CompoundNBT();
+        CompoundNBT dims = new CompoundNBT();
+        DimensionManager.writeRegistry(dims);
+        if (!dims.isEmpty())
+            data.put("dims", dims);
+        return data;
+    }
+
+    @Override
+    public void readData(SaveHandler handler, WorldInfo info, CompoundNBT tag) {
+        if (tag.contains("dims", 10))
+            DimensionLoader.readRegistry(tag.getCompound("dims"));
+    }
 }

@@ -3,6 +3,8 @@ package possibletriangle.skygrid.data.loading;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.resources.ReloadListener;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
@@ -10,10 +12,11 @@ import net.minecraft.tags.NetworkTagManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ModDimension;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import possibletriangle.skygrid.Skygrid;
-import possibletriangle.skygrid.generator.custom.CreateOptions;
 import possibletriangle.skygrid.generator.custom.CustomDimension;
 import possibletriangle.skygrid.provider.BlockProvider;
 import possibletriangle.skygrid.provider.RandomCollectionProvider;
@@ -110,13 +113,39 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
 
         LOGGER.info("Loaded {} skygrid configs", CONFIGS.size());
 
-        CONFIGS.forEach((name, config) -> config.getCreateOptions().ifPresent($ -> register(name)));
+
+        List<ResourceLocation> existing = existingDimensions().collect(Collectors.toList());
+        CONFIGS.entrySet().stream().sorted((a, b) -> {
+            if (existing.contains(a.getKey())) return 1;
+            return 0;
+        }).forEachOrdered(e -> e.getValue().getCreateOptions().ifPresent($ -> register(e.getKey())));
 
         updateConfigs();
     }
 
     private static void register(ResourceLocation name) {
         DimensionManager.registerOrGetDimension(name, CustomDimension.create(name), null, true);
+    }
+
+    public static Stream<ResourceLocation> existingDimensions() {
+        return SAVED_DIMENSIONS.stream();
+    }
+
+    private static final List<ResourceLocation> SAVED_DIMENSIONS = Lists.newArrayList();
+
+    public static void readRegistry(CompoundNBT data) {
+
+        ListNBT list = data.getList("entries", 10);
+        for (int x = 0; x < list.size(); x++) {
+
+            ResourceLocation name = new ResourceLocation(data.getString("name"));
+            ResourceLocation type = data.contains("type", 8) ? new ResourceLocation(data.getString("type")) : null;
+
+            if (type != null) {
+                ModDimension mod = ForgeRegistries.MOD_DIMENSIONS.getValue(type);
+                if (mod == null) SAVED_DIMENSIONS.add(name);
+            }
+        }
     }
 
 }

@@ -7,8 +7,8 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -240,7 +240,10 @@ public class XMLLoader {
     public Optional<DimensionConfig> parseConfig(Element node) {
 
         boolean replace = Boolean.parseBoolean(node.getAttribute("replace"));
-        boolean create = Boolean.parseBoolean(node.getAttribute("create"));
+        CreateOptions create = elements(node, "create").findFirst()
+                .map(this::parseCreateOptions)
+                .flatMap(Function.identity())
+                .orElse(null);
 
         BlockPos distance = findPos(node, "distance");
         BlockPos cluster = findPos(node, "cluster");
@@ -262,6 +265,17 @@ public class XMLLoader {
 
     }
 
+    public Vec3d parseColor(Element e) {
+        String hex = e.getAttribute("hex").replace("#", "");
+        double[] color = IntStream.range(0, 3)
+                .mapToObj(i -> hex.substring(i * 2, (i + 1) * 2))
+                .mapToInt(s -> Integer.parseInt(s, 16))
+                .mapToDouble(i -> i / 255D)
+                .toArray();
+
+        return new Vec3d(color[0], color[1], color[2]);
+    }
+
     public Optional<CreateOptions> parseCreateOptions(Element node) {
 
         IForgeRegistry<Biome> BIOMES = GameRegistry.findRegistry(Biome.class);
@@ -273,7 +287,15 @@ public class XMLLoader {
             return Optional.ofNullable(BIOMES.getValue(r)).filter($ -> BIOMES.containsKey(r));
         }).filter(Optional::isPresent).map(Optional::get);
 
-        return Optional.of(new CreateOptions(biomes)).filter(CreateOptions::isValid);
+        boolean respawn = Boolean.parseBoolean(node.getAttribute("respawn"));
+        boolean skylight = Boolean.parseBoolean(node.getAttribute("skylight"));
+        boolean hot = Boolean.parseBoolean(node.getAttribute("hot"));
+        CreateOptions.Daytime daytime = CreateOptions.Daytime.valueOf(node.getAttribute("daytime").toUpperCase());
+
+        Vec3d fog = elements(node, "fog").findFirst().map(this::parseColor).orElse(null);
+        Vec3d sky = elements(node, "sky").findFirst().map(this::parseColor).orElse(null);
+
+        return Optional.of(new CreateOptions(biomes, respawn, skylight, hot, fog, sky, daytime)).filter(CreateOptions::isValid);
 
     }
 
