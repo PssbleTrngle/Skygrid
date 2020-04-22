@@ -1,56 +1,30 @@
-## Windows
-Thumbs.db
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-## gradle
-/.gradle
-/build
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
 
-## ForgeGradle
-/run
+# gradle
+build
+.gradle
 
-## eclipse
-/.settings
-/.metadata
-/.classpath
-/.project
-/eclipse
-/bin
+# other
+eclipse
+run
+server
+src/generated
+src/links
 
-## intellij
-/out
-/.idea
-/atlassian-ide-plugin.xml
-/*.ipr
-/*.iws
-/*.iml
-/classes
+# Files from Forge MDK
+forge*changelog.txt
 
-## Private Stuffs
-/private.properties
-
-## Jars
-*.jar
-!/gradle/wrapper/gradle-wrapper.jar
-
-### OSX (adds a lot of garbage)###
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+node_modules/

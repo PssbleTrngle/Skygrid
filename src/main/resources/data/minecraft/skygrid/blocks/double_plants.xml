@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
+           xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+
+    <block id="tall_fern">
+        <set key="half" value="lower" />
+        <side on="up">
+            <block id="tall_fern">
+                <set key="half" value="upper" />
+            </block>
+        </side>
+    </block>
+
+    <block id="tall_grass">
+        <set key="half" value="lower" />
+        <side on="up">
+            <block id="tall_grass">
+                <set key="half" value="upper" />
+            </block>
+        </side>
+    </block>
+
+</collection>
