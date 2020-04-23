@@ -202,7 +202,12 @@
 
     <xsd:complexType name="except">
         <xsd:sequence>
-
+            <xsd:element ref="tag" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="name">
+                <xsd:complexType>
+                    <xsd:attribute name="pattern" type="xsd:string" />
+                </xsd:complexType>
+            </xsd:element>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -219,7 +224,7 @@
             <xsd:complexContent>
                 <xsd:extension base="tag">
                     <xsd:sequence>
-                        <xsd:element name="except" type="tag" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:element minOccurs="0" name="except" type="except" />
                     </xsd:sequence>
                 </xsd:extension>
             </xsd:complexContent>

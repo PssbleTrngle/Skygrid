@@ -39,6 +39,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -76,6 +77,24 @@ public class XMLLoader {
         return findTag(mod, id);
     }
 
+    public Predicate<Block> findFilter(Element node) {
+        return Stream.of(
+
+                elements(node, "tag")
+                        .map(this::findTag)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .<Predicate<Block>>map(t -> t::contains),
+
+                elements(node, "name")
+                    .map(e -> e.getAttribute("pattern"))
+                    .map(Pattern::compile)
+                    .map(Pattern::asPredicate)
+                    .<Predicate<Block>>map(p -> b -> p.test(b.getRegistryName().toString()))
+
+            ).flatMap(Function.identity()).reduce(Predicate::and).orElse($ -> true);
+    }
+
     /**
      * @param e The XML Element
      * @return The block provider without attaches or properties
@@ -92,13 +111,11 @@ public class XMLLoader {
                 return Stream.of(new SingleBlock(new ResourceLocation(mod, id)));
 
             case "tag":
-                List<Tag<Block>> except = elements(e, "except")
-                        .map(this::findTag)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toList());
-
-                Predicate<Block> include = b -> except.stream().noneMatch(t -> t.contains(b));
+                Predicate<Block> include = elements(e, "except")
+                        .findFirst()
+                        .map(this::findFilter)
+                        .map(Predicate::negate)
+                        .orElse($ -> true);
 
                 return findTag(e)
                         .map(Tag::getAllElements)
@@ -147,7 +164,7 @@ public class XMLLoader {
                     return Arrays.stream(Direction.values())
                             .filter(d -> d.getAxis() != Direction.Axis.Y)
                             .map(s -> new OffsetBlock(
-                                    provider.addProperties(Stream.of(new SetProperty("facing",s.getOpposite().getName()))),
+                                    provider.addProperties(Stream.of(new SetProperty("facing", s.getOpposite().getName()))),
                                     new BlockPos(0, 0, 0).offset(s, by),
                                     probability / 4, shared
                             ));

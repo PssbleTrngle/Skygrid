@@ -3,9 +3,11 @@ package possibletriangle.skygrid.generator;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -23,6 +25,8 @@ import possibletriangle.skygrid.provider.BlockProvider;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
 
@@ -62,24 +66,39 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
         return 0;
     }
 
+    public static Predicate<BlockPos> generateHere(ChunkPos chunk, BlockPos distance, BlockPos cluster) {
+
+        int cx = cluster.getX();
+        int cy = cluster.getY();
+        int cz = cluster.getZ();
+
+        int dx = distance.getX() + (cx - 1);
+        int dy = distance.getY() + (cy - 1);
+        int dz = distance.getZ() + (cz - 1);
+
+        int chunkX = chunk.x * 16;
+        int chunkZ = chunk.z * 16;
+
+        return pos -> {
+
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+
+            return (Math.abs(y % dy) < cy) && (Math.abs((x + chunkX) % dx) < cx) && (Math.abs((z + chunkZ) % dz) < cz);
+        };
+    }
+
     @Override
     public void makeBase(IWorld world, IChunk chunk) {
 
         int maxY = Math.min(100, world.getHeight());
 
-        int cx = config.cluster.getX();
-        int cy = config.cluster.getY();
-        int cz = config.cluster.getZ();
-
-        int dx = config.distance.getX() + (cx - 1);
-        int dy = config.distance.getY() + (cy - 1);
-        int dz = config.distance.getZ() + (cz - 1);
-
-        int chunkX = chunk.getPos().x * 16;
-        int chunkZ = chunk.getPos().z * 16;
-
         BlockState BEDROCK = Blocks.BEDROCK.getDefaultState();
         BlockProvider fill = config.getFill();
+
+        Predicate<BlockPos> generateHere = generateHere(chunk.getPos(), config.distance, config.cluster);
+        int firstLevel = config.distance.getY() + (config.cluster.getY() - 1);
 
         for (int y = 0; y < maxY; y++)
             for (int x = 0; x < 16; x++)
@@ -88,8 +107,8 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
 
                     BiConsumer<BlockPos, BlockState> generator = getGenerator(chunk, pos, random.nextLong());
 
-                    if ((Math.abs(y % dy) < cy) && (Math.abs((x + chunkX) % dx) < cx) && (Math.abs((z + chunkZ) % dz) < cz)) {
-                        if (y < dy) {
+                    if (generateHere.test(pos)) {
+                        if (y < firstLevel) {
                             chunk.setBlockState(pos, BEDROCK, false);
                         } else {
                             BlockProvider block = this.config.randomProvider(random);
@@ -105,22 +124,36 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
     }
 
     public BiConsumer<BlockPos, BlockState> getGenerator(IChunk chunk, BlockPos anchor, long seed) {
+        BlockPos chunkPos = chunk.getPos().asBlockPos();
+        Random r = new Random(seed);
+
+        BiConsumer<BlockPos, BlockState> gen = getGenerator(
+                (p, s) -> chunk.setBlockState(p, s, false),
+                (p, t) -> chunk.addTileEntity(chunkPos.add(p), t),
+                () -> config.randomLoot(r), world
+        );
+
+        return (p1, s1) -> gen.accept(p1.add(anchor), s1);
+    }
+
+    public static BiConsumer<BlockPos, BlockState> getGenerator(BiConsumer<BlockPos, BlockState> setBlock, BiConsumer<BlockPos, TileEntity> setTile, Supplier<ResourceLocation> loot, IWorld world) {
+        long seed = world.getSeed();
+        Rotation r = Rotation.randomRotation(new Random(seed));
+
         return (p, s) -> {
 
-            Rotation r = Rotation.randomRotation(new Random(seed));
-            BlockPos pos = anchor.add(p).rotate(r);
-
-            chunk.setBlockState(pos, s.rotate(r), false);
+            BlockPos pos = p.rotate(r);
+            setBlock.accept(pos, s.rotate(r));
 
             if (s.hasTileEntity())
                 Optional.ofNullable(s.createTileEntity(world)).ifPresent(tile -> {
 
-                    if(tile instanceof LockableLootTileEntity) {
-                        ResourceLocation table = config.randomLoot(new Random(seed));
+                    if (tile instanceof LockableLootTileEntity) {
+                        ResourceLocation table = loot.get();
                         ((LockableLootTileEntity) tile).setLootTable(table, seed);
                     }
 
-                    chunk.addTileEntity(chunk.getPos().asBlockPos().add(pos), tile);
+                    setTile.accept(pos, tile);
                 });
 
         };

@@ -5,9 +5,8 @@ import net.minecraft.util.ResourceLocation;
 import possibletriangle.skygrid.data.loading.DimensionConfig;
 import possibletriangle.skygrid.data.loading.DimensionLoader;
 
-import javax.annotation.Resource;
-import java.util.Collection;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class BlockReference extends CollectionProvider {
 
@@ -29,5 +28,10 @@ public class BlockReference extends CollectionProvider {
     @Override
     public BlockProvider getProvider(Random random) {
         return findRef();
+    }
+
+    @Override
+    public Stream<Block> allBlocks() {
+        return this.findRef().allBlocks();
     }
 }

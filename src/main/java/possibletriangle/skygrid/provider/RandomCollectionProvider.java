@@ -1,8 +1,11 @@
 package possibletriangle.skygrid.provider;
 
+import net.minecraft.block.Block;
 import possibletriangle.skygrid.RandomCollection;
 
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class RandomCollectionProvider extends CollectionProvider {
 
@@ -19,5 +22,10 @@ public class RandomCollectionProvider extends CollectionProvider {
     @Override
     public boolean isValid() {
         return !this.children.isEmpty();
+    }
+
+    @Override
+    public Stream<Block> allBlocks() {
+        return this.children.all().stream().map(BlockProvider::allBlocks).flatMap(Function.identity());
     }
 }

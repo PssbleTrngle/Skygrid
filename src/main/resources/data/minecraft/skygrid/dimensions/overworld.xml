@@ -149,8 +149,11 @@
     </collection>
 
     <collection name="tree" weight="80">
-        <tag weight="3" id="#raw_logs">
+        <tag weight="3" id="#logs">
             <cycle key="axis"/>
+            <except>
+                <name pattern="stripped_"/>
+            </except>
         </tag>
         <block weight="0.03" id="bee_nest" />
         <collection weight="0.1" name="mushrooms">

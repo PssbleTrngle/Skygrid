@@ -1,12 +1,12 @@
 package possibletriangle.skygrid.provider;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class SingleBlock extends BlockProvider {
 
@@ -30,5 +30,10 @@ public class SingleBlock extends BlockProvider {
     @Override
     protected Block get(Random random) {
         return this.block;
+    }
+
+    @Override
+    public Stream<Block> allBlocks() {
+        return Stream.of(this.block);
     }
 }

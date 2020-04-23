@@ -1,0 +1,7 @@
+{
+  "generator.skygrid": "Skygrid",
+
+  "command.skygrid.blocks.count": "\u00A76%s possible blocks",
+  "command.skygrid.blocks.contains.true": "The block can generate in this dimension",
+  "command.skygrid.blocks.contains.false": "The block cannot generate in this dimension"
+}

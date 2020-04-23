@@ -20,7 +20,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import possibletriangle.skygrid.command.SkygridCommand;
 import possibletriangle.skygrid.data.loading.DimensionLoader;
 import possibletriangle.skygrid.generator.SkygridWorldType;
 
@@ -45,13 +47,17 @@ public class Skygrid implements WorldPersistenceHooks.WorldPersistenceHook {
         new SkygridWorldType();
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
-    }
+    private void doClientStuff(final FMLClientSetupEvent event) {}
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onServerWillStart(final FMLServerAboutToStartEvent event) {
         MinecraftServer server = event.getServer();
         server.getResourceManager().addReloadListener(new DimensionLoader(server));
+    }
+
+    @SubscribeEvent
+    public void onServerStarting(final FMLServerStartingEvent event) {
+        SkygridCommand.register(event.getCommandDispatcher());
     }
 
     private Set<ResourceLocation> getTags(Item item) {

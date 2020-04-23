@@ -62,4 +62,14 @@ public abstract class BlockProvider {
 
     }
 
+    protected abstract Stream<Block> allBlocks();
+
+    public final Stream<Block> allOffsets() {
+        return this.offsets.stream().map(o -> o.provider).map(BlockProvider::getPossibleBlocks).flatMap(Function.identity());
+    }
+
+    public final Stream<Block> getPossibleBlocks() {
+        return Stream.of(this.allBlocks(), this.allOffsets()).flatMap(Function.identity());
+    }
+
 }

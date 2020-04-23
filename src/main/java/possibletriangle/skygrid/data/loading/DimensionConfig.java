@@ -1,5 +1,6 @@
 package possibletriangle.skygrid.data.loading;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -9,11 +10,14 @@ import possibletriangle.skygrid.generator.custom.CreateOptions;
 import possibletriangle.skygrid.provider.BlockProvider;
 import possibletriangle.skygrid.provider.RandomCollectionProvider;
 import possibletriangle.skygrid.provider.SingleBlock;
+import possibletriangle.skygrid.provider.property.PropertyProvider;
+import possibletriangle.skygrid.provider.property.SetProperty;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class DimensionConfig {
@@ -21,16 +25,23 @@ public class DimensionConfig {
     public static final int DEFAULT_DISTANCE = 4;
     public static final int DEFAULT_CLUSTER = 1;
 
+    public static final BlockPos DEFAULT_DISTANCE_POS = new BlockPos(DEFAULT_DISTANCE, DEFAULT_DISTANCE, DEFAULT_DISTANCE);
+    public static final BlockPos DEFAULT_CLUSTER_POS = new BlockPos(DEFAULT_CLUSTER, DEFAULT_CLUSTER, DEFAULT_CLUSTER);
+
     public static final BlockProvider FALLBACK_PROVIDER = new SingleBlock(Blocks.BEDROCK);
     public static final BlockProvider DEFAULT_FILL = new SingleBlock(Blocks.AIR);
     public static final DimensionConfig FALLBACK = new DimensionConfig(
             false, null,
             new RandomCollection<>(FALLBACK_PROVIDER),
-            new BlockPos(DEFAULT_DISTANCE, DEFAULT_DISTANCE, DEFAULT_DISTANCE),
-            new BlockPos(DEFAULT_CLUSTER, DEFAULT_CLUSTER, DEFAULT_CLUSTER),
+            DEFAULT_DISTANCE_POS,
+            DEFAULT_CLUSTER_POS,
             DEFAULT_FILL,
             new RandomCollection<>(LootTables.EMPTY)
     );
+
+    public Stream<PropertyProvider> defaultProperties() {
+        return Stream.of(new SetProperty("persistent", "true"));
+    }
 
     private final boolean replace;
 
@@ -121,6 +132,10 @@ public class DimensionConfig {
 
     public ResourceLocation randomLoot(Random random) {
         return this.loot.next(random).orElseThrow(() -> new NullPointerException("Loot collection should not be empty"));
+    }
+
+    public Stream<Block> getPossibleBlocks() {
+        return this.providers.all().stream().map(BlockProvider::getPossibleBlocks).flatMap(Function.identity());
     }
 
 }
