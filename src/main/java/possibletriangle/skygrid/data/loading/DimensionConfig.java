@@ -1,12 +1,13 @@
 package possibletriangle.skygrid.data.loading;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.storage.loot.LootTables;
 import possibletriangle.skygrid.RandomCollection;
-import possibletriangle.skygrid.generator.custom.CreateOptions;
+import possibletriangle.skygrid.world.custom.CreateOptions;
 import possibletriangle.skygrid.provider.BlockProvider;
 import possibletriangle.skygrid.provider.RandomCollectionProvider;
 import possibletriangle.skygrid.provider.SingleBlock;
@@ -48,7 +49,7 @@ public class DimensionConfig {
     @Nullable
     private final CreateOptions create;
 
-    private final RandomCollection<BlockProvider> providers;
+    public final RandomCollection<BlockProvider> providers;
 
     @Nullable
     private final BlockProvider fill;
@@ -108,7 +109,7 @@ public class DimensionConfig {
                 Optional.of(new RandomCollectionProvider(
                         new RandomCollection<>(Stream.of(a.fill, b.fill)
                                 .filter(Objects::nonNull)
-                                .toArray(BlockProvider[]::new)))
+                                .toArray(BlockProvider[]::new)), null)
                         ).filter(RandomCollectionProvider::isValid).orElse(null),
                 loot
         );
@@ -134,8 +135,10 @@ public class DimensionConfig {
         return this.loot.next(random).orElseThrow(() -> new NullPointerException("Loot collection should not be empty"));
     }
 
-    public Stream<Block> getPossibleBlocks() {
-        return this.providers.all().stream().map(BlockProvider::getPossibleBlocks).flatMap(Function.identity());
+    public Stream<Pair<Float,Block>> getPossibleBlocks() {
+        return this.providers.stream().map(e -> e.getSecond().getPossibleBlocks().map(
+                p -> new Pair<>(p.getFirst() * e.getFirst(), p.getSecond())
+        )).flatMap(Function.identity());
     }
 
 }

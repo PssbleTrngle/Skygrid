@@ -21,19 +21,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import possibletriangle.skygrid.RandomCollection;
 import possibletriangle.skygrid.Skygrid;
-import possibletriangle.skygrid.generator.custom.CreateOptions;
+import possibletriangle.skygrid.world.custom.CreateOptions;
 import possibletriangle.skygrid.provider.*;
 import possibletriangle.skygrid.provider.property.CycleProperty;
 import possibletriangle.skygrid.provider.property.PropertyProvider;
 import possibletriangle.skygrid.provider.property.SetProperty;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -48,10 +45,12 @@ public class XMLLoader {
 
     private final NetworkTagManager tags;
     private final LootTableManager loot;
+    private final Schema schema;
 
-    public XMLLoader(NetworkTagManager tags, LootTableManager loot) {
+    public XMLLoader(NetworkTagManager tags, LootTableManager loot, Schema schema) {
         this.tags = tags;
         this.loot = loot;
+        this.schema = schema;
     }
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -92,7 +91,7 @@ public class XMLLoader {
                     .map(Pattern::asPredicate)
                     .<Predicate<Block>>map(p -> b -> p.test(b.getRegistryName().toString()))
 
-            ).flatMap(Function.identity()).reduce(Predicate::and).orElse($ -> true);
+            ).flatMap(Function.identity()).reduce(Predicate::or).orElse($ -> true);
     }
 
     /**
@@ -103,6 +102,7 @@ public class XMLLoader {
         final String mod = e.getAttribute("mod");
         final String id = e.getAttribute("id");
         final Stream<Pair<Float, BlockProvider>> children = findProviders(e);
+        final String name = e.getAttribute("name");
 
         switch (e.getNodeName().toLowerCase()) {
 
@@ -127,7 +127,10 @@ public class XMLLoader {
                         .orElseGet(Stream::of);
 
             case "collection":
-                return Stream.of(new RandomCollectionProvider(RandomCollection.from(children)));
+                return Stream.of(new RandomCollectionProvider(RandomCollection.from(children), name));
+
+            case "fallback":
+                return children.map(Pair::getSecond).findFirst().map(Stream::of).orElseGet(Stream::of);
 
             case "reference":
                 return Stream.of(new BlockReference(new ResourceLocation(mod, id)));
@@ -143,7 +146,7 @@ public class XMLLoader {
 
             boolean shared = e.hasAttribute("shared") && Boolean.parseBoolean(e.getAttribute("shared"));
             float probability = e.hasAttribute("probability") ? Float.parseFloat(e.getAttribute("probability")) : 0;
-            RandomCollectionProvider provider = new RandomCollectionProvider(RandomCollection.from(findProviders(e)));
+            RandomCollectionProvider provider = new RandomCollectionProvider(RandomCollection.from(findProviders(e)), null);
             int by = e.hasAttribute("by") ? Integer.parseInt(e.getAttribute("by")) : 1;
 
             switch (e.getNodeName().toLowerCase()) {
@@ -217,7 +220,9 @@ public class XMLLoader {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
-            factory.setSchema(getSchema());
+
+            factory.setSchema(schema);
+
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setErrorHandler(new ErrorHandler());
 
@@ -287,7 +292,7 @@ public class XMLLoader {
 
         RandomCollection<BlockProvider> r = new RandomCollection<>();
         parseProvider(node).forEach(p -> r.add(p, 1F));
-        return Optional.of(new RandomCollectionProvider(r)).filter(BlockProvider::isValid);
+        return Optional.of(new RandomCollectionProvider(r, null)).filter(BlockProvider::isValid);
 
     }
 
@@ -316,7 +321,7 @@ public class XMLLoader {
         boolean respawn = Boolean.parseBoolean(node.getAttribute("respawn"));
         boolean skylight = Boolean.parseBoolean(node.getAttribute("skylight"));
         boolean hot = Boolean.parseBoolean(node.getAttribute("hot"));
-        CreateOptions.Daytime daytime = CreateOptions.Daytime.valueOf(node.getAttribute("daytime").toUpperCase());
+        String daytime = node.getAttribute("daytime").toLowerCase();
 
         Vec3d fog = elements(node, "fog").findFirst().map(this::parseColor).orElse(null);
         Vec3d sky = elements(node, "sky").findFirst().map(this::parseColor).orElse(null);
@@ -335,12 +340,6 @@ public class XMLLoader {
 
     private static Stream<Element> elements(Element parent, String name) {
         return elements(parent).filter(e -> e.getNodeName().equalsIgnoreCase(name));
-    }
-
-    private static Schema getSchema() throws SAXException {
-        File file = new File("C:\\Users\\firef\\Coding\\Java\\MC\\1.15\\Skygrid\\src\\main\\resources\\data\\schema.xsd");
-        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        return factory.newSchema(file);
     }
 
     public static class ErrorHandler implements org.xml.sax.ErrorHandler {

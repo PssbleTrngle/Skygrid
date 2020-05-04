@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
-     xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+     xsi:schemaLocation="https://www.w3schools.com ../../../skygrid/skygrid/schema.xsd">
 
     <block weight="100" id="coal_ore"/>
     <block weight="80" id="iron_ore"/>
@@ -9,5 +9,10 @@
     <block weight="60" id="gold_ore"/>
     <block weight="10" id="diamond_ore"/>
     <block weight="5" id="emerald_ore"/>
+
+    <tag weight="10" mod="quark" id="#crystal"/>
+
+    <block weight="4" mod="byg" id="ametrine_ore"/>
+    <block weight="4" mod="byg" id="pendorite_ore"/>
 
 </collection>

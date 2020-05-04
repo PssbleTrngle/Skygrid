@@ -1,5 +1,6 @@
 package possibletriangle.skygrid.provider;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import possibletriangle.skygrid.data.loading.DimensionConfig;
@@ -31,7 +32,12 @@ public class BlockReference extends CollectionProvider {
     }
 
     @Override
-    public Stream<Block> allBlocks() {
+    public Stream<Pair<Float, BlockProvider>> getAllProviders() {
+        return Stream.of(new Pair<>(1F, findRef()));
+    }
+
+    @Override
+    public Stream<Pair<Float, Block>> allBlocks() {
         return this.findRef().allBlocks();
     }
 }

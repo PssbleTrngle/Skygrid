@@ -16,13 +16,20 @@ import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.xml.sax.SAXException;
 import possibletriangle.skygrid.Skygrid;
-import possibletriangle.skygrid.generator.custom.CustomDimension;
+import possibletriangle.skygrid.world.custom.CustomDimension;
 import possibletriangle.skygrid.provider.BlockProvider;
 import possibletriangle.skygrid.provider.RandomCollectionProvider;
 
 import javax.annotation.Nonnull;
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -31,10 +38,14 @@ import java.util.stream.Stream;
 
 public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
 
-    private final XMLLoader xmlLoader;
+    private final MinecraftServer server;
 
     public DimensionLoader(MinecraftServer server) {
-        this.xmlLoader = new XMLLoader(server.getNetworkTagManager(), server.getLootTableManager());
+        this.server = server;
+    }
+
+    public static Stream<ResourceLocation> allConfigs() {
+        return CONFIGS.keySet().stream();
     }
 
     public static Optional<BlockProvider> findRef(ResourceLocation name) {
@@ -47,27 +58,50 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
 
     private static void updateConfigs() {
         listeners.forEach((dimension, listeners) -> {
-            DimensionConfig config = findConfig(dimension);
+            DimensionConfig config = findOrDefault(dimension);
             listeners.forEach(l -> l.accept(config));
         });
     }
 
-    public static DimensionConfig findConfig(ResourceLocation dimension) {
-        return CONFIGS.getOrDefault(dimension, DimensionConfig.FALLBACK);
+    public static DimensionConfig findOrDefault(ResourceLocation dimension) {
+        return find(dimension).orElse(DimensionConfig.FALLBACK);
     }
 
-    public static void findConfig(DimensionType dimension, Consumer<DimensionConfig> listener) {
+    public static Optional<DimensionConfig> find(ResourceLocation dimension) {
+        return Optional.ofNullable(CONFIGS.get(dimension));
+    }
+
+    public static void subscribeConfig(DimensionType dimension, Consumer<DimensionConfig> listener) {
         ResourceLocation id = dimension.getRegistryName();
         listeners.putIfAbsent(id, Lists.newArrayList());
         listeners.get(id).add(listener);
-        listener.accept(findConfig(id));
+        listener.accept(findOrDefault(id));
     }
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private XMLLoader createXMLLoader(IResourceManager manager) throws IOException, SAXException {
+        ResourceLocation r = manager.getAllResourceLocations(Skygrid.MODID, f -> f.endsWith(".xsd"))
+                .stream().findFirst().orElseThrow(() -> new FileSystemNotFoundException("Could not find any xsd schema resource"));
+
+        InputStream input = manager.getResource(r).getInputStream();
+
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = factory.newSchema(new StreamSource(input));
+        return new XMLLoader(server.getNetworkTagManager(), server.getLootTableManager(), schema);
+    }
+
     @Nonnull
     @Override
     protected List<LoadingResource<?>> prepare(IResourceManager manager, IProfiler profiler) {
+
+        XMLLoader xmlLoader;
+        try {
+            xmlLoader = createXMLLoader(manager);
+        } catch (Exception ex) {
+            LOGGER.error("Could not load skygrid xml schema");
+            return Lists.newArrayList();
+        }
 
         Collection<ResourceLocation> dimensions = manager.getAllResourceLocations(Skygrid.MODID + "/dimensions", s -> s.endsWith(".xml"));
         Collection<ResourceLocation> refs = manager.getAllResourceLocations(Skygrid.MODID + "/blocks", s -> s.endsWith(".xml"));
@@ -76,22 +110,22 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
 
                 dimensions.stream()
                         .peek(r -> profiler.startSection(r::toString))
-                        .map(name -> loadConfig(manager, name))
+                        .map(name -> loadConfig(manager, name, xmlLoader))
                         .peek(r -> profiler.endSection()),
 
                 refs.stream()
                         .peek(r -> profiler.startSection(r::toString))
-                        .map(name -> loadProvider(manager, name))
+                        .map(name -> loadProvider(manager, name, xmlLoader))
                         .peek(r -> profiler.endSection())
 
         ).flatMap(Function.identity()).collect(Collectors.toList());
     }
 
-    private LoadingResource<DimensionConfig> loadConfig(IResourceManager manager, ResourceLocation name) {
+    private LoadingResource<DimensionConfig> loadConfig(IResourceManager manager, ResourceLocation name, XMLLoader xmlLoader) {
         return LoadingResource.attempt(xmlLoader, name, xmlLoader::parseConfig, DimensionConfig::merge, CONFIGS::put, tryLoading(manager, name));
     }
 
-    private LoadingResource<RandomCollectionProvider> loadProvider(IResourceManager manager, ResourceLocation name) {
+    private LoadingResource<RandomCollectionProvider> loadProvider(IResourceManager manager, ResourceLocation name, XMLLoader xmlLoader) {
         return LoadingResource.attempt(xmlLoader, name, xmlLoader::parseSingleProvider, (a, b) -> b, REFS::put, tryLoading(manager, name));
     }
 

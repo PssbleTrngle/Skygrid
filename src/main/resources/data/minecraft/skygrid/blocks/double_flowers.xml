@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
-           xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+<collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com ../../../skygrid/skygrid/schema.xsd">
 
     <block id="sunflower">
         <set key="half" value="lower" />
@@ -37,5 +36,61 @@
             </block>
         </side>
     </block>
+
+    <block weight="0.4" mod="buzzierbees" id="bird_of_paradise">
+        <set key="half" value="lower" />
+        <side on="up">
+            <block mod="buzzierbees" id="bird_of_paradise">
+                <set key="half" value="upper" />
+            </block>
+        </side>
+    </block>
+
+    <block weight="0.3" mod="upgrade_aquatic" id="flowering_rush">
+        <set key="half" value="lower" />
+        <side on="up">
+            <block mod="upgrade_aquatic" id="flowering_rush">
+                <set key="half" value="upper" />
+            </block>
+        </side>
+    </block>
+
+    <collection name="bloomful">
+        <block mod="bloomful" id="purple_delphinium">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="bloomful" id="purple_delphinium">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+
+        <block mod="bloomful" id="white_delphinium">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="bloomful" id="white_delphinium">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+
+        <block mod="bloomful" id="pink_delphinium">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="bloomful" id="pink_delphinium">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+
+        <block mod="bloomful" id="blue_delphinium">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="bloomful" id="blue_delphinium">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+    </collection>
 
 </collection>

@@ -1,6 +1,7 @@
 package possibletriangle.skygrid.provider;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -62,13 +63,19 @@ public abstract class BlockProvider {
 
     }
 
-    protected abstract Stream<Block> allBlocks();
+    protected abstract Stream<Pair<Float, Block>> allBlocks();
 
-    public final Stream<Block> allOffsets() {
-        return this.offsets.stream().map(o -> o.provider).map(BlockProvider::getPossibleBlocks).flatMap(Function.identity());
+    public final Stream<Pair<Float, Block>> allOffsets() {
+        return this.offsets.stream().map(o -> o.provider.getPossibleBlocks()
+            .map(p -> new Pair<>(p.getFirst() * o.probability, p.getSecond()))
+        ).flatMap(Function.identity());
     }
 
-    public final Stream<Block> getPossibleBlocks() {
+    public final Stream<OffsetBlock> getOffsets() {
+        return this.offsets.stream();
+    }
+
+    public final Stream<Pair<Float, Block>> getPossibleBlocks() {
         return Stream.of(this.allBlocks(), this.allOffsets()).flatMap(Function.identity());
     }
 

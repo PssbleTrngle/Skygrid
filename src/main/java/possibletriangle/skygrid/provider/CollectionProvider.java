@@ -1,5 +1,6 @@
 package possibletriangle.skygrid.provider;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.biome.Biomes;
@@ -11,6 +12,8 @@ import java.util.stream.Stream;
 public abstract class CollectionProvider extends BlockProvider {
 
     public abstract BlockProvider getProvider(Random random);
+
+    public abstract Stream<Pair<Float, BlockProvider>>  getAllProviders();
 
     @Override
     protected Block get(Random random) {
