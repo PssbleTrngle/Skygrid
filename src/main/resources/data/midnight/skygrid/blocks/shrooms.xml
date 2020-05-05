@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com ../../../skygrid/skygrid/schema.xsd">
+
+    <collection weight="3" name="single">
+        <block mod="midnight" id="nightshroom" />
+        <block mod="midnight" id="dewshroom" />
+        <block mod="midnight" id="viridshroom" />
+        <block mod="midnight" id="bogshroom" />
+        <block weight="0.3" mod="midnight" id="mistshroom" />
+    </collection>
+
+    <collection name="double">
+        <block mod="midnight" id="double_nightshroom">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="midnight" id="double_nightshroom">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+
+        <block mod="midnight" id="double_dewshroom">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="midnight" id="double_dewshroom">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+
+        <block mod="midnight" id="double_viridshroom">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="midnight" id="double_viridshroom">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+
+        <block mod="midnight" id="double_bogshroom">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="midnight" id="double_bogshroom">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+
+        <block weight="0.3" mod="midnight" id="double_mistshroom">
+            <set key="half" value="lower" />
+            <side on="up">
+                <block mod="midnight" id="double_mistshroom">
+                    <set key="half" value="upper" />
+                </block>
+            </side>
+        </block>
+    </collection>
+
+</collection>

@@ -1,2 +1,0 @@
-mklink /J models "C:\Users\firef\Coding\Java\MC\1.15\Skygrid\src\main\resources\assets\skygrid\models"
-mklink /J blockstates "C:\Users\firef\Coding\Java\MC\1.15\Skygrid\src\main\resources\assets\skygrid\blockstates"

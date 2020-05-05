@@ -21,39 +21,39 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import possibletriangle.skygrid.RandomCollection;
 import possibletriangle.skygrid.Skygrid;
-import possibletriangle.skygrid.generator.custom.CreateOptions;
+import possibletriangle.skygrid.world.custom.CreateOptions;
 import possibletriangle.skygrid.provider.*;
 import possibletriangle.skygrid.provider.property.CycleProperty;
 import possibletriangle.skygrid.provider.property.PropertyProvider;
 import possibletriangle.skygrid.provider.property.SetProperty;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class XMLLoader {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private final NetworkTagManager tags;
     private final LootTableManager loot;
+    private final Schema schema;
 
-    public XMLLoader(NetworkTagManager tags, LootTableManager loot) {
+    public XMLLoader(NetworkTagManager tags, LootTableManager loot, Schema schema) {
         this.tags = tags;
         this.loot = loot;
+        this.schema = schema;
     }
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public Optional<Tag<Block>> findTag(String mod, String id) {
 
@@ -76,6 +76,24 @@ public class XMLLoader {
         return findTag(mod, id);
     }
 
+    public Predicate<Block> findFilter(Element node) {
+        return Stream.of(
+
+                elements(node, "tag")
+                        .map(this::findTag)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .<Predicate<Block>>map(t -> t::contains),
+
+                elements(node, "name")
+                    .map(e -> e.getAttribute("pattern"))
+                    .map(Pattern::compile)
+                    .map(Pattern::asPredicate)
+                    .<Predicate<Block>>map(p -> b -> p.test(b.getRegistryName().toString()))
+
+            ).flatMap(Function.identity()).reduce(Predicate::or).orElse($ -> true);
+    }
+
     /**
      * @param e The XML Element
      * @return The block provider without attaches or properties
@@ -84,6 +102,7 @@ public class XMLLoader {
         final String mod = e.getAttribute("mod");
         final String id = e.getAttribute("id");
         final Stream<Pair<Float, BlockProvider>> children = findProviders(e);
+        final String name = e.getAttribute("name");
 
         switch (e.getNodeName().toLowerCase()) {
 
@@ -92,13 +111,11 @@ public class XMLLoader {
                 return Stream.of(new SingleBlock(new ResourceLocation(mod, id)));
 
             case "tag":
-                List<Tag<Block>> except = elements(e, "except")
-                        .map(this::findTag)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toList());
-
-                Predicate<Block> include = b -> except.stream().noneMatch(t -> t.contains(b));
+                Predicate<Block> include = elements(e, "except")
+                        .findFirst()
+                        .map(this::findFilter)
+                        .map(Predicate::negate)
+                        .orElse($ -> true);
 
                 return findTag(e)
                         .map(Tag::getAllElements)
@@ -110,7 +127,10 @@ public class XMLLoader {
                         .orElseGet(Stream::of);
 
             case "collection":
-                return Stream.of(new RandomCollectionProvider(RandomCollection.from(children)));
+                return Stream.of(new RandomCollectionProvider(RandomCollection.from(children), name));
+
+            case "fallback":
+                return children.map(Pair::getSecond).findFirst().map(Stream::of).orElseGet(Stream::of);
 
             case "reference":
                 return Stream.of(new BlockReference(new ResourceLocation(mod, id)));
@@ -126,7 +146,7 @@ public class XMLLoader {
 
             boolean shared = e.hasAttribute("shared") && Boolean.parseBoolean(e.getAttribute("shared"));
             float probability = e.hasAttribute("probability") ? Float.parseFloat(e.getAttribute("probability")) : 0;
-            RandomCollectionProvider provider = new RandomCollectionProvider(RandomCollection.from(findProviders(e)));
+            RandomCollectionProvider provider = new RandomCollectionProvider(RandomCollection.from(findProviders(e)), null);
             int by = e.hasAttribute("by") ? Integer.parseInt(e.getAttribute("by")) : 1;
 
             switch (e.getNodeName().toLowerCase()) {
@@ -147,7 +167,7 @@ public class XMLLoader {
                     return Arrays.stream(Direction.values())
                             .filter(d -> d.getAxis() != Direction.Axis.Y)
                             .map(s -> new OffsetBlock(
-                                    provider.addProperties(Stream.of(new SetProperty("facing",s.getOpposite().getName()))),
+                                    provider.addProperties(Stream.of(new SetProperty("facing", s.getOpposite().getName()))),
                                     new BlockPos(0, 0, 0).offset(s, by),
                                     probability / 4, shared
                             ));
@@ -200,7 +220,9 @@ public class XMLLoader {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
-            factory.setSchema(getSchema());
+
+            factory.setSchema(schema);
+
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setErrorHandler(new ErrorHandler());
 
@@ -236,7 +258,7 @@ public class XMLLoader {
         return Optional.empty();
     }
 
-    public Optional<DimensionConfig> parseConfig(Element node) {
+    public Optional<DimensionConfig> parseConfig(Element node, ResourceLocation name) {
 
         boolean replace = Boolean.parseBoolean(node.getAttribute("replace"));
         CreateOptions create = elements(node, "create").findFirst()
@@ -253,7 +275,7 @@ public class XMLLoader {
                 .flatMap(Function.identity())
                 .orElse(null);
 
-        Element lootElement = elements(node, "loot").findFirst().orElseThrow(() -> new IllegalArgumentException("No loot defined"));
+        Element lootElement = elements(node, "loot").findFirst().orElseThrow(() -> new IllegalArgumentException("No loot defined for " + name));
         RandomCollection<ResourceLocation> tables = RandomCollection.from(elements(lootElement, "table").map(e -> {
 
             String mod = e.getAttribute("mod");
@@ -263,14 +285,14 @@ public class XMLLoader {
 
         }).filter(Optional::isPresent).map(Optional::get));
 
-        return Optional.of(new DimensionConfig(replace, create, providers, distance, cluster, fill, tables)).filter(DimensionConfig::isValid);
+        return Optional.of(new DimensionConfig(replace, create, providers, distance, cluster, fill, tables)).filter(c -> c.isValid(name));
     }
 
     public Optional<RandomCollectionProvider> parseSingleProvider(Element node) {
 
         RandomCollection<BlockProvider> r = new RandomCollection<>();
         parseProvider(node).forEach(p -> r.add(p, 1F));
-        return Optional.of(new RandomCollectionProvider(r)).filter(BlockProvider::isValid);
+        return Optional.of(new RandomCollectionProvider(r, null)).filter(BlockProvider::isValid);
 
     }
 
@@ -299,7 +321,7 @@ public class XMLLoader {
         boolean respawn = Boolean.parseBoolean(node.getAttribute("respawn"));
         boolean skylight = Boolean.parseBoolean(node.getAttribute("skylight"));
         boolean hot = Boolean.parseBoolean(node.getAttribute("hot"));
-        CreateOptions.Daytime daytime = CreateOptions.Daytime.valueOf(node.getAttribute("daytime").toUpperCase());
+        String daytime = node.getAttribute("daytime").toLowerCase();
 
         Vec3d fog = elements(node, "fog").findFirst().map(this::parseColor).orElse(null);
         Vec3d sky = elements(node, "sky").findFirst().map(this::parseColor).orElse(null);
@@ -318,12 +340,6 @@ public class XMLLoader {
 
     private static Stream<Element> elements(Element parent, String name) {
         return elements(parent).filter(e -> e.getNodeName().equalsIgnoreCase(name));
-    }
-
-    private static Schema getSchema() throws SAXException {
-        File file = new File("C:\\Users\\firef\\Coding\\Java\\MC\\1.15\\Skygrid\\src\\main\\resources\\data\\schema.xsd");
-        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        return factory.newSchema(file);
     }
 
     public static class ErrorHandler implements org.xml.sax.ErrorHandler {

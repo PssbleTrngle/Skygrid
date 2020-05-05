@@ -1,0 +1,12 @@
+{
+  "generator.skygrid": "Skygrid",
+
+  "command.skygrid.blocks.count": "\u00A76%s possible blocks",
+  "command.skygrid.blocks.contains.true": "The block can generate in this dimension with a weight of \u00A76%s",
+  "command.skygrid.blocks.contains.false": "\u00A74The block cannot generate in this dimension",
+  "command.skygrid.blocks.exports.error": "An error occurred when exported",
+  "command.skygrid.blocks.exports.success": "Successfully exported all possible blocks",
+  "command.skygrid.blocks.exports.open": "Click to open export file",
+
+  "argument.skygrid.config.invalid": "Could not find a skygrid configuration for %s"
+}

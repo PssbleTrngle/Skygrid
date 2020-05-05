@@ -1,43 +1,59 @@
 package possibletriangle.skygrid.data.loading;
 
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.storage.loot.LootTables;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import possibletriangle.skygrid.RandomCollection;
-import possibletriangle.skygrid.generator.custom.CreateOptions;
+import possibletriangle.skygrid.world.custom.CreateOptions;
 import possibletriangle.skygrid.provider.BlockProvider;
 import possibletriangle.skygrid.provider.RandomCollectionProvider;
 import possibletriangle.skygrid.provider.SingleBlock;
+import possibletriangle.skygrid.provider.property.PropertyProvider;
+import possibletriangle.skygrid.provider.property.SetProperty;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class DimensionConfig {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public static final int DEFAULT_DISTANCE = 4;
     public static final int DEFAULT_CLUSTER = 1;
+
+    public static final BlockPos DEFAULT_DISTANCE_POS = new BlockPos(DEFAULT_DISTANCE, DEFAULT_DISTANCE, DEFAULT_DISTANCE);
+    public static final BlockPos DEFAULT_CLUSTER_POS = new BlockPos(DEFAULT_CLUSTER, DEFAULT_CLUSTER, DEFAULT_CLUSTER);
 
     public static final BlockProvider FALLBACK_PROVIDER = new SingleBlock(Blocks.BEDROCK);
     public static final BlockProvider DEFAULT_FILL = new SingleBlock(Blocks.AIR);
     public static final DimensionConfig FALLBACK = new DimensionConfig(
             false, null,
             new RandomCollection<>(FALLBACK_PROVIDER),
-            new BlockPos(DEFAULT_DISTANCE, DEFAULT_DISTANCE, DEFAULT_DISTANCE),
-            new BlockPos(DEFAULT_CLUSTER, DEFAULT_CLUSTER, DEFAULT_CLUSTER),
+            DEFAULT_DISTANCE_POS,
+            DEFAULT_CLUSTER_POS,
             DEFAULT_FILL,
             new RandomCollection<>(LootTables.EMPTY)
     );
+
+    public Stream<PropertyProvider> defaultProperties() {
+        return Stream.of(new SetProperty("persistent", "true"));
+    }
 
     private final boolean replace;
 
     @Nullable
     private final CreateOptions create;
 
-    private final RandomCollection<BlockProvider> providers;
+    public final RandomCollection<BlockProvider> providers;
 
     @Nullable
     private final BlockProvider fill;
@@ -97,7 +113,7 @@ public class DimensionConfig {
                 Optional.of(new RandomCollectionProvider(
                         new RandomCollection<>(Stream.of(a.fill, b.fill)
                                 .filter(Objects::nonNull)
-                                .toArray(BlockProvider[]::new)))
+                                .toArray(BlockProvider[]::new)), null)
                         ).filter(RandomCollectionProvider::isValid).orElse(null),
                 loot
         );
@@ -107,8 +123,15 @@ public class DimensionConfig {
         return Optional.ofNullable(this.create);
     }
 
-    public boolean isValid() {
-        return !providers.isEmpty() && !loot.isEmpty();
+    public boolean isValid(ResourceLocation name) {
+        if(providers.isEmpty()) {
+            LOGGER.warn("Skygrid config for {} has no valid providers", name);
+            return false;
+        } else if(loot.isEmpty()) {
+            LOGGER.warn("Skygrid config for {} has no valid loot tables", name);
+            return false;
+        }
+        return true;
     }
 
     public BlockProvider getFill() {
@@ -121,6 +144,12 @@ public class DimensionConfig {
 
     public ResourceLocation randomLoot(Random random) {
         return this.loot.next(random).orElseThrow(() -> new NullPointerException("Loot collection should not be empty"));
+    }
+
+    public Stream<Pair<Float,Block>> getPossibleBlocks() {
+        return this.providers.stream().map(e -> e.getSecond().getPossibleBlocks().map(
+                p -> new Pair<>(p.getFirst() * e.getFirst(), p.getSecond())
+        )).flatMap(Function.identity());
     }
 
 }

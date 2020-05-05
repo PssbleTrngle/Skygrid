@@ -1,5 +1,6 @@
 package possibletriangle.skygrid;
 
+import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 
 import java.util.*;
@@ -70,4 +71,17 @@ public class RandomCollection<T> {
         pairs.forEach(p -> collection.add(p.getSecond(), p.getFirst()));
         return collection;
     }
+
+    public Stream<Pair<Float,T>> stream() {
+        float last = 0;
+        List<Pair<Float,T>> list = Lists.newArrayList();
+        for(Map.Entry<Float,T> e : this.map.entrySet()) {
+            float weight = e.getKey() - last;
+            list.add(new Pair<>(weight / total, e.getValue()));
+            last = e.getKey();
+        }
+
+        return list.stream();
+    }
+
 }

@@ -1,0 +1,4 @@
+execute if entity @a[tag=yellow,gamemode=survival] unless entity @a[tag=has_yellow_banner] as @e[tag=yellow_banner_marker] at @s align xyz unless block ~ ~ ~ yellow_banner run function skygridgame:generate_banners/yellow
+execute if entity @a[tag=red,gamemode=survival] unless entity @a[tag=has_red_banner] as @e[tag=red_banner_marker] at @s align xyz unless block ~ ~ ~ red_banner run function skygridgame:generate_banners/red
+execute if entity @a[tag=blue,gamemode=survival] unless entity @a[tag=has_blue_banner] as @e[tag=blue_banner_marker] at @s align xyz unless block ~ ~ ~ blue_banner run function skygridgame:generate_banners/blue
+execute if entity @a[tag=green,gamemode=survival] unless entity @a[tag=has_green_banner] as @e[tag=green_banner_marker] at @s align xyz unless block ~ ~ ~ green_banner run function skygridgame:generate_banners/green

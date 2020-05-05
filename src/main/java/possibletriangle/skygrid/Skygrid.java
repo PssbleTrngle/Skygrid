@@ -1,38 +1,66 @@
 package possibletriangle.skygrid;
 
+import com.google.common.base.Predicates;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.EndPortalFrameBlock;
+import net.minecraft.block.pattern.BlockPattern;
+import net.minecraft.block.pattern.BlockPatternBuilder;
+import net.minecraft.block.pattern.BlockStateMatcher;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.CachedBlockInfo;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.item.ItemEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import possibletriangle.skygrid.block.StiffAir;
+import possibletriangle.skygrid.command.SkygridCommand;
 import possibletriangle.skygrid.data.loading.DimensionLoader;
-import possibletriangle.skygrid.generator.SkygridWorldType;
+import possibletriangle.skygrid.world.SkygridWorldType;
 
 import java.util.List;
 import java.util.Set;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(Skygrid.MODID)
 public class Skygrid implements WorldPersistenceHooks.WorldPersistenceHook {
     public static final String MODID = "skygrid";
 
     public Skygrid() {
+        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+
         WorldPersistenceHooks.addHook(this);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -40,6 +68,9 @@ public class Skygrid implements WorldPersistenceHooks.WorldPersistenceHook {
 
         MinecraftForge.EVENT_BUS.register(this);
     }
+
+    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Skygrid.MODID);
+    public static final RegistryObject<Block> STIFF_AIR = BLOCKS.register("stiff_air", StiffAir::new);
 
     private void setup(final FMLCommonSetupEvent event) {
         new SkygridWorldType();
@@ -54,11 +85,45 @@ public class Skygrid implements WorldPersistenceHooks.WorldPersistenceHook {
         server.getResourceManager().addReloadListener(new DimensionLoader(server));
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onServerStarting(final FMLServerStartingEvent event) {
+        SkygridCommand.register(event.getCommandDispatcher());
+    }
+
+    public static final BlockPattern PORTAL = BlockPatternBuilder.start()
+            .aisle("FFF", "F?F", "FFF")
+            .where('?', CachedBlockInfo.hasState(BlockStateMatcher.ANY))
+            .where('F', CachedBlockInfo.hasState(BlockStateMatcher.forBlock(Blocks.END_PORTAL_FRAME)
+                    .where(EndPortalFrameBlock.EYE, Predicates.equalTo(true))))
+            .build();
+
+    @SubscribeEvent
+    public void onBlockUpdate(final BlockEvent event) {
+        BlockState state = event.getState();
+        IWorld w = event.getWorld();
+        if (w instanceof ServerWorld) {
+            ServerWorld world = (ServerWorld) w;
+
+            if (state.getBlock() == Blocks.END_PORTAL_FRAME) {
+
+                state.get(EndPortalFrameBlock.EYE);
+                BlockPattern.PatternHelper match = PORTAL.match(world, event.getPos());
+
+                if (match != null) {
+                    BlockPos portal = match.getFrontTopLeft().add(-1, 0, -1);
+                    world.setBlockState(portal, Blocks.END_PORTAL.getDefaultState(), 2);
+                    world.playBroadcastSound(1038, portal, 0);
+                }
+            }
+        }
+    }
+
     private Set<ResourceLocation> getTags(Item item) {
         if (item instanceof BlockItem) return ((BlockItem) item).getBlock().getTags();
         return item.getTags();
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onTooltip(final ItemTooltipEvent event) {
         Item item = event.getItemStack().getItem();

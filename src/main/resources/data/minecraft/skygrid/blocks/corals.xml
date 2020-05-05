@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <tag id="#coral_blocks" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
-     xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+     xsi:schemaLocation="https://www.w3schools.com ../../../skygrid/skygrid/schema.xsd">
 
     <side on="up">
         <tag id="#corals"/>

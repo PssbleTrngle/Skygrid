@@ -1,106 +1,143 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
-           xsi:schemaLocation="https://www.w3schools.com ../../../schema.xsd">
+<dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com ../../../skygrid/skygrid/schema.xsd">
 
     <loot>
-        <table weight="10" id="abandoned_mineshaft"/>
-        <table weight="10" id="simple_dungeon"/>
-        <table weight="10" id="spawn_bonus_chest"/>
-        <table id="buried_treasure"/>
-        <table id="desert_pyramid"/>
-        <table id="igloo_chest"/>
-        <table id="jungle_temple"/>
-        <table id="pillager_outpost"/>
-        <table id="shipwreck_map"/>
-        <table id="shipwreck_supply"/>
-        <table id="shipwreck_treasure"/>
-        <table id="stronghold_corridor"/>
-        <table id="stronghold_crossing"/>
-        <table id="stronghold_library"/>
-        <table id="underwater_ruin_big"/>
-        <table id="underwater_ruin_small"/>
-        <table id="woodland_mansion"/>
+        <table weight="20" id="spawn_bonus_chest" />
+        <table weight="2" id="desert_pyramid" />
+        <table weight="2" id="woodland_mansion" />
+        <table id="simple_dungeon" />
+        <table id="abandoned_mineshaft" />
+        <table id="buried_treasure" />
+        <table id="igloo_chest" />
+        <table id="jungle_temple" />
+        <table id="pillager_outpost" />
+        <table id="shipwreck_map" />
+        <table id="shipwreck_supply" />
+        <table id="shipwreck_treasure" />
+        <table id="stronghold_corridor" />
+        <table id="stronghold_crossing" />
+        <table id="stronghold_library" />
+        <table id="underwater_ruin_big" />
+        <table id="underwater_ruin_small" />
     </loot>
+
+    <collection name="fluids" weight="2">
+        <block weight="3" id="water">
+            <side on="up" probability="0.05">
+                <block id="lily_pad" />
+                <block mod="byg" id="tiny_lilypads" />
+            </side>
+        </block>
+        <block id="lava" />
+    </collection>
 
     <collection name="ground" weight="100">
 
         <collection name="grass" weight="110">
-            <block id="dirt"/>
-            <block weight="0.1" id="grass_path"/>
-            <block weight="0.1" id="coarse_dirt"/>
+            <block id="dirt" />
+            <block weight="0.1" mod="byg" id="meadow_dirt" />
+            <block weight="0.1" mod="byg" id="mud_block" />
+            <block weight="0.1" id="grass_path" />
+            <block weight="0.1" id="coarse_dirt" />
             <collection weight="4" name="grass">
 
                 <block weight="3" id="grass_block">
                     <side probability="0.3" on="up">
-                        <tag weight="10" id="#small_flowers" />
-                        <block weight="20" id="grass" />
-                        <block id="fern" />
-                    </side>
-                </block>
-
-                <block id="grass_block">
-                    <side on="up">
                         <tag id="#saplings" />
                     </side>
                 </block>
 
+                <collection weight="2">
+                    <side on="up">
+                        <tag weight="10" id="#small_flowers">
+                            <except>
+                                <name pattern="botania:" />
+                            </except>
+                        </tag>
+                        <tag weight="7" mod="botania" id="#mystical_flowers" />
+                        <block weight="10" id="grass" />
+                        <block weight="2" mod="byg" id="prairie_grass" />
+                        <block mod="byg" id="winter_grass" />
+                        <block weight="2" id="fern" />
+                    </side>
+                    <block weight="10" id="grass_block" />
+                    <block mod="byg" id="meadow_grass_block" />
+                </collection>
+
                 <block weight="0.2" id="grass_block">
                     <side on="up" shared="true">
-                        <reference id="double_flowers"/>
-                        <reference id="double_plants"/>
+                        <reference id="double_flowers" />
+                        <reference id="double_plants" />
                     </side>
                 </block>
 
             </collection>
+
+            <block weight="0.08" mod="quark" id="glowcelium">
+                <side probability="0.3" on="up">
+                    <block mod="quark" id="glowshroom" />
+                </side>
+            </block>
+
             <block weight="0.05" id="mycelium">
                 <side probability="0.3" on="up">
-                    <block id="red_mushroom"/>
-                    <block id="brown_mushroom"/>
+                    <block id="red_mushroom" />
+                    <block id="brown_mushroom" />
                 </side>
             </block>
         </collection>
 
-        <block id="obsidian" weight="5"/>
+        <block id="obsidian" weight="5" />
 
         <collection name="cold">
-            <block weight="100" id="snow_block"/>
-            <block weight="100" id="ice"/>
-            <block weight="10" id="packed_ice"/>
-            <block weight="2" id="blue_ice"/>
+            <block weight="100" id="snow_block" />
+            <block weight="100" id="ice" />
+            <block weight="10" id="packed_ice" />
+            <block weight="2" id="blue_ice" />
+            <block weight="3" mod="quark" id="permafrost" />
         </collection>
 
         <collection name="terracotta">
-            <block weight="4" id="terracotta"/>
-            <block id="red_terracotta"/>
-            <block id="orange_terracotta"/>
-            <block id="brown_terracotta"/>
-            <block id="yellow_terracotta"/>
-            <block id="white_terracotta"/>
+            <block weight="4" id="terracotta" />
+            <block id="red_terracotta" />
+            <block id="orange_terracotta" />
+            <block id="brown_terracotta" />
+            <block id="yellow_terracotta" />
+            <block id="white_terracotta" />
         </collection>
 
-        <collection name="stone" weight="100">
-            <tag id="#generated_stone"/>
-            <tag id="#gravel"/>
-            <block id="clay"/>
+        <collection name="stone" weight="300">
+            <tag weight="8" id="#wg_stone">
+                <except>
+                    <name pattern="brimstone" />
+                    <name pattern="permafrost" />
+                </except>
+            </tag>
+            <tag weight="2" id="#gravel" />
+            <block id="clay" />
         </collection>
 
         <collection name="sand" weight="20">
+            <block id="sandy_bricks" />
             <collection weight="10">
                 <block weight="10" id="sand">
                     <side probability="0.1" on="up">
+                        <block weight="0.4" mod="atmospheric" id="barrel_cactus" />
                         <block id="cactus" />
                         <block id="dead_bush" />
+                        <block weight="0.7" mod="byg" id="mini_cactus" />
+                        <block weight="0.2" mod="byg" id="golden_spined_cactus" />
                     </side>
                 </block>
-                <block id="sandstone"/>
-                <block id="smooth_sandstone"/>
-                <block id="chiseled_sandstone"/>
+                <block id="sandstone" />
+                <block id="smooth_sandstone" />
+                <block id="chiseled_sandstone" />
             </collection>
             <collection>
-                <block weight="10" id="red_sand"/>
-                <block id="red_sandstone"/>
-                <block id="red_smooth_sandstone"/>
-                <block id="red_chiseled_sandstone"/>
+                <block weight="10" id="red_sand" />
+                <block id="red_sandstone" />
+                <block id="red_smooth_sandstone" />
+                <block id="red_chiseled_sandstone" />
             </collection>
         </collection>
 
@@ -110,120 +147,181 @@
         <block id="farmland" weight="10">
             <offset y="1">
                 <tag id="#crops">
-                    <cycle key="age"/>
+                    <cycle key="age" />
                 </tag>
             </offset>
         </block>
 
         <block id="podzol">
             <offset y="1">
-                <block id="bamboo_sapling"/>
+                <block id="bamboo_sapling" />
             </offset>
         </block>
 
         <block weight="0.1" id="jungle_wood">
             <side on="north">
                 <block id="cocoa">
-                    <set key="facing" value="south"/>
+                    <set key="facing" value="south" />
                 </block>
             </side>
         </block>
 
-        <block id="sand" weight="15">
+        <block id="sand" weight="5">
+            <side on="north">
+                <block id="water" />
+            </side>
             <side on="up">
                 <block id="sugar_cane">
                     <side probability="0.3" on="up">
-                        <block id="sugar_cane"/>
+                        <block id="sugar_cane" />
                     </side>
                 </block>
             </side>
         </block>
 
+        <block id="grass_block" weight="8">
+            <side on="up">
+                <collection name="berries">
+                    <set key="age" value="3" />
+                    <block weight="8" id="sweet_berry_bush" />
+                    <block mod="byg" weight="4" id="blueberry_bush" />
+                    <block mod="autumnity" id="foul_berry_bush" />
+                </collection>
+            </side>
+        </block>
+
         <collection weight="4">
-            <block id="melon"/>
+            <block id="melon" />
             <collection name="pumpkins">
-                <block id="pumpkin"/>
-                <block id="carved_pumpkin"/>
+                <block id="pumpkin" />
+                <block id="carved_pumpkin" />
             </collection>
         </collection>
     </collection>
 
-    <collection name="tree" weight="80">
-        <tag weight="3" id="#raw_logs">
-            <cycle key="axis"/>
+    <collection name="tree" weight="55">
+        <tag weight="3" id="#logs">
+            <cycle key="axis" />
+            <except>
+                <name pattern="stripped" />
+                <name pattern="_wood" />
+                <name pattern="endergetic" />
+                <name pattern="midnight" />
+            </except>
         </tag>
         <block weight="0.03" id="bee_nest" />
         <collection weight="0.1" name="mushrooms">
             <block id="mushroom_stem" />
             <block id="red_mushroom_block" />
             <block id="brown_mushroom_block" />
+            <block weight="0.1" mod="quark" id="glowshroom_block" />
         </collection>
-        <tag id="#planks"/>
-        <tag weight="2" id="#leaves"/>
+        <tag id="#planks">
+            <except>
+                <name pattern="midnight" />
+            </except>
+        </tag>
+        <tag weight="2" id="#leaves">
+            <set key="persistent" value="true" />
+            <except>
+                <name pattern="midnight" />
+            </except>
+        </tag>
     </collection>
 
     <collection name="building" weight="14">
 
         <collection weight="20" name="stone">
-            <block id="cobblestone"/>
-            <block weight="0.2" id="mossy_cobblestone"/>
-            <block weight="0.1" id="smooth_stone"/>
-            <tag id="#polished_stone"/>
+            <block id="cobblestone" />
+            <block weight="0.1" mod="quark" id="cobbedstone" />
+            <block mod="quark" weight="0.2" id="cobblestone_bricks" />
+            <block mod="quark" weight="0.05" id="mossy_cobblestone_bricks" />
+            <block weight="0.2" id="mossy_cobblestone" />
+            <block weight="0.1" id="smooth_stone" />
+
+            <collection name="polished">
+                <block id="polished_granite" />
+                <block id="polished_diorite" />
+                <block id="polished_andesite" />
+                <block mod="quark" id="polished_marble" />
+                <block mod="quark" id="polished_limestone" />
+                <block mod="quark" id="polished_jasper" />
+                <block mod="quark" id="polished_slate" />
+            </collection>
+
             <collection name="bricks">
-                <block weight="3" id="stone_bricks"/>
-                <block id="mossy_stone_bricks"/>
-                <block id="cracked_stone_bricks"/>
-                <block id="chiseled_stone_bricks"/>
+                <block weight="3" id="stone_bricks" />
+                <block id="mossy_stone_bricks" />
+                <block id="cracked_stone_bricks" />
+                <block id="chiseled_stone_bricks" />
+                <block mod="quark" id="marble_bricks" />
+                <block mod="quark" id="limestone_bricks" />
+                <block mod="quark" id="jasper_bricks" />
+                <block mod="quark" id="slate_bricks" />
+                <block mod="quark" id="chiseled_marble_bricks" />
+                <block mod="quark" id="chiseled_limestone_bricks" />
+                <block mod="quark" id="chiseled_jasper_bricks" />
+                <block mod="quark" id="chiseled_slate_bricks" />
             </collection>
-
-            <block weight="0.2" id="bricks"/>
-            <tag id="#bookshelfs"/>
-            <tag id="#glass"/>
-            <tag id="#wool"/>
-
-            <collection name="redstone">
-                                <block id="observer" />
-                <block id="dispenser" />
-                <block id="dropper" />
-                <block id="note_block" />
-                <block id="piston" />
-                <block weight="0.2" id="sticky_piston" />
-                <block id="hopper" />
-                <block id="redstone_lamp" />
-                <block weight="2" id="tnt" />
-                <block weight="2" id="slime_block" />
-                <block id="honey_block" />
-            </collection>
-
-            <collection name="workstations">
-
-                <block weight="20" id="crafting_table" />
-                <block weight="3" id="furnace" />
-                <block id="loom" />
-                <block id="smoker" />
-                <block id="blast_furnace" />
-                <block id="cauldron" />
-                <block id="cartography_table" />
-                <block id="fletching_table" />
-                <block id="smithing_table" />
-                <block id="stonecutter" />
-                <block id="lectern" />
-                <block id="composter" />
-            </collection>
-
-            <block weight="0.2" id="cobweb" />
 
         </collection>
+
+        <block id="bricks" />
+        <reference weight="2" id="bookshelfs" />
+        <tag id="#glass" />
+        <tag id="#wool" />
+
+        <collection weight="0.2">
+            <cycle key="axis" />
+            <block mod="quark" id="midori_block" />
+            <block mod="quark" id="midori_pillar" />
+        </collection>
+
+        <collection name="redstone" weight="2">
+            <block mod="quark" id="iron_plate" />
+            <block mod="quark" id="rusty_iron_plate" />
+            <block mod="quark" id="sturdy_stone" />
+            <block id="observer" />
+            <block weight="0.1" mod="quark" id="ender_watcher" />
+            <block id="dispenser" />
+            <block id="dropper" />
+            <block id="note_block" />
+            <block id="piston" />
+            <block weight="0.2" id="sticky_piston" />
+            <block id="hopper" />
+            <block id="redstone_lamp" />
+            <block id="tnt" />
+            <block weight="2" id="slime_block" />
+            <block id="honey_block" />
+        </collection>
+
+        <collection name="workstations" weight="2">
+
+            <block weight="20" id="crafting_table" />
+            <block weight="3" id="furnace" />
+            <block id="loom" />
+            <block id="smoker" />
+            <block id="blast_furnace" />
+            <block id="cauldron" />
+            <block id="cartography_table" />
+            <block id="fletching_table" />
+            <block id="smithing_table" />
+            <block id="stonecutter" />
+            <block id="lectern" />
+            <block id="composter" />
+        </collection>
+
+        <block weight="0.4" id="cobweb" />
 
     </collection>
 
     <collection name="loot">
-                <tag id="#chests/wooden" />
+        <tag id="#chests/wooden" />
         <block id="barrel" />
     </collection>
     <block id="spawner" />
 
-    <collection name="water">
+    <collection name="water" weight="0.2">
 
         <reference weight="10" id="corals" />
 
@@ -243,30 +341,91 @@
                     </side>
                 </block>
             </side>
-            <block id="sand" />
+            <block id="sand">
+                <side on="up" probability="0.02">
+                    <block id="turtle_egg">
+                        <cycle key="eggs" />
+                    </block>
+                </side>
+            </block>
             <block id="gravel" />
         </collection>
 
         <collection weight="10" name="prismarine">
-            <block id="prismarine" />
-            <block id="dark_prismarine" />
-            <block id="prismarine_bricks" />
-            <block id="sea_lantern" />
+            <collection weight="15">
+                <block id="prismarine" />
+                <block id="dark_prismarine" />
+                <block id="prismarine_bricks" />
+                <block id="sea_lantern" />
+            </collection>
+            <collection>
+                <block mod="quark" id="elder_prismarine" />
+                <block mod="quark" id="elder_prismarine_bricks" />
+                <block mod="quark" id="elder_sea_lantern" />
+                <block mod="quark" id="dark_elder_prismarine" />
+            </collection>
         </collection>
 
         <block id="dried_kelp_block" />
     </collection>
 
-    <collection name="ores" weight="40">
+    <collection name="ores" weight="30">
         <reference id="ores" />
-        <collection name="blocks" weight="0.05">
-            <block weight="100" id="coal_block"/>
-            <block weight="80" id="iron_block"/>
-            <block weight="45" id="lapis_block"/>
-            <block weight="60" id="redstone_block"/>
-            <block weight="60" id="gold_block"/>
-            <block weight="10" id="diamond_block"/>
-            <block weight="5" id="emerald_block"/>
+        <reference weight="0.02" id="ore_blocks" />
+    </collection>
+
+    <collection name="resources" weight="6">
+        <collection>
+            <block id="hay_block" />
+            <block mod="quark" id="stick_block" />
+            <block mod="quark" id="gunpowder_sack" />
+        </collection>
+        <collection weight="0.1" name="leather">
+            <block weight="100" mod="quark" id="bonded_leather" />
+            <block weight="10" mod="quark" id="bonded_rabbit_hide" />
+            <block mod="quark" id="bonded_ravager_hide" />
+        </collection>
+        <collection name="plants" weight="0.3">
+            <block mod="quark" id="cactus_block" />
+            <block mod="quark" id="sugar_cane_block" />
+            <block weight="0.1" mod="quark" id="bamboo_block" />
+            <block mod="atmospheric" id="aloe_bundle" />
+            <block mod="atmospheric" id="passion_vine_bundle" />
+            <block mod="atmospheric" id="yucca_cask" />
+            <block mod="swampexpansion" id="cattail_seed_sack" />
+            <block mod="quark" id="thatch" />
+            <block mod="upgrade_aquatic" id="beachgrass_thatch" />
+            <block mod="swampexpansion" id="cattail_thatch" />
+        </collection>
+        <collection weight="0.1" name="petals">
+            <block mod="botania" id="white_petal_block" />
+            <block mod="botania" id="orange_petal_block" />
+            <block mod="botania" id="magenta_petal_block" />
+            <block mod="botania" id="light_blue_petal_block" />
+            <block mod="botania" id="yellow_petal_block" />
+            <block mod="botania" id="lime_petal_block" />
+            <block mod="botania" id="pink_petal_block" />
+            <block mod="botania" id="gray_petal_block" />
+            <block mod="botania" id="light_gray_petal_block" />
+            <block mod="botania" id="cyan_petal_block" />
+            <block mod="botania" id="purple_petal_block" />
+            <block mod="botania" id="blue_petal_block" />
+            <block mod="botania" id="brown_petal_block" />
+            <block mod="botania" id="green_petal_block" />
+            <block mod="botania" id="red_petal_block" />
+            <block mod="botania" id="black_petal_block" />
+        </collection>
+        <collection name="fruits">
+            <block mod="quark" id="apple_crate" />
+            <block mod="quark" id="potato_crate" />
+            <block mod="quark" id="carrot_crate" />
+            <block mod="quark" id="beetroot_crate" />
+            <block weight="0.1" mod="quark" id="berry_sack" />
+            <block weight="0.1" mod="autumnity" id="foul_berry_sack" />
+            <block weight="0.1" mod="quark" id="cocoa_beans_sack" />
+            <block weight="0.01" mod="quark" id="golden_apple_crate" />
+            <block mod="atmospheric" id="passionfruit_crate" />
+            <block weight="0.01" mod="atmospheric" id="shimmering_passionfruit_crate" />
         </collection>
     </collection>
 
