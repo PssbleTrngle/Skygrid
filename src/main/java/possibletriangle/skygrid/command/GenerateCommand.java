@@ -52,19 +52,14 @@ public class GenerateCommand {
 
     public static BiConsumer<BlockPos, BlockState> getGenerator(World world, BlockPos anchor, DimensionConfig config, List<BlockPos> updated) {
         Random random = new Random();
-        BlockState f = Blocks.TRIPWIRE.getDefaultState();
 
         return SkygridChunkGenerator.getGenerator(
                 (p, s) -> {
                     TileEntity tileentity = world.getTileEntity(p);
                     IClearable.clearObj(tileentity);
-
-                    if (s.getBlock() instanceof FallingBlock) {
-                        if (world.setBlockState(p.down(), f, 2)) updated.add(p.down().toImmutable());
-                    }
-
                     if (world.setBlockState(p, s, 2)) updated.add(p.toImmutable());
                 },
+                world::isAirBlock,
                 (p, t) -> {
                     TileEntity te = world.getTileEntity(p);
                     if (te != null) {

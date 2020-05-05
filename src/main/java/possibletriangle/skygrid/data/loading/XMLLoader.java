@@ -43,6 +43,8 @@ import java.util.stream.Stream;
 
 public class XMLLoader {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private final NetworkTagManager tags;
     private final LootTableManager loot;
     private final Schema schema;
@@ -52,8 +54,6 @@ public class XMLLoader {
         this.loot = loot;
         this.schema = schema;
     }
-
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public Optional<Tag<Block>> findTag(String mod, String id) {
 
@@ -258,7 +258,7 @@ public class XMLLoader {
         return Optional.empty();
     }
 
-    public Optional<DimensionConfig> parseConfig(Element node) {
+    public Optional<DimensionConfig> parseConfig(Element node, ResourceLocation name) {
 
         boolean replace = Boolean.parseBoolean(node.getAttribute("replace"));
         CreateOptions create = elements(node, "create").findFirst()
@@ -275,7 +275,7 @@ public class XMLLoader {
                 .flatMap(Function.identity())
                 .orElse(null);
 
-        Element lootElement = elements(node, "loot").findFirst().orElseThrow(() -> new IllegalArgumentException("No loot defined"));
+        Element lootElement = elements(node, "loot").findFirst().orElseThrow(() -> new IllegalArgumentException("No loot defined for " + name));
         RandomCollection<ResourceLocation> tables = RandomCollection.from(elements(lootElement, "table").map(e -> {
 
             String mod = e.getAttribute("mod");
@@ -285,7 +285,7 @@ public class XMLLoader {
 
         }).filter(Optional::isPresent).map(Optional::get));
 
-        return Optional.of(new DimensionConfig(replace, create, providers, distance, cluster, fill, tables)).filter(DimensionConfig::isValid);
+        return Optional.of(new DimensionConfig(replace, create, providers, distance, cluster, fill, tables)).filter(c -> c.isValid(name));
     }
 
     public Optional<RandomCollectionProvider> parseSingleProvider(Element node) {

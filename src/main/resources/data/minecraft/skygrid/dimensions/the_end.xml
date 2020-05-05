@@ -67,24 +67,32 @@
     </collection>
 
     <collection weight="0.5" name="building">
-        <block mod="quark" id="biotite_block" />
-        <block mod="quark" id="chiseled_biotite_block" />
-        <block mod="quark" id="smooth_biotite_block" />
-        <block mod="quark" id="biotite_pillar" />
+        <block weight="0.08" mod="endergetic" id="poise_bookshelf" />
+        <collection name="biotite">
+            <block mod="quark" id="biotite_block" />
+            <block mod="quark" id="chiseled_biotite_block" />
+            <block mod="quark" id="smooth_biotite_block" />
+            <block mod="quark" id="biotite_pillar" />
+        </collection>
+
+        <collection name="eumus">
+            <block mod="endergetic" id="eumus_bricks" />
+            <block mod="endergetic" id="eumus_chiseled_bricks" />
+        </collection>
     </collection>
 
-    <collection name="biotite">
-        <block mod="endergetic" id="eumus_bricks" />
-        <block mod="endergetic" id="eumus_chiseled_bricks" />
-        <block weight="0.02" mod="endergetic" id="poise_bookshelf" />
-    </collection>
 
     <collection weight="0.5" name="ores">
         <block weight="50" mod="quark" id="biotite_ore" />
         <block mod="quark" id="chorus_fruit_block" />
     </collection>
 
-    <block weight="0.05" id="shulker_box" />
+    <collection weight="0.05" name="loot">
+        <block id="shulker_box" />
+        <block mod="quark" id="purpur_chest" />
+        <block mod="quark" id="poise_chest" />
+    </collection>
+
     <tag weight="0.01" id="#chests/ender" />
 
     <block weight="0.002" id="dragon_head">

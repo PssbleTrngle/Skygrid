@@ -6,6 +6,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.storage.loot.LootTables;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import possibletriangle.skygrid.RandomCollection;
 import possibletriangle.skygrid.world.custom.CreateOptions;
 import possibletriangle.skygrid.provider.BlockProvider;
@@ -22,6 +24,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class DimensionConfig {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static final int DEFAULT_DISTANCE = 4;
     public static final int DEFAULT_CLUSTER = 1;
@@ -119,8 +123,15 @@ public class DimensionConfig {
         return Optional.ofNullable(this.create);
     }
 
-    public boolean isValid() {
-        return !providers.isEmpty() && !loot.isEmpty();
+    public boolean isValid(ResourceLocation name) {
+        if(providers.isEmpty()) {
+            LOGGER.warn("Skygrid config for {} has no valid providers", name);
+            return false;
+        } else if(loot.isEmpty()) {
+            LOGGER.warn("Skygrid config for {} has no valid loot tables", name);
+            return false;
+        }
+        return true;
     }
 
     public BlockProvider getFill() {

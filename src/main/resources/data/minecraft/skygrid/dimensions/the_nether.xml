@@ -25,11 +25,12 @@
             </side>
         </block>
 
-        <fallback weight="0.5">
-            <block id="gravel" />
-            <block id="bedrock" />
-        </fallback>
+        <block weight="0.5" id="gravel" />
+
         <block id="magma_block" />
+
+        <block weight="0.4" mod="quark" id="basalt" />
+        <block weight="0.4" mod="quark" id="brimstone" />
 
     </collection>
 
@@ -51,7 +52,7 @@
     </collection>
 
     <collection>
-        <block weight="5" id="nether_bricks">
+        <block weight="3" id="nether_bricks">
             <side probability="0.1" on="up">
                 <block id="wither_skeleton_skull">
                     <cycle key="rotation" />
@@ -62,11 +63,19 @@
         <block mod="quark" id="charred_nether_bricks" />
         <block mod="quark" id="magma_bricks" />
 
-        <collection>
-            <block mod="quark" id="cut_soul_sandstone"/> 
-            <block mod="quark" id="chiseled_soul_sandstone"/> 
-            <block mod="quark" id="soul_sandstone"/> 
-            <block mod="quark" id="soul_sandstone_bricks"/> 
+        <collection name="soulsandstone">
+            <block mod="quark" id="cut_soul_sandstone" />
+            <block mod="quark" id="chiseled_soul_sandstone" />
+            <block mod="quark" id="soul_sandstone" />
+            <block mod="quark" id="soul_sandstone_bricks" />
+        </collection>
+
+        <collection name="basalt">
+            <cycle key="axis" />
+            <block mod="quark" id="basalt_bricks" />
+            <block mod="quark" id="polished_basalt" />
+            <block mod="quark" id="chiseled_basalt_bricks" />
+            <block mod="quark" id="basalt_pillar" />
         </collection>
 
     </collection>
@@ -77,11 +86,12 @@
         <block weight="0.01" id="gold_block" />
         <block weight="0.03" mod="quark" id="blaze_lantern" />
         <block weight="0.02" mod="quark" id="nether_wart_sack" />
-        <block weight="0.01" mod="botania" id="blaze_block" />
+        <block weight="0.02" mod="botania" id="blaze_block" />
     </collection>
 
-    <collection name="loot" weight="0.07">
+    <fallback weight="0.04">
+        <block mod="quark" id="nether_brick_chest" />
         <block id="chest" />
-    </collection>
+    </fallback>
 
 </dimension>

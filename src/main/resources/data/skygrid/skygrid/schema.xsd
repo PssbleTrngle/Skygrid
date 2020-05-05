@@ -198,7 +198,7 @@
 
     <xsd:element name="name">
         <xsd:complexType>
-            <xsd:attribute name="pattern" type="xsd:string" />
+            <xsd:attribute use="required" name="pattern" type="xsd:string" />
         </xsd:complexType>
     </xsd:element>
     

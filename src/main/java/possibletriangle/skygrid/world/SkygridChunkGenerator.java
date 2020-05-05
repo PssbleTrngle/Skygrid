@@ -22,6 +22,7 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
@@ -45,6 +46,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -141,6 +143,7 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
         int endZ = END_PORTAL.getZ();
         int chunkX = chunk.getPos().x;
         int chunkZ = chunk.getPos().z;
+        boolean isOverworld = world.getDimension().getType() == DimensionType.OVERWORLD;
 
         BlockState BEDROCK = Blocks.BEDROCK.getDefaultState();
         BlockProvider fill = config.getFill();
@@ -157,7 +160,7 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
 
                     if (generateHere.test(pos)) {
                         if (y < firstLevel) {
-                            if (endX == x + chunkX && endZ == z + chunkZ) {
+                            if (isOverworld && endX == x + chunkX && endZ == z + chunkZ) {
                                 DimensionLoader.findRef(new ResourceLocation("ender_portal"))
                                     .orElseThrow(() -> new NullPointerException("Could not find ender portal schema"))
                                     .generate(generator, random);
@@ -188,6 +191,7 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
 
         return getGenerator(
                 (p, s) -> chunk.setBlockState(p, s, false),
+                p -> chunk.getBlockState(p).getBlock() == Blocks.AIR,
                 (p, t) -> {
                     t.setPos(p.add(chunkPos));
                     chunk.addTileEntity(p.add(chunkPos), t);
@@ -198,7 +202,7 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
         );
     }
 
-    public static BiConsumer<BlockPos, BlockState> getGenerator(BiConsumer<BlockPos, BlockState> setBlock, BiConsumer<BlockPos, TileEntity> setTile, Supplier<ResourceLocation> loot, Supplier<ResourceLocation> mobs, IWorld world, Random random, BlockPos at) {
+    public static BiConsumer<BlockPos, BlockState> getGenerator(BiConsumer<BlockPos, BlockState> setBlock, Predicate<BlockPos> isAir, BiConsumer<BlockPos, TileEntity> setTile, Supplier<ResourceLocation> loot, Supplier<ResourceLocation> mobs, IWorld world, Random random, BlockPos at) {
         Rotation r = Rotation.randomRotation(random);
         BlockState barrier = Skygrid.STIFF_AIR.get().getDefaultState();
 
@@ -207,7 +211,7 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
             BlockPos pos = p.rotate(r).add(at);
             setBlock.accept(pos, s.rotate(r));
 
-            if (s.getBlock() instanceof FallingBlock) {
+            if (s.getBlock() instanceof FallingBlock && isAir.test(pos.down())) {
                 setBlock.accept(pos.down(), barrier);
             }
 

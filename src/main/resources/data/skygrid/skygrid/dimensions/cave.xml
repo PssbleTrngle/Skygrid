@@ -16,10 +16,17 @@
     <reference id="ores" weight="10" />
 
     <collection name="stone" weight="100">
-        <tag id="#generated_stone"/>
+        <tag id="#wg_stone">
+            <except>
+                <name pattern="brimstone" />
+                <name pattern="permafrost" />
+            </except>
+        </tag>
         <tag id="#gravel"/>
         <block id="clay"/>
     </collection>
+
+    <block id="lava" />
 
     <block id="obsidian"/>
 

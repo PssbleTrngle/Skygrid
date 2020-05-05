@@ -106,6 +106,8 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
         Collection<ResourceLocation> dimensions = manager.getAllResourceLocations(Skygrid.MODID + "/dimensions", s -> s.endsWith(".xml"));
         Collection<ResourceLocation> refs = manager.getAllResourceLocations(Skygrid.MODID + "/blocks", s -> s.endsWith(".xml"));
 
+        LOGGER.info("Found {} skygrid configurations", dimensions.size());
+
         return Stream.of(
 
                 dimensions.stream()
@@ -122,7 +124,7 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
     }
 
     private LoadingResource<DimensionConfig> loadConfig(IResourceManager manager, ResourceLocation name, XMLLoader xmlLoader) {
-        return LoadingResource.attempt(xmlLoader, name, xmlLoader::parseConfig, DimensionConfig::merge, CONFIGS::put, tryLoading(manager, name));
+        return LoadingResource.attempt(xmlLoader, name, e -> xmlLoader.parseConfig(e, name), DimensionConfig::merge, CONFIGS::put, tryLoading(manager, name));
     }
 
     private LoadingResource<RandomCollectionProvider> loadProvider(IResourceManager manager, ResourceLocation name, XMLLoader xmlLoader) {
