@@ -318,6 +318,7 @@ public class XMLLoader {
             return Optional.ofNullable(BIOMES.getValue(r)).filter($ -> BIOMES.containsKey(r));
         }).filter(Optional::isPresent).map(Optional::get);
 
+        boolean enable = Boolean.parseBoolean(node.getAttribute("enable"));
         boolean respawn = Boolean.parseBoolean(node.getAttribute("respawn"));
         boolean skylight = Boolean.parseBoolean(node.getAttribute("skylight"));
         boolean hot = Boolean.parseBoolean(node.getAttribute("hot"));
@@ -326,7 +327,7 @@ public class XMLLoader {
         Vec3d fog = elements(node, "fog").findFirst().map(this::parseColor).orElse(null);
         Vec3d sky = elements(node, "sky").findFirst().map(this::parseColor).orElse(null);
 
-        return Optional.of(new CreateOptions(biomes, respawn, skylight, hot, fog, sky, daytime)).filter(CreateOptions::isValid);
+        return Optional.of(new CreateOptions(biomes, respawn, skylight, hot, fog, sky, daytime, enable)).filter(CreateOptions::isValid);
 
     }
 

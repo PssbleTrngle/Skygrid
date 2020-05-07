@@ -32,6 +32,8 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.StrongholdStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.Structures;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import possibletriangle.skygrid.RandomCollection;
 import possibletriangle.skygrid.Skygrid;
 import possibletriangle.skygrid.block.StiffAir;
@@ -103,7 +105,7 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
     @Override
     public BlockPos findNearestStructure(World world, String name, BlockPos pos, int radius, boolean idk) {
         Structure<?> structure = Feature.STRUCTURES.get(name.toLowerCase(Locale.ROOT));
-        if(structure == Structures.STRONGHOLD) return END_PORTAL;
+        if (structure == Structures.STRONGHOLD) return END_PORTAL;
         return null;
     }
 
@@ -159,11 +161,12 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
                     BiConsumer<BlockPos, BlockState> generator = getGenerator(chunk, pos, random.nextLong());
 
                     if (generateHere.test(pos)) {
+
                         if (y < firstLevel) {
                             if (isOverworld && endX == x + chunkX && endZ == z + chunkZ) {
                                 DimensionLoader.findRef(new ResourceLocation("ender_portal"))
-                                    .orElseThrow(() -> new NullPointerException("Could not find ender portal schema"))
-                                    .generate(generator, random);
+                                        .orElseThrow(() -> new NullPointerException("Could not find ender portal schema"))
+                                        .generate(generator, random);
                             } else {
                                 chunk.setBlockState(pos, BEDROCK, false);
                             }
@@ -183,11 +186,15 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
     public BiConsumer<BlockPos, BlockState> getGenerator(IChunk chunk, BlockPos anchor, long seed) {
         BlockPos chunkPos = chunk.getPos().asBlockPos();
         Random r = new Random(seed);
+        Supplier<ResourceLocation> spawns = () -> {
 
-        Supplier<ResourceLocation> spawns = () -> RandomCollection.from(
-                getPossibleCreatures(EntityClassification.MONSTER, anchor).stream()
-                        .map(e -> new Pair<>((float) e.itemWeight, e.entityType.getRegistryName()))
-        ).next(r).orElseGet(EntityType.ZOMBIE::getRegistryName);
+            Biome biome = chunk.getBiomes().getNoiseBiome(anchor.getX(), anchor.getY(), anchor.getZ());
+            List<Biome.SpawnListEntry> entries = biome.getSpawns(EntityClassification.MONSTER);
+            RandomCollection<ResourceLocation> mobs = RandomCollection.from(entries.stream()
+                                .map(e -> new Pair<>((float) e.itemWeight, e.entityType.getRegistryName())));
+
+            return mobs.next(r).orElseGet(EntityType.ZOMBIE::getRegistryName);
+        };
 
         return getGenerator(
                 (p, s) -> chunk.setBlockState(p, s, false),
@@ -201,6 +208,8 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
                 world, r, anchor
         );
     }
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static BiConsumer<BlockPos, BlockState> getGenerator(BiConsumer<BlockPos, BlockState> setBlock, Predicate<BlockPos> isAir, BiConsumer<BlockPos, TileEntity> setTile, Supplier<ResourceLocation> loot, Supplier<ResourceLocation> mobs, IWorld world, Random random, BlockPos at) {
         Rotation r = Rotation.randomRotation(random);
@@ -216,15 +225,16 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
             }
 
             if (s.hasTileEntity())
-                Optional.ofNullable(s.createTileEntity(world)).ifPresent(tile -> {
+                Optional.ofNullable(s.createTileEntity(world)).map(tile -> {
 
                     if (tile instanceof LockableLootTileEntity) {
                         ResourceLocation table = loot.get();
                         ((LockableLootTileEntity) tile).setLootTable(table, random.nextLong());
                     } else if (tile instanceof MobSpawnerTileEntity) {
-                        CompoundNBT nbt = tile.write(new CompoundNBT());
 
+                        CompoundNBT nbt = new CompoundNBT();
                         ResourceLocation mob = mobs.get();
+
                         CompoundNBT data = new CompoundNBT();
                         data.putString("id", mob.toString());
                         nbt.put("SpawnData", data);
@@ -239,6 +249,11 @@ public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
                     }
 
                     setTile.accept(pos, tile);
+                    return true;
+
+                }).orElseGet(() -> {
+                    LOGGER.warn("Could not create TileEntity for {}", s.getBlock().getRegistryName());
+                    return false;
                 });
 
         };

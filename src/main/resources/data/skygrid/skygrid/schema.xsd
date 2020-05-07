@@ -69,6 +69,7 @@
             <xsd:element name="sky" type="color" minOccurs="0" />
             <xsd:element name="biome" maxOccurs="unbounded" type="resource" />
         </xsd:sequence>
+        <xsd:attribute default="true" name="enable" type="xsd:boolean" />
         <xsd:attribute default="false" name="respawn" type="xsd:boolean" />
         <xsd:attribute default="false" name="hot" type="xsd:boolean" />
         <xsd:attribute default="true" name="skylight" type="xsd:boolean" />

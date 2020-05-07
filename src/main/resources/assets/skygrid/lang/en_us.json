@@ -8,5 +8,7 @@
   "command.skygrid.blocks.exports.success": "Successfully exported all possible blocks",
   "command.skygrid.blocks.exports.open": "Click to open export file",
 
-  "argument.skygrid.config.invalid": "Could not find a skygrid configuration for %s"
+  "argument.skygrid.config.invalid": "Could not find a skygrid configuration for %s",
+
+  "gui.skygrid.category.probability": "Generation"
 }

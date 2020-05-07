@@ -131,19 +131,9 @@ public class PossibleCommand {
 
     private static void exportCSV(File file, DimensionConfig config) throws IOException {
 
-        List<Pair<Float, Block>> blocks = config.getPossibleBlocks().collect(Collectors.toList());
+        List<Map.Entry<Block,Float>> blocks = config.getUniqueBlocks().collect(Collectors.toList());
 
         List<String> lines = blocks.stream()
-                .reduce(new HashMap<Block, Float>(), (map, pair) -> {
-                    Block b = pair.getSecond();
-                    map.put(b, map.getOrDefault(b, 0F) + pair.getFirst());
-                    return map;
-                }, (a, b) -> b)
-                .entrySet().stream()
-                .sorted((a, b) -> {
-                    if (a.getValue().equals(b.getValue())) return 0;
-                    else return a.getValue() < b.getValue() ? 1 : -1;
-                })
                 .map(p -> Stream.of(p.getKey().getRegistryName(), p.getValue(), p.getKey().getDefaultState().getMaterial().getColor().colorValue)
                         .map(Objects::toString)
                         .reduce((a, b) -> a + "," + b)

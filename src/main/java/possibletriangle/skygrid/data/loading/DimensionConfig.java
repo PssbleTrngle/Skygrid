@@ -17,9 +17,7 @@ import possibletriangle.skygrid.provider.property.PropertyProvider;
 import possibletriangle.skygrid.provider.property.SetProperty;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -72,7 +70,7 @@ public class DimensionConfig {
         return new BlockPos(x == 0 ? def : x, y == 0 ? def : y, z == 0 ? def : z);
     }
 
-    public DimensionConfig(boolean replace, @Nullable  CreateOptions create, RandomCollection<BlockProvider> providers, BlockPos distance, BlockPos cluster, BlockProvider fill, RandomCollection<ResourceLocation> loot) {
+    public DimensionConfig(boolean replace, @Nullable CreateOptions create, RandomCollection<BlockProvider> providers, BlockPos distance, BlockPos cluster, BlockProvider fill, RandomCollection<ResourceLocation> loot) {
         this.replace = replace;
         this.create = create;
         this.providers = providers;
@@ -114,20 +112,20 @@ public class DimensionConfig {
                         new RandomCollection<>(Stream.of(a.fill, b.fill)
                                 .filter(Objects::nonNull)
                                 .toArray(BlockProvider[]::new)), null)
-                        ).filter(RandomCollectionProvider::isValid).orElse(null),
+                ).filter(RandomCollectionProvider::isValid).orElse(null),
                 loot
         );
     }
 
     public Optional<CreateOptions> getCreateOptions() {
-        return Optional.ofNullable(this.create);
+        return Optional.ofNullable(this.create).filter(c -> c.enable);
     }
 
     public boolean isValid(ResourceLocation name) {
-        if(providers.isEmpty()) {
+        if (providers.isEmpty()) {
             LOGGER.warn("Skygrid config for {} has no valid providers", name);
             return false;
-        } else if(loot.isEmpty()) {
+        } else if (loot.isEmpty()) {
             LOGGER.warn("Skygrid config for {} has no valid loot tables", name);
             return false;
         }
@@ -146,10 +144,23 @@ public class DimensionConfig {
         return this.loot.next(random).orElseThrow(() -> new NullPointerException("Loot collection should not be empty"));
     }
 
-    public Stream<Pair<Float,Block>> getPossibleBlocks() {
+    public Stream<Pair<Float, Block>> getPossibleBlocks() {
         return this.providers.stream().map(e -> e.getSecond().getPossibleBlocks().map(
                 p -> new Pair<>(p.getFirst() * e.getFirst(), p.getSecond())
         )).flatMap(Function.identity());
+    }
+
+    public Stream<Map.Entry<Block,Float>> getUniqueBlocks() {
+        return getPossibleBlocks().reduce(new HashMap<Block, Float>(), (map, pair) -> {
+            Block b = pair.getSecond();
+            map.put(b, map.getOrDefault(b, 0F) + pair.getFirst());
+            return map;
+        }, (a, b) -> b)
+                .entrySet().stream()
+                .sorted((a, b) -> {
+                    if (a.getValue().equals(b.getValue())) return 0;
+                    else return a.getValue() < b.getValue() ? 1 : -1;
+                });
     }
 
 }

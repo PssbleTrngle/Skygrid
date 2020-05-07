@@ -13,7 +13,7 @@ public abstract class CollectionProvider extends BlockProvider {
 
     public abstract BlockProvider getProvider(Random random);
 
-    public abstract Stream<Pair<Float, BlockProvider>>  getAllProviders();
+    public abstract Stream<Pair<Float, BlockProvider>> getAllProviders();
 
     @Override
     protected Block get(Random random) {

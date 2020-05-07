@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class CreateOptions {
 
     private final Set<Biome> biomes;
-
+    public final boolean enable;
     public final String daytime;
 
     @Nullable
@@ -22,7 +22,7 @@ public class CreateOptions {
 
     public final boolean canRespawn, skyLight, waterVaporize;
 
-    public CreateOptions(Stream<Biome> biomes, boolean canRespawn, boolean skyLight, boolean waterVaporize, @Nullable Vec3d fogColor, @Nullable Vec3d skyColor, String daytime) {
+    public CreateOptions(Stream<Biome> biomes, boolean canRespawn, boolean skyLight, boolean waterVaporize, @Nullable Vec3d fogColor, @Nullable Vec3d skyColor, String daytime, boolean enable) {
         this.biomes = biomes.collect(Collectors.toSet());
         this.fogColor = fogColor;
         this.skyColor = skyColor;
@@ -30,6 +30,7 @@ public class CreateOptions {
         this.skyLight = skyLight;
         this.waterVaporize = waterVaporize;
         this.daytime = daytime;
+        this.enable = enable;
     }
 
     public static CreateOptions merge(@Nullable CreateOptions a, @Nullable CreateOptions b) {
@@ -45,9 +46,9 @@ public class CreateOptions {
                 a.canRespawn || b.canRespawn,
                 a.skyLight || b.skyLight,
                 a.waterVaporize || b.waterVaporize,
-                b.fogColor,
-                b.skyColor,
-                a.daytime == "unset" ? a.daytime : b.daytime
+                b.fogColor, b.skyColor,
+                a.daytime.equals("unset") ? a.daytime : b.daytime,
+                a.enable || b.enable
         );
     }
 
