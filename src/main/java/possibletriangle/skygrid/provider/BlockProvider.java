@@ -5,6 +5,8 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import possibletriangle.skygrid.provider.property.PropertyProvider;
 
 import java.util.Collection;
@@ -53,6 +55,7 @@ public abstract class BlockProvider {
 
         Block block = get(new Random(seed));
         BlockState state = apply(new Random(seed), block.getDefaultState());
+
         generator.accept(new BlockPos(0, 0, 0), state);
 
         Random shared = new Random(random.nextLong());
@@ -60,7 +63,6 @@ public abstract class BlockProvider {
         this.getOffsets(new Random(seed))
                 .filter(o -> (o.shared ? shared : random).nextFloat() <= o.probability)
                 .forEachOrdered(o -> o.provider.generate((p, s) -> generator.accept(p.add(o.offset), s), o.shared ? shared : random));
-
     }
 
     protected abstract Stream<Pair<Float, Block>> allBlocks();

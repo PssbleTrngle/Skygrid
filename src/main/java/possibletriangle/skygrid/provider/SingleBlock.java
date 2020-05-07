@@ -21,7 +21,7 @@ public class SingleBlock extends BlockProvider {
 
     public SingleBlock(ResourceLocation name) {
         this(BLOCKS.containsKey(name) ? BLOCKS.getValue(name) : null);
-        if(this.block == null && ModList.get().isLoaded(name.getPath()))
+        if(this.block == null && ModList.get().isLoaded(name.getNamespace()))
             LOGGER.warn("Could not find the block '{}' even tho the mod is loaded", name.toString());
     }
 

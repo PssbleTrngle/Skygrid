@@ -9,6 +9,8 @@
 
     <collection weight="10">
 
+        <block weight="0.2" mod="charm" id="fumarole" />
+
         <block weight="10" id="netherrack">
             <side probability="0.08" on="up">
                 <block weight="100" id="red_mushroom" />
@@ -81,8 +83,11 @@
     </collection>
 
     <collection weight="0.6">
-        <block weight="0.05" id="bone_block" />
         <block id="nether_quartz_ore" />
+        <block weight="0.5" mod="charm" id="nether_gold_deposit" />
+        <block weight="0.1" mod="charm" id="pig_iron_ore" />
+
+        <block weight="0.05" id="bone_block" />
         <block weight="0.01" id="gold_block" />
         <block weight="0.03" mod="quark" id="blaze_lantern" />
         <block weight="0.02" mod="quark" id="nether_wart_sack" />

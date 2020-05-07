@@ -2,7 +2,7 @@
 <dimension replace="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com"
            xsi:schemaLocation="https://www.w3schools.com ../../../skygrid/skygrid/schema.xsd">
 
-    <create>
+    <create enable="false">
         <sky hex="#4287f5" />
         <biome id="ocean"/>
         <biome id="lukewarm_ocean"/>

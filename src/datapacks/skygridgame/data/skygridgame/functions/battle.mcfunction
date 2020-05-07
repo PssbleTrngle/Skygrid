@@ -18,10 +18,7 @@ title @a[team=!lobby] times 3 15 3
 title @a[team=!lobby] title ""
 title @a[team=!lobby] subtitle [{"text":"Battle!","color":"red"}]
 
-spawnpoint @a[tag=red] -4 61 0
-spawnpoint @a[tag=yellow] 0 61 4
-spawnpoint @a[tag=blue] 4 61 0
-spawnpoint @a[tag=green] 0 61 -4
+function skygridgame:spawnpoints
 
 execute if score LastPeace skygrid_settings > Round skygrid_hidden run scoreboard players set Timer skygrid_hidden 60
 execute unless score LastPeace skygrid_settings > Round skygrid_hidden run scoreboard players set Timer skygrid_hidden 0

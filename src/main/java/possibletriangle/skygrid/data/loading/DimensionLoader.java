@@ -2,6 +2,8 @@ package possibletriangle.skygrid.data.loading;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -44,16 +46,25 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
         this.server = server;
     }
 
-    public static Stream<ResourceLocation> allConfigs() {
+    public static Stream<ResourceLocation> configKeys() {
         return CONFIGS.keySet().stream();
+    }
+
+    public static Stream<Map.Entry<ResourceLocation, DimensionConfig>> configs() {
+        return CONFIGS.entrySet().stream();
     }
 
     public static Optional<BlockProvider> findRef(ResourceLocation name) {
         return Optional.ofNullable(REFS.get(name));
     }
 
+    public static Block findIcon(ResourceLocation name) {
+        return ICONS.getOrDefault(name, Blocks.BEDROCK);
+    }
+
     private static final HashMap<ResourceLocation, DimensionConfig> CONFIGS = new HashMap<>();
     private static final HashMap<ResourceLocation, List<Consumer<DimensionConfig>>> listeners = Maps.newHashMap();
+    private static final HashMap<ResourceLocation, Block> ICONS = Maps.newHashMap();
     private static final HashMap<ResourceLocation, BlockProvider> REFS = Maps.newHashMap();
 
     private static void updateConfigs() {
@@ -144,11 +155,16 @@ public class DimensionLoader extends ReloadListener<List<LoadingResource<?>>> {
     protected void apply(List<LoadingResource<?>> loading, IResourceManager manager, IProfiler profiler) {
         CONFIGS.clear();
         REFS.clear();
+        ICONS.clear();
 
         loading.forEach(LoadingResource::parse);
 
-        LOGGER.info("Loaded {} skygrid configs", CONFIGS.size());
+        CONFIGS.forEach((name, config) -> ICONS
+                .put(name, config.getUniqueBlocks().findFirst()
+                        .map(Map.Entry::getKey)
+                        .orElse(Blocks.BEDROCK)));
 
+        LOGGER.info("Loaded {} skygrid configs", CONFIGS.size());
 
         List<ResourceLocation> existing = existingDimensions().collect(Collectors.toList());
         CONFIGS.entrySet().stream().sorted((a, b) -> {

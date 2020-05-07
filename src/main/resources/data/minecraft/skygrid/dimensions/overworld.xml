@@ -143,12 +143,45 @@
 
     </collection>
 
-    <collection name="crops" weight="5">
+    <collection name="crops" weight="9">
         <block id="farmland" weight="10">
             <offset y="1">
-                <tag id="#crops">
+                <collection>
                     <cycle key="age" />
-                </tag>
+                    <tag weight="7" id="#crops" />
+                    <block mod="simplefarming" id="peanut_crop" />
+                    <block mod="simplefarming" id="pea_crop" />
+                    <block mod="simplefarming" id="corn_crop" />
+                    <block mod="simplefarming" id="quinoa_crop" />
+                    <block mod="simplefarming" id="spinach_crop" />
+                    <block mod="simplefarming" id="onion_crop" />
+                    <block mod="simplefarming" id="cotton_crop" />
+                    <block mod="simplefarming" id="yam_crop" />
+                    <block mod="simplefarming" id="turnip_crop" />
+                    <block mod="simplefarming" id="ginger_crop" />
+                    <block mod="simplefarming" id="rice_crop" />
+                    <block mod="simplefarming" id="cassava_crop" />
+                    <block mod="simplefarming" id="cumin_crop" />
+                    <block mod="simplefarming" id="soybean_crop" />
+                    <block mod="simplefarming" id="barley_crop" />
+                    <block mod="simplefarming" id="honeydew_crop" />
+                    <block mod="simplefarming" id="squash_crop" />
+                    <block mod="simplefarming" id="grape_crop" />
+                    <block mod="simplefarming" id="kenaf_crop" />
+                    <block mod="simplefarming" id="oat_crop" />
+                    <block mod="simplefarming" id="eggplant_crop" />
+                    <block mod="simplefarming" id="radish_crop" />
+                    <block mod="simplefarming" id="pepper_crop" />
+                    <block mod="simplefarming" id="tomato_crop" />
+                    <block mod="simplefarming" id="rye_crop" />
+                    <block mod="simplefarming" id="broccoli_crop" />
+                    <block mod="simplefarming" id="zucchini_crop" />
+                    <block mod="simplefarming" id="sweet_potato_crop" />
+                    <block mod="simplefarming" id="cucumber_crop" />
+                    <block mod="simplefarming" id="cantaloupe_crop" />
+                    <block mod="simplefarming" id="sorghum_crop" />
+                    <block mod="simplefarming" id="lettuce_crop" />
+                </collection>
             </offset>
         </block>
 
@@ -186,12 +219,21 @@
                     <block weight="8" id="sweet_berry_bush" />
                     <block mod="byg" weight="4" id="blueberry_bush" />
                     <block mod="autumnity" id="foul_berry_bush" />
+                    <block mod="simplefarming" id="blackberry_bush" />
+                    <block mod="simplefarming" id="blueberry_bush" />
+                    <block mod="simplefarming" id="raspberry_bush" />
+                    <block mod="simplefarming" id="strawberry_bush" />
                 </collection>
             </side>
         </block>
 
         <collection weight="4">
-            <block id="melon" />
+            <collection name="melons">
+                <block id="melon" />
+                <block mod="simplefarming" id="cantaloupe_block" />
+                <block mod="simplefarming" id="honeydew_block" />
+                <block mod="simplefarming" id="squash_block" />
+            </collection>
             <collection name="pumpkins">
                 <block id="pumpkin" />
                 <block id="carved_pumpkin" />
@@ -207,6 +249,7 @@
                 <name pattern="_wood" />
                 <name pattern="endergetic" />
                 <name pattern="midnight" />
+                <name pattern="simplefarming" />
             </except>
         </tag>
         <block weight="0.03" id="bee_nest" />
@@ -291,6 +334,7 @@
             <block id="hopper" />
             <block id="redstone_lamp" />
             <block id="tnt" />
+            <block mod="charm" id="redstone_sand" />
             <block weight="2" id="slime_block" />
             <block id="honey_block" />
         </collection>
@@ -375,8 +419,15 @@
     </collection>
 
     <collection name="resources" weight="6">
-        <collection>
-            <block id="hay_block" />
+        <collection weight="0.5">
+            <collection name="hay">
+                <cycle key="axis" />
+                <block id="hay_block" />
+                <block mod="simplefarming" id="rice_hay_block" />
+                <block mod="simplefarming" id="rye_hay_block" />
+                <block mod="simplefarming" id="barley_hay_block" />
+                <block mod="simplefarming" id="oat_hay_block" />
+            </collection>
             <block mod="quark" id="stick_block" />
             <block mod="quark" id="gunpowder_sack" />
         </collection>
@@ -397,6 +448,7 @@
             <block mod="upgrade_aquatic" id="beachgrass_thatch" />
             <block mod="swampexpansion" id="cattail_thatch" />
         </collection>
+        <block weight="0.1" mod="botania" id="root" />
         <collection weight="0.1" name="petals">
             <block mod="botania" id="white_petal_block" />
             <block mod="botania" id="orange_petal_block" />
@@ -415,7 +467,7 @@
             <block mod="botania" id="red_petal_block" />
             <block mod="botania" id="black_petal_block" />
         </collection>
-        <collection name="fruits">
+        <collection weight="0.8" name="fruits">
             <block mod="quark" id="apple_crate" />
             <block mod="quark" id="potato_crate" />
             <block mod="quark" id="carrot_crate" />

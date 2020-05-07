@@ -85,6 +85,7 @@
     <collection weight="0.5" name="ores">
         <block weight="50" mod="quark" id="biotite_ore" />
         <block mod="quark" id="chorus_fruit_block" />
+        <block mod="charm" id="ender_pearl_block" />
     </collection>
 
     <collection weight="0.05" name="loot">
