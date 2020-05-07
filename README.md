@@ -1,7 +1,7 @@
 # Skygrid
 [Download](https://www.curseforge.com/minecraft/mc-mods/skygrid/files)
 
-A Minecraft mod realizing the Skygrid map by Sethbling as an entire world generator. If there are any feature request or issues, post them on the issue tracker or contact me via Twitter.
+A Minecraft mod realizing the Skygrid map by [Sethbling](https://twitter.com/sethbling) as an entire world generator. If there are any feature request or issues, post them on the issue tracker or contact me via Twitter.
 
 This mods adds the new Skygrid world generation type. This will generate random blocks from the dimensions configuration file and place them in a grid.
 
