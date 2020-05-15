@@ -1,11 +1,9 @@
-package possibletriangle.skygrid.data.loading;
+package possibletriangle.skygrid.util.loading;
 
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.world.ChunkEvent;
 import org.w3c.dom.Element;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.*;

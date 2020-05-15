@@ -11,8 +11,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
-import possibletriangle.skygrid.data.loading.DimensionConfig;
-import possibletriangle.skygrid.data.loading.DimensionLoader;
+import possibletriangle.skygrid.util.loading.DimensionConfig;
+import possibletriangle.skygrid.util.loading.DimensionLoader;
 
 import java.util.concurrent.CompletableFuture;
 

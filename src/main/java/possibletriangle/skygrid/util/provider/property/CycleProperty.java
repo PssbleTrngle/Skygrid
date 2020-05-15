@@ -1,9 +1,8 @@
-package possibletriangle.skygrid.provider.property;
+package possibletriangle.skygrid.util.provider.property;
 
 import net.minecraft.state.IProperty;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CycleProperty extends PropertyProvider {
 

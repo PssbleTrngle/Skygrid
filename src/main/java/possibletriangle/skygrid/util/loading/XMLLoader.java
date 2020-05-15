@@ -1,4 +1,4 @@
-package possibletriangle.skygrid.data.loading;
+package possibletriangle.skygrid.util.loading;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
@@ -19,13 +19,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import possibletriangle.skygrid.RandomCollection;
+import possibletriangle.skygrid.util.RandomCollection;
 import possibletriangle.skygrid.Skygrid;
-import possibletriangle.skygrid.world.custom.CreateOptions;
-import possibletriangle.skygrid.provider.*;
-import possibletriangle.skygrid.provider.property.CycleProperty;
-import possibletriangle.skygrid.provider.property.PropertyProvider;
-import possibletriangle.skygrid.provider.property.SetProperty;
+import possibletriangle.skygrid.util.provider.*;
+import possibletriangle.skygrid.util.provider.property.CycleProperty;
+import possibletriangle.skygrid.util.provider.property.PropertyProvider;
+import possibletriangle.skygrid.util.provider.property.SetProperty;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

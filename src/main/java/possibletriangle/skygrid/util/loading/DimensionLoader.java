@@ -1,4 +1,4 @@
-package possibletriangle.skygrid.data.loading;
+package possibletriangle.skygrid.util.loading;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -21,8 +21,8 @@ import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 import possibletriangle.skygrid.Skygrid;
 import possibletriangle.skygrid.world.custom.CustomDimension;
-import possibletriangle.skygrid.provider.BlockProvider;
-import possibletriangle.skygrid.provider.RandomCollectionProvider;
+import possibletriangle.skygrid.util.provider.BlockProvider;
+import possibletriangle.skygrid.util.provider.RandomCollectionProvider;
 
 import javax.annotation.Nonnull;
 import javax.xml.XMLConstants;

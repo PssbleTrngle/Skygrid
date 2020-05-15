@@ -1,10 +1,8 @@
-package possibletriangle.skygrid.provider;
+package possibletriangle.skygrid.util.provider;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.world.biome.Biomes;
-import net.minecraftforge.common.BiomeManager;
 
 import java.util.Random;
 import java.util.stream.Stream;

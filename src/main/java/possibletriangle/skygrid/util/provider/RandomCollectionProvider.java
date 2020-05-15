@@ -1,8 +1,8 @@
-package possibletriangle.skygrid.provider;
+package possibletriangle.skygrid.util.provider;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
-import possibletriangle.skygrid.RandomCollection;
+import possibletriangle.skygrid.util.RandomCollection;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

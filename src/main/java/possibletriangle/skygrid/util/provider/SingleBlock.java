@@ -1,4 +1,4 @@
-package possibletriangle.skygrid.provider;
+package possibletriangle.skygrid.util.provider;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;

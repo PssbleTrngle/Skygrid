@@ -1,4 +1,4 @@
-package possibletriangle.skygrid.world.custom;
+package possibletriangle.skygrid.util.loading;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.biome.Biome;

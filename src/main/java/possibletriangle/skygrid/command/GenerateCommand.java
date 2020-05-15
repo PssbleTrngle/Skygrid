@@ -17,15 +17,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import possibletriangle.skygrid.data.loading.DimensionConfig;
+import possibletriangle.skygrid.util.loading.DimensionConfig;
 import possibletriangle.skygrid.world.SkygridChunkGenerator;
 
 import java.util.List;
 import java.util.Random;
-import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
