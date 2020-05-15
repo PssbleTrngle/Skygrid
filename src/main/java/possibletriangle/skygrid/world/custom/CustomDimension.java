@@ -13,8 +13,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ModDimension;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import possibletriangle.skygrid.data.loading.DimensionConfig;
-import possibletriangle.skygrid.data.loading.DimensionLoader;
+import possibletriangle.skygrid.util.loading.CreateOptions;
+import possibletriangle.skygrid.util.loading.DimensionConfig;
+import possibletriangle.skygrid.util.loading.DimensionLoader;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

@@ -1,13 +1,11 @@
-package possibletriangle.skygrid.provider;
+package possibletriangle.skygrid.util.provider;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import possibletriangle.skygrid.provider.property.PropertyProvider;
+import possibletriangle.skygrid.util.provider.property.PropertyProvider;
 
 import java.util.Collection;
 import java.util.Random;

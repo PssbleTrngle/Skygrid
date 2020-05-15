@@ -1,6 +1,5 @@
 package possibletriangle.skygrid.compat.jei.ingredient;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
@@ -10,7 +9,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.dimension.DimensionType;
-import possibletriangle.skygrid.data.loading.DimensionLoader;
+import possibletriangle.skygrid.util.loading.DimensionLoader;
 
 import javax.annotation.Nullable;
 import java.util.Collections;

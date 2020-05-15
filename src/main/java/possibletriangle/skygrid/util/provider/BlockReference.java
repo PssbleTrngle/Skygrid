@@ -1,10 +1,10 @@
-package possibletriangle.skygrid.provider;
+package possibletriangle.skygrid.util.provider;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
-import possibletriangle.skygrid.data.loading.DimensionConfig;
-import possibletriangle.skygrid.data.loading.DimensionLoader;
+import possibletriangle.skygrid.util.loading.DimensionConfig;
+import possibletriangle.skygrid.util.loading.DimensionLoader;
 
 import javax.annotation.Nullable;
 import java.util.Random;

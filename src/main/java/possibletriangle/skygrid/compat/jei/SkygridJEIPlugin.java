@@ -7,7 +7,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.MutableRegistry;
@@ -17,8 +16,8 @@ import possibletriangle.skygrid.Skygrid;
 import possibletriangle.skygrid.compat.jei.ingredient.DimensionIngredient;
 import possibletriangle.skygrid.compat.jei.ingredient.DimensionIngredientHelper;
 import possibletriangle.skygrid.compat.jei.ingredient.DimensionIngredientRenderer;
-import possibletriangle.skygrid.data.loading.DimensionConfig;
-import possibletriangle.skygrid.data.loading.DimensionLoader;
+import possibletriangle.skygrid.util.loading.DimensionConfig;
+import possibletriangle.skygrid.util.loading.DimensionLoader;
 
 import java.util.Collection;
 import java.util.List;

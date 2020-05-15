@@ -13,7 +13,6 @@ import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.datafix.fixes.SpawnerEntityTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
@@ -29,29 +28,24 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StrongholdStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.Structures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import possibletriangle.skygrid.RandomCollection;
+import possibletriangle.skygrid.util.RandomCollection;
 import possibletriangle.skygrid.Skygrid;
-import possibletriangle.skygrid.block.StiffAir;
-import possibletriangle.skygrid.data.loading.DimensionConfig;
-import possibletriangle.skygrid.data.loading.DimensionLoader;
-import possibletriangle.skygrid.provider.BlockProvider;
+import possibletriangle.skygrid.util.loading.DimensionConfig;
+import possibletriangle.skygrid.util.loading.DimensionLoader;
+import possibletriangle.skygrid.util.provider.BlockProvider;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class SkygridChunkGenerator extends ChunkGenerator<SkygridSettings> {
 

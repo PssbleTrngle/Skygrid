@@ -1,4 +1,4 @@
-package possibletriangle.skygrid;
+package possibletriangle.skygrid.util;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;

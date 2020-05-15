@@ -1,4 +1,4 @@
-package possibletriangle.skygrid.provider;
+package possibletriangle.skygrid.util.provider;
 
 import java.util.Optional;
 

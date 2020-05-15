@@ -1,4 +1,4 @@
-package possibletriangle.skygrid.data.loading;
+package possibletriangle.skygrid.util.loading;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
@@ -8,13 +8,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.storage.loot.LootTables;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import possibletriangle.skygrid.RandomCollection;
-import possibletriangle.skygrid.world.custom.CreateOptions;
-import possibletriangle.skygrid.provider.BlockProvider;
-import possibletriangle.skygrid.provider.RandomCollectionProvider;
-import possibletriangle.skygrid.provider.SingleBlock;
-import possibletriangle.skygrid.provider.property.PropertyProvider;
-import possibletriangle.skygrid.provider.property.SetProperty;
+import possibletriangle.skygrid.util.RandomCollection;
+import possibletriangle.skygrid.util.provider.BlockProvider;
+import possibletriangle.skygrid.util.provider.RandomCollectionProvider;
+import possibletriangle.skygrid.util.provider.SingleBlock;
+import possibletriangle.skygrid.util.provider.property.PropertyProvider;
+import possibletriangle.skygrid.util.provider.property.SetProperty;
 
 import javax.annotation.Nullable;
 import java.util.*;
