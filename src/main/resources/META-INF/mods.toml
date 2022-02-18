@@ -1,31 +1,26 @@
-modLoader="javafml"
-loaderVersion="[31,)"
-#issueTrackerURL="http://my.issue.tracker/" #optional
+# Make sure this is set to "kotlinforforge"
+modLoader="kotlinforforge"
+# Make sure this is set to the appropriate version range
+loaderVersion="[2.2,)" # Require at least 2.0.x
+# License is REQUIRED after 1.16
+license='LGPL'
+
 [[mods]]
 modId="skygrid"
-version="${version}"
+version="${file.jarVersion}"
 displayName="Skygrid"
-#updateJSONURL="http://myurl.me/"
-#displayURL="http://example.com/"
-#logoFile="examplemod.png"
-# A text field displayed in the mod UI
-credits="Sethbling for the original idea"
-# A text field displayed in the mod UI
 authors="possible_triangle"
-description='''
-Skygrid generator
-'''
-[[dependencies.examplemod]] #optional
-    # the modid of the dependency
+description='''Skygrid the people'''
+
+[[dependencies.skygrid]]
     modId="forge"
     mandatory=true
-    versionRange="[31,)"
+    versionRange="[38,)"
     ordering="NONE"
     side="BOTH"
-# Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.skygrid]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.18.1]"
     ordering="NONE"
     side="BOTH"

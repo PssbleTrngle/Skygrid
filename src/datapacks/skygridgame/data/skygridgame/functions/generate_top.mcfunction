@@ -1,1 +1,0 @@
-skygrid generate -32 80 -32 32 80 32 skygridgame:top

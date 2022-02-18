@@ -20,11 +20,7 @@ build
 # other
 eclipse
 run
-server
-src/generated
-src/links
 
 # Files from Forge MDK
 forge*changelog.txt
-
-node_modules/
+libs

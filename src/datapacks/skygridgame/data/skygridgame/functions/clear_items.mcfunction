@@ -1,1 +1,0 @@
-execute as @e[type=item] unless data entity @s Thrower run kill @s
