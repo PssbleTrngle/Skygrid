@@ -2,7 +2,6 @@ package possible_triangle.skygrid.world
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.server.level.WorldGenRegion
@@ -19,13 +18,14 @@ import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.StructureSettings
 import net.minecraft.world.level.levelgen.blending.Blender
-import possible_triangle.skygrid.config.impl.DimensionConfig
+import possible_triangle.skygrid.config.DimensionConfig
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.BiFunction
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.random.Random
 
-@ExperimentalSerializationApi
 class SkygridChunkGenerator(
     biomeSource: BiomeSource,
     private val seed: Long,
@@ -60,13 +60,18 @@ class SkygridChunkGenerator(
         val dimensions = region.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY)
         val config = dimensions.getKey(region.dimensionType())?.let { DimensionConfig[it] } ?: DimensionConfig.DEFAULT
 
-        val margin = BlockPos(config.margin, config.margin, config.margin)
-        val blocks = region.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY)
-        for (x in 0..16) if (x % margin.x == 0)
-            for (z in 0..16) if (z % margin.z == 0)
-                for (y in chunk.minBuildHeight..chunk.maxBuildHeight) if (y % margin.y == 0) {
+        val minY = max(chunk.minBuildHeight, config.minY)
+        val maxY = min(chunk.maxBuildHeight, config.maxY)
+
+        region.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY)
+        for (x in 0 until 16) if ((x + chunk.pos.minBlockX) % config.distance.x == 0)
+            for (z in 0 until 16) if ((z + chunk.pos.minBlockZ) % config.distance.z == 0)
+                for (y in minY..maxY) if (y % config.distance.y == 0) {
                     val pos = BlockPos(x, y, z)
-                    config.blocks.generate(random, chunk, blocks, pos)
+                    config.generate(random, BlockAccess({ state, offset ->
+                        val at = pos.offset(offset)
+                        chunk.setBlockState(at, state, false)
+                    }, { chunk.getBlockState(it).isAir }))
                 }
     }
 

@@ -1,16 +1,17 @@
 package possible_triangle.skygrid.util
 
+import possible_triangle.skygrid.config.WeightedEntry
 import java.util.*
 import kotlin.random.Random
 
-class WeightedList<T>(pairs: Map<T, Double> = mapOf()) {
+class WeightedList<T : WeightedEntry>(pairs: List<T>) {
 
     private val map: NavigableMap<Double, T> = TreeMap()
     private var total = 0.0
 
     init {
         pairs.forEach {
-            add(it.key, it.value)
+            add(it, it.weight)
         }
     }
 

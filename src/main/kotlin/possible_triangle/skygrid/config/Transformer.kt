@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.random.Random
 
-@ExperimentalSerializationApi
 @Serializable
 abstract class Transformer {
 

@@ -1,17 +1,17 @@
 package possible_triangle.skygrid.config.impl
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.config.BlockProvider
+import possible_triangle.skygrid.config.Preset
 import possible_triangle.skygrid.config.ProxyProvider
 import possible_triangle.skygrid.config.Transformer
 import kotlin.random.Random
 
-@ExperimentalSerializationApi
 @Serializable
 @SerialName("reference")
 class Reference(
@@ -22,11 +22,17 @@ class Reference(
 ) :
     ProxyProvider() {
 
+    override val name: String
+        get() = key.toString()
+
+    private val key
+        get() = ResourceLocation(id)
+
     override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        return false
+        return Preset.exists(key)
     }
 
     override fun get(random: Random): BlockProvider {
-        TODO()
+        return Preset[key]?.provider ?: throw NullPointerException("Preset $key does not exist")
     }
 }

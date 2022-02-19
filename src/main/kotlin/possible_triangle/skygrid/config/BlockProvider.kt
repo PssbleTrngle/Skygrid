@@ -1,52 +1,50 @@
 package possible_triangle.skygrid.config
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.chunk.ChunkAccess
-import possible_triangle.skygrid.config.impl.Side
+import possible_triangle.skygrid.SkygridMod
+import possible_triangle.skygrid.world.BlockAccess
 import kotlin.random.Random
 
-@ExperimentalSerializationApi
 @Serializable
-abstract class BlockProvider {
+abstract class BlockProvider : WeightedEntry() {
 
-    abstract val weight: Double
-
-    abstract val sides: List<Side>
+    abstract val sides: List<Extra>
     abstract val transformers: List<Transformer>
+    abstract val name: String?
 
     @Transient
-    lateinit var validSides: List<Side>
+    lateinit var validSides: List<Extra>
 
     protected abstract fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean
 
     fun validate(blocks: Registry<Block>, tags: TagContainer): Boolean {
         validSides = sides.filter { it.validate(blocks, tags) }
-        return internalValidate(blocks, tags)
+        return internalValidate(blocks, tags).also {
+            if (!it) SkygridMod.LOGGER.debug("Invalid BlockProvider ${name ?: "(anonymous)"} of type ${javaClass.name}")
+        }
     }
 
-    internal abstract fun base(random: Random, blocks: Registry<Block>): Block
+    internal abstract fun base(random: Random): Block
 
-    fun get(random: Random, blocks: Registry<Block>): BlockState {
-        return transformers.fold(base(random, blocks).defaultBlockState()) { state, transformer ->
+    fun getState(random: Random): BlockState {
+        return transformers.fold(base(random).defaultBlockState()) { state, transformer ->
             transformer.apply(state, random)
         }
     }
 
-    protected open fun generateBase(random: Random, chunk: ChunkAccess, blocks: Registry<Block>, pos: BlockPos) {
-        val state = get(random, blocks)
-        chunk.setBlockState(pos, state, false)
+    protected open fun generateBase(random: Random, chunk: BlockAccess) {
+        val state = getState(random)
+        chunk.set(state)
     }
 
-    fun generate(random: Random, chunk: ChunkAccess, blocks: Registry<Block>, pos: BlockPos) {
-        generateBase(random, chunk, blocks, pos)
-        validSides.forEach { it.generate(random, chunk, blocks, pos) }
+    fun generate(random: Random, chunk: BlockAccess) {
+        generateBase(random, chunk)
+        validSides.forEach { it.generate(random, chunk) }
     }
 
 }

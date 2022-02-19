@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<preset>
+    <list>
+
+        <block weight="6" id="bookshelf"/>
+        <block weight="6" mod="quark" id="dark_oak_bookshelf"/>
+        <block weight="6" mod="quark" id="acacia_bookshelf"/>
+        <block weight="6" mod="quark" id="jungle_bookshelf"/>
+        <block weight="6" mod="quark" id="birch_bookshelf"/>
+        <block weight="6" mod="quark" id="spruce_bookshelf"/>
+
+        <block weight="3" mod="autumnity" id="maple_bookshelf"/>
+
+        <block mod="bambooblocks" id="bamboo_bookshelf"/>
+        <block mod="buzzierbees" id="hive_bookshelf"/>
+
+    </list>
+</preset>

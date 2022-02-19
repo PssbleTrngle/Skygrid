@@ -4,7 +4,9 @@
   "package": "possible_triangle.skygrid.mixins",
   "compatibilityLevel": "JAVA_17",
   "refmap": "skygrid.refmap.json",
-  "mixins": [],
+  "server": [
+    "MinecraftServerMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
