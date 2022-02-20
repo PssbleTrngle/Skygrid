@@ -39,7 +39,7 @@ class SkygridGenerator : ForgeWorldPreset(null) {
             dimensions.register(key, LevelStem(stem.typeSupplier(), generator), Lifecycle.stable())
         }
 
-        return WorldGenSettings(seed, generateStructures, bonusChest, dimensions)
+        return WorldGenSettings(seed, false, bonusChest, dimensions)
     }
 
 }

@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.StructureSettings
 import net.minecraft.world.level.levelgen.blending.Blender
+import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.config.DimensionConfig
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
@@ -35,7 +36,7 @@ class SkygridChunkGenerator(
 
         private val CLIMATE = Climate.Sampler { _, _, _ -> Climate.TargetPoint(1L, 1L, 1L, 1L, 1L, 1L) }
 
-        private val CODEC: Codec<SkygridChunkGenerator> = RecordCodecBuilder.create { builder ->
+        val CODEC: Codec<SkygridChunkGenerator> = RecordCodecBuilder.create { builder ->
             builder.group(BiomeSource.CODEC.fieldOf("biome_source").forGetter { it.biomeSource },
                 Codec.LONG.fieldOf("seed").stable().forGetter { it.seed }).apply(
                 builder,
@@ -71,7 +72,7 @@ class SkygridChunkGenerator(
                     config.generate(random, BlockAccess({ state, offset ->
                         val at = pos.offset(offset)
                         chunk.setBlockState(at, state, false)
-                    }, { chunk.getBlockState(it).isAir }))
+                    }, { chunk.getBlockState(pos.offset(it)).isAir }))
                 }
     }
 

@@ -12,6 +12,7 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener
 import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.server.ServerAboutToStartEvent
+import net.minecraftforge.event.server.ServerStoppingEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
@@ -59,21 +60,26 @@ abstract class XMLResource<T>(private val path: String, private val serializer: 
             encodeDefault = XmlSerializationPolicy.XmlEncodeDefault.NEVER
             autoPolymorphic = true
             unknownChildHandler = UnknownChildHandler { input, _, descriptor, name, candidates ->
-                throw DeserializationException(input.locationInfo,
+                throw DeserializationException(
+                    input.locationInfo,
                     "${descriptor.tagName}/${name ?: "<CDATA>"}",
-                    candidates)
+                    candidates
+                )
             }
         }
 
         private val RESOURCES = arrayListOf<XMLResource<*>>()
 
         fun reload(server: MinecraftServer) {
-            RESOURCES.forEach {  it.validate(server) }
+            RESOURCES.forEach { it.validate(server) }
         }
 
     }
 
     private var values = mapOf<ResourceLocation, T>()
+
+    val keys
+        get() = values.keys
 
     operator fun get(id: ResourceLocation): T? {
         return values[id]
@@ -85,12 +91,9 @@ abstract class XMLResource<T>(private val path: String, private val serializer: 
 
     fun register() {
         RESOURCES.add(this)
-        FORGE_BUS.addListener(EventPriority.HIGH, ::register)
+        FORGE_BUS.addListener(EventPriority.HIGH) { event: AddReloadListenerEvent -> event.addListener(this) }
+        FORGE_BUS.addListener { _: ServerStoppingEvent -> values = mapOf() }
         FORGE_BUS.addListener { event: ServerAboutToStartEvent -> validate(event.server) }
-    }
-
-    private fun register(event: AddReloadListenerEvent) {
-        event.addListener(this)
     }
 
     private fun validate(server: MinecraftServer) {

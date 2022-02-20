@@ -12,10 +12,10 @@ import possible_triangle.skygrid.config.FilterOperator
 data class NameFilter(val pattern: String): Filter() {
 
     @Transient
-    private val regex = Regex.fromLiteral(pattern)
+    private val regex = pattern.toRegex()
 
     override fun test(block: Block): Boolean {
-        return regex.matches(block.registryName.toString())
+        return regex.containsMatchIn(block.registryName.toString())
     }
 
 }

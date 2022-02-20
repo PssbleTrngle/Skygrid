@@ -108,7 +108,7 @@
         </list>
 
         <list name="stone" weight="300">
-            <tag weight="8" mod="forge" id="wg_stone">
+            <tag weight="8" id="base_stone_overworld">
                 <except>
                     <name pattern="brimstone" />
                     <name pattern="permafrost" />

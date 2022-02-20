@@ -94,12 +94,40 @@ minecraft.runs.all {
 // Include assets and data from data generators
 sourceSets.main.resources { srcDirs 'src/generated/resources/' }
 
+repositories {
+    maven {
+        // for AutoRegLib
+        name "blamejared"
+        url "https://maven.blamejared.com/"
+    }
+    maven {
+        // for JEI
+        name "progwml6"
+        url "https://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        url "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     library "io.github.pdvrieze.xmlutil:core:0.84.0"
     library "io.github.pdvrieze.xmlutil:serialization:0.84.0"
+
+    compileOnly fg.deobf("mezz.jei:${project.jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
+
+    runtimeOnly fg.deobf("vazkii.autoreglib:AutoRegLib:${project.arl_version}")
+    compileOnly fg.deobf("vazkii.autoreglib:AutoRegLib:${project.arl_version}")
+
+    implementation fg.deobf("curse.maven:quark-243121:${project.quark_version}")
+    implementation fg.deobf("curse.maven:bop-220318:${project.bop_version}")
+
+    implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${project.mc_version}-${project.terrablender_version}")
 }
 
 mixin {

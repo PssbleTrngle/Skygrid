@@ -5,6 +5,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.Fallable
 import net.minecraft.world.level.block.state.BlockState
+import possible_triangle.skygrid.SkygridMod
 
 class BlockAccess(
     private val setBlock: (state: BlockState, pos: BlockPos) -> Unit,
@@ -12,7 +13,7 @@ class BlockAccess(
 ) {
 
     companion object {
-        private val BARRIER = Blocks.BARRIER.defaultBlockState()
+        private val BARRIER = SkygridMod.STIFF_AIR.defaultBlockState()
     }
 
     fun set(state: BlockState) {
@@ -20,8 +21,8 @@ class BlockAccess(
     }
 
     private fun attemptSet(state: BlockState, pos: BlockPos) {
-        if (!isAir(pos)) setBlock(state, pos)
-        else setBlock(state, pos)
+        if (isAir(pos)) setBlock(state, pos)
+//        else setBlock(state, pos)
     }
 
     fun set(state: BlockState, pos: BlockPos) {
