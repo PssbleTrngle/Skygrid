@@ -6,7 +6,6 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.Material
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -27,7 +26,7 @@ class StiffAir : Block(Properties.of(Material.STRUCTURAL_AIR).noOcclusion().noCo
         return Shapes.empty()
     }
 
-    override fun canBeReplaced(p_60470_: BlockState, p_60471_: BlockPlaceContext): Boolean {
+    override fun canBeReplaced(state: BlockState, context: BlockPlaceContext): Boolean {
         return true
     }
 

@@ -7,6 +7,7 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import possible_triangle.skygrid.config.BlockProvider
 import possible_triangle.skygrid.config.Extra
 import possible_triangle.skygrid.config.FilterOperator
@@ -18,8 +19,9 @@ import kotlin.random.Random
 data class Tag(
     private val id: String,
     private val mod: String = "minecraft",
-    override val weight: Double = 1.0,
+    @XmlSerialName("weight", "", "") private val tagWeight: Double = 1.0,
     private val random: Boolean = true,
+    private val expand: Boolean = false,
     override val sides: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
     val filters: List<FilterOperator> = listOf(),
@@ -27,6 +29,11 @@ data class Tag(
 
     @Transient
     private lateinit var blocks: List<Block>
+
+    override val weight: Double
+        get() = if (expand)
+            blocks.size * tagWeight
+        else tagWeight
 
     private val key
         get() = ResourceLocation(mod, if (id.startsWith("#")) id.substring(1) else id)

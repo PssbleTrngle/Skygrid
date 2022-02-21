@@ -61,9 +61,13 @@ object SkygridCommand {
         val range = argument("end", BlockPosArgument.blockPos()).executes(::generateRange).then(
             configArgument().executes(::generateRange).then(
                 argument("snap", BoolArgumentType.bool()).executes(::generateRange).then(
-                    argument("seed", LongArgumentType.longArg()).executes(::generateRange)
+                    literal("random").executes(::generateRange)
                         .then(argument("distance", IntegerArgumentType.integer(1)).executes(::generateRange))
                 )
+                    .then(
+                        argument("seed", LongArgumentType.longArg()).executes(::generateRange)
+                            .then(argument("distance", IntegerArgumentType.integer(1)).executes(::generateRange))
+                    )
             )
         )
 
@@ -83,7 +87,7 @@ object SkygridCommand {
         config.generate(random, BlockAccess({ state, offset ->
             val at = pos.offset(offset)
             level.setBlock(at, state, 2)
-        }, { level.getBlockState(pos.offset(it)).isAir }))
+        }, { level.getBlockState(pos.offset(it)) }))
     }
 
     private fun generateRange(ctx: CommandContext<CommandSourceStack>): Int {

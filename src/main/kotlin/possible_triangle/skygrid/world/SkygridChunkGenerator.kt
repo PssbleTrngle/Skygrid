@@ -72,7 +72,7 @@ class SkygridChunkGenerator(
                     config.generate(random, BlockAccess({ state, offset ->
                         val at = pos.offset(offset)
                         chunk.setBlockState(at, state, false)
-                    }, { chunk.getBlockState(pos.offset(it)).isAir }))
+                    }, { chunk.getBlockState(pos.offset(it)) }))
                 }
     }
 

@@ -39,6 +39,7 @@ abstract class BlockProvider : WeightedEntry() {
 
     protected open fun generateBase(random: Random, chunk: BlockAccess) {
         val state = getState(random)
+        if(state.isAir) SkygridMod.LOGGER.info("Air detected: $name")
         chunk.set(state)
     }
 

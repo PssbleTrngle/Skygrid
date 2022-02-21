@@ -36,7 +36,8 @@ class Block(
     }
 
     override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        block = blocks.get(key) ?: return false
-        return true
+        return blocks.getOptional(key).map {
+            block = it
+        }.isPresent
     }
 }

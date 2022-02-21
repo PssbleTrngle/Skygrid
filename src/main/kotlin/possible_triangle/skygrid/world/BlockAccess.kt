@@ -9,7 +9,7 @@ import possible_triangle.skygrid.SkygridMod
 
 class BlockAccess(
     private val setBlock: (state: BlockState, pos: BlockPos) -> Unit,
-    private val isAir: (pos: BlockPos) -> Boolean,
+    private val getBlock: (pos: BlockPos) -> BlockState,
 ) {
 
     companion object {
@@ -21,7 +21,7 @@ class BlockAccess(
     }
 
     private fun attemptSet(state: BlockState, pos: BlockPos) {
-        if (isAir(pos)) setBlock(state, pos)
+        if (getBlock(pos).isAir) setBlock(state, pos)
 //        else setBlock(state, pos)
     }
 

@@ -1,20 +1,25 @@
 package possible_triangle.skygrid
 
-import kotlinx.serialization.Serializable
+import net.minecraft.client.Minecraft
 import net.minecraft.core.Registry
+import net.minecraft.network.chat.TextComponent
+import net.minecraft.world.item.BlockItem
+import net.minecraftforge.event.entity.player.ItemTooltipEvent
+import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import possible_triangle.skygrid.block.StiffAir
-import possible_triangle.skygrid.config.BlockProvider
 import possible_triangle.skygrid.config.DimensionConfig
 import possible_triangle.skygrid.config.Preset
 import possible_triangle.skygrid.world.SkygridChunkGenerator
 import possible_triangle.skygrid.world.SkygridGenerator
+import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.registerObject
+import vazkii.quark.mixin.BlockItemMixin
 
 @Mod(SkygridMod.ID)
 object SkygridMod {
@@ -39,6 +44,15 @@ object SkygridMod {
 
         Preset.register()
         DimensionConfig.register()
+
+        FORGE_BUS.addListener { event: ItemTooltipEvent ->
+            val item = event.itemStack.item
+            if (item is BlockItem && event.flags.isAdvanced) {
+                item.block.tags.forEach {
+                    event.toolTip.add(TextComponent("#$it"))
+                }
+            }
+        }
 
     }
 
