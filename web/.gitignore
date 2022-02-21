@@ -37,4 +37,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-public/assets
+public/blocks
+data
+lang
+
+temp
+tmp

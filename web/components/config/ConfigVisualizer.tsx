@@ -1,12 +1,12 @@
 import { VFC } from 'react'
 import styled from 'styled-components'
 import DimensionConfig from '../../types/DimensionConfig'
-import HierarchicalBlocks from './HierachicalBlocks'
+import UnwrappedBlocks from './UnwrappedBlocks'
 
 const ConfigVisualizer: VFC<{ config: DimensionConfig }> = ({ config, ...props }) => {
    return (
       <Style {...props}>
-         <HierarchicalBlocks blocks={config.blocks.children} />
+         <UnwrappedBlocks blocks={config.blocks.children} />
       </Style>
    )
 }

@@ -5,18 +5,16 @@ import { parseFile } from '../util/parser'
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const PARSED = parseFile('../src/main/resources/data/minecraft/skygrid/dimensions/overworld.xml')
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-   const parsed = await PARSED
+export const getServerSideProps: GetServerSideProps = async () => {
+   const parsed = await parseFile(
+      '../src/main/resources/data/minecraft/skygrid/dimensions/overworld.xml'
+   )
    return { props: { parsed } }
 }
 
 const Home: NextPage<Props> = ({ parsed }) => {
    return (
       <Page>
-         <h1>Home</h1>
-
          <ConfigVisualizer config={parsed} />
       </Page>
    )

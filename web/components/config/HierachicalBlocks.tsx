@@ -47,9 +47,9 @@ const HierarchicalBlocks: VFC<{ blocks: TypedProvider[] }> = ({ blocks }) => {
    return (
       <Style>
          <p>{path}</p>
-         <BlockGrid>
+         <BlockGrid size={200}>
             {shown?.map((provider, i) => (
-               <ProviderPanel key={i} provider={provider} onClick={navigate(provider)} />
+               <ProviderPanel key={i} size={200} provider={provider} onClick={navigate(provider)} />
             ))}
          </BlockGrid>
       </Style>

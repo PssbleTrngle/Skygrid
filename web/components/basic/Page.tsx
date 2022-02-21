@@ -13,6 +13,8 @@ const Page: FC = ({ children, ...props }) => (
    </Style>
 )
 
-const Style = styled.main``
+const Style = styled.main`
+   padding: 2rem;
+`
 
 export default Page

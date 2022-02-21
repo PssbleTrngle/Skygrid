@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
-const BlockGrid = styled.div`
+const BlockGrid = styled.div<{ size: number }>`
    display: grid;
-   gap: 5px;
+   gap: 1em;
    padding: 10px;
-   grid-template-columns: repeat(auto-fit, 200px);
-   grid-auto-rows: 250px;
+   grid-template-columns: repeat(auto-fit, ${p => p.size}px);
+   grid-auto-rows: 1fr;
 `
 
 export default BlockGrid
