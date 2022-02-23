@@ -21,6 +21,8 @@ class Cave(generator: DataGenerator) : DimensionConfigGenerator("cave", generato
             distance = Distance.of(3)
             blocks {
                 reference("ores", weight = 0.1)
+                reference("dripstone", weight = 0.3)
+                reference("moss", weight = 0.3)
                 block(Blocks.OBSIDIAN, weight = 0.1)
                 list("fluids", weight = 0.05) {
                     block(Blocks.LAVA)

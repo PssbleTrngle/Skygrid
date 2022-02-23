@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:overworld_caves",
+  "generator": {
+    "type": "skygrid:skygrid",
+    "config": "skygrid:cave",
+    "biome_source": {
+      "type": "fixed",
+      "biome": "minecraft:the_void"
+    }
+  }
+}

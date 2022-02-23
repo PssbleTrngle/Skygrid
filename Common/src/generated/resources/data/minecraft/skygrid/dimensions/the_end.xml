@@ -1,0 +1,33 @@
+<dimension>
+   <blocks>
+      <list name="ground">
+         <block id="end_stone">
+            <side on="up" probability="0.1">
+               <block id="chorus_flower"/>
+            </side>
+         </block>
+      </list>
+      <list weight="0.2" name="ores">
+         <block id="biotite_ore" mod="quark"/>
+      </list>
+      <list name="building">
+         <list weight="0.1" name="obsidian">
+            <block id="obsidian"/>
+            <block id="crying_obsidian"/>
+         </list>
+         <block id="end_stone_bricks"/>
+         <list name="purpur">
+            <block id="purpur_pillar"/>
+            <block id="purpur_block"/>
+         </list>
+         <block id="ender_chest" weight="0.01"/>
+         <block id="shulker_box" weight="0.0075"/>
+         <cycle key="axis"/>
+      </list>
+   </blocks>
+   <mobs>
+      <mob id="minecraft:enderman"/>
+      <mob id="minecraft:shulker" weight="0.1"/>
+   </mobs>
+   <distance x="5" y="5" z="5"/>
+</dimension>

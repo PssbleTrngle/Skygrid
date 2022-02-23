@@ -9,7 +9,7 @@
          </block>
       </list>
       <list weight="100.0" name="ground">
-         <list weight="300.0" name="stone">
+         <list weight="20.0" name="stone">
             <tag id="base_stone_overworld" weight="8.0">
                <side on="up" probability="0.1">
                   <block id="glow_shroom" mod="quark"/>
@@ -18,7 +18,9 @@
             <block id="gravel" weight="2.0"/>
             <block id="clay"/>
          </list>
-         <list weight="20.0" name="dirt">
+         <reference id="moss" weight="0.5"/>
+         <reference id="dripstone" weight="0.5"/>
+         <list weight="5.0" name="dirt">
             <block id="dirt"/>
             <block id="mud" mod="biomesoplenty" weight="0.1"/>
             <block id="dirt_path" weight="0.1"/>
@@ -29,14 +31,7 @@
                      <tag id="saplings"/>
                      <list>
                         <block id="fern"/>
-                        <block id="grass">
-                           <side on="up">
-                              <block id="grass">
-                                 <set key="half" value="upper"/>
-                              </block>
-                           </side>
-                           <set key="half" value="lower"/>
-                        </block>
+                        <block id="grass"/>
                         <block id="large_fern" weight="0.5">
                            <side on="up">
                               <block id="large_fern">
@@ -69,9 +64,12 @@
                   <block id="brown_mushroom"/>
                </side>
             </block>
+            <side on="down" probability="0.2">
+               <block id="hanging_roots"/>
+            </side>
          </list>
-         <block id="obsidian"/>
-         <list weight="20.0" name="sand">
+         <block id="obsidian" weight="0.5"/>
+         <list weight="5.0" name="sand">
             <block id="sandy_bricks" mod="quark" weight="0.1"/>
             <list weight="0.2">
                <block id="sandstone"/>
@@ -242,6 +240,7 @@
             <block id="dropper"/>
             <block id="note_block"/>
             <block id="piston"/>
+            <block id="target" weight="0.5"/>
             <block id="sticky_piston" weight="0.2"/>
             <block id="hopper"/>
             <block id="redstone_lamp"/>
@@ -288,57 +287,7 @@
          </tag>
       </list>
       <block id="spawner"/>
-      <list name="ocean">
-         <tag id="coral_blocks">
-            <side on="up">
-               <tag id="wall_corals"/>
-               <tag id="coral_plants">
-                  <except/>
-               </tag>
-            </side>
-         </tag>
-         <block id="sand" weight="0.05">
-            <side on="up">
-               <block id="turtle_egg">
-                  <cycle key="eggs"/>
-               </block>
-            </side>
-         </block>
-         <list>
-            <block id="sand"/>
-            <block id="gravel"/>
-            <side on="up">
-               <block id="kelp"/>
-               <block id="seagrass"/>
-               <block id="tall_seagrass">
-                  <side on="up">
-                     <block id="tall_seagrass">
-                        <set key="half" value="upper"/>
-                     </block>
-                  </side>
-                  <set key="half" value="lower"/>
-               </block>
-               <block id="sea_pickle">
-                  <cycle key="pickles"/>
-               </block>
-            </side>
-         </list>
-         <block id="dried_kelp_block"/>
-         <list name="prismarine">
-            <list>
-               <block id="prismarine"/>
-               <block id="prismarine_bricks"/>
-               <block id="dark_prismarine"/>
-               <block id="sea_lantern"/>
-            </list>
-            <list weight="0.1" name="elder prismarine">
-               <block id="elder_prismarine" mod="quark"/>
-               <block id="elder_prismarine_bricks" mod="quark"/>
-               <block id="elder_sea_lantern" mod="quark"/>
-               <block id="dark_elder_prismarine" mod="quark"/>
-            </list>
-         </list>
-      </list>
+      <reference id="ocean"/>
       <reference id="ores" weight="30.0"/>
       <list weight="6.0" name="compressed">
          <list>
@@ -362,6 +311,7 @@
             <block id="thatch" mod="quark"/>
             <block id="beachgrass_thatch" mod="upgrade_aquatic"/>
             <block id="cattail_thatch" mod="environmental"/>
+            <block id="dried_kelp_block"/>
          </list>
          <list name="crops">
             <block id="apple_crate" mod="quark"/>
@@ -396,4 +346,12 @@
       <table id="underwater_ruin_big"/>
       <table id="underwater_ruin_small"/>
    </loot>
+   <mobs>
+      <mob id="minecraft:zombie" weight="2.0"/>
+      <mob id="minecraft:skeleton" weight="2.0"/>
+      <mob id="minecraft:cave_spider" weight="3.0"/>
+      <mob id="minecraft:husk"/>
+      <mob id="minecraft:spider"/>
+      <mob id="minecraft:creeper"/>
+   </mobs>
 </dimension>

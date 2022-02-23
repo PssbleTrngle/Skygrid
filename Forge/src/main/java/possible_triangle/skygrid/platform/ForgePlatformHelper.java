@@ -1,6 +1,8 @@
 package possible_triangle.skygrid.platform;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.level.block.Block;
 import possible_triangle.skygrid.SkygridForge;
 import possible_triangle.skygrid.platform.services.IPlatformHelper;
@@ -25,4 +27,8 @@ public class ForgePlatformHelper implements IPlatformHelper {
         return SkygridForge.INSTANCE.getStiffAir();
     }
 
+    @Override
+    public Tag.Named<Block> createBlockTag(ResourceLocation id) {
+        return BlockTags.createOptional(id);
+    }
 }

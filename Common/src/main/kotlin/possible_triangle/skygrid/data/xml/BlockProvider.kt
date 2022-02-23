@@ -7,7 +7,7 @@ import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import possible_triangle.skygrid.Constants.LOGGER
-import possible_triangle.skygrid.world.BlockAccess
+import possible_triangle.skygrid.world.IBlockAccess
 import kotlin.random.Random
 
 @Serializable
@@ -31,19 +31,19 @@ abstract class BlockProvider : WeightedEntry() {
 
     internal abstract fun base(random: Random): Block
 
-    fun getState(random: Random): BlockState {
+    private fun getState(random: Random): BlockState {
         return transformers.fold(base(random).defaultBlockState()) { state, transformer ->
             transformer.apply(state, random)
         }
     }
 
-    protected open fun generateBase(random: Random, chunk: BlockAccess) {
+    protected open fun generateBase(random: Random, chunk: IBlockAccess) {
         val state = getState(random)
         if(state.isAir) LOGGER.info("Air detected: $name")
         chunk.set(state)
     }
 
-    fun generate(random: Random, chunk: BlockAccess) {
+    fun generate(random: Random, chunk: IBlockAccess) {
         generateBase(random, chunk)
         validSides.forEach { it.generate(random, chunk) }
     }

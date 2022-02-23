@@ -1,0 +1,18 @@
+<preset>
+   <block id="moss_block">
+      <side on="down" probability="0.1">
+         <block id="spore_blossom"/>
+      </side>
+      <side on="up" probability="0.8">
+         <block id="big_dripleaf"/>
+         <block id="small_dripleaf">
+            <side on="up">
+               <block id="small_dripleaf">
+                  <set key="half" value="upper"/>
+               </block>
+            </side>
+            <set key="half" value="lower"/>
+         </block>
+      </side>
+   </block>
+</preset>

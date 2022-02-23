@@ -29,7 +29,7 @@ class SkygridGenerator : ForgeWorldPreset(null) {
         dimension: ResourceKey<LevelStem>?,
     ): ChunkGenerator {
         val biomes = registries.registryOrThrow(Registry.BIOME_REGISTRY)
-        val config = dimension?.registryName ?: ResourceLocation(Constants.MOD_ID, "default")
+        val config = dimension?.location() ?: ResourceLocation(Constants.MOD_ID, "default")
         return SkygridChunkGenerator(
             FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)), config.toString(), seed,
         )

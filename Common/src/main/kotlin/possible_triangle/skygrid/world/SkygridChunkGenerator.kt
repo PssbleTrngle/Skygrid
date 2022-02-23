@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.WorldGenRegion
 import net.minecraft.world.level.LevelHeightAccessor
@@ -22,6 +23,7 @@ import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.StructureSettings
 import net.minecraft.world.level.levelgen.blending.Blender
 import possible_triangle.skygrid.data.xml.DimensionConfig
+import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.math.max
@@ -31,8 +33,8 @@ import kotlin.random.Random
 class SkygridChunkGenerator(
     biomeSource: BiomeSource,
     private val configKey: String,
-    private val seed: Long,
-) : ChunkGenerator(biomeSource, biomeSource, StructureSettings(false), seed) {
+    private val seed: Long?,
+) : ChunkGenerator(biomeSource, StructureSettings(false)) {
 
     companion object {
 
@@ -44,11 +46,11 @@ class SkygridChunkGenerator(
             builder.group(
                 BiomeSource.CODEC.fieldOf("biome_source").forGetter { it.biomeSource },
                 Codec.STRING.fieldOf("config").forGetter { it.configKey },
-                Codec.LONG.fieldOf("seed").stable().forGetter { it.seed }
+                Codec.LONG.optionalFieldOf("seed").forGetter { Optional.ofNullable(it.seed) }
             ).apply(
                 builder,
                 builder.stable(Function3 { source, key, seed ->
-                    SkygridChunkGenerator(source, key, seed)
+                    SkygridChunkGenerator(source, key, seed.orElse(null))
                 }),
             )
         }
@@ -62,7 +64,7 @@ class SkygridChunkGenerator(
         return SkygridChunkGenerator(biomeSource, configKey, seed)
     }
 
-    private val random = Random(seed)
+    private val random = seed?.let { Random(it) } ?: Random
 
     override fun buildSurface(region: WorldGenRegion, structures: StructureFeatureManager, chunk: ChunkAccess) {
         val config = DimensionConfig[ResourceLocation(configKey)] ?: DimensionConfig.DEFAULT
@@ -70,16 +72,47 @@ class SkygridChunkGenerator(
         val minY = max(chunk.minBuildHeight, config.minY)
         val maxY = min(chunk.maxBuildHeight, config.maxY)
 
+        val origin = BlockPos.MutableBlockPos()
+
+        val access = object : BlockAccess() {
+            override fun setBlock(state: BlockState, pos: BlockPos) {
+                val at = pos.offset(origin)
+                chunk.setBlockState(at, state, false)
+            }
+
+            override fun getBlock(pos: BlockPos): BlockState {
+                return chunk.getBlockState(pos.offset(origin))
+            }
+
+            override fun setNBT(pos: BlockPos, nbt: CompoundTag) {
+                with(pos.offset(origin)) {
+                    nbt.putInt("x", x)
+                    nbt.putInt("y", y)
+                    nbt.putInt("z", z)
+                }
+                chunk.setBlockEntityNbt(nbt)
+            }
+        }
+
         region.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY)
-        for (x in 0 until 16) if ((x + chunk.pos.minBlockX) % config.distance.x == 0)
-            for (z in 0 until 16) if ((z + chunk.pos.minBlockZ) % config.distance.z == 0)
-                for (y in minY..maxY) if (y % config.distance.y == 0) {
-                    val pos = BlockPos(x, y, z)
-                    if (y == minY) chunk.setBlockState(pos, BEDROCK, false)
-                    else config.generate(random, BlockAccess({ state, offset ->
-                        val at = pos.offset(offset)
-                        chunk.setBlockState(at, state, false)
-                    }, { chunk.getBlockState(pos.offset(it)) }))
+
+        val gap = config.gap.map { it.block.defaultBlockState() }
+
+        for (x in 0 until 16)
+            for (z in 0 until 16)
+                for (y in minY..(maxY + 2)) {
+                    origin.set(x, y, z)
+                    val isBlock = y <= maxY
+                            && ((x + chunk.pos.minBlockX) % config.distance.x == 0)
+                            && ((z + chunk.pos.minBlockZ) % config.distance.z == 0)
+                            && ((y - minY) % config.distance.y == 0)
+
+                    if (isBlock) {
+                        if (y == minY) chunk.setBlockState(origin, BEDROCK, false)
+                        else config.generate(random, access)
+                    } else gap.ifPresent {
+                        chunk.setBlockState(origin, it, false)
+                    }
                 }
     }
 

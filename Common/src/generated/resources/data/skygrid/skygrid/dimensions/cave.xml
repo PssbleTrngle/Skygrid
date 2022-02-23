@@ -1,6 +1,8 @@
 <dimension>
    <blocks>
       <reference id="ores" weight="0.1"/>
+      <reference id="dripstone" weight="0.3"/>
+      <reference id="moss" weight="0.3"/>
       <block id="obsidian" weight="0.1"/>
       <list weight="0.05" name="fluids">
          <block id="lava"/>

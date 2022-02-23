@@ -4,19 +4,21 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.BoolArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.LongArgumentType
-import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.SharedSuggestionProvider
+import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument
 import net.minecraft.core.BlockPos
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
 import possible_triangle.skygrid.Constants
 import possible_triangle.skygrid.data.xml.DimensionConfig
 import possible_triangle.skygrid.data.xml.Distance
@@ -39,9 +41,8 @@ object SkygridCommand {
     private val AIR = Blocks.AIR.defaultBlockState()
 
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-
         val configArgument = {
-            argument("config", StringArgumentType.string()).suggests { _, builder ->
+            argument("config", ResourceLocationArgument.id()).suggests { _, builder ->
                 SharedSuggestionProvider.suggest(
                     DimensionConfig.keys.map { it.toString().replace("minecraft:", "") }, builder
                 )
@@ -71,18 +72,28 @@ object SkygridCommand {
 
     private fun getConfig(ctx: CommandContext<CommandSourceStack>): DimensionConfig {
         return tryOr({
-            val key = StringArgumentType.getString(ctx, "config")
-            DimensionConfig[ResourceLocation(key)] ?: throw UNKNOWN_CONFIG.create(key)
+            val key = ResourceLocationArgument.getId(ctx, "config")
+            DimensionConfig[key] ?: throw UNKNOWN_CONFIG.create(key)
         }) {
             DimensionConfig[ResourceLocation("overworld")] ?: DimensionConfig.DEFAULT
         }
     }
 
-    private fun generateAt(config: DimensionConfig, pos: BlockPos, level: ServerLevel, random: Random) {
-        config.generate(random, BlockAccess({ state, offset ->
-            val at = pos.offset(offset)
-            level.setBlock(at, state, 2)
-        }, { level.getBlockState(pos.offset(it)) }))
+    private fun generateAt(config: DimensionConfig, origin: BlockPos, level: ServerLevel, random: Random) {
+        config.generate(random, object : BlockAccess() {
+            override fun setBlock(state: BlockState, pos: BlockPos) {
+                val at = pos.offset(origin)
+                level.setBlock(at, state, 2)
+            }
+
+            override fun getBlock(pos: BlockPos): BlockState {
+                return level.getBlockState(pos.offset(origin))
+            }
+
+            override fun setNBT(pos: BlockPos, nbt: CompoundTag) {
+                level.getBlockEntity(pos)?.load(nbt)
+            }
+        })
     }
 
     private fun generateRange(ctx: CommandContext<CommandSourceStack>): Int {
@@ -112,7 +123,7 @@ object SkygridCommand {
             }.onEach { generateAt(config, it, level, random) }
 
         val changed = replaced + generated
-        return changed.onEach { level.blockUpdated(it, level.getBlockState(it).block) }.count()
+        return changed/*.onEach { level.blockUpdated(it, level.getBlockState(it).block) }*/.count()
     }
 
     private fun generate(ctx: CommandContext<CommandSourceStack>): Int {

@@ -5,15 +5,17 @@ import kotlinx.serialization.encodeToString
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.DataProvider
 import net.minecraft.data.HashCache
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import possible_triangle.skygrid.Constants
 import possible_triangle.skygrid.data.XMLResource
 import possible_triangle.skygrid.data.generation.builder.BasicBlocksBuilder
 import possible_triangle.skygrid.data.generation.builder.DimensionConfigBuilder
 import possible_triangle.skygrid.data.generation.builder.IBlocksBuilder
 import possible_triangle.skygrid.data.xml.DimensionConfig
 import possible_triangle.skygrid.data.xml.Preset
-import possible_triangle.skygrid.Constants
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.writeText
@@ -24,6 +26,9 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
 
     private val configs = hashMapOf<ResourceLocation, DimensionConfig>()
     private val presets = hashMapOf<ResourceLocation, Preset>()
+
+    fun dimension(key: ResourceKey<LevelStem>, builder: DimensionConfigBuilder.() -> Unit) =
+        dimension(key.location(), builder)
 
     fun dimension(key: ResourceLocation, builder: DimensionConfigBuilder.() -> Unit) {
         DimensionConfigBuilder().apply {

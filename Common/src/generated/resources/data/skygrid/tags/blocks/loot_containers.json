@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:chest",
+    "minecraft:dispenser",
+    "minecraft:dropper",
+    "minecraft:barrel",
+    {
+      "id": "#forge:barrels",
+      "required": false
+    },
+    {
+      "id": "#forge:chests",
+      "required": false
+    }
+  ]
+}

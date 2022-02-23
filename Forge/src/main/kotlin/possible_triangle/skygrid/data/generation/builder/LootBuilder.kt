@@ -8,13 +8,9 @@ class LootBuilder {
 
     private val tables = arrayListOf<LootTable>()
 
-    fun table(key: ResourceLocation, weight: Double = 1.0) {
-       table(key.toString(), weight)
-    }
+    fun table(key: ResourceLocation, weight: Double = 1.0) = table(key.toString(), weight)
 
-    fun table(id: String, weight: Double = 1.0) {
-        tables.add(LootTable(id, weight))
-    }
+    fun table(id: String, weight: Double = 1.0) = tables.add(LootTable(id, weight))
 
     fun build(): ListWrapper<LootTable> {
         return ListWrapper(tables.toList())

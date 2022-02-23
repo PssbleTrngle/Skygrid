@@ -2,30 +2,26 @@ package possible_triangle.skygrid.world
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.level.block.Fallable
 import net.minecraft.world.level.block.state.BlockState
 import possible_triangle.skygrid.platform.Services
 
-class BlockAccess(
-    private val setBlock: (state: BlockState, pos: BlockPos) -> Unit,
-    private val getBlock: (pos: BlockPos) -> BlockState,
-) {
+abstract class BlockAccess : IBlockAccess {
+
+    protected abstract fun setBlock(state: BlockState, pos: BlockPos)
+    protected abstract fun getBlock(pos: BlockPos): BlockState
+    abstract fun setNBT(pos: BlockPos, nbt: CompoundTag)
 
     companion object {
-        //private val BARRIER = SkygridMod.STIFF_AIR.defaultBlockState()
         private val BARRIER = Services.PLATFORM.barrier.defaultBlockState()
-    }
-
-    fun set(state: BlockState) {
-        set(state, BlockPos(0, 0, 0))
     }
 
     private fun attemptSet(state: BlockState, pos: BlockPos) {
         if (getBlock(pos).isAir) setBlock(state, pos)
-//        else setBlock(state, pos)
     }
 
-    fun set(state: BlockState, pos: BlockPos) {
+    final override fun set(state: BlockState, pos: BlockPos) {
         attemptSet(state, pos)
         if (!state.fluidState.isEmpty) {
             Direction.values().forEach {

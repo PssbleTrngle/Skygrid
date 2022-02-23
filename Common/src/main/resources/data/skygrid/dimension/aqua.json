@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:overworld",
+  "generator": {
+    "type": "skygrid:skygrid",
+    "config": "skygrid:aqua",
+    "biome_source": {
+      "type": "fixed",
+      "biome": "minecraft:ocean"
+    }
+  }
+}
