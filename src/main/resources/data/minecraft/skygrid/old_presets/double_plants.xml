@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<preset>
+    <list>
+
+        <block id="tall_fern">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block id="tall_fern">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+        <block id="tall_grass">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block id="tall_grass">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+    </list>
+</preset>

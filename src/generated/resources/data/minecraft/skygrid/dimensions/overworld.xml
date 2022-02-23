@@ -1,0 +1,391 @@
+<dimension>
+   <blocks>
+      <list weight="2.0" name="fluids">
+         <block id="lava"/>
+         <block id="water" weight="3.0">
+            <side on="up" probability="0.05">
+               <block id="lily_pad"/>
+            </side>
+         </block>
+      </list>
+      <list weight="100.0" name="ground">
+         <list weight="300.0" name="stone">
+            <tag id="base_stone_overworld" weight="8.0">
+               <side on="up" probability="0.1">
+                  <block id="glow_shroom" mod="quark"/>
+               </side>
+            </tag>
+            <block id="gravel" weight="2.0"/>
+            <block id="clay"/>
+         </list>
+         <list weight="20.0" name="dirt">
+            <block id="dirt"/>
+            <block id="mud" mod="biomesoplenty" weight="0.1"/>
+            <block id="dirt_path" weight="0.1"/>
+            <block id="coarse_dirt" weight="0.1"/>
+            <list weight="4.0" name="grass">
+               <block id="grass_block" weight="3.0">
+                  <side on="up" probability="0.6">
+                     <tag id="saplings"/>
+                     <list>
+                        <block id="fern"/>
+                        <block id="grass">
+                           <side on="up">
+                              <block id="grass">
+                                 <set key="half" value="upper"/>
+                              </block>
+                           </side>
+                           <set key="half" value="lower"/>
+                        </block>
+                        <block id="large_fern" weight="0.5">
+                           <side on="up">
+                              <block id="large_fern">
+                                 <set key="half" value="upper"/>
+                              </block>
+                           </side>
+                           <set key="half" value="lower"/>
+                        </block>
+                        <block id="tall_grass" weight="0.5">
+                           <side on="up">
+                              <block id="tall_grass">
+                                 <set key="half" value="upper"/>
+                              </block>
+                           </side>
+                           <set key="half" value="lower"/>
+                        </block>
+                     </list>
+                     <tag id="small_flowers" weight="0.5">
+                        <except>
+                           <mod id="botania"/>
+                        </except>
+                     </tag>
+                     <tag id="mystical_flowers" mod="botania" weight="0.1"/>
+                  </side>
+               </block>
+            </list>
+            <block id="mycelium">
+               <side on="up">
+                  <block id="red_mushroom"/>
+                  <block id="brown_mushroom"/>
+               </side>
+            </block>
+         </list>
+         <block id="obsidian"/>
+         <list weight="20.0" name="sand">
+            <block id="sandy_bricks" mod="quark" weight="0.1"/>
+            <list weight="0.2">
+               <block id="sandstone"/>
+               <block id="chiseled_sandstone"/>
+               <block id="smooth_sandstone"/>
+               <block id="red_sandstone" weight="0.2"/>
+               <block id="chiseled_red_sandstone" weight="0.2"/>
+               <block id="smooth_red_sandstone" weight="0.2"/>
+            </list>
+            <list>
+               <block id="sand"/>
+               <block id="red_sand" weight="0.2"/>
+               <side on="up" probability="0.1">
+                  <block id="cactus"/>
+                  <block id="dead_bush"/>
+               </side>
+            </list>
+         </list>
+         <list name="cold">
+            <block id="snow_block"/>
+            <block id="ice"/>
+            <block id="packed_ice" weight="0.1"/>
+            <block id="blue_ice" weight="0.02"/>
+            <block id="permafrost" mod="quark" weight="0.05"/>
+         </list>
+      </list>
+      <list weight="9.0" name="crops">
+         <block id="farmland">
+            <side on="up">
+               <list>
+                  <tag id="crops"/>
+                  <cycle key="age"/>
+               </list>
+            </side>
+         </block>
+         <block id="podzol" weight="0.1">
+            <side on="up">
+               <block id="bamboo_sapling"/>
+            </side>
+         </block>
+         <block id="jungle_wood" weight="0.01">
+            <side on="north">
+               <block id="cocoa">
+                  <set key="facing" value="south"/>
+               </block>
+            </side>
+         </block>
+         <block id="sand" weight="0.5">
+            <side on="north">
+               <block id="water"/>
+            </side>
+            <side on="up">
+               <block id="sugar_cane">
+                  <side on="up">
+                     <block id="sugar_cane">
+                        <set key="half" value="upper"/>
+                     </block>
+                  </side>
+                  <set key="half" value="lower"/>
+               </block>
+            </side>
+         </block>
+         <block id="grass_block" weight="0.8">
+            <side on="up">
+               <list>
+                  <block id="sweet_berry_bush"/>
+                  <cycle key="age"/>
+               </list>
+            </side>
+         </block>
+         <list weight="0.2" name="melons">
+            <block id="melon"/>
+         </list>
+         <list weight="0.2" name="pumpkins">
+            <block id="pumpkin"/>
+            <block id="carved_pumpkin"/>
+         </list>
+      </list>
+      <list weight="50.0" name="tree">
+         <tag id="logs_that_burn">
+            <cycle key="axis"/>
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+               <name pattern="stripped"/>
+               <name pattern="_wood"/>
+               <mod id="simplefarming"/>
+            </except>
+         </tag>
+         <block id="bee_nest" weight="0.01"/>
+         <tag id="planks" weight="0.3">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+            </except>
+         </tag>
+         <tag id="leaves" weight="0.6">
+            <set key="persistent" value="true"/>
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+            </except>
+         </tag>
+         <list name="mushrooms blocks">
+            <block id="mushroom_stem"/>
+            <block id="red_mushroom_block"/>
+            <block id="brown_mushroom_block"/>
+            <block id="glow_shroom_block" mod="quark" weight="0.1"/>
+            <block id="glowshroom_block" mod="biomesoplenty" weight="0.1"/>
+         </list>
+      </list>
+      <list weight="14.0" name="building">
+         <list name="bricks">
+            <block id="cobblestone"/>
+            <block id="cobbled_deepslate" weight="0.5"/>
+            <block id="mossy_cobblestone" weight="0.1"/>
+            <block id="smooth_stone" weight="0.1"/>
+            <list name="bricks">
+               <block id="bricks"/>
+               <list name="stone bricks">
+                  <block id="stone_bricks"/>
+                  <block id="mossy_stone_bricks" weight="0.5"/>
+                  <block id="cracked_stone_bricks" weight="0.2"/>
+                  <block id="chiseled_stone_bricks" weight="0.2"/>
+               </list>
+               <list name="deepslate bricks">
+                  <block id="deepslate_bricks"/>
+                  <block id="polished_deepslate"/>
+                  <block id="chiseled_deepslate"/>
+                  <block id="deepslate_tiles"/>
+                  <block id="cracked_deepslate_bricks" weight="0.5"/>
+                  <block id="cracked_deepslate_tiles" weight="0.5"/>
+               </list>
+               <list weight="0.2" name="cobblestone bricks">
+                  <block id="cobblestone_bricks" mod="quark"/>
+                  <block id="mossy_cobblestone_bricks" mod="quark" weight="0.5"/>
+               </list>
+               <list name="quark bricks">
+                  <block id="polished_jasper" mod="quark" weight="0.5"/>
+                  <block id="polished_limestone" mod="quark" weight="0.5"/>
+                  <block id="polished_shale" mod="quark" weight="0.5"/>
+               </list>
+            </list>
+         </list>
+         <block id="bookshelf" weight="0.05"/>
+         <tag id="glass" mod="forge"/>
+         <tag id="wool"/>
+         <list weight="0.01" name="midori">
+            <block id="midori_block" mod="quark"/>
+            <block id="midori_pillar" mod="quark"/>
+            <cycle key="axis"/>
+         </list>
+         <list weight="0.1" name="redstone">
+            <block id="observer"/>
+            <block id="dispenser"/>
+            <block id="dropper"/>
+            <block id="note_block"/>
+            <block id="piston"/>
+            <block id="sticky_piston" weight="0.2"/>
+            <block id="hopper"/>
+            <block id="redstone_lamp"/>
+            <block id="tnt"/>
+            <block id="slime_block" weight="2.0"/>
+            <block id="honey_block"/>
+         </list>
+         <list weight="0.1" name="workstations">
+            <block id="crafting_table" weight="20.0"/>
+            <block id="furnace" weight="3.0"/>
+            <block id="smoker"/>
+            <block id="blast_furnace"/>
+            <block id="loom"/>
+            <block id="water_cauldron"/>
+            <block id="cartography_table"/>
+            <block id="fletching_table"/>
+            <block id="smithing_table"/>
+            <block id="stonecutter"/>
+            <block id="lectern"/>
+            <block id="composter"/>
+         </list>
+         <block id="cobweb" weight="0.02"/>
+      </list>
+      <list name="loot">
+         <tag id="barrels/wooden" mod="forge">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+            </except>
+         </tag>
+         <tag id="chests/wooden" mod="forge">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+            </except>
+         </tag>
+      </list>
+      <block id="spawner"/>
+      <list name="ocean">
+         <tag id="coral_blocks">
+            <side on="up">
+               <tag id="wall_corals"/>
+               <tag id="coral_plants">
+                  <except/>
+               </tag>
+            </side>
+         </tag>
+         <block id="turtle_egg">
+            <cycle key="eggs"/>
+         </block>
+         <block id="sand" weight="0.05"/>
+         <list>
+            <block id="sand"/>
+            <block id="gravel"/>
+            <side on="up">
+               <block id="kelp"/>
+               <block id="seagrass"/>
+               <block id="tall_seagrass">
+                  <side on="up">
+                     <block id="tall_seagrass">
+                        <set key="half" value="upper"/>
+                     </block>
+                  </side>
+                  <set key="half" value="lower"/>
+               </block>
+               <block id="sea_pickle">
+                  <cycle key="pickles"/>
+               </block>
+            </side>
+         </list>
+         <block id="dried_kelp_block"/>
+         <list name="prismarine">
+            <list>
+               <block id="prismarine"/>
+               <block id="prismarine_bricks"/>
+               <block id="dark_prismarine"/>
+               <block id="sea_lantern"/>
+            </list>
+            <list weight="0.1" name="elder prismarine">
+               <block id="elder_prismarine" mod="quark"/>
+               <block id="elder_prismarine_bricks" mod="quark"/>
+               <block id="elder_sea_lantern" mod="quark"/>
+               <block id="dark_elder_prismarine" mod="quark"/>
+            </list>
+         </list>
+      </list>
+      <reference id="ores" weight="30.0"/>
+      <list weight="6.0" name="compressed">
+         <list>
+            <block id="hay_block"/>
+            <block id="stick_block" mod="quark"/>
+            <block id="gunpowder_block" mod="quark"/>
+         </list>
+         <list weight="0.1" name="leather">
+            <block id="bonded_leather"/>
+            <block id="bonded_rabbit_hide" weight="0.1"/>
+            <block id="bonded_ravager_hide" weight="0.01"/>
+         </list>
+         <list name="plants">
+            <block id="cactus_block" mod="quark"/>
+            <block id="sugarcane_block" mod="quark"/>
+            <block id="sugar_cane_block" mod="quark" weight="0.1"/>
+            <block id="aloe_bundle" mod="atmospheric"/>
+            <block id="passion_vine_bundle" mod="atmospheric"/>
+            <block id="yucca_cask" mod="atmospheric"/>
+            <block id="cattail_seed_sack" mod="environmental"/>
+            <block id="thatch" mod="quark"/>
+            <block id="beachgrass_thatch" mod="upgrade_aquatic"/>
+            <block id="cattail_thatch" mod="environmental"/>
+         </list>
+         <list name="crops">
+            <block id="apple_crate" mod="quark"/>
+            <block id="potato_crate" mod="quark"/>
+            <block id="carrot_crate" mod="quark"/>
+            <block id="beetroot_crate" mod="quark"/>
+            <block id="berry_sack" mod="quark" weight="0.1"/>
+            <block id="cocoa_beans_sack" mod="quark" weight="0.1"/>
+            <block id="golden_apple_crate" mod="quark" weight="0.01"/>
+            <block id="passionfruit_crate" mod="atmospheric"/>
+            <block id="shimmering_passionfruit_crate" mod="atmospheric" weight="0.01"/>
+         </list>
+         <cycle key="axis"/>
+      </list>
+   </blocks>
+   <loot>
+      <table id="spawn_bonus_chest" weight="20.0"/>
+      <table id="desert_pyramid" weight="2.0"/>
+      <table id="woodland_mansion" weight="2.0"/>
+      <table id="simple_dungeon"/>
+      <table id="abandoned_mineshaft"/>
+      <table id="buried_treasure"/>
+      <table id="igloo_chest"/>
+      <table id="jungle_temple"/>
+      <table id="pillager_outpost"/>
+      <table id="shipwreck_map"/>
+      <table id="shipwreck_supply"/>
+      <table id="shipwreck_treasure"/>
+      <table id="stronghold_corridor"/>
+      <table id="stronghold_crossing"/>
+      <table id="stronghold_library"/>
+      <table id="underwater_ruin_big"/>
+      <table id="underwater_ruin_small"/>
+   </loot>
+</dimension>

@@ -1,4 +1,5 @@
 import { Polymorph } from '../util/polymorphism'
+import { ModFilter, NameFilter, TagFilter } from './Filters'
 import WeightedEntry from './WeightedEntry'
 
 export enum ProviderType {
@@ -41,10 +42,16 @@ export interface Tag extends BlockProvider {
    id: string
    mod?: string
    matches: Block[]
+   except?: {
+      mod?: ModFilter[] | ModFilter
+      name?: NameFilter[] | NameFilter
+      tag?: TagFilter[] | TagFilter
+   }
 }
 
 export interface Reference extends BlockProvider {
    id: string
+   provider: TypedProvider
 }
 
 export interface BlockList extends BlockProvider {

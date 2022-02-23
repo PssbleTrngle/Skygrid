@@ -6,7 +6,8 @@ const POLYMORPHS: Array<{
    transform: (v: any) => unknown
 }> = []
 
-function toArray<T>(t: T | T[]) {
+export function toArray<T>(t?: T | T[]) {
+   if (!t) return []
    return Array.isArray(t) ? t : [t]
 }
 
@@ -18,35 +19,49 @@ type MorphMap<Morph, R> = {
    [Type in keyof Morph]?: (v: Polymorph<Morph, Type>) => R
 }
 
-export function forPolymorph<Morph, R>(value: Polymorph<Morph>, map: MorphMap<Morph, R>): R | undefined {
+export function forPolymorph<Morph, R>(
+   value: Polymorph<Morph>,
+   map: MorphMap<Morph, R>
+): R | undefined {
    const func = map[value.type]
    return func?.(value as Polymorph<any>)
 }
 
-export function applyPolymorphs<R extends object>(input: R): R {
-   return POLYMORPHS.reduce((value, polymorph) => {
+export function applyPolymorphs<R extends object>(input: R): Promise<R> {
+   if (!input) return input
+
+   return POLYMORPHS.reduce(async (value, polymorph) => {
       const keys = Object.values(polymorph.enum)
 
-      const props = Object.entries(value).map(([k, v]) => {
-         const r = Array.isArray(v) ? v.map(applyPolymorphs) : typeof v === 'object' ? applyPolymorphs(v) : v
-         return [k, r]
-      })
+      const props = await Promise.all(
+         Object.entries(await value).map(async ([k, v]) => {
+            const r = Array.isArray(v)
+               ? await Promise.all(v.map(applyPolymorphs))
+               : typeof v === 'object'
+               ? await applyPolymorphs(v)
+               : v
+            return [k, r]
+         })
+      )
 
       const [match, noMatch] = partition(props, ([key]) => keys.includes(key))
 
-      const children = match
-         .map(([k, v]) => [k, toArray(v)] as [string, object[]])
-         .map(([type, providers]) => providers.map(provider => polymorph.transform({ type, ...provider })))
-         .flat()
+      const children = await Promise.all(
+         match
+            .map(([k, v]) => [k, toArray(v)] as [string, object[]])
+            .map(([type, providers]) =>
+               Promise.all(providers.map(provider => polymorph.transform({ type, ...provider })))
+            )
+      )
 
-      return { ...Object.fromEntries(noMatch), [polymorph.to]: children }
-   }, input)
+      return { ...Object.fromEntries(noMatch), [polymorph.to]: children.flat() }
+   }, Promise.resolve(input))
 }
 
 export function registerPolymorph<T extends object>(
    to: string,
    enm: Record<string, string>,
-   transform: (v: T) => T = v => v
+   transform: (v: T) => T | Promise<T> = v => v
 ) {
    POLYMORPHS.push({ to, enum: enm, transform })
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<preset>
+    <tag id="#coral_blocks">
+
+    <side on="up">
+        <tag id="#corals"/>
+    </side>
+
+</tag>
+</preset>

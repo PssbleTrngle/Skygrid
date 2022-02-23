@@ -42,6 +42,7 @@ function unwrapProvider(provider: TypedProvider): GeneratedBlock[] {
          tag: p => withWeight(p.matches, w => w / p.matches.length),
          list: p => withWeight(unwrap(p.children), w => w * p.weight),
          fallback: p => withWeight(unwrap(p.children).slice(0), () => p.weight),
+         reference: p => withWeight(unwrapProvider(p.provider), () => p.weight),
       }) ?? []
    )
 }

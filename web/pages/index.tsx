@@ -1,21 +1,23 @@
-import type { GetServerSideProps, InferGetServerSidePropsType, NextPage } from 'next'
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import Link from 'next/link'
 import Page from '../components/basic/Page'
-import ConfigVisualizer from '../components/config/ConfigVisualizer'
-import { parseFile } from '../util/parser'
+import { getConfigs } from '../util/data/configs'
 
-type Props = InferGetServerSidePropsType<typeof getServerSideProps>
+type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-export const getServerSideProps: GetServerSideProps = async () => {
-   const parsed = await parseFile(
-      '../src/main/resources/data/minecraft/skygrid/dimensions/overworld.xml'
-   )
-   return { props: { parsed } }
+export const getStaticProps: GetStaticProps = async () => {
+   const configs = getConfigs()
+   return { props: { configs } }
 }
 
-const Home: NextPage<Props> = ({ parsed }) => {
+const Home: NextPage<Props> = ({ configs }) => {
    return (
       <Page>
-         <ConfigVisualizer config={parsed} />
+         {configs.map(({ namespace, config }) => (
+            <Link key={`${namespace}-${config}`} href={`${namespace}/${config}`} passHref>
+               <a>{config}</a>
+            </Link>
+         ))}
       </Page>
    )
 }

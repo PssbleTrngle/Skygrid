@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<preset>
+    <list>
+
+        <list weight="100">
+            <block id="coal_block"/>
+            <block mod="quark" id="charcoal_block"/>
+        </list>
+        <block weight="80" id="iron_block"/>
+        <block weight="45" id="lapis_block"/>
+        <block weight="60" id="redstone_block"/>
+        <block weight="60" id="gold_block"/>
+        <block weight="10" id="diamond_block"/>
+        <block weight="5" id="emerald_block"/>
+
+        <block weight="4" mod="byg" id="ametrine_block"/>
+        <block weight="4" mod="byg" id="pendorite_block"/>
+
+
+    </list>
+</preset>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<preset>
+    <list>
+
+        <block id="sunflower">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block id="sunflower">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+        <block id="lilac">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block id="lilac">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+        <block id="rose_bush">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block id="rose_bush">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+        <block id="peony">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block id="peony">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+        <block weight="0.4" mod="buzzierbees" id="bird_of_paradise">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block mod="buzzierbees" id="bird_of_paradise">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+        <block weight="0.3" mod="upgrade_aquatic" id="flowering_rush">
+            <set key="half" value="lower"/>
+            <side on="up">
+                <block mod="upgrade_aquatic" id="flowering_rush">
+                    <set key="half" value="upper"/>
+                </block>
+            </side>
+        </block>
+
+        <list name="bloomful">
+            <block mod="bloomful" id="purple_delphinium">
+                <set key="half" value="lower"/>
+                <side on="up">
+                    <block mod="bloomful" id="purple_delphinium">
+                        <set key="half" value="upper"/>
+                    </block>
+                </side>
+            </block>
+
+            <block mod="bloomful" id="white_delphinium">
+                <set key="half" value="lower"/>
+                <side on="up">
+                    <block mod="bloomful" id="white_delphinium">
+                        <set key="half" value="upper"/>
+                    </block>
+                </side>
+            </block>
+
+            <block mod="bloomful" id="pink_delphinium">
+                <set key="half" value="lower"/>
+                <side on="up">
+                    <block mod="bloomful" id="pink_delphinium">
+                        <set key="half" value="upper"/>
+                    </block>
+                </side>
+            </block>
+
+            <block mod="bloomful" id="blue_delphinium">
+                <set key="half" value="lower"/>
+                <side on="up">
+                    <block mod="bloomful" id="blue_delphinium">
+                        <set key="half" value="upper"/>
+                    </block>
+                </side>
+            </block>
+        </list>
+
+    </list>
+</preset>

@@ -14,7 +14,7 @@ import { dirname, extname, join } from 'path'
 import unzipper from 'unzipper'
 import { Merger, TagDefinition } from './data'
 
-const mods = ['minecraft', 'quark', 'biomesoplenty']
+const mods = ['minecraft', 'quark', 'biomesoplenty', 'botania']
 
 const pathOf = ({ blockName }: BlockModel) => {
    if (!blockName) throw new Error('missing blockName')
@@ -26,8 +26,12 @@ async function render(archive: string, overwriteExisting = false) {
    const minecraft = Minecraft.open(archive)
    const blocks = await Promise.all(
       mods.map(async namespace => {
-         const blocks = await minecraft.getBlockList(namespace)
-         return blocks.filter(b => overwriteExisting || !existsSync(pathOf(b)))
+         const names = await minecraft.getBlockNameList(namespace)
+         const blocks = await Promise.allSettled(names.map(it => minecraft.getModel(it)))
+         return blocks
+            .filter(it => it.status === 'fulfilled')
+            .map(it => (it as PromiseFulfilledResult<BlockModel>).value)
+            .filter(b => overwriteExisting || !existsSync(pathOf(b)))
       })
    )
 
