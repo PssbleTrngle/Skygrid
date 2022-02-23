@@ -21,7 +21,7 @@ import possible_triangle.skygrid.data.xml.*
 import possible_triangle.skygrid.data.xml.impl.*
 import java.io.File
 
-abstract class XMLResource<T>(private val path: String, private val serializer: () -> KSerializer<T>) :
+abstract class XMLResource<T>(val path: String, private val serializer: () -> KSerializer<T>) :
     SimplePreparableReloadListener<Map<ResourceLocation, T>>() {
 
     @ExperimentalXmlUtilApi
@@ -74,7 +74,7 @@ abstract class XMLResource<T>(private val path: String, private val serializer: 
             RESOURCES.forEach { it.validate(server) }
         }
 
-        fun register(register: (PreparableReloadListener) -> Unit) {
+        fun register(register: (XMLResource<*>) -> Unit) {
             RESOURCES.forEach(register)
         }
 

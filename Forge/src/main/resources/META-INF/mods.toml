@@ -1,16 +1,16 @@
-# Make sure this is set to "kotlinforforge"
 modLoader = "kotlinforforge"
-# Make sure this is set to the appropriate version range
-loaderVersion = "[2.2,)" # Require at least 2.0.x
-# License is REQUIRED after 1.16
-license = 'LGPL'
+loaderVersion = "[2.2,)"
+license = 'https://github.com/PssbleTrngle/Skygrid/blob/1.18.x/LICENSE.txt'
+issueTrackerURL = "https://github.com/PssbleTrngle/skygrid/issues"
+showAsResourcePack = false
 
 [[mods]]
 modId = "skygrid"
 version = "${file.jarVersion}"
 displayName = "Skygrid"
 authors = "possible_triangle"
-description = '''Skygrid the people'''
+description = '''Skygrid'''
+credits = "Sethbling for the original idea"
 
 [[dependencies.skygrid]]
 modId = "forge"

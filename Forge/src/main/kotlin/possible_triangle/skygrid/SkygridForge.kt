@@ -1,6 +1,7 @@
 package possible_triangle.skygrid
 
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.RegisterCommandsEvent
@@ -54,6 +55,7 @@ object SkygridForge {
         FORGE_BUS.addListener { event: RegisterCommandsEvent ->
             SkygridCommand.register(event.dispatcher)
         }
+
     }
 
 }
