@@ -1,43 +1,54 @@
-import { orderBy, sumBy } from 'lodash'
+import { groupBy, orderBy, sumBy } from 'lodash'
 import { useMemo, VFC } from 'react'
 import {
+   Block,
+   BlockProvider,
    BlockProviders,
    GeneratedBlock,
-   ProviderType,
-   TypedProvider
+   ProviderType
 } from '../../types/BlockProviders'
+import WeightedEntry from '../../types/WeightedEntry'
 import { forPolymorph } from '../../util/polymorphism'
 import BlockGrid from './BlockGrid'
 import ProviderPanel from './ProviderPanel'
+import Searchbar, { useFiltered } from './Searchbar'
 
-const UnwrappedBlocks: VFC<{ blocks: TypedProvider[] }> = ({ blocks }) => {
+const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
    const unwrapped = useMemo(() => unwrap(blocks), [blocks])
    const sorted = useMemo(() => orderBy(unwrapped, b => b.weight, 'desc'), [unwrapped])
    const size = 100
 
+   const { filter, setFilter, filtered } = useFiltered(sorted)
+
+   console.log(filter)
+
    return (
-      <BlockGrid size={size}>
-         {sorted.map(block => (
-            <ProviderPanel
-               key={block.uuid}
-               size={size}
-               provider={{ ...block, type: ProviderType.BLOCK }}
-            />
-         ))}
-      </BlockGrid>
+      <>
+         <Searchbar value={filter} onChange={setFilter} />
+         <BlockGrid size={size}>
+            {filtered.map(block => (
+               <ProviderPanel key={block.uuid} size={size} provider={block}>
+                  <p>
+                     {/*TODO DUMB PLURAL*/}
+                     {block.occurenced} entr{block.occurenced === 1 ? 'y' : 'ies'}
+                  </p>
+               </ProviderPanel>
+            ))}
+         </BlockGrid>
+      </>
    )
 }
 
-function withWeight(
-   blocks: GeneratedBlock[],
+function withWeight<T extends Required<WeightedEntry>>(
+   blocks: T[],
    func: (w: number) => number = w => w
-): GeneratedBlock[] {
+): T[] {
    return blocks.map(b => ({ ...b, weight: func(b.weight) }))
 }
 
-function unwrapProvider(provider: TypedProvider): GeneratedBlock[] {
+function unwrapProvider(provider: BlockProvider): Block[] {
    return (
-      forPolymorph<BlockProviders, GeneratedBlock[]>(provider, {
+      forPolymorph<BlockProviders, Block[]>(provider, {
          block: p => withWeight([p]),
          tag: p => withWeight(p.matches, w => w / p.matches.length),
          list: p => withWeight(unwrap(p.children), w => w * p.weight),
@@ -47,10 +58,30 @@ function unwrapProvider(provider: TypedProvider): GeneratedBlock[] {
    )
 }
 
-function unwrap(providers: TypedProvider[]): GeneratedBlock[] {
+function unwrap(providers: BlockProvider[]): GeneratedBlock[] {
    const unwrapped = providers.flatMap(p => unwrapProvider(p))
    const total = sumBy(unwrapped, w => w.weight)
-   return unwrapped.map((p, _, a) => ({ ...p, weight: p.weight / total }))
+   const normalized = unwrapped
+      .map(p => ({ ...p, weight: p.weight / total }))
+      .flatMap<Omit<GeneratedBlock, 'occurenced' | 'type'>>(({ extras, ...provider }) => {
+         const unwrappedExtras = extras
+            ? extras.flatMap(it => withWeight(unwrap(it.children), w => w * it.probability))
+            : []
+         return [
+            { ...provider, extra: false },
+            ...withWeight(unwrappedExtras, w => w * provider.weight).map(e => ({
+               ...e,
+               extra: true,
+            })),
+         ]
+      })
+
+   return Object.values(groupBy(normalized, n => `${n.mod}:${n.id}`)).map(occurences => ({
+      ...occurences[0],
+      occurenced: occurences.length,
+      weight: sumBy(occurences, it => it.weight),
+      type: ProviderType.BLOCK,
+   }))
 }
 
 export default UnwrappedBlocks

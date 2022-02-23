@@ -5,8 +5,8 @@ import BlockIcon from './BlockIcon'
 const BlockPanel: FC<GeneratedBlock & { size: number }> = ({ children, ...block }) => (
    <>
       <BlockIcon {...block} />
-      <p>{block.name ?? block.id}</p>
-      <p>{block.mod ?? 'minecraft'}</p>
+      <span>{block.name ?? <i>{block.id}</i>}</span>
+      <code>{block.mod ?? 'minecraft'}</code>
       {children}
    </>
 )

@@ -1,4 +1,4 @@
-import { TypedProvider } from './BlockProviders'
+import { BlockProvider } from './BlockProviders'
 import WeightedEntry from './WeightedEntry'
 
 export interface LootTable extends WeightedEntry {
@@ -10,6 +10,6 @@ export default interface DimensionConfig {
       table: LootTable[]
    }
    blocks: {
-      children: TypedProvider[]
+      children: BlockProvider[]
    }
 }

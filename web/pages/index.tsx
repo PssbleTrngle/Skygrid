@@ -1,21 +1,24 @@
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 import Page from '../components/basic/Page'
-import { getConfigs } from '../util/data/configs'
+import { Named } from '../types'
+import { getStaticConfigs } from '../util/data/configs'
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>
+interface Props {
+   configs: Named[]
+}
 
-export const getStaticProps: GetStaticProps = async () => {
-   const configs = getConfigs()
+export const getStaticProps: GetStaticProps<Props> = async () => {
+   const configs = getStaticConfigs()
    return { props: { configs } }
 }
 
 const Home: NextPage<Props> = ({ configs }) => {
    return (
       <Page>
-         {configs.map(({ namespace, config }) => (
-            <Link key={`${namespace}-${config}`} href={`${namespace}/${config}`} passHref>
-               <a>{config}</a>
+         {configs.map(({ mod, id }) => (
+            <Link key={`${mod}-${id}`} href={`${mod}/${id}`} passHref>
+               <a>{id}</a>
             </Link>
          ))}
       </Page>

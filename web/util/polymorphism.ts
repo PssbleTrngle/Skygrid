@@ -1,11 +1,5 @@
 import { partition } from 'lodash'
 
-const POLYMORPHS: Array<{
-   enum: Record<string, string>
-   to: string
-   transform: (v: any) => unknown
-}> = []
-
 export function toArray<T>(t?: T | T[]) {
    if (!t) return []
    return Array.isArray(t) ? t : [t]
@@ -27,41 +21,53 @@ export function forPolymorph<Morph, R>(
    return func?.(value as Polymorph<any>)
 }
 
-export function applyPolymorphs<R extends object>(input: R): Promise<R> {
-   if (!input) return input
+export class Polymorpher {
+   private polymorphs: Array<{
+      enum: Record<string, string>
+      to: string
+      transform: (v: any) => unknown
+   }> = []
 
-   return POLYMORPHS.reduce(async (value, polymorph) => {
-      const keys = Object.values(polymorph.enum)
+   async applyPolymorphs<R extends object>(input: R): Promise<R> {
+      if (!input) return input
 
       const props = await Promise.all(
-         Object.entries(await value).map(async ([k, v]) => {
-            const r = Array.isArray(v)
-               ? await Promise.all(v.map(applyPolymorphs))
-               : typeof v === 'object'
-               ? await applyPolymorphs(v)
-               : v
-            return [k, r]
+         Object.entries(input).map(async ([key, value]) => {
+            const recursed = Array.isArray(value)
+               ? await Promise.all(value.map(it => this.applyPolymorphs(it)))
+               : typeof value === 'object'
+               ? await this.applyPolymorphs(value)
+               : value
+            return { key, value: recursed }
          })
       )
 
-      const [match, noMatch] = partition(props, ([key]) => keys.includes(key))
+      const mapped = await this.polymorphs.reduce(async (value, polymorph) => {
+         const keys = Object.values(polymorph.enum)
 
-      const children = await Promise.all(
-         match
-            .map(([k, v]) => [k, toArray(v)] as [string, object[]])
-            .map(([type, providers]) =>
-               Promise.all(providers.map(provider => polymorph.transform({ type, ...provider })))
-            )
-      )
+         const [match, noMatch] = partition(await value, ({ key }) => keys.includes(key))
 
-      return { ...Object.fromEntries(noMatch), [polymorph.to]: children.flat() }
-   }, Promise.resolve(input))
-}
+         const children = await Promise.all(
+            match
+               .map(({ key, value }) => ({ key, value: toArray(value) }))
+               .map(({ key, value }) =>
+                  Promise.all(
+                     value.map(provider => polymorph.transform({ type: key, ...provider }))
+                  )
+               )
+         )
 
-export function registerPolymorph<T extends object>(
-   to: string,
-   enm: Record<string, string>,
-   transform: (v: T) => T | Promise<T> = v => v
-) {
-   POLYMORPHS.push({ to, enum: enm, transform })
+         return [...noMatch, { key: polymorph.to, value: children.flat() }]
+      }, Promise.resolve(props))
+
+      return mapped.reduce((o, { key, value }) => ({ ...o, [key]: value }), {} as R)
+   }
+
+   register<T extends object>(
+      to: string,
+      enm: Record<string, string>,
+      transform: (v: T) => T | Promise<T> = v => v
+   ) {
+      this.polymorphs.push({ to, enum: enm, transform })
+   }
 }
