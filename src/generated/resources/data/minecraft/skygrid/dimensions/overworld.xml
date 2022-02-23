@@ -159,6 +159,7 @@
                <name pattern="hellbark"/>
                <mod id="endergetic"/>
                <mod id="midnight"/>
+               <mod id="botania"/>
                <name pattern="stripped"/>
                <name pattern="_wood"/>
                <mod id="simplefarming"/>
@@ -172,6 +173,7 @@
                <name pattern="hellbark"/>
                <mod id="endergetic"/>
                <mod id="midnight"/>
+               <mod id="botania"/>
             </except>
          </tag>
          <tag id="leaves" weight="0.6">
@@ -182,6 +184,7 @@
                <name pattern="hellbark"/>
                <mod id="endergetic"/>
                <mod id="midnight"/>
+               <mod id="botania"/>
             </except>
          </tag>
          <list name="mushrooms blocks">
@@ -226,7 +229,7 @@
             </list>
          </list>
          <block id="bookshelf" weight="0.05"/>
-         <tag id="glass" mod="forge"/>
+         <tag id="glass/silica" mod="forge"/>
          <tag id="wool"/>
          <list weight="0.01" name="midori">
             <block id="midori_block" mod="quark"/>
@@ -270,6 +273,7 @@
                <name pattern="hellbark"/>
                <mod id="endergetic"/>
                <mod id="midnight"/>
+               <mod id="botania"/>
             </except>
          </tag>
          <tag id="chests/wooden" mod="forge">
@@ -279,6 +283,7 @@
                <name pattern="hellbark"/>
                <mod id="endergetic"/>
                <mod id="midnight"/>
+               <mod id="botania"/>
             </except>
          </tag>
       </list>
@@ -292,10 +297,13 @@
                </tag>
             </side>
          </tag>
-         <block id="turtle_egg">
-            <cycle key="eggs"/>
+         <block id="sand" weight="0.05">
+            <side on="up">
+               <block id="turtle_egg">
+                  <cycle key="eggs"/>
+               </block>
+            </side>
          </block>
-         <block id="sand" weight="0.05"/>
          <list>
             <block id="sand"/>
             <block id="gravel"/>

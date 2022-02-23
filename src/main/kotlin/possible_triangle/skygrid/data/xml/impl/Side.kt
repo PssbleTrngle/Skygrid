@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config.impl
+package possible_triangle.skygrid.data.xml.impl
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,8 +7,8 @@ import net.minecraft.core.Direction
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
-import possible_triangle.skygrid.config.BlockProvider
-import possible_triangle.skygrid.config.Extra
+import possible_triangle.skygrid.data.xml.BlockProvider
+import possible_triangle.skygrid.data.xml.Extra
 
 @Serializable
 @SerialName("side")

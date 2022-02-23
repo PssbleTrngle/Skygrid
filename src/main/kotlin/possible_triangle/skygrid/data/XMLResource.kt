@@ -19,8 +19,8 @@ import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlSerializationPolicy
 import possible_triangle.skygrid.SkygridMod
-import possible_triangle.skygrid.config.*
-import possible_triangle.skygrid.config.impl.*
+import possible_triangle.skygrid.data.xml.*
+import possible_triangle.skygrid.data.xml.impl.*
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import java.io.File
 
@@ -55,10 +55,13 @@ abstract class XMLResource<T>(private val path: String, private val serializer: 
 
             polymorphic(Filter::class) {
                 subclass(NameFilter::class)
+                subclass(ModFilter::class)
+                subclass(TagFilter::class)
             }
         }) {
             encodeDefault = XmlSerializationPolicy.XmlEncodeDefault.NEVER
             autoPolymorphic = true
+            indentString = " ".repeat(3)
             unknownChildHandler = UnknownChildHandler { input, _, descriptor, name, candidates ->
                 throw DeserializationException(
                     input.locationInfo,

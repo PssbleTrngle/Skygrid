@@ -1,8 +1,8 @@
-package possible_triangle.skygrid.config.impl
+package possible_triangle.skygrid.data.xml.impl
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import possible_triangle.skygrid.config.WeightedEntry
+import possible_triangle.skygrid.data.xml.WeightedEntry
 
 @Serializable
 @SerialName("table")

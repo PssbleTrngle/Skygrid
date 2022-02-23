@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config
+package possible_triangle.skygrid.data.xml
 
 abstract class WeightedEntry {
 

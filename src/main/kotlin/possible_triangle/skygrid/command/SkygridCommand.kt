@@ -20,10 +20,9 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import possible_triangle.skygrid.SkygridMod
-import possible_triangle.skygrid.config.DimensionConfig
-import possible_triangle.skygrid.config.Distance
+import possible_triangle.skygrid.data.xml.DimensionConfig
+import possible_triangle.skygrid.data.xml.Distance
 import possible_triangle.skygrid.world.BlockAccess
-import java.lang.IllegalArgumentException
 import kotlin.random.Random
 
 inline fun <T> tryOr(supplier: () -> T, default: () -> T): T {
@@ -99,7 +98,7 @@ object SkygridCommand {
         val snap = tryOr({ BoolArgumentType.getBool(ctx, "snap") }) { false }
         val random = tryOr({ LongArgumentType.getLong(ctx, "seed").let(::Random) }, { Random })
         val distance =
-            tryOr({ IntegerArgumentType.getInteger(ctx, "distance").let { Distance(it, it, it) } }) { config.distance }
+            tryOr({ IntegerArgumentType.getInteger(ctx, "distance").let(Distance::of) }) { config.distance }
 
         val origin = if (snap) start else BlockPos(0, 0, 0)
 

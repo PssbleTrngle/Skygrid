@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config
+package possible_triangle.skygrid.data.xml
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -13,7 +13,7 @@ import kotlin.random.Random
 @Serializable
 abstract class BlockProvider : WeightedEntry() {
 
-    abstract val sides: List<Extra>
+    abstract val extras: List<Extra>
     abstract val transformers: List<Transformer>
     abstract val name: String?
 
@@ -23,7 +23,7 @@ abstract class BlockProvider : WeightedEntry() {
     protected abstract fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean
 
     fun validate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        validSides = sides.filter { it.validate(blocks, tags) }
+        validSides = extras.filter { it.validate(blocks, tags) }
         return internalValidate(blocks, tags).also {
             if (!it) SkygridMod.LOGGER.debug("Invalid BlockProvider ${name ?: "(anonymous)"} of type ${javaClass.name}")
         }

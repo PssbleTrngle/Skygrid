@@ -1,6 +1,5 @@
-package possible_triangle.skygrid.config
+package possible_triangle.skygrid.data.xml
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.random.Random

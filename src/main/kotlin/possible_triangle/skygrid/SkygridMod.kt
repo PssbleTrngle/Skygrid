@@ -1,25 +1,23 @@
 package possible_triangle.skygrid
 
-import net.minecraft.client.Minecraft
 import net.minecraft.core.Registry
 import net.minecraft.network.chat.TextComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.BlockItem
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import possible_triangle.skygrid.block.StiffAir
-import possible_triangle.skygrid.config.DimensionConfig
-import possible_triangle.skygrid.config.Preset
+import possible_triangle.skygrid.data.xml.DimensionConfig
+import possible_triangle.skygrid.data.xml.Preset
 import possible_triangle.skygrid.world.SkygridChunkGenerator
 import possible_triangle.skygrid.world.SkygridGenerator
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.registerObject
-import vazkii.quark.mixin.BlockItemMixin
 
 @Mod(SkygridMod.ID)
 object SkygridMod {
@@ -35,12 +33,12 @@ object SkygridMod {
     init {
         LOGGER.info("Skygrid booting")
 
-        WORLD_TYPES.registerObject("skygrid") { SkygridGenerator() }
+        WORLD_TYPES.registerObject(ID) { SkygridGenerator() }
 
         WORLD_TYPES.register(MOD_BUS)
         BLOCKS.register(MOD_BUS)
 
-        Registry.register(Registry.CHUNK_GENERATOR, "skygrid", SkygridChunkGenerator.CODEC)
+        Registry.register(Registry.CHUNK_GENERATOR, ResourceLocation(ID, ID), SkygridChunkGenerator.CODEC)
 
         Preset.register()
         DimensionConfig.register()

@@ -109,6 +109,10 @@ repositories {
         url "https://cursemaven.com"
         content { includeGroup "curse.maven" }
     }
+    maven {
+        name = "C4"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
@@ -126,6 +130,13 @@ dependencies {
 
     implementation fg.deobf("curse.maven:quark-243121:${project.quark_version}")
     implementation fg.deobf("curse.maven:bop-220318:${project.bop_version}")
+
+    implementation fg.deobf("vazkii.patchouli:Patchouli:${project.mc_version}-${project.patchouli_version}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.mc_version}-${project.curios_version}:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${project.mc_version}-${project.curios_version}")
+
+    compileOnly fg.deobf("vazkii.botania:Botania:${project.mc_version}-${project.botania_version}:api")
+    runtimeOnly fg.deobf("vazkii.botania:Botania:${project.mc_version}-${project.botania_version}")
 
     implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${project.mc_version}-${project.terrablender_version}")
 }

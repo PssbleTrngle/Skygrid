@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config
+package possible_triangle.skygrid.data.xml
 
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.Property

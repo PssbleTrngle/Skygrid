@@ -1,18 +1,13 @@
-package possible_triangle.skygrid.data.generation.builder
+package possible_triangle.skygrid.data.generation.builder.providers
 
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.Transformer
-import possible_triangle.skygrid.data.xml.impl.BlockList
+import possible_triangle.skygrid.data.xml.impl.Block
 
-class BlockProviderListBuilder(private val name: String?) : BlockProviderBuilder<BlockList>() {
+class BlockBuilder(private val id: String, private val mod: String) :
+    BlockProviderBuilder<Block>() {
 
-    private val children = BlockListBuilder()
-
-    fun children(consumer: BlockListBuilder.() -> Unit) {
-        consumer(children)
-    }
-
-    override fun buildWith(weight: Double, extras: List<Extra>, transformers: List<Transformer>): BlockList {
-        return BlockList(children.build(), weight, name, extras, transformers)
+    override fun buildWith(weight: Double, extras: List<Extra>, transformers: List<Transformer>): Block {
+        return Block(id, mod, weight, extras, transformers)
     }
 }

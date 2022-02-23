@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config.impl
+package possible_triangle.skygrid.data.xml.impl
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,10 +6,10 @@ import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
-import possible_triangle.skygrid.config.BlockProvider
-import possible_triangle.skygrid.config.Extra
-import possible_triangle.skygrid.config.ProxyProvider
-import possible_triangle.skygrid.config.Transformer
+import possible_triangle.skygrid.data.xml.BlockProvider
+import possible_triangle.skygrid.data.xml.Extra
+import possible_triangle.skygrid.data.xml.ProxyProvider
+import possible_triangle.skygrid.data.xml.Transformer
 import kotlin.random.Random
 
 @Serializable
@@ -18,7 +18,7 @@ data class Fallback(
     override val name: String? = null,
     val children: List<BlockProvider>,
     override val weight: Double = 1.0,
-    override val sides: List<Extra> = listOf(),
+    override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
 ) : ProxyProvider() {
 

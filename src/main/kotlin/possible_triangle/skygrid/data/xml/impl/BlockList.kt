@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config.impl
+package possible_triangle.skygrid.data.xml.impl
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,10 +7,10 @@ import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.SkygridMod
-import possible_triangle.skygrid.config.BlockProvider
-import possible_triangle.skygrid.config.Extra
-import possible_triangle.skygrid.config.ProxyProvider
-import possible_triangle.skygrid.config.Transformer
+import possible_triangle.skygrid.data.xml.BlockProvider
+import possible_triangle.skygrid.data.xml.Extra
+import possible_triangle.skygrid.data.xml.ProxyProvider
+import possible_triangle.skygrid.data.xml.Transformer
 import possible_triangle.skygrid.util.WeightedList
 import kotlin.random.Random
 
@@ -20,7 +20,7 @@ data class BlockList(
     val children: List<BlockProvider>,
     override val weight: Double = 1.0,
     override val name: String? = null,
-    override val sides: List<Extra> = listOf(),
+    override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
 ) : ProxyProvider() {
 
@@ -39,7 +39,7 @@ data class BlockList(
 
     operator fun plus(other: BlockList): BlockList {
         return other.copy(children = this.children + other.children,
-            sides = this.sides + other.sides,
+            extras = this.extras + other.extras,
             transformers = this.transformers + other.transformers
         )
     }

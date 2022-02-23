@@ -1,6 +1,6 @@
 package possible_triangle.skygrid.util
 
-import possible_triangle.skygrid.config.WeightedEntry
+import possible_triangle.skygrid.data.xml.WeightedEntry
 import java.util.*
 import kotlin.random.Random
 

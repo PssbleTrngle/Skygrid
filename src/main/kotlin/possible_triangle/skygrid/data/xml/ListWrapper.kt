@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config
+package possible_triangle.skygrid.data.xml
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

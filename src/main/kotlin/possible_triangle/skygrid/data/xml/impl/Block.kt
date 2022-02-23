@@ -18,7 +18,7 @@ class Block(
     private val id: String,
     private val mod: String = "minecraft",
     override val weight: Double = 1.0,
-    override val sides: List<Extra> = listOf(),
+    override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
 ) : BlockProvider() {
 

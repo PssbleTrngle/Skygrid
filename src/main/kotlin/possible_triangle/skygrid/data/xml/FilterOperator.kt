@@ -1,12 +1,13 @@
-package possible_triangle.skygrid.config
+package possible_triangle.skygrid.data.xml
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import net.minecraft.core.Registry
+import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 
 @Serializable
 abstract class FilterOperator {
 
-    abstract fun test(block: Block): Boolean
+    abstract fun test(block: Block, blocks: Registry<Block>, tags: TagContainer): Boolean
 
 }

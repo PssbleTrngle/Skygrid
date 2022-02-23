@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.config
+package possible_triangle.skygrid.data.xml
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,12 +8,12 @@ import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.event.server.ServerAboutToStartEvent
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import possible_triangle.skygrid.config.impl.LootTable
 import possible_triangle.skygrid.data.XMLResource
+import possible_triangle.skygrid.data.xml.impl.LootTable
 import possible_triangle.skygrid.world.BlockAccess
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import kotlin.random.Random
-import possible_triangle.skygrid.config.impl.Block as SingleBlock
+import possible_triangle.skygrid.data.xml.impl.Block as SingleBlock
 
 @Serializable
 @SerialName("dimension")
@@ -48,11 +48,9 @@ data class DimensionConfig(
         }
 
         init {
-            FORGE_BUS.register(::validateDefault)
-        }
-
-        private fun validateDefault(event: ServerAboutToStartEvent) {
-            validate(DEFAULT, event.server)
+            FORGE_BUS.addListener { event: ServerAboutToStartEvent ->
+                validate(DEFAULT, event.server)
+            }
         }
 
         override fun validate(value: DimensionConfig, server: MinecraftServer): Boolean {
