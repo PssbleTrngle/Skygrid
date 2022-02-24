@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
@@ -12,13 +11,14 @@ import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.FilterOperator
 import possible_triangle.skygrid.data.xml.Transformer
+import possible_triangle.skygrid.keyFrom
 import kotlin.random.Random
 
 @Serializable
 @SerialName("tag")
 data class Tag(
     private val id: String,
-    private val mod: String = "minecraft",
+    private val mod: String? = null,
     @XmlSerialName("weight", "", "") private val tagWeight: Double = 1.0,
     private val random: Boolean = true,
     private val expand: Boolean = false,
@@ -30,13 +30,13 @@ data class Tag(
     @Transient
     private lateinit var blocks: List<Block>
 
+    @Transient
+    private val key = keyFrom(id, mod)
+
     override val weight: Double
         get() = if (expand)
             blocks.size * tagWeight
         else tagWeight
-
-    private val key
-        get() = ResourceLocation(mod, if (id.startsWith("#")) id.substring(1) else id)
 
     override val name: String
         get() = "#$key"

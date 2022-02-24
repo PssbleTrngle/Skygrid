@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.data.xml.Filter
+import possible_triangle.skygrid.keyFrom
 
 @Serializable
 @SerialName("name")
@@ -36,10 +36,10 @@ data class ModFilter(val id: String) : Filter() {
 
 @Serializable
 @SerialName("tag")
-data class TagFilter(val id: String, val mod: String = "minecraft") : Filter() {
+data class TagFilter(val id: String, val mod: String? = null) : Filter() {
 
-    private val key
-        get() = ResourceLocation(mod, if (id.startsWith("#")) id.substring(1) else id)
+    @Transient
+    private val key = keyFrom(id, mod)
 
     override fun test(block: Block, blocks: Registry<Block>, tags: TagContainer): Boolean {
         return tags.getOrEmpty(Registry.BLOCK_REGISTRY).getTagOrEmpty(key).contains(block)

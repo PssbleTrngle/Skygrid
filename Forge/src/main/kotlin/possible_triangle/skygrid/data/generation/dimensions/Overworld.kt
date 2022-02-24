@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.DripstoneThickness
 import net.minecraft.world.level.dimension.LevelStem
 import net.minecraftforge.common.Tags
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
-import possible_triangle.skygrid.Constants
+import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.generation.DimensionConfigGenerator
 import possible_triangle.skygrid.data.generation.builder.ExceptFilterBuilder
 import possible_triangle.skygrid.data.generation.builder.providers.TagBuilder
@@ -87,19 +87,19 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         block(Blocks.CLAY)
                     }
 
-                    preset("moss", weight = 0.5) {
+                    preset("moss", weight = 0.3) {
                         block(Blocks.MOSS_BLOCK) {
                             side(DOWN, probability = 0.1) {
                                 block(Blocks.SPORE_BLOSSOM)
                             }
-                            side(UP, probability = 0.8) {
+                            side(UP, probability = 0.4) {
                                 block(Blocks.BIG_DRIPLEAF)
                                 double(Blocks.SMALL_DRIPLEAF)
                             }
                         }
                     }
 
-                    preset("dripstone", weight = 0.5) {
+                    preset("dripstone", weight = 0.3) {
                         listOf(UP, DOWN).forEach {
                             block(Blocks.DRIPSTONE_BLOCK) {
                                 side(it) {
@@ -107,7 +107,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                         property(PointedDripstoneBlock.THICKNESS, DripstoneThickness.TIP)
                                         property(PointedDripstoneBlock.TIP_DIRECTION, it)
                                     }
-                                    block(Blocks.POINTED_DRIPSTONE) {
+                                    block(Blocks.POINTED_DRIPSTONE, weight = 0.5) {
                                         property(PointedDripstoneBlock.THICKNESS, DripstoneThickness.FRUSTUM)
                                         property(PointedDripstoneBlock.TIP_DIRECTION, it)
                                         side(it) {
@@ -144,7 +144,12 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                         double(Blocks.TALL_GRASS, weight = 0.5)
                                     }
 
-                                    tag(BlockTags.SMALL_FLOWERS, weight = 0.5) { except { mod("botania") } }
+                                    tag(BlockTags.SMALL_FLOWERS, weight = 0.5) {
+                                        except {
+                                            mod("botania")
+                                            pattern("wither_rose")
+                                        }
+                                    }
                                     tag("mystical_flowers", "botania", weight = 0.1)
                                 }
                             }
@@ -423,7 +428,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                             block(Blocks.BUDDING_AMETHYST) {
                                 Direction.values().forEach {
                                     side(it, probability = 0.5) {
-                                        tag(Constants.AMETHYST_CLUSTERS) {
+                                        tag(SkygridMod.AMETHYST_CLUSTERS) {
                                             property(BlockStateProperties.FACING, it)
                                         }
                                     }

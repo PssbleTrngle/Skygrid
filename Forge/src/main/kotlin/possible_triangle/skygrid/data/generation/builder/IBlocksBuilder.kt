@@ -21,7 +21,7 @@ fun interface IBlocksBuilder {
         return double(key.path, key.namespace, weight, builder)
     }
 
-    fun double(id: String, mod: String, weight: Double, builder: BlockBuilder.() -> Unit = {}) {
+    fun double(id: String, mod: String? = null, weight: Double, builder: BlockBuilder.() -> Unit = {}) {
         block(id, mod, weight) {
             builder(this)
             property(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER)
@@ -51,7 +51,7 @@ fun interface IBlocksBuilder {
         return block(key.path, key.namespace, weight, builder)
     }
 
-    fun block(id: String, mod: String = "minecraft", weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}) {
+    fun block(id: String, mod: String? = null, weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}) {
         BlockBuilder(id, mod).also {
             builder(it)
             add(it.build(weight))
@@ -70,7 +70,7 @@ fun interface IBlocksBuilder {
 
     fun tag(
         id: String,
-        mod: String = "minecraft",
+        mod: String? = null,
         weight: Double = 1.0,
         expand: Boolean = false,
         random: Boolean = true,

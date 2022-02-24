@@ -9,13 +9,14 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
-import possible_triangle.skygrid.Constants
+import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.XMLResource
 import possible_triangle.skygrid.data.generation.builder.BasicBlocksBuilder
 import possible_triangle.skygrid.data.generation.builder.DimensionConfigBuilder
 import possible_triangle.skygrid.data.generation.builder.IBlocksBuilder
 import possible_triangle.skygrid.data.xml.DimensionConfig
 import possible_triangle.skygrid.data.xml.Preset
+import possible_triangle.skygrid.data.xml.impl.BlockList
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.writeText
@@ -39,8 +40,12 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
 
     fun preset(key: String, builder: IBlocksBuilder.() -> Unit) = preset(ResourceLocation(key), builder)
     fun preset(key: ResourceLocation, builder: IBlocksBuilder.() -> Unit) {
-        val provider = BasicBlocksBuilder().also(builder).build().lastOrNull()
-        require(provider != null)
+        val providers = BasicBlocksBuilder().also(builder).build()
+        require(providers.isNotEmpty())
+        val provider = when(providers.size) {
+            1 ->  providers.first()
+            else -> BlockList(providers)
+        }
         presets[key] = Preset(provider)
     }
 
@@ -62,7 +67,7 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
             val sha = DataProvider.SHA1.hashUnencodedChars(content).toString()
             if (cache.getHash(file) != sha || !file.exists()) {
                 if (!file.parent.exists()) file.parent.createDirectories()
-                Constants.LOGGER.info("Writing $type/$key")
+                SkygridMod.LOGGER.info("Writing $type/$key")
                 file.writeText(content)
             }
 

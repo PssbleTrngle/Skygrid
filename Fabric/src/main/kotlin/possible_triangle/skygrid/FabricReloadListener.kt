@@ -28,7 +28,7 @@ class FabricReloadListener(private val internal: PreparableReloadListener, priva
     }
 
     override fun getFabricId(): ResourceLocation {
-        return ResourceLocation(Constants.MOD_ID, id)
+        return ResourceLocation(SkygridMod.MOD_ID, id)
     }
 
 }

@@ -6,15 +6,16 @@ import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import possible_triangle.skygrid.Constants.LOGGER
+import possible_triangle.skygrid.SkygridMod.LOGGER
+import possible_triangle.skygrid.world.Generator
 import possible_triangle.skygrid.world.IBlockAccess
 import kotlin.random.Random
 
 @Serializable
-abstract class BlockProvider : WeightedEntry() {
+abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess> {
 
-    abstract val extras: List<Extra>
-    abstract val transformers: List<Transformer>
+    protected abstract val extras: List<Extra>
+    protected abstract val transformers: List<Transformer>
     abstract val name: String?
 
     @Transient
@@ -43,9 +44,9 @@ abstract class BlockProvider : WeightedEntry() {
         chunk.set(state)
     }
 
-    fun generate(random: Random, chunk: IBlockAccess) {
-        generateBase(random, chunk)
-        validSides.forEach { it.generate(random, chunk) }
+    override fun generate(random: Random, access: IBlockAccess) {
+        generateBase(random, access)
+        validSides.forEach { it.generate(random, access) }
     }
 
 }

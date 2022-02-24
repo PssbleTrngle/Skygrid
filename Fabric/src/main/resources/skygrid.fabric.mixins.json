@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "possible_triangle.skygrid.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "WorldPresetMixin",
+    "WorldGenSettingsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

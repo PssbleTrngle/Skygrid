@@ -6,7 +6,10 @@ import possible_triangle.skygrid.util.WeightedList
 import kotlin.random.Random
 
 @Serializable
-data class ListWrapper<T : WeightedEntry>(val children: List<T> = listOf()) {
+data class ListWrapper<T : WeightedEntry>(
+    private val children: List<T> = listOf(),
+    private val replace: Boolean = false,
+) {
 
     @Transient
     private lateinit var weighted: WeightedList<T>
@@ -14,11 +17,16 @@ data class ListWrapper<T : WeightedEntry>(val children: List<T> = listOf()) {
     constructor(vararg children: T) : this(children.toList())
 
     operator fun plus(other: ListWrapper<T>): ListWrapper<T> {
+        if (other.replace) return other
         return ListWrapper(children + other.children)
     }
 
     fun validate(predicate: (T) -> Boolean): Boolean {
         weighted = WeightedList(children.filter(predicate))
+        return weighted.isNotEmpty()
+    }
+
+    fun isValid(): Boolean {
         return weighted.isNotEmpty()
     }
 

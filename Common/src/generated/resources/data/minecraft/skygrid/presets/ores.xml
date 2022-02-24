@@ -1,28 +1,28 @@
 <preset>
    <list>
       <list weight="20.0" name="ores">
-         <tag id="coal_ores" weight="10.0"/>
-         <tag id="iron_ores" weight="8.0"/>
-         <tag id="copper_ores" weight="8.0"/>
-         <tag id="gold_ores" weight="6.0"/>
-         <tag id="diamond_ores"/>
-         <tag id="emerald_ores" weight="0.5"/>
-         <tag id="lapis_ores" weight="4.5"/>
-         <tag id="redstone_ores" weight="6.0"/>
+         <tag id="coal_ores" mod="minecraft" weight="10.0"/>
+         <tag id="iron_ores" mod="minecraft" weight="8.0"/>
+         <tag id="copper_ores" mod="minecraft" weight="8.0"/>
+         <tag id="gold_ores" mod="minecraft" weight="6.0"/>
+         <tag id="diamond_ores" mod="minecraft"/>
+         <tag id="emerald_ores" mod="minecraft" weight="0.5"/>
+         <tag id="lapis_ores" mod="minecraft" weight="4.5"/>
+         <tag id="redstone_ores" mod="minecraft" weight="6.0"/>
       </list>
       <list name="blocks">
-         <block id="coal_block"/>
-         <block id="raw_iron_block" weight="0.5"/>
-         <block id="raw_copper_block" weight="0.5"/>
-         <block id="raw_gold_block" weight="0.3"/>
-         <block id="diamond_block" weight="0.01"/>
-         <block id="emerald_block" weight="0.005"/>
-         <block id="lapis_block" weight="0.45"/>
-         <block id="redstone_block" weight="0.6"/>
+         <block id="coal_block" mod="minecraft"/>
+         <block id="raw_iron_block" mod="minecraft" weight="0.5"/>
+         <block id="raw_copper_block" mod="minecraft" weight="0.5"/>
+         <block id="raw_gold_block" mod="minecraft" weight="0.3"/>
+         <block id="diamond_block" mod="minecraft" weight="0.01"/>
+         <block id="emerald_block" mod="minecraft" weight="0.005"/>
+         <block id="lapis_block" mod="minecraft" weight="0.45"/>
+         <block id="redstone_block" mod="minecraft" weight="0.6"/>
       </list>
       <list name="crystals">
-         <block id="amethyst_block"/>
-         <block id="budding_amethyst">
+         <block id="amethyst_block" mod="minecraft"/>
+         <block id="budding_amethyst" mod="minecraft">
             <side on="down" probability="0.5">
                <tag id="amethyst_clusters" mod="skygrid">
                   <set key="facing" value="down"/>

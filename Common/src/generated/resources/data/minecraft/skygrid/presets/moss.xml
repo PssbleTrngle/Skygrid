@@ -1,13 +1,13 @@
 <preset>
-   <block id="moss_block">
+   <block id="moss_block" mod="minecraft">
       <side on="down" probability="0.1">
-         <block id="spore_blossom"/>
+         <block id="spore_blossom" mod="minecraft"/>
       </side>
-      <side on="up" probability="0.8">
-         <block id="big_dripleaf"/>
-         <block id="small_dripleaf">
+      <side on="up" probability="0.4">
+         <block id="big_dripleaf" mod="minecraft"/>
+         <block id="small_dripleaf" mod="minecraft">
             <side on="up">
-               <block id="small_dripleaf">
+               <block id="small_dripleaf" mod="minecraft">
                   <set key="half" value="upper"/>
                </block>
             </side>

@@ -23,7 +23,8 @@
     ]
   },
   "mixins": [
-    "skygrid.mixins.json"
+    "skygrid.mixins.json",
+    "skygrid.fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.12",

@@ -11,7 +11,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class StiffAir : Block(Properties.of(Material.STRUCTURAL_AIR).noOcclusion().noCollission().noDrops()) {
+class StiffAir : Block(Properties.of(Material.STRUCTURAL_AIR).noOcclusion().noCollission().noDrops().air()) {
 
     override fun getRenderShape(state: BlockState): RenderShape {
         return RenderShape.INVISIBLE

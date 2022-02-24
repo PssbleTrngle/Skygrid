@@ -6,7 +6,7 @@ import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
-import possible_triangle.skygrid.Constants
+import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.ProxyProvider
@@ -28,7 +28,7 @@ data class BlockList(
     private lateinit var validChildren: WeightedList<BlockProvider>
 
     override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        Constants.LOGGER.debug("Validated list $name")
+        SkygridMod.LOGGER.debug("Validated list $name")
         validChildren = WeightedList(children.filter { it.validate(blocks, tags) })
         return validChildren.isNotEmpty()
     }

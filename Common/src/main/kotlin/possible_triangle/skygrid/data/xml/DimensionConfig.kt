@@ -4,20 +4,21 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
+import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.server.MinecraftServer
 import net.minecraft.tags.TagContainer
 import net.minecraft.util.random.SimpleWeightedRandomList
 import net.minecraft.world.level.SpawnData
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import possible_triangle.skygrid.Constants
+import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.XMLResource
 import possible_triangle.skygrid.data.xml.impl.LootTable
 import possible_triangle.skygrid.data.xml.impl.SpawnerEntry
 import possible_triangle.skygrid.world.BlockAccess
+import possible_triangle.skygrid.world.Generator
 import java.util.*
 import kotlin.random.Random
 import possible_triangle.skygrid.data.xml.impl.Block as SingleBlock
@@ -32,26 +33,28 @@ data class DimensionConfig(
     val minY: Int = Int.MIN_VALUE,
     val maxY: Int = 100,
     val distance: Distance = Distance(4, 4, 4),
-    private @XmlSerialName("gap", "", "") val unsafeGap: SingleBlock? = null,
-) {
+    @XmlSerialName("gap", "", "") private val unsafeGap: SingleBlock? = null,
+): Generator<BlockAccess> {
 
     @Transient
     lateinit var gap: Optional<SingleBlock>
 
-    fun validate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        this.loot.validate { true }
-        this.mobs.validate { true }
-        gap = Optional.ofNullable(unsafeGap).filter { it.validate(blocks, tags) }
-        return this.blocks.validate { it.validate(blocks, tags) }
+    fun validate(registries: RegistryAccess, tags: TagContainer): Boolean {
+        val blockRegistry = registries.registryOrThrow(Registry.BLOCK_REGISTRY)
+        val entityRegistry = registries.registryOrThrow(Registry.ENTITY_TYPE_REGISTRY)
+        loot.validate { true }
+        mobs.validate { entityRegistry.containsKey(it.key) }
+        gap = Optional.ofNullable(unsafeGap).filter { it.validate(blockRegistry, tags) }
+        return blocks.validate { it.validate(blockRegistry, tags) }
     }
 
-    fun generate(random: Random, access: BlockAccess) {
-        val generateLoot = loot.children.isNotEmpty()
-        val fillSpawners = mobs.children.isNotEmpty()
+    override fun generate(random: Random, access: BlockAccess) {
+        val generateLoot = loot.isValid()
+        val fillSpawners = mobs.isValid()
 
         this.blocks.random(random).generate(random) { state, pos ->
             access.set(state, pos)
-            val nbt = if (generateLoot && state.`is`(Constants.LOOT_CONTAINERS)) {
+            val nbt = if (generateLoot && state.`is`(SkygridMod.LOOT_CONTAINERS)) {
                 CompoundTag().apply {
                     val lootTable = loot.random(random)
                     putString("LootTable", lootTable.toString())
@@ -88,6 +91,7 @@ data class DimensionConfig(
                 replace = false,
                 blocks = a.blocks + b.blocks,
                 loot = a.loot + b.loot,
+                mobs = a.mobs + b.mobs,
             )
         }
 
@@ -96,7 +100,7 @@ data class DimensionConfig(
         }
 
         override fun validate(value: DimensionConfig, server: MinecraftServer): Boolean {
-            return value.validate(server.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY), server.tags)
+            return value.validate(server.registryAccess(), server.tags)
         }
 
     }

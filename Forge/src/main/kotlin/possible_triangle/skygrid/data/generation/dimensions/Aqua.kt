@@ -4,7 +4,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.data.DataGenerator
 import net.minecraft.resources.ResourceLocation
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
-import possible_triangle.skygrid.Constants
+import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.generation.DimensionConfigGenerator
 
 @ExperimentalXmlUtilApi
@@ -13,7 +13,7 @@ class Aqua(generator: DataGenerator) : DimensionConfigGenerator("aqua", generato
 
     override fun generate() {
 
-        dimension(ResourceLocation(Constants.MOD_ID, "aqua")) {
+        dimension(ResourceLocation(SkygridMod.MOD_ID, "aqua")) {
             gap("water")
 
             blocks {

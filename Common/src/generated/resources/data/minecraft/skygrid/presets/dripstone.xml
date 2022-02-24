@@ -1,20 +1,40 @@
 <preset>
-   <block id="dripstone_block">
-      <side on="down">
-         <block id="pointed_dripstone">
-            <set key="thickness" value="tip"/>
-            <set key="vertical_direction" value="down"/>
-         </block>
-         <block id="pointed_dripstone">
-            <side on="down">
-               <block id="pointed_dripstone">
-                  <set key="thickness" value="tip"/>
-                  <set key="vertical_direction" value="down"/>
-               </block>
-            </side>
-            <set key="thickness" value="frustum"/>
-            <set key="vertical_direction" value="down"/>
-         </block>
-      </side>
-   </block>
+   <list>
+      <block id="dripstone_block" mod="minecraft">
+         <side on="up">
+            <block id="pointed_dripstone" mod="minecraft">
+               <set key="thickness" value="tip"/>
+               <set key="vertical_direction" value="up"/>
+            </block>
+            <block id="pointed_dripstone" mod="minecraft" weight="0.5">
+               <side on="up">
+                  <block id="pointed_dripstone" mod="minecraft">
+                     <set key="thickness" value="tip"/>
+                     <set key="vertical_direction" value="up"/>
+                  </block>
+               </side>
+               <set key="thickness" value="frustum"/>
+               <set key="vertical_direction" value="up"/>
+            </block>
+         </side>
+      </block>
+      <block id="dripstone_block" mod="minecraft">
+         <side on="down">
+            <block id="pointed_dripstone" mod="minecraft">
+               <set key="thickness" value="tip"/>
+               <set key="vertical_direction" value="down"/>
+            </block>
+            <block id="pointed_dripstone" mod="minecraft" weight="0.5">
+               <side on="down">
+                  <block id="pointed_dripstone" mod="minecraft">
+                     <set key="thickness" value="tip"/>
+                     <set key="vertical_direction" value="down"/>
+                  </block>
+               </side>
+               <set key="thickness" value="frustum"/>
+               <set key="vertical_direction" value="down"/>
+            </block>
+         </side>
+      </block>
+   </list>
 </preset>

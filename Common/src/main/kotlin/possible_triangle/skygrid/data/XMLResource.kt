@@ -7,7 +7,6 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener
 import net.minecraft.util.profiling.ProfilerFiller
@@ -15,8 +14,8 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlSerializationPolicy
-import possible_triangle.skygrid.Constants
-import possible_triangle.skygrid.Constants.LOGGER
+import possible_triangle.skygrid.SkygridMod
+import possible_triangle.skygrid.SkygridMod.LOGGER
 import possible_triangle.skygrid.data.xml.*
 import possible_triangle.skygrid.data.xml.impl.*
 import java.io.File
@@ -109,7 +108,7 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
     }
 
     override fun prepare(manager: ResourceManager, profiler: ProfilerFiller): Map<ResourceLocation, T> {
-        val resources = manager.listResources("${Constants.MOD_ID}/$path") { it.endsWith(".xml") }
+        val resources = manager.listResources("${SkygridMod.MOD_ID}/$path") { it.endsWith(".xml") }
         LOGGER.info("Found ${resources.size} $path")
         return resources.associateWith { load(manager, it) }
             .filterValues { it != null }
@@ -118,7 +117,7 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
     }
 
     override fun apply(loaded: Map<ResourceLocation, T>, manager: ResourceManager, profiler: ProfilerFiller) {
-        LOGGER.info("Loaded ${loaded.size} $path")
+        LOGGER.info("Loaded ${loaded.size} skygrid $path")
         values = loaded
     }
 
