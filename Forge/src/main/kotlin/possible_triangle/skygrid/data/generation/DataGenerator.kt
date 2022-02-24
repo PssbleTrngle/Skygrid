@@ -16,6 +16,7 @@ object DataGenerator {
     fun register(event: GatherDataEvent) {
         if (event.includeServer()) {
             event.generator.addProvider(SkygridTags(event.generator, event.existingFileHelper))
+            event.generator.addProvider(Presets(event.generator))
             event.generator.addProvider(Overworld(event.generator))
             event.generator.addProvider(Nether(event.generator))
             event.generator.addProvider(End(event.generator))

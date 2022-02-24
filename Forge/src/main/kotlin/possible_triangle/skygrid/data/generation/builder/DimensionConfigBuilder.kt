@@ -9,6 +9,7 @@ import possible_triangle.skygrid.data.xml.impl.Block
 class DimensionConfigBuilder {
 
     var distance: Distance = Distance.DEFAULT
+    var endPortals: Boolean = false
     private val blocks = BasicBlocksBuilder()
     private val loot = LootBuilder()
     private val mobs = MobsBuilder()
@@ -37,6 +38,7 @@ class DimensionConfigBuilder {
             mobs = mobs.build(),
             distance = distance,
             unsafeGap = gap,
+            endPortals = endPortals,
         )
     }
 

@@ -12,6 +12,8 @@ import net.minecraft.tags.TagContainer
 import net.minecraft.util.random.SimpleWeightedRandomList
 import net.minecraft.world.level.SpawnData
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.entity.BlockEntityType
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.XMLResource
@@ -30,11 +32,12 @@ data class DimensionConfig(
     @XmlSerialName("loot", "", "") val loot: ListWrapper<LootTable> = ListWrapper(),
     @XmlSerialName("mobs", "", "") val mobs: ListWrapper<SpawnerEntry> = ListWrapper(),
     val replace: Boolean = false,
+    val endPortals: Boolean = false,
     val minY: Int = Int.MIN_VALUE,
     val maxY: Int = 100,
     val distance: Distance = Distance(4, 4, 4),
     @XmlSerialName("gap", "", "") private val unsafeGap: SingleBlock? = null,
-): Generator<BlockAccess> {
+) : Generator<BlockAccess> {
 
     @Transient
     lateinit var gap: Optional<SingleBlock>
@@ -48,36 +51,48 @@ data class DimensionConfig(
         return blocks.validate { it.validate(blockRegistry, tags) }
     }
 
-    override fun generate(random: Random, access: BlockAccess) {
+    override fun generate(random: Random, access: BlockAccess): Boolean {
         val generateLoot = loot.isValid()
         val fillSpawners = mobs.isValid()
 
-        this.blocks.random(random).generate(random) { state, pos ->
-            access.set(state, pos)
-            val nbt = if (generateLoot && state.`is`(SkygridMod.LOOT_CONTAINERS)) {
-                CompoundTag().apply {
-                    val lootTable = loot.random(random)
-                    putString("LootTable", lootTable.toString())
-                }
-            } else if (fillSpawners && state.`is`(Blocks.SPAWNER)) {
-                CompoundTag().apply {
-                    val mob = mobs.random(random)
-                    val data = mob.createSpawnData()
-                    val potentials = SimpleWeightedRandomList.builder<SpawnData>().add(data, 1).build()
+        return this.blocks.random(random).generate(random) { state, pos ->
+            if (access.set(state, pos)) {
+                val block = state.block
 
-                    SpawnData.CODEC.encodeStart(NbtOps.INSTANCE, data).result().ifPresent {
-                        put("SpawnData", it)
-                    }
+                if (block is EntityBlock) {
+                    val nbt = if (generateLoot && state.`is`(SkygridMod.LOOT_CONTAINERS)) {
+                        CompoundTag().apply {
+                            putString("id", "mob_spawner")
+                            val lootTable = loot.random(random)
+                            putString("LootTable", lootTable.id)
+                            putLong("LootTableSeed", random.nextLong())
+                        }
+                    } else if (fillSpawners && state.`is`(Blocks.SPAWNER)) {
+                        CompoundTag().apply {
+                            val mob = mobs.random(random)
+                            val data = mob.createSpawnData()
+                            val potentials = SimpleWeightedRandomList.builder<SpawnData>().add(data, 1).build()
 
-                    SpawnData.LIST_CODEC.encodeStart(NbtOps.INSTANCE, potentials).result().ifPresent {
-                        put("SpawnPotentials", it)
+                            SpawnData.CODEC.encodeStart(NbtOps.INSTANCE, data).result().ifPresent {
+                                put("SpawnData", it)
+                            }
+
+                            SpawnData.LIST_CODEC.encodeStart(NbtOps.INSTANCE, potentials).result().ifPresent {
+                                put("SpawnPotentials", it)
+                            }
+                        }
+                    } else null
+
+                    if (nbt != null) block.newBlockEntity(pos, state)?.also {
+                        nbt.putString("id", BlockEntityType.getKey(it.type).toString())
+                        access.setNBT(pos, nbt)
                     }
                 }
+
+                true
             } else {
-                null
+                false
             }
-
-            if (nbt != null) access.setNBT(pos, nbt)
         }
     }
 

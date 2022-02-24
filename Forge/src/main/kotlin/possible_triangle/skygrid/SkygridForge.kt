@@ -1,6 +1,7 @@
 package possible_triangle.skygrid
 
 import kotlinx.serialization.ExperimentalSerializationApi
+import net.minecraft.server.commands.ResetChunksCommand
 import net.minecraftforge.event.AddReloadListenerEvent
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
@@ -14,6 +15,7 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import possible_triangle.skygrid.SkygridMod.MOD_ID
 import possible_triangle.skygrid.command.SkygridCommand
 import possible_triangle.skygrid.data.XMLResource
+import possible_triangle.skygrid.platform.Services
 import possible_triangle.skygrid.world.SkygridGenerator
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
@@ -45,6 +47,9 @@ object SkygridForge {
 
         FORGE_BUS.addListener { event: RegisterCommandsEvent ->
             SkygridCommand.register(event.dispatcher)
+            if(Services.PLATFORM.isDevelopmentEnvironment) {
+                ResetChunksCommand.register(event.dispatcher)
+            }
         }
 
     }

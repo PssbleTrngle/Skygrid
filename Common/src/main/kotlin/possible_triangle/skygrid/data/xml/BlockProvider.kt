@@ -38,15 +38,15 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess> {
         }
     }
 
-    protected open fun generateBase(random: Random, chunk: IBlockAccess) {
+    protected open fun generateBase(random: Random, chunk: IBlockAccess): Boolean {
         val state = getState(random)
-        if(state.isAir) LOGGER.info("Air detected: $name")
-        chunk.set(state)
+        return chunk.set(state)
     }
 
-    override fun generate(random: Random, access: IBlockAccess) {
-        generateBase(random, access)
-        validSides.forEach { it.generate(random, access) }
+    override fun generate(random: Random, access: IBlockAccess): Boolean {
+        return generateBase(random, access).apply {
+            if (this) validSides.forEach { it.generate(random, access) }
+        }
     }
 
 }

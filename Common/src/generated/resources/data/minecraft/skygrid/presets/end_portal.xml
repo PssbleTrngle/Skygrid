@@ -1,0 +1,44 @@
+<preset>
+   <block id="air" mod="minecraft">
+      <offset x="-1" z="-1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="west"/>
+         </block>
+      </offset>
+      <offset x="-1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="south"/>
+         </block>
+      </offset>
+      <offset x="-1" z="1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="east"/>
+         </block>
+      </offset>
+      <offset z="-1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="west"/>
+         </block>
+      </offset>
+      <offset z="1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="east"/>
+         </block>
+      </offset>
+      <offset x="1" z="-1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="west"/>
+         </block>
+      </offset>
+      <offset x="1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="north"/>
+         </block>
+      </offset>
+      <offset x="1" z="1">
+         <block id="end_portal_frame" mod="minecraft">
+            <set key="facing" value="east"/>
+         </block>
+      </offset>
+   </block>
+</preset>

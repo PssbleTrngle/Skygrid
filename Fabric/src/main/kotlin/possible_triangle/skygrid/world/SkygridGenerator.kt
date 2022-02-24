@@ -36,7 +36,7 @@ object SkygridGenerator : WorldPreset("${MOD_ID}.${MOD_ID}") {
             Registry.BIOME_REGISTRY)
         val config = ResourceLocation(MOD_ID, "default")
         return SkygridChunkGenerator(
-            FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)), config.toString(), seed,
+            FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)), config.toString(), seed, false
         )
     }
 

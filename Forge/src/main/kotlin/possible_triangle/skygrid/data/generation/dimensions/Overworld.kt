@@ -36,6 +36,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
         }
 
         dimension(LevelStem.OVERWORLD) {
+            endPortals = true
 
             loot {
                 table("spawn_bonus_chest", weight = 20.0)

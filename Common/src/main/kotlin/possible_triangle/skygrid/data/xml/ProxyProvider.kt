@@ -12,8 +12,8 @@ abstract class ProxyProvider : BlockProvider() {
         return get(random).base(random)
     }
 
-    override fun generateBase(random: Random, chunk: IBlockAccess) {
-        get(random).generate(random, chunk)
+    override fun generateBase(random: Random, chunk: IBlockAccess): Boolean {
+        return get(random).generate(random, chunk)
     }
 
 }

@@ -26,8 +26,8 @@ data class Preset(val provider: BlockProvider) : Generator<BlockAccess> {
 
     }
 
-    override fun generate(random: Random, access: BlockAccess) {
-        provider.generate(random, access)
+    override fun generate(random: Random, access: BlockAccess): Boolean {
+        return provider.generate(random, access)
     }
 
 }

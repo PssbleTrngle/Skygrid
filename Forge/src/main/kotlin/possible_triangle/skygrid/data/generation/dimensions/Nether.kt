@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SkullBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
+import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import possible_triangle.skygrid.data.generation.DimensionConfigGenerator

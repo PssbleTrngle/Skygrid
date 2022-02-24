@@ -1,4 +1,4 @@
-<dimension>
+<dimension endPortals="true">
    <blocks>
       <list weight="2.0" name="fluids">
          <block id="lava" mod="minecraft"/>
