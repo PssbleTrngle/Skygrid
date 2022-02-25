@@ -18,17 +18,19 @@
       <list>
          <block id="sand" mod="minecraft"/>
          <block id="gravel" mod="minecraft"/>
+         <side on="up" shared="true">
+            <block id="tall_seagrass" mod="minecraft">
+               <set key="half" value="lower"/>
+            </block>
+         </side>
+         <side on="up" offset="2" shared="true">
+            <block id="tall_seagrass" mod="minecraft">
+               <set key="half" value="upper"/>
+            </block>
+         </side>
          <side on="up">
             <block id="kelp" mod="minecraft"/>
             <block id="seagrass" mod="minecraft"/>
-            <block id="tall_seagrass" mod="minecraft">
-               <side on="up">
-                  <block id="tall_seagrass" mod="minecraft">
-                     <set key="half" value="upper"/>
-                  </block>
-               </side>
-               <set key="half" value="lower"/>
-            </block>
             <block id="sea_pickle" mod="minecraft">
                <cycle key="pickles"/>
             </block>

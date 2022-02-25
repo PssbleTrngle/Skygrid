@@ -97,8 +97,7 @@ object SkygridCommand {
             }
 
             override fun setNBT(pos: BlockPos, nbt: CompoundTag) {
-                val tile = level.getBlockEntity(pos)
-                if (tile == null) SkygridMod.LOGGER.warn("Tile not found at $pos")
+                val tile = level.getBlockEntity(pos.offset(origin))
                 tile?.load(nbt)
             }
         }
@@ -131,7 +130,7 @@ object SkygridCommand {
         val generated = BlockPos.betweenClosed(start, end)
             .map { BlockPos(it) }
             .filter { distance.isBlock(it.subtract(origin)) }
-            .onEach { generator.generate(random, access(it, level)) }
+            .onEach { generator.generate(random, access(it, level), ) }
 
         val changed = replaced + generated
         return changed.onEach { level.blockUpdated(it, level.getBlockState(it).block) }.count()
@@ -140,7 +139,7 @@ object SkygridCommand {
     private fun generate(ctx: CommandContext<CommandSourceStack>, generator: Generator<BlockAccess>): Int {
         val pos = BlockPosArgument.getLoadedBlockPos(ctx, "start")
         val random = tryOr({ LongArgumentType.getLong(ctx, "seed").let(::Random) }, { Random })
-        generator.generate(random, access(pos, ctx.source.level))
+        generator.generate(random, access(pos, ctx.source.level), )
 
         ctx.source.level.blockUpdated(pos, ctx.source.level.getBlockState(pos).block)
 

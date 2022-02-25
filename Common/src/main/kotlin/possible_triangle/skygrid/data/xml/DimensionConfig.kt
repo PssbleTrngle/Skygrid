@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import possible_triangle.skygrid.SkygridMod
+import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.XMLResource
 import possible_triangle.skygrid.data.xml.impl.LootTable
 import possible_triangle.skygrid.data.xml.impl.SpawnerEntry
@@ -45,17 +46,21 @@ data class DimensionConfig(
     fun validate(registries: RegistryAccess, tags: TagContainer): Boolean {
         val blockRegistry = registries.registryOrThrow(Registry.BLOCK_REGISTRY)
         val entityRegistry = registries.registryOrThrow(Registry.ENTITY_TYPE_REGISTRY)
+        val references = ReferenceContext()
+
         loot.validate { true }
         mobs.validate { entityRegistry.containsKey(it.key) }
-        gap = Optional.ofNullable(unsafeGap).filter { it.validate(blockRegistry, tags) }
-        return blocks.validate { it.validate(blockRegistry, tags) }
+        gap = Optional.ofNullable(unsafeGap).filter { it.validate(blockRegistry, tags, references) }
+        return blocks.validate { it.validate(blockRegistry, tags, references) }
     }
 
     override fun generate(random: Random, access: BlockAccess): Boolean {
         val generateLoot = loot.isValid()
         val fillSpawners = mobs.isValid()
 
-        return this.blocks.random(random).generate(random) { state, pos ->
+        return this.blocks.random(random).generate(
+            random,
+        ) { state, pos ->
             if (access.set(state, pos)) {
                 val block = state.block
 

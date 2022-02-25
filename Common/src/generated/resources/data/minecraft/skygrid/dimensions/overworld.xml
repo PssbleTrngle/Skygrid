@@ -26,36 +26,33 @@
             <block id="dirt_path" mod="minecraft" weight="0.1"/>
             <block id="coarse_dirt" mod="minecraft" weight="0.1"/>
             <list weight="4.0" name="grass">
-               <block id="grass_block" mod="minecraft" weight="3.0">
+               <list name="grass and fern">
+                  <block id="fern" mod="minecraft"/>
+                  <block id="grass" mod="minecraft"/>
+                  <block id="grass_block" mod="minecraft"/>
+                  <block id="grass_block" mod="minecraft" weight="0.5">
+                     <side on="up" shared="true">
+                        <block id="large_fern" mod="minecraft">
+                           <set key="half" value="lower"/>
+                        </block>
+                        <block id="tall_grass" mod="minecraft">
+                           <set key="half" value="lower"/>
+                        </block>
+                     </side>
+                     <side on="up" offset="2" shared="true">
+                        <block id="large_fern" mod="minecraft">
+                           <set key="half" value="upper"/>
+                        </block>
+                        <block id="tall_grass" mod="minecraft">
+                           <set key="half" value="upper"/>
+                        </block>
+                     </side>
+                  </block>
+               </list>
+               <reference id="flowers"/>
+               <block id="grass_block" mod="minecraft" weight="0.5">
                   <side on="up" probability="0.6">
                      <tag id="saplings" mod="minecraft"/>
-                     <list>
-                        <block id="fern" mod="minecraft"/>
-                        <block id="grass" mod="minecraft"/>
-                        <block id="large_fern" mod="minecraft" weight="0.5">
-                           <side on="up">
-                              <block id="large_fern" mod="minecraft">
-                                 <set key="half" value="upper"/>
-                              </block>
-                           </side>
-                           <set key="half" value="lower"/>
-                        </block>
-                        <block id="tall_grass" mod="minecraft" weight="0.5">
-                           <side on="up">
-                              <block id="tall_grass" mod="minecraft">
-                                 <set key="half" value="upper"/>
-                              </block>
-                           </side>
-                           <set key="half" value="lower"/>
-                        </block>
-                     </list>
-                     <tag id="small_flowers" mod="minecraft" weight="0.5">
-                        <except>
-                           <mod id="botania"/>
-                           <name pattern="wither_rose"/>
-                        </except>
-                     </tag>
-                     <tag id="mystical_flowers" mod="botania" weight="0.1"/>
                   </side>
                </block>
             </list>
@@ -122,14 +119,14 @@
             <side on="north">
                <block id="water" mod="minecraft"/>
             </side>
-            <side on="up">
+            <side on="up" shared="true">
                <block id="sugar_cane" mod="minecraft">
-                  <side on="up">
-                     <block id="sugar_cane" mod="minecraft">
-                        <set key="half" value="upper"/>
-                     </block>
-                  </side>
                   <set key="half" value="lower"/>
+               </block>
+            </side>
+            <side on="up" offset="2" shared="true">
+               <block id="sugar_cane" mod="minecraft">
+                  <set key="half" value="upper"/>
                </block>
             </side>
          </block>
@@ -329,23 +326,23 @@
       </list>
    </blocks>
    <loot>
-      <table id="spawn_bonus_chest" weight="20.0"/>
-      <table id="desert_pyramid" weight="2.0"/>
-      <table id="woodland_mansion" weight="2.0"/>
-      <table id="simple_dungeon"/>
-      <table id="abandoned_mineshaft"/>
-      <table id="buried_treasure"/>
-      <table id="igloo_chest"/>
-      <table id="jungle_temple"/>
-      <table id="pillager_outpost"/>
-      <table id="shipwreck_map"/>
-      <table id="shipwreck_supply"/>
-      <table id="shipwreck_treasure"/>
-      <table id="stronghold_corridor"/>
-      <table id="stronghold_crossing"/>
-      <table id="stronghold_library"/>
-      <table id="underwater_ruin_big"/>
-      <table id="underwater_ruin_small"/>
+      <table id="chests/spawn_bonus_chest" weight="20.0"/>
+      <table id="chests/desert_pyramid" weight="2.0"/>
+      <table id="chests/woodland_mansion" weight="2.0"/>
+      <table id="chests/simple_dungeon"/>
+      <table id="chests/abandoned_mineshaft"/>
+      <table id="chests/buried_treasure"/>
+      <table id="chests/igloo_chest"/>
+      <table id="chests/jungle_temple"/>
+      <table id="chests/pillager_outpost"/>
+      <table id="chests/shipwreck_map"/>
+      <table id="chests/shipwreck_supply"/>
+      <table id="chests/shipwreck_treasure"/>
+      <table id="chests/stronghold_corridor"/>
+      <table id="chests/stronghold_crossing"/>
+      <table id="chests/stronghold_library"/>
+      <table id="chests/underwater_ruin_big"/>
+      <table id="chests/underwater_ruin_small"/>
    </loot>
    <mobs>
       <mob id="minecraft:zombie" weight="2.0"/>

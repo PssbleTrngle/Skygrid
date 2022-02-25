@@ -39,23 +39,23 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
             endPortals = true
 
             loot {
-                table("spawn_bonus_chest", weight = 20.0)
-                table("desert_pyramid", weight = 2.0)
-                table("woodland_mansion", weight = 2.0)
-                table("simple_dungeon")
-                table("abandoned_mineshaft")
-                table("buried_treasure")
-                table("igloo_chest")
-                table("jungle_temple")
-                table("pillager_outpost")
-                table("shipwreck_map")
-                table("shipwreck_supply")
-                table("shipwreck_treasure")
-                table("stronghold_corridor")
-                table("stronghold_crossing")
-                table("stronghold_library")
-                table("underwater_ruin_big")
-                table("underwater_ruin_small")
+                table("chests/spawn_bonus_chest", weight = 20.0)
+                table("chests/desert_pyramid", weight = 2.0)
+                table("chests/woodland_mansion", weight = 2.0)
+                table("chests/simple_dungeon")
+                table("chests/abandoned_mineshaft")
+                table("chests/buried_treasure")
+                table("chests/igloo_chest")
+                table("chests/jungle_temple")
+                table("chests/pillager_outpost")
+                table("chests/shipwreck_map")
+                table("chests/shipwreck_supply")
+                table("chests/shipwreck_treasure")
+                table("chests/stronghold_corridor")
+                table("chests/stronghold_crossing")
+                table("chests/stronghold_library")
+                table("chests/underwater_ruin_big")
+                table("chests/underwater_ruin_small")
             }
 
             mobs {
@@ -93,9 +93,11 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                             side(DOWN, probability = 0.1) {
                                 block(Blocks.SPORE_BLOSSOM)
                             }
+                            double(probability = 0.2) {
+                                block(Blocks.BIG_DRIPLEAF)
+                            }
                             side(UP, probability = 0.4) {
                                 block(Blocks.BIG_DRIPLEAF)
-                                double(Blocks.SMALL_DRIPLEAF)
                             }
                         }
                     }
@@ -134,24 +136,39 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         block(Blocks.COARSE_DIRT, weight = 0.1)
 
                         list("grass", weight = 4.0) {
-                            block(Blocks.GRASS_BLOCK, weight = 3.0) {
-                                side(UP, probability = 0.6) {
-                                    tag(BlockTags.SAPLINGS)
-
-                                    list {
-                                        block(Blocks.FERN)
-                                        block(Blocks.GRASS)
-                                        double(Blocks.LARGE_FERN, weight = 0.5)
-                                        double(Blocks.TALL_GRASS, weight = 0.5)
+                            list("grass and fern") {
+                                block(Blocks.GRASS_BLOCK) {
+                                    block(Blocks.FERN)
+                                    block(Blocks.GRASS)
+                                }
+                                block(Blocks.GRASS_BLOCK, weight = 0.5) {
+                                    double {
+                                        block(Blocks.LARGE_FERN)
+                                        block(Blocks.TALL_GRASS)
                                     }
+                                }
+                            }
 
-                                    tag(BlockTags.SMALL_FLOWERS, weight = 0.5) {
-                                        except {
-                                            mod("botania")
-                                            pattern("wither_rose")
+                            preset("flowers") {
+                                block(Blocks.GRASS_BLOCK) {
+                                    side(UP) {
+                                        tag("mystical_flowers", "botania", weight = 0.1)
+                                        tag(BlockTags.SMALL_FLOWERS) {
+                                            except {
+                                                mod("botania")
+                                                pattern("wither_rose")
+                                            }
                                         }
                                     }
-                                    tag("mystical_flowers", "botania", weight = 0.1)
+                                }
+                                block(Blocks.GRASS_BLOCK, weight = 0.5) {
+                                    double { tag(BlockTags.TALL_FLOWERS) }
+                                }
+                            }
+
+                            block(Blocks.GRASS_BLOCK, weight = 0.5) {
+                                side(UP, probability = 0.6) {
+                                    tag(BlockTags.SAPLINGS)
                                 }
                             }
                         }
@@ -219,7 +236,9 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
 
                     block(Blocks.SAND, weight = 0.5) {
                         side(NORTH) { block(Blocks.WATER) }
-                        side(UP) { double(Blocks.SUGAR_CANE) }
+                        double {
+                            block(Blocks.SUGAR_CANE)
+                        }
                     }
 
                     block(Blocks.GRASS_BLOCK, weight = 0.8) {
@@ -352,91 +371,89 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                 block(Blocks.SPAWNER)
 
                 preset("ocean") {
+                    tag(BlockTags.CORAL_BLOCKS) {
+                        side(UP) {
+                            tag(BlockTags.CORAL_PLANTS) {
+                                except { tag(BlockTags.WALL_CORALS) }
+                            }
+                        }
+                    }
+
+                    block(Blocks.SAND, weight = 0.05) {
+                        side(UP) {
+                            block(Blocks.TURTLE_EGG) {
+                                cycle(TurtleEggBlock.EGGS)
+                            }
+                        }
+                    }
 
                     list {
-                        tag(BlockTags.CORAL_BLOCKS) {
-                            side(UP) {
-                                tag(BlockTags.CORAL_PLANTS) {
-                                    except { tag(BlockTags.WALL_CORALS) }
-                                }
+                        block(Blocks.SAND)
+                        block(Blocks.GRAVEL)
+
+                        double {
+                            block(Blocks.TALL_SEAGRASS)
+                        }
+                        side(UP) {
+                            block(Blocks.KELP)
+                            block(Blocks.SEAGRASS)
+                            block(Blocks.SEA_PICKLE) {
+                                cycle(SeaPickleBlock.PICKLES)
                             }
                         }
+                    }
 
-                        block(Blocks.SAND, weight = 0.05) {
-                            side(UP) {
-                                block(Blocks.TURTLE_EGG) {
-                                    cycle(TurtleEggBlock.EGGS)
-                                }
-                            }
-                        }
-
+                    list("prismarine") {
                         list {
-                            block(Blocks.SAND)
-                            block(Blocks.GRAVEL)
-                            side(UP) {
-                                block(Blocks.KELP)
-                                block(Blocks.SEAGRASS)
-                                double(Blocks.TALL_SEAGRASS)
-                                block(Blocks.SEA_PICKLE) {
-                                    cycle(SeaPickleBlock.PICKLES)
-                                }
-                            }
+                            block(Blocks.PRISMARINE)
+                            block(Blocks.PRISMARINE_BRICKS)
+                            block(Blocks.DARK_PRISMARINE)
+                            block(Blocks.SEA_LANTERN)
                         }
-
-                        list("prismarine") {
-                            list {
-                                block(Blocks.PRISMARINE)
-                                block(Blocks.PRISMARINE_BRICKS)
-                                block(Blocks.DARK_PRISMARINE)
-                                block(Blocks.SEA_LANTERN)
-                            }
-                            list("elder prismarine", weight = 0.1) {
-                                block("elder_prismarine", "quark")
-                                block("elder_prismarine_bricks", "quark")
-                                block("elder_sea_lantern", "quark")
-                                block("dark_elder_prismarine", "quark")
-                            }
+                        list("elder prismarine", weight = 0.1) {
+                            block("elder_prismarine", "quark")
+                            block("elder_prismarine_bricks", "quark")
+                            block("elder_sea_lantern", "quark")
+                            block("dark_elder_prismarine", "quark")
                         }
                     }
                 }
 
                 preset("ores", weight = 30.0) {
-                    list {
-                        list("ores", weight = 20.0) {
-                            tag(BlockTags.COAL_ORES, weight = 10.0)
-                            tag(BlockTags.IRON_ORES, weight = 8.0)
-                            tag(BlockTags.COPPER_ORES, weight = 8.0)
-                            tag(BlockTags.GOLD_ORES, weight = 6.0)
-                            tag(BlockTags.DIAMOND_ORES)
-                            tag(BlockTags.EMERALD_ORES, weight = 0.5)
-                            tag(BlockTags.LAPIS_ORES, weight = 4.5)
-                            tag(BlockTags.REDSTONE_ORES, weight = 6.0)
-                        }
+                    list("ores", weight = 20.0) {
+                        tag(BlockTags.COAL_ORES, weight = 10.0)
+                        tag(BlockTags.IRON_ORES, weight = 8.0)
+                        tag(BlockTags.COPPER_ORES, weight = 8.0)
+                        tag(BlockTags.GOLD_ORES, weight = 6.0)
+                        tag(BlockTags.DIAMOND_ORES)
+                        tag(BlockTags.EMERALD_ORES, weight = 0.5)
+                        tag(BlockTags.LAPIS_ORES, weight = 4.5)
+                        tag(BlockTags.REDSTONE_ORES, weight = 6.0)
+                    }
 
-                        list("blocks") {
-                            block(Blocks.COAL_BLOCK)
-                            block(Blocks.RAW_IRON_BLOCK, weight = 0.5)
-                            block(Blocks.RAW_COPPER_BLOCK, weight = 0.5)
-                            block(Blocks.RAW_GOLD_BLOCK, weight = 0.3)
-                            block(Blocks.DIAMOND_BLOCK, weight = 0.01)
-                            block(Blocks.EMERALD_BLOCK, weight = 0.005)
-                            block(Blocks.LAPIS_BLOCK, weight = 0.45)
-                            block(Blocks.REDSTONE_BLOCK, weight = 0.6)
-                        }
+                    list("blocks") {
+                        block(Blocks.COAL_BLOCK)
+                        block(Blocks.RAW_IRON_BLOCK, weight = 0.5)
+                        block(Blocks.RAW_COPPER_BLOCK, weight = 0.5)
+                        block(Blocks.RAW_GOLD_BLOCK, weight = 0.3)
+                        block(Blocks.DIAMOND_BLOCK, weight = 0.01)
+                        block(Blocks.EMERALD_BLOCK, weight = 0.005)
+                        block(Blocks.LAPIS_BLOCK, weight = 0.45)
+                        block(Blocks.REDSTONE_BLOCK, weight = 0.6)
+                    }
 
-                        list("crystals") {
-                            block(Blocks.AMETHYST_BLOCK)
-                            block(Blocks.BUDDING_AMETHYST) {
-                                Direction.values().forEach {
-                                    side(it, probability = 0.5) {
-                                        tag(SkygridMod.AMETHYST_CLUSTERS) {
-                                            property(BlockStateProperties.FACING, it)
-                                        }
+                    list("crystals") {
+                        block(Blocks.AMETHYST_BLOCK)
+                        block(Blocks.BUDDING_AMETHYST) {
+                            Direction.values().forEach {
+                                side(it, probability = 0.5) {
+                                    tag(SkygridMod.AMETHYST_CLUSTERS) {
+                                        property(BlockStateProperties.FACING, it)
                                     }
                                 }
                             }
-                            tag("corundum", "quark")
                         }
+                        tag("corundum", "quark")
                     }
                 }
 

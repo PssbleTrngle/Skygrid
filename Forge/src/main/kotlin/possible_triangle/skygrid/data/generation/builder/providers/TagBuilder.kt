@@ -9,6 +9,7 @@ import possible_triangle.skygrid.data.xml.impl.Tag
 class TagBuilder(
     private val id: String,
     private val mod: String? = null,
+    private val weight: Double = 1.0,
     private val random: Boolean,
     private val expand: Boolean,
 ) :
@@ -23,7 +24,7 @@ class TagBuilder(
         }
     }
 
-    override fun buildWith(weight: Double, extras: List<Extra>, transformers: List<Transformer>): Tag {
+    override fun buildWith(extras: List<Extra>, transformers: List<Transformer>): Tag {
         return Tag(id, mod, weight, random, expand, extras, transformers, filters.toList())
     }
 

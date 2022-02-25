@@ -6,6 +6,7 @@ import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
+import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.ProxyProvider
@@ -25,8 +26,8 @@ data class Fallback(
     @Transient
     private lateinit var provider: BlockProvider
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        provider = children.firstOrNull { it.validate(blocks, tags) } ?: return false
+    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
+        provider = children.firstOrNull { it.validate(blocks, tags, references) } ?: return false
         return true
     }
 

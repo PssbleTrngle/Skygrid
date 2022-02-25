@@ -6,12 +6,15 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
+import possible_triangle.skygrid.data.ReferenceContext
+import possible_triangle.skygrid.data.Validating
 import possible_triangle.skygrid.util.WeightedList
+import possible_triangle.skygrid.world.Generator
 import possible_triangle.skygrid.world.IBlockAccess
 import kotlin.random.Random
 
 @Serializable
-abstract class Extra {
+abstract class Extra : Generator<IBlockAccess>, Validating {
 
     abstract val providers: List<BlockProvider>
     abstract val probability: Double
@@ -24,16 +27,19 @@ abstract class Extra {
 
     abstract fun offset(pos: BlockPos): BlockPos
 
-    fun validate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        validProviders = WeightedList(providers.filter { it.validate(blocks, tags) })
+    override fun validate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
+        validProviders = WeightedList(providers.filter { it.validate(blocks, tags, references) })
         return internalValidate(blocks, tags) && validProviders.isNotEmpty()
     }
 
-    fun generate(random: Random, chunk: IBlockAccess) {
-        if (random.nextDouble() > probability) return
+    override fun generate(random: Random, access: IBlockAccess): Boolean {
+        val providerRandom = Random(random.nextLong())
+
+        if (random.nextDouble() > probability) return false
         val at = offset(BlockPos(0, 0, 0))
-        validProviders.random(random).generate(random) { state, pos ->
-            chunk.set(state, pos.offset(at))
+
+        return validProviders.random(random).generate(providerRandom) { state, pos ->
+            access.set(state, pos.offset(at))
         }
     }
 

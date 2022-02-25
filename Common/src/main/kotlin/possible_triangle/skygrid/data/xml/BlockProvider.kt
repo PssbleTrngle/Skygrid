@@ -7,25 +7,59 @@ import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import possible_triangle.skygrid.SkygridMod.LOGGER
+import possible_triangle.skygrid.data.ReferenceContext
+import possible_triangle.skygrid.data.Validating
 import possible_triangle.skygrid.world.Generator
 import possible_triangle.skygrid.world.IBlockAccess
 import kotlin.random.Random
 
 @Serializable
-abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess> {
+abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validating {
 
     protected abstract val extras: List<Extra>
     protected abstract val transformers: List<Transformer>
     abstract val name: String?
 
     @Transient
-    lateinit var validSides: List<Extra>
+    lateinit var validExtras: List<Extra>
 
-    protected abstract fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean
+    /**
+     * @return the provider without any extras
+     */
+    fun stripped(): BlockProvider {
+        val parent = this
+        val stripped = object : BlockProvider() {
+            override val extras: List<Extra> = emptyList()
+            override val transformers: List<Transformer> = parent.transformers
+            override val name: String? = parent.name
+            override val weight: Double
+                get() = parent.weight
 
-    fun validate(blocks: Registry<Block>, tags: TagContainer): Boolean {
-        validSides = extras.filter { it.validate(blocks, tags) }
-        return internalValidate(blocks, tags).also {
+            override fun internalValidate(
+                blocks: Registry<Block>,
+                tags: TagContainer,
+                references: ReferenceContext,
+            ): Boolean = parent.internalValidate(blocks, tags, references)
+
+            override fun base(random: Random): Block = parent.base(random)
+
+            override fun generateBase(random: Random, chunk: IBlockAccess): Boolean = parent.generateBase(random, chunk)
+        }
+
+        stripped.validExtras = emptyList()
+        return stripped
+    }
+
+    protected abstract fun internalValidate(
+        blocks: Registry<Block>,
+        tags: TagContainer,
+        references: ReferenceContext,
+    ): Boolean
+
+    final override fun validate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
+        val referencesWithThis = references.with(this)
+        validExtras = extras.filter { it.validate(blocks, tags, referencesWithThis) }
+        return internalValidate(blocks, tags, references).also {
             if (!it) LOGGER.debug("Invalid BlockProvider ${name ?: "(anonymous)"} of type ${javaClass.name}")
         }
     }
@@ -43,9 +77,12 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess> {
         return chunk.set(state)
     }
 
-    override fun generate(random: Random, access: IBlockAccess): Boolean {
+    final override fun generate(random: Random, access: IBlockAccess): Boolean {
+        val sharedSeed = random.nextLong()
         return generateBase(random, access).apply {
-            if (this) validSides.forEach { it.generate(random, access) }
+            if (this) validExtras.forEach {
+                it.generate(if (it.shared) Random(sharedSeed) else random, access)
+            }
         }
     }
 

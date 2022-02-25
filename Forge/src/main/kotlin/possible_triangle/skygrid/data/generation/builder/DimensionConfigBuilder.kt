@@ -28,7 +28,7 @@ class DimensionConfigBuilder {
     }
 
     fun gap(id: String, mod: String? = null) {
-        gap = BlockBuilder(id, mod).build(1.0)
+        gap = BlockBuilder(id, mod).build()
     }
 
     fun build(): DimensionConfig {

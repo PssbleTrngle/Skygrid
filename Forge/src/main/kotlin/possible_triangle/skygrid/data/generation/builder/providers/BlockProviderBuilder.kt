@@ -1,6 +1,8 @@
 package possible_triangle.skygrid.data.generation.builder.providers
 
 import net.minecraft.core.Direction
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.Property
 import possible_triangle.skygrid.data.generation.builder.BasicBlocksBuilder
 import possible_triangle.skygrid.data.xml.BlockProvider
@@ -43,6 +45,17 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         }
     }
 
+    fun double(probability: Double = 1.0, on: Direction = Direction.UP, builder: BasicBlocksBuilder.() -> Unit) {
+        listOf(DoubleBlockHalf.LOWER, DoubleBlockHalf.UPPER).forEachIndexed { i, half ->
+            side(on, offset = i + 1, probability, shared = true) {
+                builder(this)
+                each {
+                    property(BlockStateProperties.DOUBLE_BLOCK_HALF, half)
+                }
+            }
+        }
+    }
+
     fun <T : Comparable<T>> property(property: Property<T>, value: T) {
         property(property.name.lowercase(), property.getName(value))
     }
@@ -59,10 +72,10 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         transformers.add(CyclePropertyTransformer(key))
     }
 
-    protected abstract fun buildWith(weight: Double, extras: List<Extra>, transformers: List<Transformer>): T
+    protected abstract fun buildWith(extras: List<Extra>, transformers: List<Transformer>): T
 
-    fun build(weight: Double): T {
-        return buildWith(weight, extras.toList(), transformers.toList())
+    fun build(): T {
+        return buildWith(extras.toList(), transformers.toList())
     }
 
 }

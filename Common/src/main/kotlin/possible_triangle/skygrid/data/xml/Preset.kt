@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.minecraft.core.Registry
 import net.minecraft.server.MinecraftServer
+import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.XMLResource
 import possible_triangle.skygrid.world.BlockAccess
 import possible_triangle.skygrid.world.Generator
@@ -20,14 +21,15 @@ data class Preset(val provider: BlockProvider) : Generator<BlockAccess> {
         }
 
         override fun validate(value: Preset, server: MinecraftServer): Boolean {
-            return value.provider.validate(server.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY),
-                server.tags)
+            val references = ReferenceContext()
+            val blocks = server.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY)
+            return value.provider.validate(blocks, server.tags, references)
         }
 
     }
 
     override fun generate(random: Random, access: BlockAccess): Boolean {
-        return provider.generate(random, access)
+        return provider.generate(random, access, )
     }
 
 }

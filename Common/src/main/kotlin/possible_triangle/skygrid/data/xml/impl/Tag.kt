@@ -7,6 +7,7 @@ import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.FilterOperator
@@ -41,7 +42,7 @@ data class Tag(
     override val name: String
         get() = "#$key"
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
+    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
         this.blocks = tags.getOrEmpty(Registry.BLOCK_REGISTRY).getTagOrEmpty(key).values.filter {
             filters.all { filter -> filter.test(it, blocks, tags) }
         }

@@ -203,11 +203,11 @@ class SkygridChunkGenerator(
 
             if (config.distance.isBlock(mutable.offset(origin))) {
                 if (isFloor && endPortal != null && hasEndPortal && (x > 3 && z > 3) && !generatedPortal) {
-                    endPortal.generate(random, access)
+                    endPortal.generate(random, access, )
                     generatedPortal = true
                 } else if (isFloor || (createCeiling && (y - config.distance.y) > maxY)) {
                     access.set(BEDROCK)
-                } else config.generate(random, access)
+                } else config.generate(random, access, )
             } else gap.ifPresent {
                 access.set(it)
             }

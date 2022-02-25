@@ -7,6 +7,7 @@ import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.SkygridMod
+import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.ProxyProvider
@@ -27,21 +28,14 @@ data class BlockList(
     @Transient
     private lateinit var validChildren: WeightedList<BlockProvider>
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
+    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
         SkygridMod.LOGGER.debug("Validated list $name")
-        validChildren = WeightedList(children.filter { it.validate(blocks, tags) })
+        validChildren = WeightedList(children.filter { it.validate(blocks, tags, references) })
         return validChildren.isNotEmpty()
     }
 
     override fun get(random: Random): BlockProvider {
         return validChildren.random(random)
-    }
-
-    operator fun plus(other: BlockList): BlockList {
-        return other.copy(children = this.children + other.children,
-            extras = this.extras + other.extras,
-            transformers = this.transformers + other.transformers
-        )
     }
 
 }

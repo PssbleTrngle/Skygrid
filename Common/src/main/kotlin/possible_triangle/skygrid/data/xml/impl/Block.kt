@@ -6,6 +6,7 @@ import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
+import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.Transformer
@@ -14,7 +15,7 @@ import kotlin.random.Random
 
 @Serializable
 @SerialName("block")
-class Block(
+data class Block(
     private val id: String,
     private val mod: String? = null,
     override val weight: Double = 1.0,
@@ -35,7 +36,7 @@ class Block(
         return block
     }
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
+    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
         return blocks.getOptional(key).map {
             block = it
         }.isPresent
