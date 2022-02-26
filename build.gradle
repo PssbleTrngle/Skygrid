@@ -12,12 +12,6 @@ plugins {
     id "org.sonarqube" version "3.3"
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", System.getenv('REPOSITORY')?.replace('/', '_')
-    }
-}
-
 subprojects {
 
     apply plugin: 'kotlin'
@@ -58,6 +52,13 @@ subprojects {
         }
     }
 
+    tasks.withType(JavaCompile) {
+        source(project(":Common").sourceSets.main.allSource)
+    }
+
+    tasks.getByName("compileKotlin") {
+        source(project(":Common").sourceSets.main.allSource)
+    }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
@@ -69,5 +70,32 @@ subprojects {
     // other mod developers.
     tasks.withType(GenerateModuleMetadata) {
         enabled = false
+    }
+}
+
+
+var sonarKey = System.getenv('REPOSITORY')?.replace('/', '_')
+
+if (sonarKey != null) {
+    println("Configured Sonarqube for $sonarKey")
+
+    sonarqube {
+        properties {
+            property "sonar.projectKey", sonarKey
+        }
+    }
+
+    subprojects { project ->
+        sonarqube {
+            properties {
+                property "sonar.branch", project.name
+            }
+        }
+    }
+
+    project(":Common") {
+        sonarqube {
+            skipProject = true
+        }
     }
 }
