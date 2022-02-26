@@ -8,6 +8,12 @@ buildscript {
     }
 }
 
+sonarqube {
+    properties {
+        property "sonar.projectKey", System.getenv('REPOSITORY')?.replace('/', '_')
+    }
+}
+
 subprojects {
 
     apply plugin: 'kotlin'
