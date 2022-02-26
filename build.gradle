@@ -80,6 +80,7 @@ subprojects {
 sonarqube {
     properties {
         property 'sonar.projectVersion', version
+        property 'sonar.projectKey', mod_id
     }
 }
 
