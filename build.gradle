@@ -92,10 +92,4 @@ if (sonarKey != null) {
             }
         }
     }
-
-    project(":Common") {
-        sonarqube {
-            skipProject = true
-        }
-    }
 }
