@@ -128,10 +128,6 @@ dependencies {
 
 }
 
-tasks.getByName("compileTestJava") {
-    exclude('**/*')
-}
-
 processResources {
     from project(":Common").sourceSets.main.resources
 }
