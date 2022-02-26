@@ -79,7 +79,6 @@ subprojects {
 
 sonarqube {
     properties {
-        property 'sonar.sources', '.'
         property 'sonar.projectVersion', version
     }
 }
