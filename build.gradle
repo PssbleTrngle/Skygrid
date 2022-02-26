@@ -77,24 +77,17 @@ subprojects {
     }
 }
 
+sonarqube {
+    properties {
+        property 'sonar.sources', '.'
+        property 'sonar.projectVersion', version
+    }
+}
 
-var sonarKey = System.getenv('REPOSITORY')?.replace('/', '_')
-
-if (sonarKey != null) {
-    println("Configured Sonarqube for $sonarKey")
-
+subprojects { project ->
     sonarqube {
         properties {
-            property "sonar.projectKey", sonarKey
-            property "sonar.projectVersion", version
-        }
-    }
-
-    subprojects { project ->
-        sonarqube {
-            properties {
-                property "sonar.branch", project.name
-            }
+            property 'sonar.branch', project.name
         }
     }
 }
