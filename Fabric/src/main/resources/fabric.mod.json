@@ -26,6 +26,7 @@
     "skygrid.mixins.json",
     "skygrid.fabric.mixins.json"
   ],
+  "accessWidener" : "skygrid.accesswidener",
   "depends": {
     "fabricloader": ">=0.12",
     "fabric": "*",
