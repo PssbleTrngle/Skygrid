@@ -1,0 +1,18 @@
+<dimension>
+   <blocks>
+      <reference id="ores" weight="0.1"/>
+      <reference id="dripstone" weight="0.1"/>
+      <reference id="moss" weight="0.05"/>
+      <block id="obsidian" mod="minecraft" weight="0.1"/>
+      <list weight="0.05" name="fluids">
+         <block id="lava" mod="minecraft"/>
+         <block id="water" mod="minecraft"/>
+      </list>
+      <tag id="base_stone_overworld" mod="minecraft">
+         <side on="up" probability="0.1">
+            <block id="glow_shroom" mod="quark"/>
+         </side>
+      </tag>
+   </blocks>
+   <distance x="3" y="3" z="3"/>
+</dimension>

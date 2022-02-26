@@ -1,0 +1,20 @@
+<preset>
+   <block id="moss_block" mod="minecraft">
+      <side on="down" probability="0.1">
+         <block id="spore_blossom" mod="minecraft"/>
+      </side>
+      <side on="up" probability="0.2" shared="true">
+         <block id="big_dripleaf" mod="minecraft">
+            <set key="half" value="lower"/>
+         </block>
+      </side>
+      <side on="up" offset="2" probability="0.2" shared="true">
+         <block id="big_dripleaf" mod="minecraft">
+            <set key="half" value="upper"/>
+         </block>
+      </side>
+      <side on="up" probability="0.4">
+         <block id="big_dripleaf" mod="minecraft"/>
+      </side>
+   </block>
+</preset>

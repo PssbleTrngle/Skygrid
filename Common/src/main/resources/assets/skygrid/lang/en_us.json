@@ -1,0 +1,6 @@
+{
+  "generator.skygrid.skygrid": "Skygrid",
+  "commands.skygrid.unknown_config": "unknown skygrid config %s",
+  "commands.skygrid.unknown_preset": "unknown skygrid preset %s",
+  "block.skygrid.stiff_air": "Air"
+}

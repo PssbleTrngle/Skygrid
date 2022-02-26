@@ -1,4 +1,6 @@
+import { Named } from '.'
 import { Polymorph } from '../util/polymorphism'
+import { Extra } from './Extras'
 import { ModFilter, NameFilter, TagFilter } from './Filters'
 import WeightedEntry from './WeightedEntry'
 
@@ -10,7 +12,7 @@ export enum ProviderType {
    BLOCK = 'block',
 }
 
-export interface BlockProviders extends Record<ProviderType, BlockProvider> {
+export interface BlockProviders extends Record<ProviderType, BaseBlockProvider> {
    list: BlockList
    fallback: Fallback
    reference: Reference
@@ -18,29 +20,23 @@ export interface BlockProviders extends Record<ProviderType, BlockProvider> {
    block: Block
 }
 
-export interface BlockProvider extends WeightedEntry {
+interface BaseBlockProvider extends WeightedEntry {
+   name?: string
    weight: number
    uuid: string
+   extras?: Extra[]
 }
 
-export type TypedProvider<Type extends ProviderType = ProviderType> = Polymorph<
-   BlockProviders,
-   Type
-> & {
-   uuid: string
+export interface Block extends BaseBlockProvider, Named {
 }
 
-export interface Block extends BlockProvider {
-   id: string
-   mod?: string
-   name?: string
+export interface GeneratedBlock extends Block {
+   extra: boolean
+   occurenced: number
+   type: ProviderType.BLOCK
 }
 
-export interface GeneratedBlock extends Block {}
-
-export interface Tag extends BlockProvider {
-   id: string
-   mod?: string
+export interface Tag extends BaseBlockProvider, Named {
    matches: Block[]
    except?: {
       mod?: ModFilter[] | ModFilter
@@ -49,14 +45,15 @@ export interface Tag extends BlockProvider {
    }
 }
 
-export interface Reference extends BlockProvider {
+export interface Reference extends BaseBlockProvider {
    id: string
-   provider: TypedProvider
+   provider: BlockProvider
 }
 
-export interface BlockList extends BlockProvider {
-   name?: string
-   children: TypedProvider[]
+export interface BlockList extends BaseBlockProvider {
+   children: BlockProvider[]
 }
 
 export interface Fallback extends BlockList {}
+
+export type BlockProvider<T extends ProviderType = ProviderType> = Polymorph<BlockProviders, T>

@@ -2,15 +2,15 @@ import { sumBy } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, VFC } from 'react'
 import styled from 'styled-components'
-import { ProviderType, TypedProvider } from '../../types/BlockProviders'
+import { BlockProvider, ProviderType } from '../../types/BlockProviders'
 import BlockGrid from './BlockGrid'
 import ProviderPanel from './ProviderPanel'
 
-function isList(p: TypedProvider): p is TypedProvider<ProviderType.LIST> {
+function isList(p: BlockProvider): p is BlockProvider<ProviderType.LIST> {
    return 'children' in p && p.children.length > 0
 }
 
-function findRecursive(path: string, blocks: TypedProvider[]): TypedProvider[] | null {
+function findRecursive(path: string, blocks: BlockProvider[]): BlockProvider[] | null {
    const [search, ...rest] = path.split('/')
    if (!search) return null
    const match = blocks.find(b => b.uuid === search)
@@ -21,7 +21,7 @@ function findRecursive(path: string, blocks: TypedProvider[]): TypedProvider[] |
    return null
 }
 
-const HierarchicalBlocks: VFC<{ blocks: TypedProvider[] }> = ({ blocks }) => {
+const HierarchicalBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
    const router = useRouter()
    const path = router.query.path?.toString()
    const shown = useMemo(() => {
@@ -35,7 +35,7 @@ const HierarchicalBlocks: VFC<{ blocks: TypedProvider[] }> = ({ blocks }) => {
    }, [router, shown])
 
    const navigate = useCallback(
-      (provider: TypedProvider) => () => {
+      (provider: BlockProvider) => () => {
          if (isList(provider)) {
             const to = path ? `${path}/${provider.uuid}` : provider.uuid
             router.push({ query: { path: to } })

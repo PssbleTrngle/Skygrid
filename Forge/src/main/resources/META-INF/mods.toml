@@ -1,0 +1,26 @@
+modLoader = "kotlinforforge"
+loaderVersion = "[2.2,)"
+license = 'https://github.com/PssbleTrngle/Skygrid/blob/1.18.x/LICENSE.txt'
+issueTrackerURL = "https://github.com/PssbleTrngle/skygrid/issues"
+showAsResourcePack = false
+
+[[mods]]
+modId = "skygrid"
+version = "${file.jarVersion}"
+displayName = "Skygrid"
+authors = "possible_triangle"
+description = '''Skygrid'''
+credits = "Sethbling for the original idea"
+
+[[dependencies.skygrid]]
+modId = "forge"
+mandatory = true
+versionRange = "[38,)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.skygrid]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18.1]"
+ordering = "NONE"
+side = "BOTH"

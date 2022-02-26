@@ -1,17 +1,31 @@
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from 'next'
+import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Page from '../../components/basic/Page'
 import ConfigVisualizer from '../../components/config/ConfigVisualizer'
-import { getConfigs, getStaticConfig } from '../../util/data/configs'
+import DimensionConfig from '../../types/DimensionConfig'
+import { getStaticConfig, getStaticConfigs } from '../../util/data/configs'
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>
-
-export const getStaticPaths: GetStaticPaths = async () => {
-   const configs = getConfigs()
-   return { paths: configs.map(params => ({ params })), fallback: false }
+interface Props {
+   parsed: DimensionConfig
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-   const parsed = await getStaticConfig(params)
+export const getStaticPaths: GetStaticPaths = async () => {
+   const configs = getStaticConfigs()
+   return {
+      paths: configs.map(({ mod, id }) => ({
+         params: {
+            namespace: mod,
+            config: id,
+         },
+      })),
+      fallback: false,
+   }
+}
+
+export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
+   const { namespace, config } = params ?? {}
+   if (typeof namespace !== 'string') return { notFound: true }
+   if (typeof config !== 'string') return { notFound: true }
+   const parsed = await getStaticConfig({ id: config, mod: namespace })
    return { props: { parsed } }
 }
 
