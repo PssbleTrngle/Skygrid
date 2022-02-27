@@ -8,7 +8,7 @@ import possible_triangle.skygrid.data.xml.impl.Tag
 
 class TagBuilder(
     private val id: String,
-    private val mod: String? = null,
+    private val mod: String = "minecraft",
     private val weight: Double = 1.0,
     private val random: Boolean,
     private val expand: Boolean,

@@ -6,6 +6,7 @@ import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
+import nl.adaptivity.xmlutil.serialization.XmlAfter
 import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.xml.BlockProvider
@@ -18,11 +19,11 @@ import kotlin.random.Random
 @Serializable
 @SerialName("list")
 data class BlockList(
-    val children: List<BlockProvider>,
     override val weight: Double = 1.0,
     override val name: String? = null,
     override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
+    val children: List<BlockProvider>,
 ) : ProxyProvider() {
 
     @Transient

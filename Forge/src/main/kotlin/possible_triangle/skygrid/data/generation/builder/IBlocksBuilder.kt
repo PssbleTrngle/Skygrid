@@ -14,7 +14,7 @@ fun interface IBlocksBuilder {
         return block(key.path, key.namespace, weight, builder)
     }
 
-    fun block(id: String, mod: String? = null, weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}) {
+    fun block(id: String, mod: String = "minecraft", weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}) {
         BlockBuilder(id, mod, weight).also {
             builder(it)
             add(it)
@@ -33,7 +33,7 @@ fun interface IBlocksBuilder {
 
     fun tag(
         id: String,
-        mod: String? = null,
+        mod: String = "minecraft",
         weight: Double = 1.0,
         expand: Boolean = false,
         random: Boolean = true,

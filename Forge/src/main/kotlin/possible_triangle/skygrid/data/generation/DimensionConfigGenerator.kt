@@ -44,7 +44,7 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
         require(providers.isNotEmpty())
         val provider = when(providers.size) {
             1 ->  providers.first()
-            else -> BlockList(providers)
+            else -> BlockList(children = providers)
         }
         presets[key] = Preset(provider)
     }

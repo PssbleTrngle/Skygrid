@@ -16,7 +16,7 @@ class ExceptFilterBuilder {
         tag(tag.name.namespace, tag.name.path)
     }
 
-    fun tag(id: String, mod: String? = null) {
+    fun tag(id: String, mod: String = "minecraft") {
         filters.add(TagFilter(id, mod))
     }
 

@@ -1,156 +1,157 @@
-<dimension
-        xmlns="https://www.w3schools.com"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="https://www.w3schools.com/xml ../../../../../../main/resources/schema.xsd">
+<?xml version="1.0" encoding="UTF-8"
+    xmlns="https://www.w3schools.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.w3schools.com https://raw.githubusercontent.com/PssbleTrngle/Skygrid/1.18.x/Common/src/main/resources/schema.xsd" ?>
+<dimension>
     <blocks>
         <list weight="2.0" name="fluids">
-            <block id="lava" mod="minecraft"/>
-            <block id="water" mod="minecraft" weight="3.0">
+            <block id="lava"/>
+            <block id="water" weight="3.0">
                 <side on="up" probability="0.05">
-                    <block id="lily_pad" mod="minecraft"/>
+                    <block id="lily_pad"/>
                 </side>
             </block>
         </list>
         <list weight="100.0" name="ground">
             <list weight="20.0" name="stone">
-                <tag id="base_stone_overworld" mod="minecraft" weight="8.0">
+                <tag id="base_stone_overworld" weight="8.0">
                     <side on="up" probability="0.1">
                         <block id="glow_shroom" mod="quark"/>
                     </side>
                 </tag>
-                <block id="gravel" mod="minecraft" weight="2.0"/>
-                <block id="clay" mod="minecraft"/>
+                <block id="gravel" weight="2.0"/>
+                <block id="clay"/>
             </list>
             <reference id="moss" weight="0.3"/>
             <reference id="dripstone" weight="0.3"/>
             <list weight="5.0" name="dirt">
-                <block id="dirt" mod="minecraft"/>
+                <side on="down" probability="0.2">
+                    <block id="hanging_roots"/>
+                </side>
+                <block id="dirt"/>
                 <block id="mud" mod="biomesoplenty" weight="0.1"/>
-                <block id="dirt_path" mod="minecraft" weight="0.1"/>
-                <block id="coarse_dirt" mod="minecraft" weight="0.1"/>
+                <block id="dirt_path" weight="0.1"/>
+                <block id="coarse_dirt" weight="0.1"/>
                 <list weight="4.0" name="grass">
                     <list name="grass and fern">
-                        <block id="fern" mod="minecraft"/>
-                        <block id="grass" mod="minecraft"/>
-                        <block id="grass_block" mod="minecraft"/>
-                        <block id="grass_block" mod="minecraft" weight="0.5">
+                        <block id="fern"/>
+                        <block id="grass"/>
+                        <block id="grass_block"/>
+                        <block id="grass_block" weight="0.5">
                             <side on="up" shared="true">
-                                <block id="large_fern" mod="minecraft">
+                                <block id="large_fern">
                                     <set key="half" value="lower"/>
                                 </block>
-                                <block id="tall_grass" mod="minecraft">
+                                <block id="tall_grass">
                                     <set key="half" value="lower"/>
                                 </block>
                             </side>
                             <side on="up" offset="2" shared="true">
-                                <block id="large_fern" mod="minecraft">
+                                <block id="large_fern">
                                     <set key="half" value="upper"/>
                                 </block>
-                                <block id="tall_grass" mod="minecraft">
+                                <block id="tall_grass">
                                     <set key="half" value="upper"/>
                                 </block>
                             </side>
                         </block>
                     </list>
                     <reference id="flowers"/>
-                    <block id="grass_block" mod="minecraft" weight="0.5">
+                    <block id="grass_block" weight="0.5">
                         <side on="up" probability="0.6">
-                            <tag id="saplings" mod="minecraft"/>
+                            <tag id="saplings"/>
                         </side>
                     </block>
                 </list>
-                <block id="mycelium" mod="minecraft">
+                <block id="mycelium">
                     <side on="up">
-                        <block id="red_mushroom" mod="minecraft"/>
-                        <block id="brown_mushroom" mod="minecraft"/>
+                        <block id="red_mushroom"/>
+                        <block id="brown_mushroom"/>
                     </side>
                 </block>
-                <side on="down" probability="0.2">
-                    <block id="hanging_roots" mod="minecraft"/>
-                </side>
             </list>
-            <block id="obsidian" mod="minecraft" weight="0.5"/>
+            <block id="obsidian" weight="0.5"/>
             <list weight="5.0" name="sand">
                 <block id="sandy_bricks" mod="quark" weight="0.1"/>
                 <list weight="0.2">
-                    <block id="sandstone" mod="minecraft"/>
-                    <block id="chiseled_sandstone" mod="minecraft"/>
-                    <block id="smooth_sandstone" mod="minecraft"/>
-                    <block id="red_sandstone" mod="minecraft" weight="0.2"/>
-                    <block id="chiseled_red_sandstone" mod="minecraft" weight="0.2"/>
-                    <block id="smooth_red_sandstone" mod="minecraft" weight="0.2"/>
+                    <block id="sandstone"/>
+                    <block id="chiseled_sandstone"/>
+                    <block id="smooth_sandstone"/>
+                    <block id="red_sandstone" weight="0.2"/>
+                    <block id="chiseled_red_sandstone" weight="0.2"/>
+                    <block id="smooth_red_sandstone" weight="0.2"/>
                 </list>
                 <list>
-                    <block id="sand" mod="minecraft"/>
-                    <block id="red_sand" mod="minecraft" weight="0.2"/>
                     <side on="up" probability="0.1">
-                        <block id="cactus" mod="minecraft"/>
-                        <block id="dead_bush" mod="minecraft"/>
+                        <block id="cactus"/>
+                        <block id="dead_bush"/>
                     </side>
+                    <block id="sand"/>
+                    <block id="red_sand" weight="0.2"/>
                 </list>
             </list>
             <list name="cold">
-                <block id="snow_block" mod="minecraft"/>
-                <block id="ice" mod="minecraft"/>
-                <block id="packed_ice" mod="minecraft" weight="0.1"/>
-                <block id="blue_ice" mod="minecraft" weight="0.02"/>
+                <block id="snow_block"/>
+                <block id="ice"/>
+                <block id="packed_ice" weight="0.1"/>
+                <block id="blue_ice" weight="0.02"/>
                 <block id="permafrost" mod="quark" weight="0.05"/>
             </list>
         </list>
         <list weight="9.0" name="crops">
-            <block id="farmland" mod="minecraft">
+            <block id="farmland">
                 <side on="up">
                     <list>
-                        <tag id="crops" mod="minecraft"/>
                         <cycle key="age"/>
+                        <tag id="crops"/>
                     </list>
                 </side>
             </block>
-            <block id="podzol" mod="minecraft" weight="0.1">
+            <block id="podzol" weight="0.1">
                 <side on="up">
-                    <block id="bamboo_sapling" mod="minecraft"/>
+                    <block id="bamboo_sapling"/>
                 </side>
             </block>
-            <block id="jungle_wood" mod="minecraft" weight="0.01">
+            <block id="jungle_wood" weight="0.01">
                 <side on="north">
-                    <block id="cocoa" mod="minecraft">
+                    <block id="cocoa">
                         <set key="facing" value="south"/>
                     </block>
                 </side>
             </block>
-            <block id="sand" mod="minecraft" weight="0.5">
+            <block id="sand" weight="0.5">
                 <side on="north">
-                    <block id="water" mod="minecraft"/>
+                    <block id="water"/>
                 </side>
                 <side on="up" shared="true">
-                    <block id="sugar_cane" mod="minecraft">
+                    <block id="sugar_cane">
                         <set key="half" value="lower"/>
                     </block>
                 </side>
                 <side on="up" offset="2" shared="true">
-                    <block id="sugar_cane" mod="minecraft">
+                    <block id="sugar_cane">
                         <set key="half" value="upper"/>
                     </block>
                 </side>
             </block>
-            <block id="grass_block" mod="minecraft" weight="0.8">
+            <block id="grass_block" weight="0.8">
                 <side on="up">
                     <list>
-                        <block id="sweet_berry_bush" mod="minecraft"/>
                         <cycle key="age"/>
+                        <block id="sweet_berry_bush"/>
                     </list>
                 </side>
             </block>
             <list weight="0.2" name="melons">
-                <block id="melon" mod="minecraft"/>
+                <block id="melon"/>
             </list>
             <list weight="0.2" name="pumpkins">
-                <block id="pumpkin" mod="minecraft"/>
-                <block id="carved_pumpkin" mod="minecraft"/>
+                <block id="pumpkin"/>
+                <block id="carved_pumpkin"/>
             </list>
         </list>
         <list weight="50.0" name="tree">
-            <tag id="logs_that_burn" mod="minecraft">
+            <tag id="logs_that_burn">
                 <cycle key="axis"/>
                 <except>
                     <name pattern="crimson"/>
@@ -164,8 +165,8 @@
                     <mod id="simplefarming"/>
                 </except>
             </tag>
-            <block id="bee_nest" mod="minecraft" weight="0.01"/>
-            <tag id="planks" mod="minecraft" weight="0.3">
+            <block id="bee_nest" weight="0.01"/>
+            <tag id="planks" weight="0.3">
                 <except>
                     <name pattern="crimson"/>
                     <name pattern="warped"/>
@@ -175,7 +176,7 @@
                     <mod id="botania"/>
                 </except>
             </tag>
-            <tag id="leaves" mod="minecraft" weight="0.6">
+            <tag id="leaves" weight="0.6">
                 <set key="persistent" value="true"/>
                 <except>
                     <name pattern="crimson"/>
@@ -187,34 +188,34 @@
                 </except>
             </tag>
             <list name="mushrooms blocks">
-                <block id="mushroom_stem" mod="minecraft"/>
-                <block id="red_mushroom_block" mod="minecraft"/>
-                <block id="brown_mushroom_block" mod="minecraft"/>
+                <block id="mushroom_stem"/>
+                <block id="red_mushroom_block"/>
+                <block id="brown_mushroom_block"/>
                 <block id="glow_shroom_block" mod="quark" weight="0.1"/>
                 <block id="glow_shroom_block" mod="biomesoplenty" weight="0.1"/>
             </list>
         </list>
         <list weight="14.0" name="building">
             <list name="bricks">
-                <block id="cobblestone" mod="minecraft"/>
-                <block id="cobbled_deepslate" mod="minecraft" weight="0.5"/>
-                <block id="mossy_cobblestone" mod="minecraft" weight="0.1"/>
-                <block id="smooth_stone" mod="minecraft" weight="0.1"/>
+                <block id="cobblestone"/>
+                <block id="cobbled_deepslate" weight="0.5"/>
+                <block id="mossy_cobblestone" weight="0.1"/>
+                <block id="smooth_stone" weight="0.1"/>
                 <list name="bricks">
-                    <block id="bricks" mod="minecraft"/>
+                    <block id="bricks"/>
                     <list name="stone bricks">
-                        <block id="stone_bricks" mod="minecraft"/>
-                        <block id="mossy_stone_bricks" mod="minecraft" weight="0.5"/>
-                        <block id="cracked_stone_bricks" mod="minecraft" weight="0.2"/>
-                        <block id="chiseled_stone_bricks" mod="minecraft" weight="0.2"/>
+                        <block id="stone_bricks"/>
+                        <block id="mossy_stone_bricks" weight="0.5"/>
+                        <block id="cracked_stone_bricks" weight="0.2"/>
+                        <block id="chiseled_stone_bricks" weight="0.2"/>
                     </list>
                     <list name="deepslate bricks">
-                        <block id="deepslate_bricks" mod="minecraft"/>
-                        <block id="polished_deepslate" mod="minecraft"/>
-                        <block id="chiseled_deepslate" mod="minecraft"/>
-                        <block id="deepslate_tiles" mod="minecraft"/>
-                        <block id="cracked_deepslate_bricks" mod="minecraft" weight="0.5"/>
-                        <block id="cracked_deepslate_tiles" mod="minecraft" weight="0.5"/>
+                        <block id="deepslate_bricks"/>
+                        <block id="polished_deepslate"/>
+                        <block id="chiseled_deepslate"/>
+                        <block id="deepslate_tiles"/>
+                        <block id="cracked_deepslate_bricks" weight="0.5"/>
+                        <block id="cracked_deepslate_tiles" weight="0.5"/>
                     </list>
                     <list weight="0.2" name="cobblestone bricks">
                         <block id="cobblestone_bricks" mod="quark"/>
@@ -227,43 +228,43 @@
                     </list>
                 </list>
             </list>
-            <block id="bookshelf" mod="minecraft" weight="0.05"/>
+            <block id="bookshelf" weight="0.05"/>
             <tag id="glass/silica" mod="forge"/>
-            <tag id="wool" mod="minecraft"/>
+            <tag id="wool"/>
             <list weight="0.01" name="midori">
+                <cycle key="axis"/>
                 <block id="midori_block" mod="quark"/>
                 <block id="midori_pillar" mod="quark"/>
-                <cycle key="axis"/>
             </list>
             <list weight="0.1" name="redstone">
-                <block id="observer" mod="minecraft"/>
-                <block id="dispenser" mod="minecraft"/>
-                <block id="dropper" mod="minecraft"/>
-                <block id="note_block" mod="minecraft"/>
-                <block id="piston" mod="minecraft"/>
-                <block id="target" mod="minecraft" weight="0.5"/>
-                <block id="sticky_piston" mod="minecraft" weight="0.2"/>
-                <block id="hopper" mod="minecraft"/>
-                <block id="redstone_lamp" mod="minecraft"/>
-                <block id="tnt" mod="minecraft"/>
-                <block id="slime_block" mod="minecraft" weight="2.0"/>
-                <block id="honey_block" mod="minecraft"/>
+                <block id="observer"/>
+                <block id="dispenser"/>
+                <block id="dropper"/>
+                <block id="note_block"/>
+                <block id="piston"/>
+                <block id="target" weight="0.5"/>
+                <block id="sticky_piston" weight="0.2"/>
+                <block id="hopper"/>
+                <block id="redstone_lamp"/>
+                <block id="tnt"/>
+                <block id="slime_block" weight="2.0"/>
+                <block id="honey_block"/>
             </list>
             <list weight="0.1" name="workstations">
-                <block id="crafting_table" mod="minecraft" weight="20.0"/>
-                <block id="furnace" mod="minecraft" weight="3.0"/>
-                <block id="smoker" mod="minecraft"/>
-                <block id="blast_furnace" mod="minecraft"/>
-                <block id="loom" mod="minecraft"/>
-                <block id="water_cauldron" mod="minecraft"/>
-                <block id="cartography_table" mod="minecraft"/>
-                <block id="fletching_table" mod="minecraft"/>
-                <block id="smithing_table" mod="minecraft"/>
-                <block id="stonecutter" mod="minecraft"/>
-                <block id="lectern" mod="minecraft"/>
-                <block id="composter" mod="minecraft"/>
+                <block id="crafting_table" weight="20.0"/>
+                <block id="furnace" weight="3.0"/>
+                <block id="smoker"/>
+                <block id="blast_furnace"/>
+                <block id="loom"/>
+                <block id="water_cauldron"/>
+                <block id="cartography_table"/>
+                <block id="fletching_table"/>
+                <block id="smithing_table"/>
+                <block id="stonecutter"/>
+                <block id="lectern"/>
+                <block id="composter"/>
             </list>
-            <block id="cobweb" mod="minecraft" weight="0.02"/>
+            <block id="cobweb" weight="0.02"/>
         </list>
         <list name="loot">
             <tag id="barrels/wooden" mod="forge">
@@ -287,12 +288,13 @@
                 </except>
             </tag>
         </list>
-        <block id="spawner" mod="minecraft"/>
+        <block id="spawner"/>
         <reference id="ocean"/>
         <reference id="ores" weight="30.0"/>
         <list weight="6.0" name="compressed">
+            <cycle key="axis"/>
             <list>
-                <block id="hay_block" mod="minecraft"/>
+                <block id="hay_block"/>
                 <block id="stick_block" mod="quark"/>
                 <block id="gunpowder_block" mod="quark"/>
             </list>
@@ -312,7 +314,7 @@
                 <block id="thatch" mod="quark"/>
                 <block id="beachgrass_thatch" mod="upgrade_aquatic"/>
                 <block id="cattail_thatch" mod="environmental"/>
-                <block id="dried_kelp_block" mod="minecraft"/>
+                <block id="dried_kelp_block"/>
             </list>
             <list name="crops">
                 <block id="apple_crate" mod="quark"/>
@@ -325,7 +327,6 @@
                 <block id="passionfruit_crate" mod="atmospheric"/>
                 <block id="shimmering_passionfruit_crate" mod="atmospheric" weight="0.01"/>
             </list>
-            <cycle key="axis"/>
         </list>
     </blocks>
     <loot>

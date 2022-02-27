@@ -1,47 +1,47 @@
 <preset>
    <list>
-      <tag id="coral_blocks" mod="minecraft">
+      <tag id="coral_blocks">
          <side on="up">
-            <tag id="wall_corals" mod="minecraft"/>
-            <tag id="coral_plants" mod="minecraft">
+            <tag id="wall_corals"/>
+            <tag id="coral_plants">
                <except/>
             </tag>
          </side>
       </tag>
-      <block id="sand" mod="minecraft" weight="0.05">
+      <block id="sand" weight="0.05">
          <side on="up">
-            <block id="turtle_egg" mod="minecraft">
+            <block id="turtle_egg">
                <cycle key="eggs"/>
             </block>
          </side>
       </block>
       <list>
-         <block id="sand" mod="minecraft"/>
-         <block id="gravel" mod="minecraft"/>
          <side on="up" shared="true">
-            <block id="tall_seagrass" mod="minecraft">
+            <block id="tall_seagrass">
                <set key="half" value="lower"/>
             </block>
          </side>
          <side on="up" offset="2" shared="true">
-            <block id="tall_seagrass" mod="minecraft">
+            <block id="tall_seagrass">
                <set key="half" value="upper"/>
             </block>
          </side>
          <side on="up">
-            <block id="kelp" mod="minecraft"/>
-            <block id="seagrass" mod="minecraft"/>
-            <block id="sea_pickle" mod="minecraft">
+            <block id="kelp"/>
+            <block id="seagrass"/>
+            <block id="sea_pickle">
                <cycle key="pickles"/>
             </block>
          </side>
+         <block id="sand"/>
+         <block id="gravel"/>
       </list>
       <list name="prismarine">
          <list>
-            <block id="prismarine" mod="minecraft"/>
-            <block id="prismarine_bricks" mod="minecraft"/>
-            <block id="dark_prismarine" mod="minecraft"/>
-            <block id="sea_lantern" mod="minecraft"/>
+            <block id="prismarine"/>
+            <block id="prismarine_bricks"/>
+            <block id="dark_prismarine"/>
+            <block id="sea_lantern"/>
          </list>
          <list weight="0.1" name="elder prismarine">
             <block id="elder_prismarine" mod="quark"/>

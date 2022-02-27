@@ -1,95 +1,95 @@
 <dimension>
    <blocks>
-      <block id="lava" mod="minecraft" weight="0.5"/>
+      <block id="lava" weight="0.5"/>
       <list name="ground">
-         <block id="netherrack" mod="minecraft">
+         <block id="netherrack">
             <side on="up" probability="0.1">
-               <block id="fire" mod="minecraft"/>
+               <block id="fire"/>
             </side>
          </block>
-         <block id="magma_block" mod="minecraft" weight="0.5"/>
-         <block id="gravel" mod="minecraft" weight="0.5"/>
-         <block id="basalt" mod="minecraft" weight="0.5">
+         <block id="magma_block" weight="0.5"/>
+         <block id="gravel" weight="0.5"/>
+         <block id="basalt" weight="0.5">
             <cycle key="axis"/>
          </block>
-         <block id="blackstone" mod="minecraft" weight="0.6"/>
+         <block id="blackstone" weight="0.6"/>
          <list name="soul">
-            <block id="soul_sand" mod="minecraft"/>
-            <block id="soul_soil" mod="minecraft"/>
             <side on="up" probability="0.1">
-               <block id="soul_fire" mod="minecraft"/>
+               <block id="soul_fire"/>
             </side>
+            <block id="soul_sand"/>
+            <block id="soul_soil"/>
          </list>
-         <block id="warped_nylium" mod="minecraft">
+         <block id="warped_nylium">
             <side on="up" probability="0.4">
-               <block id="warped_roots" mod="minecraft"/>
-               <block id="nether_sprouts" mod="minecraft"/>
-               <block id="twisting_vines" mod="minecraft" weight="0.2"/>
+               <block id="warped_roots"/>
+               <block id="nether_sprouts"/>
+               <block id="twisting_vines" weight="0.2"/>
             </side>
          </block>
-         <block id="crimson_nylium" mod="minecraft">
+         <block id="crimson_nylium">
             <side on="down" probability="0.02">
-               <block id="weeping_vines" mod="minecraft"/>
+               <block id="weeping_vines"/>
             </side>
             <side on="up" probability="0.1">
-               <block id="crimson_roots" mod="minecraft"/>
+               <block id="crimson_roots"/>
             </side>
          </block>
       </list>
       <list weight="0.2" name="ores">
-         <block id="nether_quartz_ore" mod="minecraft"/>
-         <block id="nether_gold_ore" mod="minecraft"/>
-         <block id="ancient_debris" mod="minecraft" weight="0.02"/>
-         <block id="coal_block" mod="minecraft" weight="0.1"/>
-         <block id="gold_block" mod="minecraft" weight="0.1"/>
-         <block id="netherite_block" mod="minecraft" weight="0.005"/>
-         <block id="gilded_blackstone" mod="minecraft" weight="0.1"/>
+         <block id="nether_quartz_ore"/>
+         <block id="nether_gold_ore"/>
+         <block id="ancient_debris" weight="0.02"/>
+         <block id="coal_block" weight="0.1"/>
+         <block id="gold_block" weight="0.1"/>
+         <block id="netherite_block" weight="0.005"/>
+         <block id="gilded_blackstone" weight="0.1"/>
       </list>
       <list weight="0.1" name="trees">
          <list name="logs">
-            <block id="warped_stem" mod="minecraft"/>
-            <block id="crimson_stem" mod="minecraft"/>
             <cycle key="axis"/>
+            <block id="warped_stem"/>
+            <block id="crimson_stem"/>
          </list>
          <list name="leaves">
-            <block id="nether_wart_block" mod="minecraft"/>
-            <block id="warped_wart_block" mod="minecraft"/>
-            <block id="shroomlight" mod="minecraft"/>
-            <block id="red_mushroom_block" mod="minecraft" weight="0.1"/>
-            <block id="brown_mushroom_block" mod="minecraft" weight="0.1"/>
+            <block id="nether_wart_block"/>
+            <block id="warped_wart_block"/>
+            <block id="shroomlight"/>
+            <block id="red_mushroom_block" weight="0.1"/>
+            <block id="brown_mushroom_block" weight="0.1"/>
          </list>
       </list>
-      <block id="glowstone" mod="minecraft" weight="0.1"/>
+      <block id="glowstone" weight="0.1"/>
       <list weight="0.1" name="building">
-         <block id="obsidian" mod="minecraft"/>
-         <block id="crying_obsidian" mod="minecraft"/>
-         <block id="respawn_anchor" mod="minecraft" weight="0.05"/>
-         <block id="smithing_table" mod="minecraft" weight="0.1"/>
+         <cycle key="axis"/>
+         <block id="obsidian"/>
+         <block id="crying_obsidian"/>
+         <block id="respawn_anchor" weight="0.05"/>
+         <block id="smithing_table" weight="0.1"/>
          <list name="quartz">
-            <block id="quartz_block" mod="minecraft"/>
-            <block id="quartz_bricks" mod="minecraft"/>
-            <block id="quartz_pillar" mod="minecraft"/>
+            <block id="quartz_block"/>
+            <block id="quartz_bricks"/>
+            <block id="quartz_pillar"/>
          </list>
          <list name="blackstone">
-            <block id="polished_blackstone_bricks" mod="minecraft"/>
-            <block id="cracked_polished_blackstone_bricks" mod="minecraft"/>
+            <block id="polished_blackstone_bricks"/>
+            <block id="cracked_polished_blackstone_bricks"/>
          </list>
          <list name="basalt">
-            <block id="polished_basalt" mod="minecraft"/>
-            <block id="smooth_basalt" mod="minecraft"/>
+            <block id="polished_basalt"/>
+            <block id="smooth_basalt"/>
          </list>
          <list name="nether bricks">
-            <block id="nether_bricks" mod="minecraft" weight="10.0"/>
-            <block id="cracked_nether_bricks" mod="minecraft"/>
-            <block id="chiseled_nether_bricks" mod="minecraft"/>
-            <block id="red_nether_bricks" mod="minecraft"/>
             <side on="up" probability="0.05">
-               <block id="wither_skeleton_skull" mod="minecraft">
+               <block id="wither_skeleton_skull">
                   <cycle key="rotation"/>
                </block>
             </side>
+            <block id="nether_bricks" weight="10.0"/>
+            <block id="cracked_nether_bricks"/>
+            <block id="chiseled_nether_bricks"/>
+            <block id="red_nether_bricks"/>
          </list>
-         <cycle key="axis"/>
       </list>
    </blocks>
    <mobs>

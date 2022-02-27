@@ -1,9 +1,9 @@
 <preset>
    <list>
-      <block id="grass_block" mod="minecraft">
+      <block id="grass_block">
          <side on="up">
             <tag id="mystical_flowers" mod="botania" weight="0.1"/>
-            <tag id="small_flowers" mod="minecraft">
+            <tag id="small_flowers">
                <except>
                   <mod id="botania"/>
                   <name pattern="wither_rose"/>
@@ -11,14 +11,14 @@
             </tag>
          </side>
       </block>
-      <block id="grass_block" mod="minecraft" weight="0.5">
+      <block id="grass_block" weight="0.5">
          <side on="up" shared="true">
-            <tag id="tall_flowers" mod="minecraft">
+            <tag id="tall_flowers">
                <set key="half" value="lower"/>
             </tag>
          </side>
          <side on="up" offset="2" shared="true">
-            <tag id="tall_flowers" mod="minecraft">
+            <tag id="tall_flowers">
                <set key="half" value="upper"/>
             </tag>
          </side>

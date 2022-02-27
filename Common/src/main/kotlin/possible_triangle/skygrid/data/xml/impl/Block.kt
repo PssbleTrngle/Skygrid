@@ -17,7 +17,7 @@ import kotlin.random.Random
 @SerialName("block")
 data class Block(
     private val id: String,
-    private val mod: String? = null,
+    private val mod: String = "minecraft",
     override val weight: Double = 1.0,
     override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),

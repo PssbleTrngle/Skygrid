@@ -1,14 +1,14 @@
 <preset>
    <list>
-      <block id="dripstone_block" mod="minecraft">
+      <block id="dripstone_block">
          <side on="up">
-            <block id="pointed_dripstone" mod="minecraft">
+            <block id="pointed_dripstone">
                <set key="thickness" value="tip"/>
                <set key="vertical_direction" value="up"/>
             </block>
-            <block id="pointed_dripstone" mod="minecraft" weight="0.5">
+            <block id="pointed_dripstone" weight="0.5">
                <side on="up">
-                  <block id="pointed_dripstone" mod="minecraft">
+                  <block id="pointed_dripstone">
                      <set key="thickness" value="tip"/>
                      <set key="vertical_direction" value="up"/>
                   </block>
@@ -18,15 +18,15 @@
             </block>
          </side>
       </block>
-      <block id="dripstone_block" mod="minecraft">
+      <block id="dripstone_block">
          <side on="down">
-            <block id="pointed_dripstone" mod="minecraft">
+            <block id="pointed_dripstone">
                <set key="thickness" value="tip"/>
                <set key="vertical_direction" value="down"/>
             </block>
-            <block id="pointed_dripstone" mod="minecraft" weight="0.5">
+            <block id="pointed_dripstone" weight="0.5">
                <side on="down">
-                  <block id="pointed_dripstone" mod="minecraft">
+                  <block id="pointed_dripstone">
                      <set key="thickness" value="tip"/>
                      <set key="vertical_direction" value="down"/>
                   </block>

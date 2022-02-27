@@ -3,12 +3,12 @@
       <reference id="ores" weight="0.1"/>
       <reference id="dripstone" weight="0.1"/>
       <reference id="moss" weight="0.05"/>
-      <block id="obsidian" mod="minecraft" weight="0.1"/>
+      <block id="obsidian" weight="0.1"/>
       <list weight="0.05" name="fluids">
-         <block id="lava" mod="minecraft"/>
-         <block id="water" mod="minecraft"/>
+         <block id="lava"/>
+         <block id="water"/>
       </list>
-      <tag id="base_stone_overworld" mod="minecraft">
+      <tag id="base_stone_overworld">
          <side on="up" probability="0.1">
             <block id="glow_shroom" mod="quark"/>
          </side>

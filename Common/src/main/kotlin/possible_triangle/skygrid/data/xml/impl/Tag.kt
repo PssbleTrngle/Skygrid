@@ -19,7 +19,7 @@ import kotlin.random.Random
 @SerialName("tag")
 data class Tag(
     private val id: String,
-    private val mod: String? = null,
+    private val mod: String = "minecraft",
     @XmlSerialName("weight", "", "") private val tagWeight: Double = 1.0,
     private val random: Boolean = true,
     private val expand: Boolean = false,

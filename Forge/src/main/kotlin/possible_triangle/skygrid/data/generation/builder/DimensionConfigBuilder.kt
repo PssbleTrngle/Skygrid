@@ -26,7 +26,7 @@ class DimensionConfigBuilder {
         builder(mobs)
     }
 
-    fun gap(id: String, mod: String? = null) {
+    fun gap(id: String, mod: String = "minecraft") {
         gap = BlockBuilder(id, mod).build()
     }
 

@@ -1,9 +1,9 @@
 <dimension>
    <blocks>
       <list name="ground">
-         <block id="end_stone" mod="minecraft">
+         <block id="end_stone">
             <side on="up" probability="0.1">
-               <block id="chorus_flower" mod="minecraft"/>
+               <block id="chorus_flower"/>
             </side>
          </block>
       </list>
@@ -11,18 +11,18 @@
          <block id="biotite_ore" mod="quark"/>
       </list>
       <list name="building">
-         <list weight="0.1" name="obsidian">
-            <block id="obsidian" mod="minecraft"/>
-            <block id="crying_obsidian" mod="minecraft"/>
-         </list>
-         <block id="end_stone_bricks" mod="minecraft"/>
-         <list name="purpur">
-            <block id="purpur_pillar" mod="minecraft"/>
-            <block id="purpur_block" mod="minecraft"/>
-         </list>
-         <block id="ender_chest" mod="minecraft" weight="0.01"/>
-         <block id="shulker_box" mod="minecraft" weight="0.0075"/>
          <cycle key="axis"/>
+         <list weight="0.1" name="obsidian">
+            <block id="obsidian"/>
+            <block id="crying_obsidian"/>
+         </list>
+         <block id="end_stone_bricks"/>
+         <list name="purpur">
+            <block id="purpur_pillar"/>
+            <block id="purpur_block"/>
+         </list>
+         <block id="ender_chest" weight="0.01"/>
+         <block id="shulker_box" weight="0.0075"/>
       </list>
    </blocks>
    <mobs>

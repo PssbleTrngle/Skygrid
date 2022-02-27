@@ -17,10 +17,10 @@ import kotlin.random.Random
 @SerialName("fallback")
 data class Fallback(
     override val name: String? = null,
-    val children: List<BlockProvider>,
     override val weight: Double = 1.0,
     override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
+    val children: List<BlockProvider>,
 ) : ProxyProvider() {
 
     @Transient

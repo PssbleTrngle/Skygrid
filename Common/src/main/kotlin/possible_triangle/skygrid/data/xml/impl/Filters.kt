@@ -36,7 +36,7 @@ data class ModFilter(val id: String) : Filter() {
 
 @Serializable
 @SerialName("tag")
-data class TagFilter(val id: String, val mod: String? = null) : Filter() {
+data class TagFilter(val id: String, val mod: String = "minecraft") : Filter() {
 
     @Transient
     private val key = keyFrom(id, mod)
