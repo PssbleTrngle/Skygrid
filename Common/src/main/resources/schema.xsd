@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema id="skygrid" targetNamespace="https://www.w3schools.com" xmlns="https://www.w3schools.com" elementFormDefault="qualified" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="dimension" type="dimension" />
+
+    <xsd:complexType name="weighted">
+        <xsd:attribute type="xsd:float" name="weight" default="1" />
+    </xsd:complexType>
+
+    <xsd:complexType name="name">
+        <xsd:complexContent>
+            <xsd:extension base="weighted">
+                <xsd:attribute name="mod" type="xsd:string" />
+                <xsd:attribute use="required" name="id" type="xsd:string" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="provider" abstract="true" />
+    <xsd:complexType name="provider">
+        <xsd:complexContent>
+            <xsd:extension base="weighted">
+                <xsd:sequence>
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" ref="property" />
+                    <xsd:element minOccurs="0" maxOccurs="unbounded" ref="attach" />
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="list">
+        <xs:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="entry" type="xsd:string" />
+        </xs:sequence>
+        <xsd:attribute use="required" name="type">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="whitelist" />
+                    <xsd:enumeration value="blacklist" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="pos">
+        <xsd:attribute type="xsd:nonNegativeInteger" name="x" default="0" />
+        <xsd:attribute type="xsd:nonNegativeInteger" name="y" default="0" />
+        <xsd:attribute type="xsd:nonNegativeInteger" name="z" default="0" />
+    </xsd:complexType>
+
+    <xsd:complexType name="color">
+        <xsd:attribute name="hex" use="required">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="#[a-zA-Z0-9]{6}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="resource">
+        <xsd:attribute name="mod" type="xsd:string" />
+        <xsd:attribute use="required" name="id" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:complexType name="create">
+        <xsd:sequence>
+            <xsd:element name="fog" type="color" minOccurs="0" />
+            <xsd:element name="sky" type="color" minOccurs="0" />
+            <xsd:element name="biome" maxOccurs="unbounded" type="resource" />
+        </xsd:sequence>
+        <xsd:attribute default="true" name="enable" type="xsd:boolean" />
+        <xsd:attribute default="false" name="respawn" type="xsd:boolean" />
+        <xsd:attribute default="false" name="hot" type="xsd:boolean" />
+        <xsd:attribute default="true" name="skylight" type="xsd:boolean" />
+        <xsd:attribute default="unset" name="daytime">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="unset" />
+                    <xsd:enumeration value="day" />
+                    <xsd:enumeration value="night" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="resource-collection">
+        <xsd:sequence>
+            <xsd:element name="table" maxOccurs="unbounded" type="name" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="blocks">
+        <xsd:sequence>
+            <xsd:element name="provider" maxOccurs="unbounded" type="name" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="dimension">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" name="distance" type="pos" />
+            <xsd:element name="gap" minOccurs="0" type="block" />
+            <xsd:element name="loot" type="resource-collection" />
+            <xsd:element name="blocks" type="blocks" />
+        </xsd:sequence>
+        <xsd:attribute default="false" name="replace" type="xsd:boolean" />
+    </xsd:complexType>
+
+    <xsd:element name="property" abstract="true" />
+
+    <xsd:element name="set" substitutionGroup="property">
+        <xsd:complexType>
+            <xsd:attribute use="required" name="key" type="xsd:string" />
+            <xsd:attribute use="required" name="value">
+                <xsd:simpleType>
+                    <xsd:union memberTypes="xsd:float xsd:string" />
+                </xsd:simpleType>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="cycle" substitutionGroup="property">
+        <xsd:complexType>
+            <xsd:attribute use="required" name="key" type="xsd:string" />
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="attach" abstract="true" />
+    <xsd:complexType name="attach">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" ref="provider" />
+        </xsd:sequence>
+        <xsd:attribute default="1" name="probability">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:float">
+                    <xsd:minInclusive value="0" />
+                    <xsd:maxInclusive value="1" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:element name="offset" substitutionGroup="attach">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="attach">
+                    <xsd:attribute default="0" name="x" type="xsd:integer" />
+                    <xsd:attribute default="0" name="y" type="xsd:integer" />
+                    <xsd:attribute default="0" name="z" type="xsd:integer" />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="side" substitutionGroup="attach">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="attach">
+                    <xsd:attribute use="required" name="on">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:enumeration value="south" />
+                                <xsd:enumeration value="north" />
+                                <xsd:enumeration value="east" />
+                                <xsd:enumeration value="west" />
+                                <xsd:enumeration value="up" />
+                                <xsd:enumeration value="down" />
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:attribute>
+                    <xsd:attribute default="1" name="by" type="xsd:integer" />
+                    <xsd:attribute default="false" name="shared" type="xsd:boolean" />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="horizontal" substitutionGroup="attach">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="attach">
+                    <xsd:attribute default="1" name="by" type="xsd:integer" />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="block" substitutionGroup="provider" type="block" />
+    <xsd:complexType name="block">
+        <xsd:complexContent>
+            <xsd:extension base="provider">
+                <xsd:attribute name="mod" type="xsd:string" />
+                <xsd:attribute use="required" name="id" type="xsd:string" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="tagName">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="#[:_\-a-zA-Z0-9/]+" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:element name="name">
+        <xsd:complexType>
+            <xsd:attribute use="required" name="pattern" type="xsd:string" />
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="except">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" ref="name" />
+            <xsd:element minOccurs="0" maxOccurs="unbounded" ref="tag" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="tag">
+        <xsd:complexContent>
+            <xsd:extension base="provider">
+                <xsd:attribute default="minecraft" name="mod" type="xsd:string" />
+                <xsd:attribute use="required" name="id" type="tagName" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="tag" substitutionGroup="provider">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tag">
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="except" type="except" />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="list" substitutionGroup="provider">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="provider">
+                    <xsd:sequence>
+                        <xsd:element maxOccurs="unbounded" ref="provider" />
+                    </xsd:sequence>
+                    <xsd:attribute name="name" type="xsd:string" />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="fallback" substitutionGroup="provider">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="provider">
+                    <xsd:sequence>
+                        <xsd:element maxOccurs="unbounded" ref="provider" />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="reference" substitutionGroup="provider">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="provider">
+                    <xsd:attribute default="minecraft" name="mod" type="xsd:string" />
+                    <xsd:attribute use="required" name="id" type="xsd:string" />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

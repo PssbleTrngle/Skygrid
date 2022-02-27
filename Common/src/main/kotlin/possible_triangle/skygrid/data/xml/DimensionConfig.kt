@@ -33,7 +33,6 @@ data class DimensionConfig(
     @XmlSerialName("loot", "", "") val loot: ListWrapper<LootTable> = ListWrapper(),
     @XmlSerialName("mobs", "", "") val mobs: ListWrapper<SpawnerEntry> = ListWrapper(),
     val replace: Boolean = false,
-    val endPortals: Boolean = false,
     val minY: Int = Int.MIN_VALUE,
     val maxY: Int = 100,
     val distance: Distance = Distance(4, 4, 4),
