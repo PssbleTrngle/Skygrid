@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.1.0.gradle'
 
-archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+archivesBaseName = "${mod_id}-forge"
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -89,13 +89,6 @@ repositories {
     }
 }
 
-configurations {
-    library
-    implementation.extendsFrom library
-    api.extendsFrom library
-    library.exclude group: 'org.jetbrains' , module:'annotations'
-}
-
 minecraft.runs.all {
     lazyToken('minecraft_classpath') {
         configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
@@ -132,4 +125,11 @@ processResources {
     from project(":Common").sourceSets.main.resources
 }
 
-jar.finalizedBy('reobfJar')
+reobf {
+    shadowJar {}
+}
+
+//jar.finalizedBy('reobfJar')
+
+tasks.build.dependsOn reobfShadowJar
+jar.finalizedBy('reobfShadowJar')

@@ -10,10 +10,11 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "3.3"
+    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
 }
 
 subprojects {
-
+    apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'kotlin'
     apply plugin: 'kotlinx-serialization'
 
@@ -75,6 +76,22 @@ subprojects {
     tasks.withType(GenerateModuleMetadata) {
         enabled = false
     }
+
+    configurations {
+        library
+        implementation.extendsFrom library
+        api.extendsFrom library
+        library.exclude group: 'org.jetbrains', module: 'annotations'
+    }
+
+    shadowJar {
+        archiveClassifier.set 'shadow'
+        configurations = [project.configurations.library]
+        relocate 'nl.adaptivity', "${project.group}.nl.adaptivity"
+        exclude 'kotlinx/**'
+        exclude 'kotlin/**'
+    }
+
 }
 
 sonarqube {

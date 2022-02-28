@@ -3,6 +3,8 @@ on:
   push:
     branches: [ 1.18.x ]
     paths-ignore: [ web/** ]
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -12,6 +14,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
@@ -33,9 +36,66 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Update mod version
+        if: ${{ github.event_name == 'release' }}
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'gradle.properties'
+          property: 'version'
+          value: ${{ github.event.release.tag_name }}
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: ./gradlew build sonarqube
+
+      - name: Upload forge jar to release
+        if: ${{ github.event_name == 'release' }}
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: Forge/build/libs/skygrid-forge-${{ github.event.release.tag_name }}.jar
+          asset_name: skygrid-forge-${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload fabric jar to release
+        if: ${{ github.event_name == 'release' }}
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: Fabric/build/libs/skygrid-fabric-${{ github.event.release.tag_name }}.jar
+          asset_name: skygrid-fabric-${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload forge jar to curseforge
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CURSEFORGE_TOKEN }}
+          project_id: ${{ secrets.CURSEFORGE_PROJECT }}
+          file_path: Forge/build/libs/skygrid-forge-${{ github.event.release.tag_name }}.jar
+          game_endpoint: minecraft
+          relations: fabric-api:requiredDependency,kotlin-for-forge:requiredDependency
+          game_versions: Minecraft 1.18:1.18.1,Java 17,Forge
+          changelog: ${{ github.event.release.body }}
+          changelog_type: markdown
+          release_type: alpha
+
+      - name: Upload fabric jar to curseforge
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CURSEFORGE_TOKEN }}
+          project_id: ${{ secrets.CURSEFORGE_PROJECT }}
+          file_path: Fabric/build/libs/skygrid-fabric-${{ github.event.release.tag_name }}.jar
+          game_endpoint: minecraft
+          relations: fabric-api:requiredDependency,fabric-language-kotlin:requiredDependency
+          game_versions: Minecraft 1.18:1.18.1,Java 17,Fabric
+          changelog: ${{ github.event.release.body }}
+          changelog_type: markdown
+          release_type: alpha
+

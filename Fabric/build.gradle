@@ -3,7 +3,7 @@ plugins {
     id 'idea'
 }
 
-archivesBaseName = "${mod_name}-fabric-${minecraft_version}"
+archivesBaseName = "${mod_id}-fabric"
 
 sourceSets.main.resources.srcDir project(":Common").file('src/generated/resources/')
 
@@ -15,8 +15,8 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":Common")
 
-    implementation "io.github.pdvrieze.xmlutil:core:0.84.0"
-    implementation "io.github.pdvrieze.xmlutil:serialization:0.84.0"
+    library "io.github.pdvrieze.xmlutil:core:0.84.0"
+    library "io.github.pdvrieze.xmlutil:serialization:0.84.0"
 
     modImplementation group: "net.fabricmc", name: "fabric-language-kotlin", version: "1.7.1+kotlin.1.6.10"
 }
@@ -54,7 +54,14 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
+    archiveClassifier.set 'dev'
     from("LICENSE") {
         rename { "${it}_${mod_name}" }
     }
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier.set null
 }
