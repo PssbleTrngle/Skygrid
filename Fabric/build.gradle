@@ -95,7 +95,7 @@ import com.modrinth.minotaur.dependencies.ModDependency
 if (ENV.MODRINTH_TOKEN) modrinth {
     projectId = modrinth_project_id
 
-    versionNumber = version
+    versionNumber = "fabric-${version}"
     versionType = release_type
     uploadFile = remapJar.archiveFile
     changelog = ENV.CHANGELOG
