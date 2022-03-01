@@ -1,8 +1,5 @@
 name: Build & Release
 on:
-  push:
-    branches: [ 1.18.x ]
-    paths-ignore: [ web/** ]
   release:
     types: [created]
 
