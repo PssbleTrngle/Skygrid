@@ -1,30 +1,26 @@
-name: Build Mod
+name: Build & Release
 on:
   push:
     branches: [ 1.18.x ]
     paths-ignore: [ web/** ]
+  release:
+    types: [created]
 
 jobs:
   build:
-    name: Build
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 17
 
       - run: chmod +x ./gradlew
-
-      - name: Cache SonarQube packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache Gradle packages
         uses: actions/cache@v1
@@ -33,9 +29,39 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Build and analyze
+      - name: Update mod version
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'gradle.properties'
+          property: 'version'
+          value: ${{ github.event.release.tag_name }}
+
+      - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: ./gradlew build sonarqube
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CHANGELOG: ${{ github.event.release.changelog }}
+        run: ./gradlew build curseforge modrinth
+
+      - name: Upload forge jar to release
+        if: ${{ github.event_name == 'release' }}
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: Forge/build/libs/skygrid-forge-${{ github.event.release.tag_name }}.jar
+          asset_name: skygrid-forge-${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload fabric jar to release
+        if: ${{ github.event_name == 'release' }}
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: Fabric/build/libs/skygrid-fabric-${{ github.event.release.tag_name }}.jar
+          asset_name: skygrid-fabric-${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/java-archive

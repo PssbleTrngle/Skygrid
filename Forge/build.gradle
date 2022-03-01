@@ -8,10 +8,13 @@ buildscript {
     }
 }
 
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'com.modrinth.minotaur'
+
 apply plugin: 'net.minecraftforge.gradle'
 apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.1.0.gradle'
 
-archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+archivesBaseName = "${mod_id}-forge"
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -89,13 +92,6 @@ repositories {
     }
 }
 
-configurations {
-    library
-    implementation.extendsFrom library
-    api.extendsFrom library
-    library.exclude group: 'org.jetbrains' , module:'annotations'
-}
-
 minecraft.runs.all {
     lazyToken('minecraft_classpath') {
         configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
@@ -132,4 +128,51 @@ processResources {
     from project(":Common").sourceSets.main.resources
 }
 
-jar.finalizedBy('reobfJar')
+reobf {
+    shadowJar {}
+}
+
+//jar.finalizedBy('reobfJar')
+
+tasks.build.dependsOn reobfShadowJar
+jar.finalizedBy('reobfShadowJar')
+
+def ENV = System.getenv()
+if (ENV.CURSEFORGE_TOKEN) curseforge {
+    apiKey = ENV.CURSEFORGE_TOKEN
+    project {
+        id = curseforge_project_id
+        addGameVersion minecraft_version
+        addGameVersion 'Forge'
+
+        mainArtifact jar.archiveFile
+
+        releaseType = release_type
+        changelog = ENV.CHANGELOG
+        changelogType = 'markdown'
+
+        relations {
+            requiredDependency 'kotlin-for-forge'
+        }
+    }
+}
+
+import com.modrinth.minotaur.dependencies.ModDependency
+
+if (ENV.MODRINTH_TOKEN) modrinth {
+    projectId = modrinth_project_id
+
+    versionNumber = version
+    versionType = release_type
+    uploadFile = jar.archiveFile
+    changelog = ENV.CHANGELOG
+
+    gameVersions = [minecraft_version]
+    loaders = ["forge"]
+
+    dependencies = [
+            new ModDependency("ordsPcFz", "required"),
+    ]
+}
+
+rootProject.tasks.curseforge.dependsOn tasks.curseforge
