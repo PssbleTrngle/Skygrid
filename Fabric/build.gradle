@@ -3,6 +3,9 @@ plugins {
     id 'idea'
 }
 
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'com.modrinth.minotaur'
+
 archivesBaseName = "${mod_id}-fabric"
 
 sourceSets.main.resources.srcDir project(":Common").file('src/generated/resources/')
@@ -65,3 +68,45 @@ remapJar {
     dependsOn shadowJar
     archiveClassifier.set null
 }
+
+def ENV = System.getenv()
+if (ENV.CURSEFORGE_TOKEN) curseforge {
+    apiKey = ENV.CURSEFORGE_TOKEN
+    project {
+        id = curseforge_project_id
+        addGameVersion minecraft_version
+        addGameVersion 'Fabric'
+
+        mainArtifact remapJar.archiveFile
+
+        releaseType = release_type
+        changelog = ENV.CHANGELOG
+        changelogType = 'markdown'
+
+        relations {
+            requiredDependency 'fabric-api'
+            requiredDependency 'fabric-language-kotlin'
+        }
+    }
+}
+
+import com.modrinth.minotaur.dependencies.ModDependency
+
+if (ENV.MODRINTH_TOKEN) modrinth {
+    projectId = modrinth_project_id
+
+    versionNumber = version
+    versionType = release_type
+    uploadFile = remapJar.archiveFile
+    changelog = ENV.CHANGELOG
+
+    gameVersions = [minecraft_version]
+    loaders = ["fabric"]
+
+    dependencies = [
+            new ModDependency("P7dR8mSH", "required"),
+            new ModDependency("Ha28R6CL", "required"),
+    ]
+}
+
+rootProject.tasks.curseforge.dependsOn tasks.curseforge

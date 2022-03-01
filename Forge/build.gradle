@@ -8,6 +8,9 @@ buildscript {
     }
 }
 
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'com.modrinth.minotaur'
+
 apply plugin: 'net.minecraftforge.gradle'
 apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.1.0.gradle'
 
@@ -133,3 +136,43 @@ reobf {
 
 tasks.build.dependsOn reobfShadowJar
 jar.finalizedBy('reobfShadowJar')
+
+def ENV = System.getenv()
+if (ENV.CURSEFORGE_TOKEN) curseforge {
+    apiKey = ENV.CURSEFORGE_TOKEN
+    project {
+        id = curseforge_project_id
+        addGameVersion minecraft_version
+        addGameVersion 'Forge'
+
+        mainArtifact jar.archiveFile
+
+        releaseType = release_type
+        changelog = ENV.CHANGELOG
+        changelogType = 'markdown'
+
+        relations {
+            requiredDependency 'kotlin-for-forge'
+        }
+    }
+}
+
+import com.modrinth.minotaur.dependencies.ModDependency
+
+if (ENV.MODRINTH_TOKEN) modrinth {
+    projectId = modrinth_project_id
+
+    versionNumber = version
+    versionType = release_type
+    uploadFile = jar.archiveFile
+    changelog = ENV.CHANGELOG
+
+    gameVersions = [minecraft_version]
+    loaders = ["forge"]
+
+    dependencies = [
+            new ModDependency("ordsPcFz", "required"),
+    ]
+}
+
+rootProject.tasks.curseforge.dependsOn tasks.curseforge
