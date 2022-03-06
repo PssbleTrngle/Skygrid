@@ -84,14 +84,21 @@ subprojects {
         implementation.extendsFrom library
         api.extendsFrom library
         library.exclude group: 'org.jetbrains', module: 'annotations'
+        //library.exclude group: 'org.jetbrains.kotlin'
+        //library.exclude group: 'org.jetbrains.kotlinx'
     }
 
     shadowJar {
-        archiveClassifier.set 'shadow'
-        configurations = [project.configurations.library]
-        relocate 'nl.adaptivity', "${project.group}.nl.adaptivity"
-        exclude 'kotlinx/**'
-        exclude 'kotlin/**'
+        archiveClassifier.set 'obf'
+        //configurations = [project.configurations.library]
+        //relocate 'nl.adaptivity', "${project.group}.nl.adaptivity"
+        //exclude 'kotlinx/**'
+        //exclude 'kotlin/**'
+
+        dependencies {
+            include(dependency("io.github.pdvrieze.xmlutil:core:0.84.0"))
+            include(dependency("io.github.pdvrieze.xmlutil:serialization:0.84.0"))
+        }
     }
 
 }

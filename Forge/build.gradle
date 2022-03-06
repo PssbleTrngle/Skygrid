@@ -30,7 +30,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             ideaModule "${rootProject.name}.${project.name}.main"
-            arg "-mixin.config=${mod_id}.mixins.json"
+            arg "-mixin.config=${mod_id}.forge.mixins.json"
             property 'forge.logging.console.level', 'debug'
             taskName 'Client'
             mods {
@@ -43,7 +43,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
+            ideaModule "${rootProject.name}.forge.${project.name}.main"
             arg "-mixin.config=${mod_id}.mixins.json"
             property 'forge.logging.console.level', 'debug'
             taskName 'Server'
@@ -57,7 +57,7 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
+            ideaModule "${rootProject.name}.forge.${project.name}.main"
             args '--mod', mod_id, '--all', '--output', project(":Common").file('src/generated/resources/'), '--existing', file('src/main/resources/')
             property 'forge.logging.console.level', 'debug'
             taskName 'Data'
@@ -128,14 +128,17 @@ processResources {
     from project(":Common").sourceSets.main.resources
 }
 
-reobf {
-    shadowJar {}
+jar {
+    from configurations.library.collect { it.isDirectory() ? it : zipTree(it) }
+    duplicatesStrategy = 'exclude'
 }
 
-//jar.finalizedBy('reobfJar')
+//reobf {
+//    shadowJar {}
+//}
 
-tasks.build.dependsOn reobfShadowJar
-jar.finalizedBy('reobfShadowJar')
+//tasks.build.dependsOn shadowJar
+//jar.finalizedBy('reobfShadowJar')
 
 def ENV = System.getenv()
 if (ENV.CURSEFORGE_TOKEN) curseforge {

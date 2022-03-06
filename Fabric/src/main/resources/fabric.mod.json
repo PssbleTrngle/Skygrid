@@ -23,7 +23,6 @@
     ]
   },
   "mixins": [
-    "skygrid.mixins.json",
     "skygrid.fabric.mixins.json"
   ],
   "accessWidener" : "skygrid.accesswidener",

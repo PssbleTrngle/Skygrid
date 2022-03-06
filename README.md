@@ -18,3 +18,4 @@
 [![Fabric Download](https://img.shields.io/badge/Download%20for-Fabric-blue?logo=curseforge&)][FABRIC]
 [![Downloads](https://cf.way2muchnoise.eu/full_316763_downloads.svg)][DOWNLOAD]
 [![Minecraft Version](https://cf.way2muchnoise.eu/versions/316763_latest.svg)][DOWNLOAD]
+
