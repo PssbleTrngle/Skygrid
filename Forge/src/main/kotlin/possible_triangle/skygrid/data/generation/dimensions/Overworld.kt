@@ -136,8 +136,10 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         list("grass", weight = 4.0) {
                             list("grass and fern") {
                                 block(Blocks.GRASS_BLOCK) {
-                                    block(Blocks.FERN)
-                                    block(Blocks.GRASS)
+                                    side(UP) {
+                                        block(Blocks.FERN)
+                                        block(Blocks.GRASS)
+                                    }
                                 }
                                 block(Blocks.GRASS_BLOCK, weight = 0.5) {
                                     double {

@@ -28,6 +28,8 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
     private val configs = hashMapOf<ResourceLocation, DimensionConfig>()
     private val presets = hashMapOf<ResourceLocation, Preset>()
 
+    open val datapack: String? = null
+
     fun dimension(key: ResourceKey<LevelStem>, builder: DimensionConfigBuilder.() -> Unit) =
         dimension(key.location(), builder)
 
@@ -42,8 +44,8 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
     fun preset(key: ResourceLocation, builder: IBlocksBuilder.() -> Unit) {
         val providers = BasicBlocksBuilder().also(builder).build()
         require(providers.isNotEmpty())
-        val provider = when(providers.size) {
-            1 ->  providers.first()
+        val provider = when (providers.size) {
+            1 -> providers.first()
             else -> BlockList(children = providers)
         }
         presets[key] = Preset(provider)
@@ -59,7 +61,9 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
     final override fun run(cache: HashCache) {
         generate()
 
-        val directory = generator.outputFolder
+        val directory = datapack?.let {
+            generator.outputFolder.resolve("datapacks/$it")
+        } ?: generator.outputFolder
 
         fun write(type: String, key: ResourceLocation, content: String) {
             val file = directory.resolve("data/" + key.namespace + "/skygrid/$type/" + key.path + ".xml")

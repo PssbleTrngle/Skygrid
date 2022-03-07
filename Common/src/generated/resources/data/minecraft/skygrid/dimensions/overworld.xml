@@ -30,9 +30,12 @@
             <block id="coarse_dirt" weight="0.1"/>
             <list weight="4.0" name="grass">
                <list name="grass and fern">
-                  <block id="fern"/>
-                  <block id="grass"/>
-                  <block id="grass_block"/>
+                  <block id="grass_block">
+                     <side on="up">
+                        <block id="fern"/>
+                        <block id="grass"/>
+                     </side>
+                  </block>
                   <block id="grass_block" weight="0.5">
                      <side on="up" shared="true">
                         <block id="large_fern">

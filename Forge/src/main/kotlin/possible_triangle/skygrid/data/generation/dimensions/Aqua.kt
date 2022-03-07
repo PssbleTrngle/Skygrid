@@ -11,6 +11,8 @@ import possible_triangle.skygrid.data.generation.DimensionConfigGenerator
 @ExperimentalSerializationApi
 class Aqua(generator: DataGenerator) : DimensionConfigGenerator("aqua", generator) {
 
+    override val datapack = "custom-examples"
+
     override fun generate() {
 
         dimension(ResourceLocation(SkygridMod.MOD_ID, "aqua")) {

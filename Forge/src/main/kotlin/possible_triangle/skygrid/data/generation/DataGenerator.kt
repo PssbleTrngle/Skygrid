@@ -20,8 +20,11 @@ object DataGenerator {
             event.generator.addProvider(Overworld(event.generator))
             event.generator.addProvider(Nether(event.generator))
             event.generator.addProvider(End(event.generator))
-            event.generator.addProvider(Cave(event.generator))
-            event.generator.addProvider(Aqua(event.generator))
+
+            val examplesGenerator = DatapackGenerator(event.generator, "custom-examples")
+
+            event.generator.addProvider(Cave(examplesGenerator))
+            event.generator.addProvider(Aqua(examplesGenerator))
         }
     }
 
