@@ -1,0 +1,6 @@
+<dimension>
+   <blocks>
+      <reference id="ocean"/>
+   </blocks>
+   <gap id="water"/>
+</dimension>

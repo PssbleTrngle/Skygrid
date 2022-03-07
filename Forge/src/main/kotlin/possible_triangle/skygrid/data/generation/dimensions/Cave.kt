@@ -15,8 +15,6 @@ import possible_triangle.skygrid.data.xml.Distance
 @ExperimentalSerializationApi
 class Cave(generator: DataGenerator) : DimensionConfigGenerator("cave", generator) {
 
-    override val datapack = "custom-examples"
-
     override fun generate() {
 
         dimension(ResourceLocation(SkygridMod.MOD_ID, "cave")) {

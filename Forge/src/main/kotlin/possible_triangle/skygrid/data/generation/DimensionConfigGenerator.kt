@@ -17,6 +17,7 @@ import possible_triangle.skygrid.data.generation.builder.IBlocksBuilder
 import possible_triangle.skygrid.data.xml.DimensionConfig
 import possible_triangle.skygrid.data.xml.Preset
 import possible_triangle.skygrid.data.xml.impl.BlockList
+import kotlin.io.path.absolutePathString
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
 import kotlin.io.path.writeText
@@ -28,7 +29,7 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
     private val configs = hashMapOf<ResourceLocation, DimensionConfig>()
     private val presets = hashMapOf<ResourceLocation, Preset>()
 
-    open val datapack: String? = null
+    var datapack: String? = null
 
     fun dimension(key: ResourceKey<LevelStem>, builder: DimensionConfigBuilder.() -> Unit) =
         dimension(key.location(), builder)
@@ -61,9 +62,10 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
     final override fun run(cache: HashCache) {
         generate()
 
-        val directory = datapack?.let {
-            generator.outputFolder.resolve("datapacks/$it")
-        } ?: generator.outputFolder
+        val directory = if (datapack == null)
+            generator.outputFolder
+        else
+            generator.outputFolder.resolve("datapacks/${datapack}")
 
         fun write(type: String, key: ResourceLocation, content: String) {
             val file = directory.resolve("data/" + key.namespace + "/skygrid/$type/" + key.path + ".xml")
@@ -71,7 +73,7 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
             val sha = DataProvider.SHA1.hashUnencodedChars(content).toString()
             if (cache.getHash(file) != sha || !file.exists()) {
                 if (!file.parent.exists()) file.parent.createDirectories()
-                SkygridMod.LOGGER.info("Writing $type/$key")
+                SkygridMod.LOGGER.info("Writing $type/$key to ${file.absolutePathString()}")
                 file.writeText(content)
             }
 
