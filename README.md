@@ -1,4 +1,4 @@
-![Banner](https://github.com/PssbleTrngle/Skygrid/raw/1.18.x/web/public/banner.png)
+![Banner](https://github.com/PssbleTrngle/Skygrid/raw/readme/web/public/banner.png)
 
 [ISSUES]: https://github.com/PssbleTrngle/Brazier/issues
 [FORGE]: https://www.curseforge.com/minecraft/mc-mods/skygrid/files/all?filter-status=1&filter-game-version=2020709689%3A7498
