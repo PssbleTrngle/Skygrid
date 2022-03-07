@@ -98,6 +98,11 @@ minecraft.runs.all {
     }
 }
 
+configurations {
+    library.exclude group: 'org.jetbrains.kotlin'
+    library.exclude group: 'org.jetbrains.kotlinx'
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
@@ -131,6 +136,8 @@ processResources {
 jar {
     from configurations.library.collect { it.isDirectory() ? it : zipTree(it) }
     duplicatesStrategy = 'exclude'
+    exclude 'kotlinx/**'
+    exclude 'kotlin/**'
 }
 
 //reobf {
