@@ -90,15 +90,15 @@ subprojects {
 
     shadowJar {
         archiveClassifier.set 'obf'
-        //configurations = [project.configurations.library]
-        //relocate 'nl.adaptivity', "${project.group}.nl.adaptivity"
-        //exclude 'kotlinx/**'
-        //exclude 'kotlin/**'
+        configurations = [project.configurations.library]
+        relocate 'nl.adaptivity', "${project.group}.nl.adaptivity"
+        exclude 'kotlinx/**'
+        exclude 'kotlin/**'
 
-        dependencies {
-            include(dependency("io.github.pdvrieze.xmlutil:core:0.84.0"))
-            include(dependency("io.github.pdvrieze.xmlutil:serialization:0.84.0"))
-        }
+        //dependencies {
+        //    include(dependency("io.github.pdvrieze.xmlutil:core:0.84.0"))
+        //    include(dependency("io.github.pdvrieze.xmlutil:serialization:0.84.0"))
+        //}
     }
 
 }
