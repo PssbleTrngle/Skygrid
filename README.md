@@ -1,3 +1,5 @@
+![Banner](https://github.com/PssbleTrngle/Skygrid/raw/1.18.x/web/public/banner.png)
+
 [ISSUES]: https://github.com/PssbleTrngle/Brazier/issues
 [FORGE]: https://www.curseforge.com/minecraft/mc-mods/skygrid/files/all?filter-status=1&filter-game-version=2020709689%3A7498
 [FABRIC]: https://www.curseforge.com/minecraft/mc-mods/skygrid/files/all?filter-status=1&filter-game-version=2020709689%3A7499brazier-fabric
@@ -22,5 +24,3 @@
 [![Fabric Download](https://img.shields.io/badge/Download%20for-Fabric-blue?logo=curseforge&)][FABRIC]
 [![Downloads](https://cf.way2muchnoise.eu/full_316763_downloads.svg)][DOWNLOAD]
 [![Minecraft Version](https://cf.way2muchnoise.eu/versions/316763_latest.svg)][DOWNLOAD]
-
-![Banner](https://github.com/PssbleTrngle/Skygrid/raw/1.18.x/web/public/screenshot.png)
