@@ -1,8 +1,9 @@
-import { sumBy } from 'lodash'
+import { omit, sumBy } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, VFC } from 'react'
 import styled from 'styled-components'
-import { BlockProvider, ProviderType } from '../../types/BlockProviders'
+import { BlockProvider, ProviderType } from '../../@types/BlockProviders'
+import Breadcrumbs from '../Breadcrumbs'
 import BlockGrid from './BlockGrid'
 import ProviderPanel from './ProviderPanel'
 
@@ -10,22 +11,31 @@ function isList(p: BlockProvider): p is BlockProvider<ProviderType.LIST> {
    return 'children' in p && p.children.length > 0
 }
 
-function findRecursive(path: string, blocks: BlockProvider[]): BlockProvider[] | null {
-   const [search, ...rest] = path.split('/')
+function findRecursive(path: string[], blocks: BlockProvider[]): BlockProvider[] | null {
+   const [search, ...rest] = path
    if (!search) return null
-   const match = blocks.find(b => b.uuid === search)
+   const match = blocks.find(b => b.uuid === search || b.name === search)
    if (match && isList(match)) {
       if (rest.length === 0) return match.children
-      if (match && isList(match)) return findRecursive(rest.join('/'), match.children)
+      if (isList(match)) return findRecursive(rest, match.children)
    }
    return null
 }
 
 const HierarchicalBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
    const router = useRouter()
-   const path = router.query.path?.toString()
+   const path = useMemo(
+      () =>
+         router.query.path
+            ?.toString()
+            .split('/')
+            .map(s => s.trim())
+            .filter(s => !!s) ?? [],
+      [router.query]
+   )
+
    const shown = useMemo(() => {
-      const list = path ? findRecursive(path, blocks) : blocks
+      const list = path.length ? findRecursive(path, blocks) : blocks
       const totalWeight = sumBy(list, it => it.weight)
       return list?.map(p => ({ ...p, weight: p.weight / totalWeight }))
    }, [blocks, path])
@@ -35,21 +45,29 @@ const HierarchicalBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
    }, [router, shown])
 
    const navigate = useCallback(
+      (to: string[]) => {
+         if (to.length) router.push({ query: { ...router.query, path: to.join('/') } })
+         else router.push({ query: omit(router.query, 'path') })
+      },
+      [router]
+   )
+
+   const click = useCallback(
       (provider: BlockProvider) => () => {
          if (isList(provider)) {
-            const to = path ? `${path}/${provider.uuid}` : provider.uuid
-            router.push({ query: { path: to } })
+            const id = provider.name ?? provider.uuid
+            navigate([...path, id])
          }
       },
-      [router, path]
+      [navigate, path]
    )
 
    return (
       <Style>
-         <p>{path}</p>
+         {path && <Breadcrumbs root={router.query.config as string} crumbs={path} onClick={navigate} />}
          <BlockGrid size={200}>
             {shown?.map((provider, i) => (
-               <ProviderPanel key={i} size={200} provider={provider} onClick={navigate(provider)} />
+               <ProviderPanel key={i} size={200} provider={provider} onClick={click(provider)} />
             ))}
          </BlockGrid>
       </Style>

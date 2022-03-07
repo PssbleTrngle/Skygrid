@@ -1,7 +1,7 @@
 import type { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
+import { Named } from '../@types'
 import Page from '../components/basic/Page'
-import { Named } from '../types'
 import { getStaticConfigs } from '../util/data/configs'
 
 interface Props {

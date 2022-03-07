@@ -1,3 +1,4 @@
+import { darken } from 'polished'
 import styled from 'styled-components'
 
 const Panel = styled.div<{ size?: number }>`
@@ -13,8 +14,12 @@ const Panel = styled.div<{ size?: number }>`
 
    font-size: ${p => (p.size ?? 150) / 150}em;
 
+   overflow: hidden;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+
    &:hover {
-      background: #0001;
+      background: ${p => darken(0.01, p.theme.bg)};
    }
 `
 

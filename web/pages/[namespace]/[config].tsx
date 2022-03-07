@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import DimensionConfig from '../../@types/DimensionConfig'
 import Page from '../../components/basic/Page'
 import ConfigVisualizer from '../../components/config/ConfigVisualizer'
-import DimensionConfig from '../../types/DimensionConfig'
 import { getStaticConfig, getStaticConfigs } from '../../util/data/configs'
 
 interface Props {

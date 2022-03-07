@@ -1,14 +1,16 @@
 import { groupBy, orderBy, sumBy } from 'lodash'
 import { useMemo, VFC } from 'react'
+import styled from 'styled-components'
 import {
    Block,
    BlockProvider,
    BlockProviders,
    GeneratedBlock,
    ProviderType
-} from '../../types/BlockProviders'
-import WeightedEntry from '../../types/WeightedEntry'
+} from '../../@types/BlockProviders'
+import WeightedEntry from '../../@types/WeightedEntry'
 import { forPolymorph } from '../../util/polymorphism'
+import Checkbox from '../inputs/Checkbox'
 import BlockGrid from './BlockGrid'
 import ProviderPanel from './ProviderPanel'
 import Searchbar, { useFiltered } from './Searchbar'
@@ -20,11 +22,18 @@ const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
 
    const { filter, setFilter, filtered } = useFiltered(sorted)
 
-   console.log(filter)
-
    return (
       <>
-         <Searchbar value={filter} onChange={setFilter} />
+         <FilterBar>
+            <Searchbar value={filter} onChange={setFilter} />
+            <Checkbox
+               id='includeExtras'
+               value={filter.includeExtras ?? true}
+               onChange={v => setFilter({ includeExtras: v })}>
+               Include Extras?
+            </Checkbox>
+            <p>{filtered.length} results</p>
+         </FilterBar>
          <BlockGrid size={size}>
             {filtered.map(block => (
                <ProviderPanel key={block.uuid} size={size} provider={block}>
@@ -38,6 +47,14 @@ const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
       </>
    )
 }
+
+const FilterBar = styled.section`
+   display: grid;
+   grid-auto-flow: column;
+   margin-bottom: 2em;
+   align-items: center;
+   gap: 1em;
+`
 
 function withWeight<T extends Required<WeightedEntry>>(
    blocks: T[],
@@ -58,7 +75,7 @@ function unwrapProvider(provider: BlockProvider): Block[] {
    )
 }
 
-function unwrap(providers: BlockProvider[]): GeneratedBlock[] {
+export function unwrap(providers: BlockProvider[]): GeneratedBlock[] {
    const unwrapped = providers.flatMap(p => unwrapProvider(p))
    const total = sumBy(unwrapped, w => w.weight)
    const normalized = unwrapped
@@ -67,8 +84,9 @@ function unwrap(providers: BlockProvider[]): GeneratedBlock[] {
          const unwrappedExtras = extras
             ? extras.flatMap(it => withWeight(unwrap(it.children), w => w * it.probability))
             : []
+
          return [
-            { ...provider, extra: false },
+            { ...provider, extra: provider.extra ?? false },
             ...withWeight(unwrappedExtras, w => w * provider.weight).map(e => ({
                ...e,
                extra: true,

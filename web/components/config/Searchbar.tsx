@@ -1,13 +1,14 @@
 import { debounce } from 'lodash'
 import { ChangeEvent, Dispatch, useCallback, useMemo, useState, VFC } from 'react'
 import styled from 'styled-components'
-import { BlockProvider, BlockProviders } from '../../types/BlockProviders'
+import { BlockProvider, BlockProviders } from '../../@types/BlockProviders'
 import { exists } from '../../util'
 import { forPolymorph } from '../../util/polymorphism'
 
 interface Filter {
    mod?: string[]
    text?: string
+   includeExtras?: boolean
 }
 
 function matchesables(provider: BlockProvider): string[] {
@@ -26,17 +27,19 @@ function matchesables(provider: BlockProvider): string[] {
 export function useFiltered<B extends BlockProvider>(unfiltered: B[]) {
    const [filter, setInstant] = useState<Filter>({})
    const [lazyFilter, setLazy] = useState<Filter>({})
-
+   
    const filtered = useMemo(
       () =>
-         unfiltered.filter(provider => {
-            const search = lazyFilter.text?.toLocaleLowerCase()
-            if (!search) return true
+         unfiltered
+            .filter(p => lazyFilter.includeExtras !== false || !p.extra)
+            .filter(provider => {
+               const search = lazyFilter.text?.toLocaleLowerCase()
+               if (!search) return true
 
-            return matchesables(provider)
-               .map(it => it.toLowerCase())
-               .some(it => it.includes(search))
-         }),
+               return matchesables(provider)
+                  .map(it => it.toLowerCase())
+                  .some(it => it.includes(search))
+            }),
       [unfiltered, lazyFilter]
    )
 

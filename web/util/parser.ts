@@ -1,8 +1,9 @@
-import { readFileSync } from 'fs'
+import { existsSync, readFileSync } from 'fs'
 import { nanoid } from 'nanoid'
+import { resolve } from 'path'
 import { Parser } from 'xml2js'
-import { BlockProvider, BlockProviders, ProviderType } from '../types/BlockProviders'
-import { Extra, ExtrasType } from '../types/Extras'
+import { Block, BlockProvider, BlockProviders, ProviderType } from '../@types/BlockProviders'
+import { Extra, ExtrasType } from '../@types/Extras'
 import { nameOf } from './data'
 import { getStaticReference } from './data/configs'
 import { blocksForTag } from './data/tags'
@@ -16,12 +17,21 @@ function modify<T, R>(ifIn: string[], mod: (v: T) => R) {
 
 const polymorpher = new Polymorpher()
 
+function extendBlock(p: Block) {
+   const icon = `blocks/${p.mod ?? 'minecraft'}/${p.id}.png`
+   const hasIcon = existsSync(resolve('public', icon))
+   return {
+      name: nameOf(p),
+      icon: hasIcon ? icon : null,
+   }
+}
+
 polymorpher.register<BlockProvider>('children', ProviderType, async provider => {
    const weight = provider.weight ?? 1
    const uuid = nanoid(8)
    const extra = await forPolymorph<BlockProviders, Promise<{}> | {}>(provider, {
-      tag: p => ({ matches: blocksForTag(p) }),
-      block: p => ({ name: nameOf(p) }),
+      tag: p => ({ matches: blocksForTag(p).map(b => ({ ...b, ...extendBlock(b) })) }),
+      block: extendBlock,
       reference: async p => ({ provider: await getStaticReference(p) }),
    })
    return { ...provider, ...extra, weight, uuid }

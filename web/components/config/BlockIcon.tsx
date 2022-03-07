@@ -1,10 +1,12 @@
 import Image from 'next/image'
 import { useEffect, useMemo, useState, VFC } from 'react'
-import { Block } from '../../types/BlockProviders'
+import { Block } from '../../@types/BlockProviders'
 
-const BlockIcon: VFC<Block & { size: number }> = ({ id, mod, size }) => {
-   const defaultSrc = useMemo(() => `blocks/${mod ?? 'minecraft'}/${id}`, [id, mod])
-   const [src, setSrc] = useState<string>()
+const FALLBACK = 'unknown_block.png'
+
+const BlockIcon: VFC<Block & { size: number }> = ({ size, id, icon }) => {
+   const defaultSrc = useMemo(() => icon ?? FALLBACK, [icon])
+   const [src, setSrc] = useState<string>(defaultSrc)
 
    useEffect(() => setSrc(defaultSrc), [defaultSrc])
 
@@ -12,10 +14,10 @@ const BlockIcon: VFC<Block & { size: number }> = ({ id, mod, size }) => {
       <Image
          objectFit='contain'
          alt={id}
-         src={`/${src}.png`}
+         src={`/${src}`}
          height={size}
          width={size}
-         onError={() => setSrc('unknown_block')}
+         onError={() => setSrc(FALLBACK)}
       />
    )
 }

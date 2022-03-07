@@ -25,9 +25,11 @@ interface BaseBlockProvider extends WeightedEntry {
    weight: number
    uuid: string
    extras?: Extra[]
+   extra?: boolean
 }
 
 export interface Block extends BaseBlockProvider, Named {
+   icon?: string
 }
 
 export interface GeneratedBlock extends Block {
