@@ -30,6 +30,7 @@
     "@types/react": "17.0.39",
     "@types/styled-components": "^5.1.23",
     "@types/unzipper": "^0.10.5",
+    "@types/wicg-file-system-access": "^2020.9.5",
     "@types/xml2js": "^0.4.9",
     "eslint": "8.9.0",
     "eslint-config-next": "12.1.0",
