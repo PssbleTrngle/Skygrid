@@ -32,6 +32,9 @@ class Cave(generator: DataGenerator) : DimensionConfigGenerator("cave", generato
                     side(Direction.UP, probability = 0.1) {
                         block("glow_shroom", "quark")
                     }
+                    side(Direction.DOWN, probability = 0.05) {
+                        block("hanging_cobweb", mod = "biomesoplenty")
+                    }
                 }
             }
         }

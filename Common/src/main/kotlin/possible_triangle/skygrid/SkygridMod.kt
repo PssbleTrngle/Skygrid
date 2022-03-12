@@ -1,5 +1,6 @@
 package possible_triangle.skygrid
 
+import net.minecraft.ChatFormatting
 import net.minecraft.core.Registry
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.TextComponent
@@ -35,14 +36,29 @@ object SkygridMod {
     }
 
     fun onItemTooltip(stack: ItemStack, flags: TooltipFlag, tooltip: MutableList<Component>) {
-        if (Services.PLATFORM.isDevelopmentEnvironment) {
-            val item = stack.item
-            if (item is BlockItem && flags.isAdvanced) {
-                val tags = Services.PLATFORM.getTags(item.block)
-                tags.forEach {
+        val item = stack.item
+        if (flags.isAdvanced && item is BlockItem) {
+
+            if (Services.CONFIG.showProbabilities) {
+                val probabilities = DimensionConfig.getProbability(item.block)
+                if (probabilities.isNotEmpty()) {
+                    tooltip.add(TextComponent("Probabilities:").withStyle(ChatFormatting.GOLD))
+                    probabilities.forEach { (config, probability) ->
+                        tooltip.add(TextComponent("  $config: ")
+                            .append(TextComponent("${String.format("%.3f", probability * 100)}%").withStyle(
+                                ChatFormatting.AQUA))
+                        )
+                    }
+                }
+            }
+
+            if (Services.CONFIG.showBlockTags) {
+                Services.PLATFORM.getTags(item.block).forEach {
                     tooltip.add(TextComponent("#$it"))
                 }
             }
+
         }
     }
+
 }

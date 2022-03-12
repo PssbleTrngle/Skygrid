@@ -5,8 +5,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.Property
 import possible_triangle.skygrid.data.generation.builder.BasicBlocksBuilder
+import possible_triangle.skygrid.data.generation.builder.ExceptFilterBuilder
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
+import possible_triangle.skygrid.data.xml.FilterOperator
 import possible_triangle.skygrid.data.xml.Transformer
 import possible_triangle.skygrid.data.xml.impl.CyclePropertyTransformer
 import possible_triangle.skygrid.data.xml.impl.Offset
@@ -17,6 +19,14 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
 
     private val extras = arrayListOf<Extra>()
     private val transformers = arrayListOf<Transformer>()
+    private val filters = arrayListOf<FilterOperator>()
+
+    fun except(builder: ExceptFilterBuilder.() -> Unit) {
+        ExceptFilterBuilder().also {
+            builder(it)
+            filters.add(it.build())
+        }
+    }
 
     fun side(
         on: Direction,
@@ -72,10 +82,14 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         transformers.add(CyclePropertyTransformer(key))
     }
 
-    protected abstract fun buildWith(extras: List<Extra>, transformers: List<Transformer>): T
+    protected abstract fun buildWith(
+        extras: List<Extra>,
+        transformers: List<Transformer>,
+        filters: List<FilterOperator>
+    ): T
 
     fun build(): T {
-        return buildWith(extras.toList(), transformers.toList())
+        return buildWith(extras.toList(), transformers.toList(), filters.toList())
     }
 
 }

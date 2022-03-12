@@ -4,7 +4,7 @@ import possible_triangle.skygrid.data.generation.builder.providers.BlockBuilder
 import possible_triangle.skygrid.data.xml.DimensionConfig
 import possible_triangle.skygrid.data.xml.Distance
 import possible_triangle.skygrid.data.xml.ListWrapper
-import possible_triangle.skygrid.data.xml.impl.Block
+import possible_triangle.skygrid.data.xml.impl.SingleBlock
 
 class DimensionConfigBuilder {
 
@@ -12,7 +12,7 @@ class DimensionConfigBuilder {
     private val blocks = BasicBlocksBuilder()
     private val loot = LootBuilder()
     private val mobs = MobsBuilder()
-    private var gap: Block? = null
+    private var gap: SingleBlock? = null
 
     fun blocks(builder: IBlocksBuilder.() -> Unit) {
         builder(blocks)

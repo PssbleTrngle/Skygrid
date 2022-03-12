@@ -6,13 +6,9 @@ import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
-import nl.adaptivity.xmlutil.serialization.XmlAfter
 import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.ReferenceContext
-import possible_triangle.skygrid.data.xml.BlockProvider
-import possible_triangle.skygrid.data.xml.Extra
-import possible_triangle.skygrid.data.xml.ProxyProvider
-import possible_triangle.skygrid.data.xml.Transformer
+import possible_triangle.skygrid.data.xml.*
 import possible_triangle.skygrid.util.WeightedList
 import kotlin.random.Random
 
@@ -23,15 +19,23 @@ data class BlockList(
     override val name: String? = null,
     override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
+    override val filters: List<FilterOperator> = listOf(),
     val children: List<BlockProvider>,
 ) : ProxyProvider() {
 
     @Transient
     private lateinit var validChildren: WeightedList<BlockProvider>
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
+    override fun flat(): List<Pair<Block, Double>> = validChildren.flat()
+
+    override fun internalValidate(
+        blocks: Registry<Block>,
+        tags: TagContainer,
+        references: ReferenceContext,
+        filters: List<FilterOperator>,
+    ): Boolean {
         SkygridMod.LOGGER.debug("Validated list $name")
-        validChildren = WeightedList(children.filter { it.validate(blocks, tags, references) })
+        validChildren = WeightedList(children.filter { it.validate(blocks, tags, references, filters) })
         return validChildren.isNotEmpty()
     }
 

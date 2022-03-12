@@ -25,7 +25,7 @@ data class Tag(
     private val expand: Boolean = false,
     override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
-    val filters: List<FilterOperator> = listOf(),
+    override val filters: List<FilterOperator> = listOf(),
 ) : BlockProvider() {
 
     @Transient
@@ -42,7 +42,14 @@ data class Tag(
     override val name: String
         get() = "#$key"
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
+    override fun flat(): List<Pair<Block, Double>> = blocks.map { it to 1.0 }
+
+    override fun internalValidate(
+        blocks: Registry<Block>,
+        tags: TagContainer,
+        references: ReferenceContext,
+        filters: List<FilterOperator>,
+    ): Boolean {
         this.blocks = tags.getOrEmpty(Registry.BLOCK_REGISTRY).getTagOrEmpty(key).values.filter {
             filters.all { filter -> filter.test(it, blocks, tags) }
         }

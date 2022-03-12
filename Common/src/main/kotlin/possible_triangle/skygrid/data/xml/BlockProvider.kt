@@ -18,6 +18,7 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
 
     protected abstract val extras: List<Extra>
     protected abstract val transformers: List<Transformer>
+    protected abstract val filters: List<FilterOperator>
     abstract val name: String?
 
     @Transient
@@ -31,15 +32,19 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
         val stripped = object : BlockProvider() {
             override val extras: List<Extra> = emptyList()
             override val transformers: List<Transformer> = parent.transformers
+            override val filters: List<FilterOperator> = parent.filters
             override val name: String? = parent.name
             override val weight: Double
                 get() = parent.weight
+
+            override fun flat(): List<Pair<Block, Double>> = parent.flat()
 
             override fun internalValidate(
                 blocks: Registry<Block>,
                 tags: TagContainer,
                 references: ReferenceContext,
-            ): Boolean = parent.internalValidate(blocks, tags, references)
+                filters: List<FilterOperator>,
+            ): Boolean = parent.internalValidate(blocks, tags, references, filters)
 
             override fun base(random: Random): Block = parent.base(random)
 
@@ -50,16 +55,24 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
         return stripped
     }
 
+    abstract fun flat(): List<Pair<Block, Double>>
+
     protected abstract fun internalValidate(
         blocks: Registry<Block>,
         tags: TagContainer,
         references: ReferenceContext,
+        filters: List<FilterOperator>,
     ): Boolean
 
-    final override fun validate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
+    final override fun validate(
+        blocks: Registry<Block>,
+        tags: TagContainer,
+        references: ReferenceContext,
+        additionalFilters: List<FilterOperator>,
+    ): Boolean {
         val referencesWithThis = references.with(this)
         validExtras = extras.filter { it.validate(blocks, tags, referencesWithThis) }
-        return internalValidate(blocks, tags, references).also {
+        return internalValidate(blocks, tags, references, additionalFilters + filters).also {
             if (!it) LOGGER.debug("Invalid BlockProvider ${name ?: "(anonymous)"} of type ${javaClass.name}")
         }
     }

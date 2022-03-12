@@ -1,9 +1,23 @@
 <dimension>
    <blocks>
-      <block id="lava" weight="0.5"/>
-      <list name="ground">
+      <list weight="0.1" name="fluids">
+         <block id="lava" weight="0.5"/>
+         <block id="blood" mod="biomesoplenty"/>
+      </list>
+      <list weight="5.0" name="ground">
          <block id="netherrack">
             <side on="up" probability="0.1">
+               <block id="burning_blossom" mod="biomesoplenty"/>
+               <block id="hellbark_sapling" mod="biomesoplenty"/>
+               <block id="crimson_fungus"/>
+               <block id="warped_fungus"/>
+               <block id="bramble" mod="biomesoplenty">
+                  <set key="down" value="true"/>
+               </block>
+            </side>
+         </block>
+         <block id="netherrack" weight="0.1">
+            <side on="up">
                <block id="fire"/>
             </side>
          </block>
@@ -12,7 +26,11 @@
          <block id="basalt" weight="0.5">
             <cycle key="axis"/>
          </block>
-         <block id="blackstone" weight="0.6"/>
+         <block id="blackstone">
+            <side on="up" probability="0.2">
+               <block id="blackstone_spines" mod="biomesoplenty"/>
+            </side>
+         </block>
          <list name="soul">
             <side on="up" probability="0.1">
                <block id="soul_fire"/>
@@ -35,6 +53,11 @@
                <block id="crimson_roots"/>
             </side>
          </block>
+         <tag id="flesh" mod="biomesoplenty">
+            <side on="down">
+               <block id="flesh_tendons" mod="biomesoplenty"/>
+            </side>
+         </tag>
       </list>
       <list weight="0.2" name="ores">
          <block id="nether_quartz_ore"/>
@@ -50,22 +73,72 @@
             <cycle key="axis"/>
             <block id="warped_stem"/>
             <block id="crimson_stem"/>
+            <block id="hellbark_log" mod="biomesoplenty"/>
          </list>
          <list name="leaves">
             <block id="nether_wart_block"/>
             <block id="warped_wart_block"/>
             <block id="shroomlight"/>
-            <block id="red_mushroom_block" weight="0.1"/>
-            <block id="brown_mushroom_block" weight="0.1"/>
+            <block id="red_mushroom_block" weight="0.05"/>
+            <block id="brown_mushroom_block" weight="0.05"/>
          </list>
       </list>
       <block id="glowstone" weight="0.1"/>
+      <block id="rose_quartz_block" mod="biomesoplenty" weight="0.05">
+         <side on="down" probability="0.5">
+            <block id="rose_quartz_cluster" mod="biomesoplenty">
+               <set key="facing" value="down"/>
+            </block>
+         </side>
+         <side on="up" probability="0.5">
+            <block id="rose_quartz_cluster" mod="biomesoplenty">
+               <set key="facing" value="up"/>
+            </block>
+         </side>
+         <side on="north" probability="0.5">
+            <block id="rose_quartz_cluster" mod="biomesoplenty">
+               <set key="facing" value="north"/>
+            </block>
+         </side>
+         <side on="south" probability="0.5">
+            <block id="rose_quartz_cluster" mod="biomesoplenty">
+               <set key="facing" value="south"/>
+            </block>
+         </side>
+         <side on="west" probability="0.5">
+            <block id="rose_quartz_cluster" mod="biomesoplenty">
+               <set key="facing" value="west"/>
+            </block>
+         </side>
+         <side on="east" probability="0.5">
+            <block id="rose_quartz_cluster" mod="biomesoplenty">
+               <set key="facing" value="east"/>
+            </block>
+         </side>
+      </block>
+      <block id="spawner" weight="0.05"/>
+      <list weight="0.02" name="loot">
+         <block id="warped_chest" mod="quark"/>
+         <block id="crimson_chest" mod="quark"/>
+         <fallback>
+            <block id="nether_brick_chest" mod="quark"/>
+            <block id="chest"/>
+         </fallback>
+      </list>
+      <list weight="0.01" name="compressed">
+         <block id="nether_wart_sack" mod="quark"/>
+         <block id="blaze_lantern" mod="quark"/>
+         <block id="blaze_block" mod="botania" weight="0.1"/>
+      </list>
       <list weight="0.1" name="building">
          <cycle key="axis"/>
          <block id="obsidian"/>
          <block id="crying_obsidian"/>
-         <block id="respawn_anchor" weight="0.05"/>
-         <block id="smithing_table" weight="0.1"/>
+         <list weight="0.1" name="workstations">
+            <block id="respawn_anchor" weight="0.5"/>
+            <block id="smithing_table"/>
+            <block id="blackstone_furnace" mod="quark"/>
+         </list>
          <list name="quartz">
             <block id="quartz_block"/>
             <block id="quartz_bricks"/>
@@ -79,6 +152,12 @@
             <block id="polished_basalt"/>
             <block id="smooth_basalt"/>
          </list>
+         <list name="soul sandstone">
+            <block id="soul_sandstone" mod="quark"/>
+            <block id="chiseled_soul_sandstone" mod="quark"/>
+            <block id="cut_soul_sandstone" mod="quark"/>
+            <block id="soul_sandstone_bricks" mod="quark"/>
+         </list>
          <list name="nether bricks">
             <side on="up" probability="0.05">
                <block id="wither_skeleton_skull">
@@ -86,6 +165,7 @@
                </block>
             </side>
             <block id="nether_bricks" weight="10.0"/>
+            <block id="blue_nether_bricks" mod="quark"/>
             <block id="cracked_nether_bricks"/>
             <block id="chiseled_nether_bricks"/>
             <block id="red_nether_bricks"/>

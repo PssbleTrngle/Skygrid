@@ -16,19 +16,24 @@ import kotlin.random.Random
 @Serializable
 abstract class Extra : Generator<IBlockAccess>, Validating {
 
-    abstract val providers: List<BlockProvider>
+    protected abstract val providers: List<BlockProvider>
     abstract val probability: Double
     abstract val shared: Boolean
 
     @Transient
-    private lateinit var validProviders: WeightedList<BlockProvider>
+    lateinit var validProviders: WeightedList<BlockProvider>
 
     abstract fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean
 
     abstract fun offset(pos: BlockPos): BlockPos
 
-    override fun validate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
-        validProviders = WeightedList(providers.filter { it.validate(blocks, tags, references) })
+    override fun validate(
+        blocks: Registry<Block>,
+        tags: TagContainer,
+        references: ReferenceContext,
+        additionalFilters: List<FilterOperator>
+    ): Boolean {
+        validProviders = WeightedList(providers.filter { it.validate(blocks, tags, references, ) })
         return internalValidate(blocks, tags) && validProviders.isNotEmpty()
     }
 

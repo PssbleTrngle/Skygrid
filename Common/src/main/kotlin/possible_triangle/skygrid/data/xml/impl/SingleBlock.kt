@@ -6,21 +6,24 @@ import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
+import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
+import possible_triangle.skygrid.data.xml.FilterOperator
 import possible_triangle.skygrid.data.xml.Transformer
 import possible_triangle.skygrid.keyFrom
 import kotlin.random.Random
 
 @Serializable
 @SerialName("block")
-data class Block(
+data class SingleBlock(
     private val id: String,
     private val mod: String = "minecraft",
     override val weight: Double = 1.0,
     override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
+    override val filters: List<FilterOperator> = listOf(),
 ) : BlockProvider() {
 
     @Transient
@@ -36,7 +39,17 @@ data class Block(
         return block
     }
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer, references: ReferenceContext): Boolean {
+    override fun flat(): List<Pair<Block, Double>> {
+        return listOf(block to 1.0)
+    }
+
+    override fun internalValidate(
+        blocks: Registry<Block>,
+        tags: TagContainer,
+        references: ReferenceContext,
+        filters: List<FilterOperator>,
+    ): Boolean {
+        SkygridMod.LOGGER.info("Validating $name")
         return blocks.getOptional(key).map {
             block = it
         }.isPresent

@@ -12,7 +12,7 @@ class ExceptFilterBuilder {
         filters.add(NameFilter(pattern))
     }
 
-    fun tag(tag: Tag.Named<Block>) {
+    fun tag(tag: Tag.Named<SingleBlock>) {
         tag(tag.name.namespace, tag.name.path)
     }
 

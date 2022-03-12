@@ -7,6 +7,7 @@
                <except>
                   <mod id="botania"/>
                   <name pattern="wither_rose"/>
+                  <name pattern="burning_blossom"/>
                </except>
             </tag>
          </side>

@@ -7,10 +7,12 @@ import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.tags.TagContainer
 import net.minecraft.util.random.SimpleWeightedRandomList
 import net.minecraft.world.level.SpawnData
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -19,12 +21,24 @@ import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.XMLResource
 import possible_triangle.skygrid.data.xml.impl.LootTable
+import possible_triangle.skygrid.data.xml.impl.SingleBlock
 import possible_triangle.skygrid.data.xml.impl.SpawnerEntry
 import possible_triangle.skygrid.world.BlockAccess
 import possible_triangle.skygrid.world.Generator
 import java.util.*
 import kotlin.random.Random
-import possible_triangle.skygrid.data.xml.impl.Block as SingleBlock
+
+fun Collection<BlockProvider>.flat(): List<Pair<Block, Double>> {
+    val totalWeight = sumOf { it.weight }
+    return flatMap { provider ->
+        val probability = provider.weight / totalWeight
+        val extras = provider.validExtras.flatMap { extra ->
+            extra.validProviders.flat().map { it.first to it.second * extra.probability * probability }
+        }
+        extras + provider.flat().map { it.first to it.second * probability }
+    }
+}
+
 
 @Serializable
 @SerialName("dimension")
@@ -104,6 +118,12 @@ data class DimensionConfig(
 
         val DEFAULT = DimensionConfig(ListWrapper(SingleBlock("bedrock")))
 
+        private val WEIGHT_MAP = hashMapOf<Block, HashMap<ResourceLocation, Double>>()
+
+        fun getProbability(block: Block): Map<ResourceLocation, Double> {
+            return WEIGHT_MAP[block] ?: emptyMap()
+        }
+
         override fun merge(a: DimensionConfig, b: DimensionConfig): DimensionConfig {
             return if (b.replace) b
             else b.copy(
@@ -116,6 +136,13 @@ data class DimensionConfig(
 
         override fun onReload(server: MinecraftServer) {
             validate(DEFAULT, server)
+
+            entries.forEach { (key, config) ->
+                val blocks = config.blocks.flat()
+                blocks.forEach { (block, probability) ->
+                    WEIGHT_MAP.getOrPut(block) { hashMapOf() }[key] = probability
+                }
+            }
         }
 
         override fun validate(value: DimensionConfig, server: MinecraftServer): Boolean {

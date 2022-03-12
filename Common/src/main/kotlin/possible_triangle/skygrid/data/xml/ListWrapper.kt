@@ -9,7 +9,7 @@ import kotlin.random.Random
 data class ListWrapper<T : WeightedEntry>(
     private val children: List<T> = listOf(),
     private val replace: Boolean = false,
-) {
+): Collection<T> {
 
     @Transient
     private lateinit var weighted: WeightedList<T>
@@ -34,4 +34,22 @@ data class ListWrapper<T : WeightedEntry>(
         return weighted.random(random)
     }
 
+    override val size: Int
+        get() = weighted.size
+
+    override fun contains(element: T): Boolean {
+        return weighted.contains(element)
+    }
+
+    override fun containsAll(elements: Collection<T>): Boolean {
+        return weighted.containsAll(elements)
+    }
+
+    override fun isEmpty(): Boolean {
+        return weighted.isEmpty()
+    }
+
+    override fun iterator(): Iterator<T> {
+        return weighted.iterator()
+    }
 }

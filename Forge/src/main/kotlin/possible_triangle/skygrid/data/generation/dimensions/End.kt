@@ -25,10 +25,20 @@ class End(generator: DataGenerator) : DimensionConfigGenerator("end", generator)
                 mob(EntityType.SHULKER, weight = 0.1)
             }
 
+            loot {
+                table("chests/end_city_treasure")
+            }
+
             blocks {
                 list("ground") {
                     block(Blocks.END_STONE) {
                         side(UP, probability = 0.1) {
+                            block("chorus_weeds", mod = "quark")
+                            block("chorus_twist", mod = "quark")
+                        }
+                    }
+                    block(Blocks.END_STONE, weight = 0.05) {
+                        side(UP) {
                             block(Blocks.CHORUS_FLOWER)
                         }
                     }
@@ -45,12 +55,39 @@ class End(generator: DataGenerator) : DimensionConfigGenerator("end", generator)
                         block(Blocks.CRYING_OBSIDIAN)
                     }
                     block(Blocks.END_STONE_BRICKS)
+
                     list("purpur") {
                         block(Blocks.PURPUR_PILLAR)
                         block(Blocks.PURPUR_BLOCK)
                     }
+
+                    list("duskbound") {
+                        block("duskbound_block", mod = "quark")
+                        block("duskbound_lantern", mod = "quark")
+                    }
+
+                    list("myalite") {
+                        block("myalite", mod = "quark", weight = 10.0)
+                        block("myalite_crystal", mod = "quark", weight = 5.0)
+                        block("dusky_myalite", mod = "quark")
+                        block("myalite_bricks", mod = "quark")
+                        block("chiseled_myalite_bricks", mod = "quark")
+                        block("myalite_pillar", mod = "quark")
+                    }
+
                     block(Blocks.ENDER_CHEST, weight = 0.01)
+                }
+
+                list("compressed", weight = 0.05) {
+                    block("chorus_fruit_block", mod = "quark")
+                }
+
+                list("loot", weight = 0.01) {
                     block(Blocks.SHULKER_BOX, weight = 0.0075)
+                    fallback {
+                        block("purpur_chest", mod = "quark")
+                        block(Blocks.CHEST)
+                    }
                 }
             }
         }

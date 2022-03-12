@@ -4,8 +4,10 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.*
 import net.minecraft.data.DataGenerator
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
@@ -14,26 +16,36 @@ import net.minecraftforge.common.Tags
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.generation.DimensionConfigGenerator
-import possible_triangle.skygrid.data.generation.builder.ExceptFilterBuilder
-import possible_triangle.skygrid.data.generation.builder.providers.TagBuilder
+import possible_triangle.skygrid.data.generation.builder.IBlocksBuilder
+import possible_triangle.skygrid.data.generation.builder.providers.BlockProviderBuilder
+
+fun BlockProviderBuilder<*>.overworldWood() {
+    except {
+        pattern("crimson")
+        pattern("warped")
+        pattern("hellbark")
+        mod("endergetic")
+        mod("midnight")
+        mod("botania")
+        mod("simplefarming")
+    }
+}
+
+fun BlockProviderBuilder<*>.cluster(crystals: IBlocksBuilder.() -> BlockProviderBuilder<*>) {
+    Direction.values().forEach { direction ->
+        side(direction, probability = 0.5) {
+            crystals(this).also {
+                it.property(BlockStateProperties.FACING, direction)
+            }
+        }
+    }
+}
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
 class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld", generator) {
 
     override fun generate() {
-
-        fun TagBuilder.overworldWood(builder: ExceptFilterBuilder.() -> Unit = {}) {
-            except {
-                pattern("crimson")
-                pattern("warped")
-                pattern("hellbark")
-                mod("endergetic")
-                mod("midnight")
-                mod("botania")
-                builder(this)
-            }
-        }
 
         dimension(LevelStem.OVERWORLD) {
             loot {
@@ -77,22 +89,26 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
 
                 list("ground", weight = 100.0) {
                     list("stone", weight = 20.0) {
-                        tag(BlockTags.BASE_STONE_OVERWORLD, weight = 8.0) {
-                            side(UP, probability = 0.1) {
+                        tag(BlockTags.BASE_STONE_OVERWORLD, expand = true) {
+                            side(UP, probability = 0.02) {
                                 block("glow_shroom", "quark")
                             }
                         }
-                        block(Blocks.GRAVEL, weight = 2.0)
-                        block(Blocks.CLAY)
+                        block(Blocks.STONE)
+                        block("limestone", mod = "create")
+                        block("ochrum", mod = "create")
+                        block("scoria", mod = "create")
+                        block("scorchia", mod = "create")
+                        block(Blocks.CALCITE, weight = 0.1)
                     }
+
+                    block(Blocks.GRAVEL, weight = 10.0)
+                    block(Blocks.CLAY, weight = 8.0)
 
                     preset("moss", weight = 0.3) {
                         block(Blocks.MOSS_BLOCK) {
                             side(DOWN, probability = 0.1) {
                                 block(Blocks.SPORE_BLOSSOM)
-                            }
-                            double(probability = 0.2) {
-                                block(Blocks.BIG_DRIPLEAF)
                             }
                             side(UP, probability = 0.4) {
                                 block(Blocks.BIG_DRIPLEAF)
@@ -139,12 +155,16 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                     side(UP) {
                                         block(Blocks.FERN)
                                         block(Blocks.GRASS)
+                                        block("bush", mod = "biomesoplenty")
+                                        block("sprout", mod = "biomesoplenty")
+                                        block("clover", mod = "biomesoplenty", weight = 0.1)
                                     }
                                 }
                                 block(Blocks.GRASS_BLOCK, weight = 0.5) {
                                     double {
                                         block(Blocks.LARGE_FERN)
                                         block(Blocks.TALL_GRASS)
+                                        block("barley", mod = "biomesoplenty", weight = 0.2)
                                     }
                                 }
                             }
@@ -157,6 +177,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                             except {
                                                 mod("botania")
                                                 pattern("wither_rose")
+                                                pattern("burning_blossom")
                                             }
                                         }
                                     }
@@ -184,14 +205,19 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                     block(Blocks.OBSIDIAN, weight = 0.5)
 
                     list("sand", weight = 5.0) {
-                        block("sandy_bricks", "quark", weight = 0.1)
-                        list(weight = 0.2) {
-                            block(Blocks.SANDSTONE)
-                            block(Blocks.CHISELED_SANDSTONE)
-                            block(Blocks.SMOOTH_SANDSTONE)
-                            block(Blocks.RED_SANDSTONE, weight = 0.2)
-                            block(Blocks.CHISELED_RED_SANDSTONE, weight = 0.2)
-                            block(Blocks.SMOOTH_RED_SANDSTONE, weight = 0.2)
+                        list("sandstone", weight = 0.2) {
+                            list("normal sandstone") {
+                                block(Blocks.SANDSTONE)
+                                block(Blocks.CHISELED_SANDSTONE)
+                                block(Blocks.CUT_SANDSTONE)
+                                block("sandstone_bricks", mod = "quark")
+                            }
+                            list("red sandstone", weight = 0.2) {
+                                block("red_sandstone_bricks", mod = "quark")
+                                block(Blocks.RED_SANDSTONE, weight = 0.2)
+                                block(Blocks.CHISELED_RED_SANDSTONE, weight = 0.2)
+                                block(Blocks.CUT_RED_SANDSTONE, weight = 0.2)
+                            }
                         }
                         list {
                             block(Blocks.SAND)
@@ -199,6 +225,8 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                             side(UP, probability = 0.1) {
                                 block(Blocks.CACTUS)
                                 block(Blocks.DEAD_BUSH)
+                                block("desert_grass", mod = "biomesoplenty")
+                                block("", mod = "biomesoplenty")
                             }
                         }
                     }
@@ -243,6 +271,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
 
                     block(Blocks.GRASS_BLOCK, weight = 0.8) {
                         side(UP) {
+                            block("small_banana_fond", mod = "neapolitan", weight = 0.1)
                             list {
                                 cycle(SweetBerryBushBlock.AGE)
                                 block(Blocks.SWEET_BERRY_BUSH)
@@ -261,21 +290,20 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                 }
 
                 list("tree", weight = 50.0) {
+                    overworldWood()
                     tag(BlockTags.LOGS_THAT_BURN) {
                         cycle(BlockStateProperties.AXIS)
-                        overworldWood {
+                        except {
                             pattern("stripped")
                             pattern("_wood")
-                            mod("simplefarming")
                         }
                     }
                     block(Blocks.BEE_NEST, weight = 0.01)
-                    tag(BlockTags.PLANKS, weight = 0.3) { overworldWood() }
+                    tag(BlockTags.PLANKS, weight = 0.3)
                     tag(BlockTags.LEAVES, weight = 0.6) {
                         property(LeavesBlock.PERSISTENT, true)
-                        overworldWood()
                     }
-                    list("mushrooms blocks") {
+                    list("mushrooms blocks", weight = 0.01) {
                         block(Blocks.MUSHROOM_STEM)
                         block(Blocks.RED_MUSHROOM_BLOCK)
                         block(Blocks.BROWN_MUSHROOM_BLOCK)
@@ -290,6 +318,17 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         block(Blocks.COBBLED_DEEPSLATE, weight = 0.5)
                         block(Blocks.MOSSY_COBBLESTONE, weight = 0.1)
                         block(Blocks.SMOOTH_STONE, weight = 0.1)
+
+                        list("copper") {
+                            block(Blocks.WAXED_COPPER_BLOCK)
+                            block(Blocks.WAXED_OXIDIZED_COPPER)
+                            block(Blocks.WAXED_EXPOSED_COPPER)
+                            block(Blocks.WAXED_WEATHERED_COPPER)
+                            block(Blocks.WAXED_CUT_COPPER)
+                            block(Blocks.WAXED_OXIDIZED_CUT_COPPER)
+                            block(Blocks.WAXED_EXPOSED_CUT_COPPER)
+                            block(Blocks.WAXED_WEATHERED_CUT_COPPER)
+                        }
 
                         list("bricks") {
                             block(Blocks.BRICKS)
@@ -311,17 +350,34 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                 block("cobblestone_bricks", "quark")
                                 block("mossy_cobblestone_bricks", "quark", weight = 0.5)
                             }
-                            list("quark bricks") {
-                                block("polished_jasper_block", "quark", weight = 0.5)
-                                block("polished_limestone_block", "quark", weight = 0.5)
-                                block("polished_shale_block", "quark", weight = 0.5)
+                            list("stone variants bricks") {
+                                cycle(BlockStateProperties.AXIS)
+                                listOf("quark:jasper",
+                                    "quark:shale",
+                                    "quark:limestone",
+                                    "granite",
+                                    "diorite",
+                                    "andesite",
+                                    "calcite",
+                                    "dripstone").map(::ResourceLocation)
+                                    .forEach {
+                                        block("polished_${it.path}", mod = it.namespace)
+                                        block("${it.path}_pillar", mod = "quark")
+                                        block("${it.path}_bricks", mod = "quark")
+                                        block("chiseled_${it.path}_bricks", mod = "quark")
+                                    }
                             }
                         }
                     }
 
-                    block(Blocks.BOOKSHELF, weight = 0.05)
+                    fallback(weight = 0.05) {
+                        tag("bookshelves", mod = "forge")
+                        block(Blocks.BOOKSHELF)
+                    }
                     tag(Tags.Blocks.GLASS_SILICA)
                     tag(BlockTags.WOOL)
+
+                    block("bamboo_mat", mod = "quark", weight = 0.05)
 
                     list("midori", weight = 0.01) {
                         cycle(BlockStateProperties.AXIS)
@@ -342,12 +398,20 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         block(Blocks.TNT)
                         block(Blocks.SLIME_BLOCK, weight = 2.0)
                         block(Blocks.HONEY_BLOCK)
-                        // TODO quark redstone
+                        block("iron_plate", mod = "quark", weight = 0.3)
+                        block("rusty_iron_plate", mod = "quark", weight = 0.3)
+                        fallback {
+                            block("ender_watcher", mod = "quark")
+                            block("ender_eye_block", mod = "botania")
+                        }
                     }
 
                     list("workstations", weight = 0.1) {
                         block(Blocks.CRAFTING_TABLE, weight = 20.0)
-                        block(Blocks.FURNACE, weight = 3.0)
+                        list(weight = 3.0) {
+                            block(Blocks.FURNACE)
+                            block("deepslate_furnace", mod = "quark")
+                        }
                         block(Blocks.SMOKER)
                         block(Blocks.BLAST_FURNACE)
                         block(Blocks.LOOM)
@@ -364,8 +428,9 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                 }
 
                 list("loot") {
-                    tag(Tags.Blocks.BARRELS_WOODEN) { overworldWood() }
-                    tag(Tags.Blocks.CHESTS_WOODEN) { overworldWood() }
+                    overworldWood()
+                    tag(Tags.Blocks.BARRELS_WOODEN)
+                    tag(Tags.Blocks.CHESTS_WOODEN)
                 }
 
                 block(Blocks.SPAWNER)
@@ -429,29 +494,28 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         tag(BlockTags.EMERALD_ORES, weight = 0.5)
                         tag(BlockTags.LAPIS_ORES, weight = 4.5)
                         tag(BlockTags.REDSTONE_ORES, weight = 6.0)
+                        tag("ores/zinc", mod = "forge", weight = 8.0)
+                        except {
+                            tag(Tags.Blocks.ORES_IN_GROUND_NETHERRACK)
+                            pattern("nether_")
+                        }
                     }
 
-                    list("blocks") {
+                    list("blocks", weight = 0.1) {
                         block(Blocks.COAL_BLOCK)
-                        block(Blocks.RAW_IRON_BLOCK, weight = 0.5)
-                        block(Blocks.RAW_COPPER_BLOCK, weight = 0.5)
-                        block(Blocks.RAW_GOLD_BLOCK, weight = 0.3)
-                        block(Blocks.DIAMOND_BLOCK, weight = 0.01)
-                        block(Blocks.EMERALD_BLOCK, weight = 0.005)
-                        block(Blocks.LAPIS_BLOCK, weight = 0.45)
-                        block(Blocks.REDSTONE_BLOCK, weight = 0.6)
+                        block(Blocks.RAW_IRON_BLOCK, weight = 10.0)
+                        block(Blocks.RAW_COPPER_BLOCK, weight = 8.0)
+                        block(Blocks.RAW_GOLD_BLOCK, weight = 6.0)
+                        block(Blocks.DIAMOND_BLOCK)
+                        block(Blocks.EMERALD_BLOCK, weight = 0.5)
+                        block(Blocks.LAPIS_BLOCK, weight = 4.5)
+                        block(Blocks.REDSTONE_BLOCK, weight = 6.0)
+                        tag("storage_blocks/raw_zinc", mod = "forge", weight = 8.0)
                     }
 
                     list("crystals") {
-                        block(Blocks.AMETHYST_BLOCK)
-                        block(Blocks.BUDDING_AMETHYST) {
-                            Direction.values().forEach {
-                                side(it, probability = 0.5) {
-                                    tag(SkygridMod.AMETHYST_CLUSTERS) {
-                                        property(BlockStateProperties.FACING, it)
-                                    }
-                                }
-                            }
+                        block(Blocks.AMETHYST_BLOCK).cluster {
+                            tag(SkygridMod.AMETHYST_CLUSTERS)
                         }
                         tag("corundum", "quark")
                     }
@@ -470,6 +534,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         block("bonded_ravager_hide", weight = 0.01)
                     }
                     list("plants") {
+                        block("glowberry_sack", "quark")
                         block("cactus_block", "quark")
                         block("sugarcane_block", "quark")
                         block("bamboo_block", "quark", weight = 0.1)
@@ -483,15 +548,29 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         block(Blocks.DRIED_KELP_BLOCK)
                     }
                     list("crops") {
-                        block("apple_crate", "quark")
+                        block("apple_crate", "quark", weight = 0.3)
                         block("potato_crate", "quark")
                         block("carrot_crate", "quark")
                         block("beetroot_crate", "quark")
                         block("berry_sack", "quark", weight = 0.1)
                         block("cocoa_beans_sack", "quark", weight = 0.1)
                         block("golden_apple_crate", "quark", weight = 0.01)
+
                         block("passionfruit_crate", "atmospheric")
                         block("shimmering_passionfruit_crate", "atmospheric", weight = 0.01)
+
+                        block("chocolate_block", mod = "neapolitan", weight = 0.1)
+                        block("banana_crate", mod = "neapolitan", weight = 0.5)
+                        block("strawberry_crate", mod = "neapolitan")
+                        block("white_strawberry_crate", mod = "neapolitan", weight = 0.1)
+                        block("mint_basket", mod = "neapolitan", weight = 0.5)
+                        block("adzuki_crate", mod = "neapolitan", weight = 0.2)
+                        block("vanilla_pod_block", mod = "neapolitan", weight = 0.3)
+                    }
+                    list("petals", weight = 0.1) {
+                        DyeColor.values().forEach {
+                            block("${it.name.lowercase()}_petal_block", mod = "botania")
+                        }
                     }
                 }
             }

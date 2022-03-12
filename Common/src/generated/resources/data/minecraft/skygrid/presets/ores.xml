@@ -1,6 +1,9 @@
 <preset>
    <list>
       <list weight="20.0" name="ores">
+         <except>
+            <name pattern="nether_"/>
+         </except>
          <tag id="coal_ores" weight="10.0"/>
          <tag id="iron_ores" weight="8.0"/>
          <tag id="copper_ores" weight="8.0"/>
@@ -9,20 +12,22 @@
          <tag id="emerald_ores" weight="0.5"/>
          <tag id="lapis_ores" weight="4.5"/>
          <tag id="redstone_ores" weight="6.0"/>
+         <tag id="ores/zinc" mod="forge" weight="8.0"/>
+         <tag id="ores_in_ground/netherrack" mod="forge"/>
       </list>
-      <list name="blocks">
+      <list weight="0.1" name="blocks">
          <block id="coal_block"/>
-         <block id="raw_iron_block" weight="0.5"/>
-         <block id="raw_copper_block" weight="0.5"/>
-         <block id="raw_gold_block" weight="0.3"/>
-         <block id="diamond_block" weight="0.01"/>
-         <block id="emerald_block" weight="0.005"/>
-         <block id="lapis_block" weight="0.45"/>
-         <block id="redstone_block" weight="0.6"/>
+         <block id="raw_iron_block" weight="10.0"/>
+         <block id="raw_copper_block" weight="8.0"/>
+         <block id="raw_gold_block" weight="6.0"/>
+         <block id="diamond_block"/>
+         <block id="emerald_block" weight="0.5"/>
+         <block id="lapis_block" weight="4.5"/>
+         <block id="redstone_block" weight="6.0"/>
+         <tag id="storage_blocks/raw_zinc" mod="forge" weight="8.0"/>
       </list>
       <list name="crystals">
-         <block id="amethyst_block"/>
-         <block id="budding_amethyst">
+         <block id="amethyst_block">
             <side on="down" probability="0.5">
                <tag id="amethyst_clusters" mod="skygrid">
                   <set key="facing" value="down"/>

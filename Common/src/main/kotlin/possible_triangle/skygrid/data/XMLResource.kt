@@ -31,7 +31,7 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
                 subclass(BlockList::class)
                 subclass(Fallback::class)
                 subclass(Tag::class)
-                subclass(Block::class)
+                subclass(SingleBlock::class)
                 subclass(Reference::class)
             }
 
@@ -89,6 +89,9 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
 
     val keys
         get() = values.keys
+
+    val entries
+        get() = values.entries
 
     operator fun get(id: ResourceLocation): T? {
         return values[id]

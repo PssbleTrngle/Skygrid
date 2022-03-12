@@ -14,4 +14,5 @@ interface IPlatformHelper {
     fun createBlock(id: String, block: () -> Block): ReadOnlyProperty<Any?, Block>
 
     fun createBlockTag(id: ResourceLocation): Tag.Named<Block>
+
 }

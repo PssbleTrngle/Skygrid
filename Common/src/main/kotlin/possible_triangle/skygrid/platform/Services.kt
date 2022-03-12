@@ -1,12 +1,14 @@
 package possible_triangle.skygrid.platform
 
 import possible_triangle.skygrid.SkygridMod
+import possible_triangle.skygrid.platform.services.IConfig
 import possible_triangle.skygrid.platform.services.IPlatformHelper
 import java.util.*
 
 object Services {
 
-    val PLATFORM: IPlatformHelper = load(IPlatformHelper::class.java)
+    val PLATFORM = load(IPlatformHelper::class.java)
+    val CONFIG = load(IConfig::class.java)
 
     private fun <T> load(clazz: Class<T>): T {
         val loadedService: T = ServiceLoader.load(clazz)

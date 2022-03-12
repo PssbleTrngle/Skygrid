@@ -4,7 +4,7 @@ import possible_triangle.skygrid.data.xml.WeightedEntry
 import java.util.*
 import kotlin.random.Random
 
-class WeightedList<T : WeightedEntry>(pairs: List<T>) {
+class WeightedList<T : WeightedEntry>(pairs: List<T>): Collection<T> {
 
     private val map: NavigableMap<Double, T> = TreeMap()
     private var total = 0.0
@@ -27,15 +27,17 @@ class WeightedList<T : WeightedEntry>(pairs: List<T>) {
         return map.higherEntry(value)?.value ?: throw NullPointerException("No entry found")
     }
 
-    val size: Int
+    override  val size: Int
         get() = map.size
 
-    fun isEmpty(): Boolean {
+   override fun isEmpty(): Boolean {
         return map.isEmpty() || total == 0.0
     }
 
-    fun isNotEmpty(): Boolean {
-        return map.isNotEmpty() && total > 0.0
-    }
+    override fun contains(element: T): Boolean = map.values.contains(element)
+
+    override fun containsAll(elements: Collection<T>): Boolean = map.values.containsAll(elements)
+
+    override fun iterator(): Iterator<T> = map.values.iterator()
 
 }

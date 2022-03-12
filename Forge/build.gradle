@@ -128,6 +128,8 @@ processResources {
     from project(":Common").sourceSets.main.resources
 }
 
+import java.util.stream.Collectors
+
 jar {
     ArrayList<File> collected = configurations.library.collect { it }
     from collected.stream()
@@ -162,13 +164,14 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
 
         relations {
             requiredDependency 'kotlin-for-forge'
+            requiredDependency 'shutup-experimental-settings'
+            optionalDependency 'quark'
+            optionalDependency 'biomes-o-plenty'
         }
     }
 }
 
 import com.modrinth.minotaur.dependencies.ModDependency
-
-import java.util.stream.Collectors
 
 if (ENV.MODRINTH_TOKEN) modrinth {
     projectId = modrinth_project_id

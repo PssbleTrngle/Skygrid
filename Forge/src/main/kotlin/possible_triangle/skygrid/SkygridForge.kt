@@ -15,6 +15,7 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import possible_triangle.skygrid.SkygridMod.MOD_ID
 import possible_triangle.skygrid.command.SkygridCommand
 import possible_triangle.skygrid.data.XMLResource
+import possible_triangle.skygrid.platform.ForgeConfig
 import possible_triangle.skygrid.platform.Services
 import possible_triangle.skygrid.world.SkygridGenerator
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
@@ -31,6 +32,7 @@ object SkygridForge {
 
     init {
         SkygridMod.init()
+        ForgeConfig.register()
 
         FORGE_BUS.addListener(EventPriority.HIGH) { event: AddReloadListenerEvent -> XMLResource.register(event::addListener) }
         FORGE_BUS.addListener { _: ServerStoppingEvent -> XMLResource.clear() }
@@ -47,7 +49,7 @@ object SkygridForge {
 
         FORGE_BUS.addListener { event: RegisterCommandsEvent ->
             SkygridCommand.register(event.dispatcher)
-            if(Services.PLATFORM.isDevelopmentEnvironment) {
+            if (Services.PLATFORM.isDevelopmentEnvironment) {
                 ResetChunksCommand.register(event.dispatcher)
             }
         }

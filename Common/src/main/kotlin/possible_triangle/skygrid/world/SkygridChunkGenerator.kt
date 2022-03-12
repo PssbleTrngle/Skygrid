@@ -41,22 +41,21 @@ class SkygridChunkGenerator(
     private val configKey: String,
     private val seed: Long?,
     private val endPortals: Boolean,
-) : ChunkGenerator(biomeSource, StructureSettings(endPortals)) {
+) : ChunkGenerator(biomeSource, StructureSettings(Optional.of(StructureSettings.DEFAULT_STRONGHOLD), emptyMap())) {
 
     companion object {
         fun create(
             registries: RegistryAccess,
             seed: Long,
             dimension: ResourceKey<LevelStem>?,
+            biomeSource: BiomeSource? = null,
         ): ChunkGenerator {
             val biomes = registries.registryOrThrow(Registry.BIOME_REGISTRY)
             val config = dimension?.location() ?: ResourceLocation(SkygridMod.MOD_ID, "default")
-            return SkygridChunkGenerator(
-                FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)),
+            return SkygridChunkGenerator(biomeSource ?: FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)),
                 config.toString(),
                 seed,
-                dimension == LevelStem.OVERWORLD
-            )
+                dimension == LevelStem.OVERWORLD)
         }
 
         fun createSettings(
@@ -65,22 +64,39 @@ class SkygridChunkGenerator(
             bonusChest: Boolean,
         ): WorldGenSettings {
             val dimensions = MappedRegistry(Registry.LEVEL_STEM_REGISTRY, Lifecycle.experimental())
+            val biomes = registries.registryOrThrow(Registry.BIOME_REGISTRY)
 
-            val overworldGenerator = create(registries, seed, LevelStem.OVERWORLD)
-            dimensions.register(LevelStem.OVERWORLD, LevelStem({
-                registries.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY)
-                    .getOrThrow(DimensionType.OVERWORLD_LOCATION)
-            }, overworldGenerator), Lifecycle.stable())
-
-            DimensionType.defaultDimensions(registries, seed).entrySet().forEach { (key, stem) ->
-                val generator = create(registries, seed, key)
-                dimensions.register(key, LevelStem(stem.typeSupplier(), generator), Lifecycle.stable())
+            fun register(
+                stem: ResourceKey<LevelStem>,
+                dimension: ResourceKey<DimensionType>,
+                biomeSource: BiomeSource,
+            ) {
+                val generator = create(registries, seed, stem, biomeSource)
+                dimensions.register(stem, LevelStem({
+                    registries.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrThrow(dimension)
+                }, generator), Lifecycle.stable())
             }
+
+            register(
+                LevelStem.OVERWORLD,
+                DimensionType.OVERWORLD_LOCATION,
+                //ChunkyBiomeSource(ChunkyBiomeSource.Preset.OVERWORLD.biomes(biomes), seed),
+                FixedBiomeSource { biomes.getOrThrow(Biomes.PLAINS) }
+            )
+
+            register(LevelStem.NETHER,
+                DimensionType.NETHER_LOCATION,
+                //ChunkyBiomeSource(ChunkyBiomeSource.Preset.NETHER.biomes(biomes), seed),
+                FixedBiomeSource { biomes.getOrThrow(Biomes.NETHER_WASTES) }
+            )
+
+            register(LevelStem.END,
+                DimensionType.END_LOCATION,
+                FixedBiomeSource { biomes.getOrThrow(Biomes.THE_END) })
 
             return WorldGenSettings(seed, false, bonusChest, dimensions)
         }
 
-        private val CLIMATE = Climate.Sampler { _, _, _ -> Climate.TargetPoint(1L, 1L, 1L, 1L, 1L, 1L) }
 
         private val BEDROCK = Blocks.BEDROCK.defaultBlockState()
 
@@ -93,11 +109,18 @@ class SkygridChunkGenerator(
             ).apply(
                 builder,
                 builder.stable(Function4 { source, key, seed, endPortals ->
-                    SkygridChunkGenerator(source, key, seed.orElse(null), endPortals.orElse(false))
+                    SkygridChunkGenerator(
+                        source,
+                        key,
+                        seed.orElse(null),
+                        endPortals.orElse(false),
+                    )
                 }),
             )
         }
     }
+
+    private val climate = Climate.Sampler { _, _, _ -> Climate.TargetPoint(1L, 1L, 1L, 1L, 1L, 1L) }
 
     override fun codec(): Codec<out ChunkGenerator> {
         return CODEC
@@ -203,11 +226,11 @@ class SkygridChunkGenerator(
 
             if (config.distance.isBlock(mutable.offset(origin))) {
                 if (isFloor && endPortal != null && hasEndPortal && (x > 3 && z > 3) && !generatedPortal) {
-                    endPortal.generate(random, access, )
+                    endPortal.generate(random, access)
                     generatedPortal = true
                 } else if (isFloor || (createCeiling && (y - config.distance.y) > maxY)) {
                     access.set(BEDROCK)
-                } else config.generate(random, access, )
+                } else config.generate(random, access)
             } else gap.ifPresent {
                 access.set(it)
             }
@@ -226,17 +249,20 @@ class SkygridChunkGenerator(
     ): BlockPos? {
         val distance = config.distance
         return if (structure == StructureFeature.STRONGHOLD) {
-            endPortalPositions
-                .map { BlockPos(it.minBlockX + distance.x, level.minBuildHeight, it.minBlockZ + distance.z) }
-                .minByOrNull { it.distSqr(pos) }
+            endPortalPositions.map {
+                BlockPos(it.minBlockX + distance.x,
+                    level.minBuildHeight,
+                    it.minBlockZ + distance.z)
+            }.minByOrNull { it.distSqr(pos) }
         } else super.findNearestMapFeature(level, structure, pos, something, somethingElse)
     }
 
     override fun climateSampler(): Climate.Sampler {
-        return CLIMATE
+        return climate
     }
 
     override fun buildSurface(region: WorldGenRegion, structures: StructureFeatureManager, chunk: ChunkAccess) {
+        // No surface
     }
 
     override fun applyCarvers(
@@ -247,10 +273,12 @@ class SkygridChunkGenerator(
         chunk: ChunkAccess,
         step: GenerationStep.Carving,
     ) {
-
+        // No carving
     }
 
-    override fun spawnOriginalMobs(region: WorldGenRegion) {}
+    override fun spawnOriginalMobs(region: WorldGenRegion) {
+        //TODO maybe?
+    }
 
     override fun getGenDepth(): Int {
         return 384

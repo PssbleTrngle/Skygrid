@@ -3,6 +3,12 @@
       <list name="ground">
          <block id="end_stone">
             <side on="up" probability="0.1">
+               <block id="chorus_weeds" mod="quark"/>
+               <block id="chorus_twist" mod="quark"/>
+            </side>
+         </block>
+         <block id="end_stone" weight="0.05">
+            <side on="up">
                <block id="chorus_flower"/>
             </side>
          </block>
@@ -21,10 +27,34 @@
             <block id="purpur_pillar"/>
             <block id="purpur_block"/>
          </list>
+         <list name="duskbound">
+            <block id="duskbound_block" mod="quark"/>
+            <block id="duskbound_lantern" mod="quark"/>
+         </list>
+         <list name="myalite">
+            <block id="myalite" mod="quark" weight="10.0"/>
+            <block id="myalite_crystal" mod="quark" weight="5.0"/>
+            <block id="dusky_myalite" mod="quark"/>
+            <block id="myalite_bricks" mod="quark"/>
+            <block id="chiseled_myalite_bricks" mod="quark"/>
+            <block id="myalite_pillar" mod="quark"/>
+         </list>
          <block id="ender_chest" weight="0.01"/>
+      </list>
+      <list weight="0.05" name="compressed">
+         <block id="chorus_fruit_block" mod="quark"/>
+      </list>
+      <list weight="0.01" name="loot">
          <block id="shulker_box" weight="0.0075"/>
+         <fallback>
+            <block id="purpur_chest" mod="quark"/>
+            <block id="chest"/>
+         </fallback>
       </list>
    </blocks>
+   <loot>
+      <table id="chests/end_city_treasure"/>
+   </loot>
    <mobs>
       <mob id="minecraft:enderman"/>
       <mob id="minecraft:shulker" weight="0.1"/>
