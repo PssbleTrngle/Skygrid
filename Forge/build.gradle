@@ -129,10 +129,14 @@ processResources {
 }
 
 jar {
-    from configurations.library.collect { it.isDirectory() ? it : zipTree(it) }
+    ArrayList<File> collected = configurations.library.collect { it }
+    from collected.stream()
+            .filter { it.name.contains('xmlutil') }
+            .map { it.isDirectory() ? it : zipTree(it) }
+            .collect(Collectors.toList())
     duplicatesStrategy = 'exclude'
-    exclude 'kotlinx/**'
-    exclude 'kotlin/**'
+    //exclude 'kotlinx/**'
+    //exclude 'kotlin/**'
 }
 
 //reobf {
@@ -163,6 +167,8 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
 }
 
 import com.modrinth.minotaur.dependencies.ModDependency
+
+import java.util.stream.Collectors
 
 if (ENV.MODRINTH_TOKEN) modrinth {
     projectId = modrinth_project_id
