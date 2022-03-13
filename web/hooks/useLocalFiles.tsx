@@ -2,7 +2,6 @@ import { createContext, FC, useCallback, useContext, useEffect, useMemo, useStat
 import { Named } from '../@types'
 import DimensionConfig from '../@types/DimensionConfig'
 import Preset from '../@types/Preset'
-import parseXML from '../util/parser'
 
 interface ResourceTypes {
    dimensions: DimensionConfig
@@ -92,7 +91,6 @@ export const LocalFileProvider: FC = ({ children }) => {
                if (lastModifed.get(path) !== file.lastModified) {
                   console.log('reading', path)
                   const content = await file.text()
-                  const parsed = await parseXML<ResourceTypes[T]>(content)
                   lastModifed.set(path, file.lastModified)
                }
             })

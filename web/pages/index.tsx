@@ -2,14 +2,14 @@ import type { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 import { Named } from '../@types'
 import Page from '../components/basic/Page'
-import { getStaticConfigs } from '../util/data/configs'
+import serverParser from '../util/data/serverParser'
 
 interface Props {
    configs: Named[]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-   const configs = getStaticConfigs()
+   const configs = await serverParser.getResources('dimensions')
    return { props: { configs } }
 }
 

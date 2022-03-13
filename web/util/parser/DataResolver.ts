@@ -1,10 +1,8 @@
-import { Named } from '../../@types'
-import { Block, Reference, Tag } from '../../@types/BlockProviders'
-import DimensionConfig from '../../@types/DimensionConfig'
-import Preset from '../../@types/Preset'
+import { Block } from '../../@types/BlockProviders'
 
 export default interface DataResolver {
-   getPreset(reference: Reference): Promise<Preset>
-   getConfig(config: Named): Promise<DimensionConfig>
-   getBlocksFor(tag: Tag): Promise<Block[]>
+   exists(...path: string[]): Promise<boolean>
+   getContent(...path: string[]): Promise<string | null>
+   getName(block: Block): Promise<string | null>
+   list(...path: string[]): Promise<string[]>
 }

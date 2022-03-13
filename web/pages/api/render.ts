@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next'
-import createRenders from '../../util/data/renderer'
+import createRenders from '../../util/data/extractor'
 
 const handler: NextApiHandler = async (req, res) => {
    const result = await createRenders()

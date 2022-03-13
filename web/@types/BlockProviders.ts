@@ -21,7 +21,7 @@ export interface BlockProviders extends Record<ProviderType, BaseBlockProvider> 
 }
 
 interface BaseBlockProvider extends WeightedEntry {
-   name?: string
+   name?: string | null
    weight: number
    uuid: string
    extras?: Extra[]
@@ -29,7 +29,7 @@ interface BaseBlockProvider extends WeightedEntry {
 }
 
 export interface Block extends BaseBlockProvider, Named {
-   icon?: string
+   icon?: string | null
 }
 
 export interface GeneratedBlock extends Block {
