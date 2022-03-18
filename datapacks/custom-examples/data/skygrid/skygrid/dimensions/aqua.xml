@@ -1,6 +1,10 @@
 <dimension>
    <blocks>
       <reference id="ocean"/>
+      <fallback weight="0.01">
+         <block id="prismarine_chest" mod="quark"/>
+         <block id="chest"/>
+      </fallback>
    </blocks>
    <gap id="water"/>
 </dimension>

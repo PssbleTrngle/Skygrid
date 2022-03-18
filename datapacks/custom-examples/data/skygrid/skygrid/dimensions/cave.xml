@@ -12,6 +12,9 @@
          <side on="up" probability="0.1">
             <block id="glow_shroom" mod="quark"/>
          </side>
+         <side on="down" probability="0.05">
+            <block id="hanging_cobweb" mod="biomesoplenty"/>
+         </side>
       </tag>
    </blocks>
    <distance x="3" y="3" z="3"/>
