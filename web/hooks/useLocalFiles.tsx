@@ -1,119 +1,151 @@
-import { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { get, set } from 'idb-keyval'
+import { isEqualWith } from 'lodash'
+import { NextPage } from 'next'
+import {
+   createContext,
+   DispatchWithoutAction,
+   FC,
+   useCallback,
+   useContext,
+   useEffect,
+   useMemo,
+   useState,
+} from 'react'
 import { Named } from '../@types'
-import DimensionConfig from '../@types/DimensionConfig'
-import Preset from '../@types/Preset'
+import Page from '../components/basic/Page'
+import LocalDataParser from '../util/parser/LocalDataParser'
+import { Resource, ResourceType } from '../util/parser/XMLParser'
 
-interface ResourceTypes {
-   dimensions: DimensionConfig
-   presets: Preset
-}
+type Consumer<T extends ResourceType = any> = (value: Resource<T>) => void
 
-type Consumer<T extends keyof ResourceTypes = any> = (value: ResourceTypes[T]) => void
-
-interface Subscriber<T extends keyof ResourceTypes = any> {
-   consumer: Consumer<T>
-   type: T
-   subject: Named
+enum Status {
+   LOADING = 'loading',
+   PERMISSION_MISSING = 'permission_missing',
+   SELECTED = 'selected',
+   NOT_SELECTED = 'not_selected',
 }
 
 interface Context {
-   subscribe<T extends keyof ResourceTypes>(
-      type: T,
-      config: Named,
-      consumer: Consumer<T>
-   ): () => void
+   subscribe<T extends ResourceType>(type: T, config: Named, consumer: Consumer<T>): () => void
    open(): Promise<void>
    error?: Error
+   status: Status
+   resources: Record<ResourceType, Named[]>
+}
+
+const NO_RESOURCES = {
+   dimensions: [],
+   presets: [],
 }
 
 const CTX = createContext<Context>({
    open: async () => console.error('Accessing outside of LocalFileProvider'),
    subscribe: () => () => console.error('Accessing outside of LocalFileProvider'),
+   status: Status.LOADING,
+   resources: NO_RESOURCES,
 })
-
-async function read<Kind extends FileSystemHandleKind>(
-   handle: FileSystemDirectoryHandle,
-   kind: Kind,
-   filter: (name: string) => boolean = () => true
-) {
-   type Result = Kind extends 'file' ? FileSystemFileHandle : FileSystemDirectoryHandle
-
-   const permission = await handle.queryPermission({ mode: 'read' })
-   if (permission !== 'granted') await handle.requestPermission({ mode: 'read' })
-
-   const entries = []
-   for await (const [name, entry] of handle.entries()) {
-      if (entry.kind === kind && filter(name)) entries.push(entry)
-   }
-   return entries as Result[]
-}
 
 export default function useLocalFiles() {
    return useContext(CTX)
 }
 
-export function useLocalFile<T extends keyof ResourceTypes>(type: T, subject: Named) {
-   const [value, setValue] = useState<ResourceTypes[T]>()
+export function useLocalFile<T extends ResourceType>(type: T, subject: Named) {
+   const [value, setValue] = useState<Resource<T>>()
    const { subscribe } = useLocalFiles()
    useEffect(() => subscribe(type, subject, setValue), [type, subject, setValue, subscribe])
    return value
 }
 
-async function optionalHandle(parent: FileSystemDirectoryHandle, child: string) {
-   try {
-      return await parent.getDirectoryHandle(child)
-   } catch {
-      return null
-   }
-}
+const keyOf = (s: Named, type: string) => `${type}/${s.mod}:${s.id}`
 
 export const LocalFileProvider: FC = ({ children }) => {
-   const [directory, openDirectory] = useState<FileSystemDirectoryHandle>()
-   const [error, setError] = useState<Error>()
-   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
-   const lastModifed = useMemo(() => new Map<string, number>(), [directory])
+   const [status, setStatus] = useState<Status>(Status.LOADING)
+   const [directory, setHandle] = useState<FileSystemDirectoryHandle>()
 
-   const loadFiles = useCallback(
-      async function <T extends keyof ResourceTypes>(
-         skygridHandle: FileSystemDirectoryHandle,
-         type: T
-      ) {
-         const typeHandle = await optionalHandle(skygridHandle, type)
-         if (!typeHandle) return []
-         const files = await read(typeHandle, 'file')
-
-         return Promise.all(
-            files.map(async fileHandle => {
-               const file = await fileHandle.getFile()
-               const path = await directory?.resolve(fileHandle).then(p => p?.join('/'))
-               if (!path) return
-
-               if (lastModifed.get(path) !== file.lastModified) {
-                  console.log('reading', path)
-                  const content = await file.text()
-                  lastModifed.set(path, file.lastModified)
-               }
-            })
-         )
+   const openDirectory = useCallback(
+      async (selected: FileSystemDirectoryHandle) => {
+         await set('directory', selected)
+         setHandle(selected)
       },
-      [directory, lastModifed]
+      [setHandle]
    )
 
-   const load = useCallback(async () => {
-      if (!directory) return
-      const namespaces = await read(directory, 'directory')
+   const updatePermission = useCallback(() => {
+      return directory?.queryPermission({ mode: 'read' }).then(permission => {
+         if (permission === 'granted') setStatus(Status.SELECTED)
+         else setStatus(Status.PERMISSION_MISSING)
+      })
+   }, [directory, setStatus])
 
-      await Promise.all(
-         namespaces.map(async namespace => {
-            const skygridHandle = await optionalHandle(namespace, 'skygrid')
-            if (!skygridHandle) return
-            await loadFiles(skygridHandle, 'dimensions')
-            await loadFiles(skygridHandle, 'presets')
-         })
-      )
-   }, [directory, loadFiles])
+   const requestPermission = useCallback(async () => {
+      await directory?.requestPermission({ mode: 'read' })
+      await updatePermission()
+   }, [directory, updatePermission])
+
+   const [error, setError] = useState<Error>()
+
+   const subscribers = useMemo(() => new Map<string, Set<Consumer>>(), [])
+   const values = useMemo(() => new Map<string, unknown>(), [directory])
+   const lastModifed = useMemo(() => new Map<string, number>(), [directory])
+   const [resources, setResources] = useState<Record<ResourceType, Named[]>>(NO_RESOURCES)
 
    useEffect(() => {
+      if (!directory) {
+         get('directory').then(cached => {
+            if (cached) return openDirectory(cached)
+            else setStatus(Status.NOT_SELECTED)
+         })
+      } else {
+         updatePermission()
+      }
+   }, [directory, openDirectory, setStatus, updatePermission])
+
+   const parser = useMemo(() => directory && new LocalDataParser(directory), [directory])
+
+   const load = useCallback(async () => {
+      if (!parser || status !== Status.SELECTED) return
+
+      const types = Object.values(ResourceType)
+
+      const resources = await Promise.all(
+         types.map(async type => {
+            const keys = await parser.getResources(type)
+            const subjects = keys.map(it => ({ ...it, key: keyOf(it, type) }))
+
+            const modified = subjects.filter(it => {
+               if (!it.lastModified) return true
+               if (!lastModifed.has(it.key)) return true
+               return it.lastModified > lastModifed.get(it.key)!
+            })
+
+            await Promise.all(
+               modified.map(async subject => {
+                  const parsed = await parser.getConfig(subject)
+                  values.set(subject.key, parsed)
+                  subscribers.get(subject.key)?.forEach(consume => consume(parsed))
+               })
+            )
+
+            return { type, keys }
+         })
+      )
+
+      setResources(current => {
+         const same = resources.every(({ type, keys }) => {
+            if (keys.length !== current[type].length) return false
+            return isEqualWith(current[type], keys, (a, b) => keyOf(a, type) === keyOf(b, type))
+         })
+
+         if (same) return current
+         return resources.reduce(
+            (o, { type, keys }) => ({ ...o, [type]: keys }),
+            {} as typeof current
+         )
+      })
+   }, [lastModifed, parser, subscribers, values, status])
+
+   useEffect(() => {
+      load()
       const interval = setInterval(load, 1000)
       return () => clearInterval(interval)
    }, [load])
@@ -122,23 +154,55 @@ export const LocalFileProvider: FC = ({ children }) => {
       setError(undefined)
       try {
          const selected = await window.showDirectoryPicker()
-         await selected.queryPermission({ mode: 'read' })
-         await load()
-         openDirectory(selected)
+         await openDirectory(selected)
       } catch (e) {
          console.error(e)
          setError(e as Error)
       }
-   }, [])
+   }, [openDirectory])
 
    const subscribe = useCallback(
-      function <T extends keyof ResourceTypes>(type: T, subject: Named, consumer: Consumer<T>) {
-         const subscriber = { type, subject, consumer }
-         setSubscribers(s => [...s, subscriber])
-         return () => setSubscribers(s => s.filter(it => it !== subscriber))
+      function <T extends ResourceType>(type: T, subject: Named, consumer: Consumer<T>) {
+         const key = keyOf(subject, type)
+         if (values.has(key)) consumer(values.get(key) as T)
+         if (!subscribers.has(key)) subscribers.set(key, new Set<Consumer>())
+         subscribers.get(key)?.add(consumer)
+         return () => subscribers.get(key)?.delete(consumer)
       },
-      [setSubscribers]
+      [subscribers, values]
    )
 
-   return <CTX.Provider value={{ subscribe, open, error }}>{children}</CTX.Provider>
+   if (status === Status.LOADING) return <p>...</p>
+   if (status === Status.NOT_SELECTED) return <SelectFolder onOpen={open} />
+   if (status === Status.PERMISSION_MISSING)
+      return <GrantPermission onRequest={requestPermission} onOpen={open} />
+
+   if (status === Status.SELECTED)
+      return (
+         <CTX.Provider value={{ subscribe, open, error, resources, status }}>
+            {children}
+         </CTX.Provider>
+      )
+
+   throw new Error('Unkown Status')
 }
+
+const GrantPermission: NextPage<{
+   onRequest: DispatchWithoutAction
+   onOpen: DispatchWithoutAction
+}> = ({ onRequest, onOpen }) => (
+   <Page>
+      <button onClick={onRequest}>Give permission</button>
+      <button onClick={onOpen}>Select a different folder</button>
+   </Page>
+)
+
+const SelectFolder: NextPage<{
+   onOpen: DispatchWithoutAction
+}> = ({ onOpen }) => (
+   <Page>
+      <button onClick={onOpen}>
+         Select <code>datapack</code> Folder
+      </button>
+   </Page>
+)

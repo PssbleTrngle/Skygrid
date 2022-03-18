@@ -18,6 +18,18 @@ import DataResolver from './DataResolver'
 
 const NUMERICS = ['weight', 'probability', 'offset', 'x', 'y', 'z']
 
+export enum ResourceType {
+   CONFIG = 'dimensions',
+   PRESET = 'presets',
+}
+
+interface ResourceTypes {
+   [ResourceType.CONFIG]: DimensionConfig
+   [ResourceType.PRESET]: Preset
+}
+
+export type Resource<T extends ResourceType> = ResourceTypes[T]
+
 function modify<T, R>(ifIn: string[], mod: (v: T) => R) {
    return (value: T, name: string) => (ifIn.includes(name) ? mod(value) : value)
 }
@@ -50,36 +62,48 @@ export default class XMLParser {
       }))
    }
 
-   async getResources(type: string): Promise<Named[]> {
-      const namespaces = await this.resolver.list('data')
+   async getResources(type: ResourceType): Promise<(Named & { lastModified?: number })[]> {
+      const namespaces = await this.resolver.list('directory', 'data')
       const resouces = await Promise.all(
          namespaces.map(async mod => {
-            const files = await this.resolver.list('data', mod, 'skygrid', type)
-            return files
-               .filter(f => f.endsWith('xml'))
-               .map<Named>(file => ({ mod, id: file.substring(0, file.length - 4) }))
+            const dir = ['data', mod, 'skygrid', type]
+            if (!(await this.resolver.exists('directory', ...dir))) return []
+            const files = await this.resolver.list('file', ...dir)
+            return Promise.all(
+               files
+                  .filter(f => f.endsWith('xml'))
+                  .map(async file => ({
+                     mod,
+                     id: file.substring(0, file.length - 4),
+                     lastModified: await this.resolver.lastModified?.(...dir, file),
+                  }))
+            )
          })
       )
       return resouces.flat()
    }
 
    async getConfig(key: Named) {
-      const path = this.getDataPath(key, 'skygrid/dimensions', 'xml')
+      const path = this.getDataPath(key, `skygrid/${ResourceType.CONFIG}`, 'xml')
       return this.parseFile<DimensionConfig>(...path)
    }
 
    async getPreset(reference: Reference) {
-      const path = this.getDataPath(reference, 'skygrid/presets', 'xml')
+      const path = this.getDataPath(reference, `skygrid/${ResourceType.PRESET}`, 'xml')
       const parsed = await this.parseFile<Preset>(...path)
       return parsed?.children?.[0]
    }
 
-   async extendBlock(block: Block) {
+   async getIcon(block: Named) {
       const icon = `blocks/${block.mod ?? 'minecraft'}/${block.id}.png`
-      const hasIcon = await this.resolver.exists('public', icon)
+      if (await this.resolver.exists('file', 'public', icon)) return icon
+      return null
+   }
+
+   async extendBlock(block: Block) {
       return {
          name: await this.resolver.getName(block),
-         icon: hasIcon ? icon : null,
+         icon: await this.getIcon(block),
       }
    }
 

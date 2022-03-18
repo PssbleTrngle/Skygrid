@@ -1,18 +1,15 @@
 import { NextPage } from 'next'
-import DimensionConfig from '../../../@types/DimensionConfig'
+import { useRouter } from 'next/router'
 import Page from '../../../components/basic/Page'
 import ConfigVisualizer from '../../../components/config/ConfigVisualizer'
+import { useLocalFile } from '../../../hooks/useLocalFiles'
+import { ResourceType } from '../../../util/parser/XMLParser'
 
-interface Props {
-   parsed: DimensionConfig
-}
+const LocalConfig: NextPage = () => {
+   const { namespace, config } = useRouter().query
+   const parsed = useLocalFile(ResourceType.CONFIG, { mod: namespace, id: config })
 
-const LocalConfig: NextPage<Props> = ({ parsed }) => {
-   return (
-      <Page>
-         <ConfigVisualizer config={parsed} />
-      </Page>
-   )
+   return <Page>{parsed && <ConfigVisualizer config={parsed} />}</Page>
 }
 
 export default LocalConfig

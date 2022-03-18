@@ -6,7 +6,7 @@ import {
    BlockProvider,
    BlockProviders,
    GeneratedBlock,
-   ProviderType
+   ProviderType,
 } from '../../@types/BlockProviders'
 import WeightedEntry from '../../@types/WeightedEntry'
 import { forPolymorph } from '../../util/polymorphism'
@@ -69,8 +69,8 @@ function unwrapProvider(provider: BlockProvider): Block[] {
          block: p => withWeight([p]),
          tag: p => withWeight(p.matches, w => w / p.matches.length),
          list: p => withWeight(unwrap(p.children), w => w * p.weight),
-         fallback: p => withWeight(unwrap(p.children).slice(0), () => p.weight),
-         reference: p => withWeight(unwrapProvider(p.provider), () => p.weight),
+         fallback: p => withWeight(unwrap(p.children).slice(0, 1), () => p.weight),
+         reference: p => (p.provider ? withWeight(unwrapProvider(p.provider), () => p.weight) : []),
       }) ?? []
    )
 }

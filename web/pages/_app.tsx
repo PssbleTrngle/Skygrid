@@ -7,8 +7,8 @@ import dark from '../theme/dark'
 function MyApp({ Component, pageProps }: AppProps) {
    return (
       <ThemeProvider theme={dark}>
+         <Global />
          <LocalFileProvider>
-            <Global />
             <Component {...pageProps} />
          </LocalFileProvider>
       </ThemeProvider>

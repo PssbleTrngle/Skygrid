@@ -49,7 +49,7 @@ export interface Tag extends BaseBlockProvider, Named {
 
 export interface Reference extends BaseBlockProvider {
    id: string
-   provider: BlockProvider
+   provider?: BlockProvider
 }
 
 export interface BlockList extends BaseBlockProvider {
