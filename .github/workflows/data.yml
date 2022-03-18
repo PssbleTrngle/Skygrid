@@ -1,0 +1,42 @@
+name: Generate Data
+on:
+  workflow_dispatch:
+  push:
+    branches: [ 1.18.x ]
+    paths: [ Forge/src/main/kotlin/data/generation/** ]
+
+jobs:
+  build:
+    name: Generate Data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - run: chmod +x ./gradlew
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Generate
+        run: ./gradlew Forge:runData
+
+      - name: Copy datapacks
+        run: cp -a Common/src/generated/resources/datapacks/** datapacks/
+
+      - name: Commit Files
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '[datapacks, Common/src/generated]'
+          default_author: github_actions
+          message: Automatic data generation
