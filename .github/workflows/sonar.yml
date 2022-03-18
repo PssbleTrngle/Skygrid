@@ -1,8 +1,9 @@
 name: Build & Analyze
 on:
   push:
-    branches: [ 1.18.x ]
-    paths-ignore: [ web/** ]
+    paths:
+      - '**/*.kt'
+      - '**/*.java'
 
 jobs:
   build:
