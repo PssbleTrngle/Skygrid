@@ -29,12 +29,23 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Generate
-        run: ./gradlew --no-daemon Forge:Data
+        run: ./gradlew Forge:Data > output.log
+        continue-on-error: true
 
       - name: Copy datapacks
         run: cp -a Common/src/generated/resources/datapacks/** datapacks/
 
+      - name: Check for success
+        id: check
+        run: |
+          if grep -q "All providers took" output.log; then
+            echo "::set-output name=success::true"
+          else
+            echo "::set-output name=success::false"
+          fi
+
       - name: Commit Files
+        if: ${{ steps.check.outputs.success == 'true' }}
         uses: EndBug/add-and-commit@v9
         with:
           add: '[datapacks, Common/src/generated]'
