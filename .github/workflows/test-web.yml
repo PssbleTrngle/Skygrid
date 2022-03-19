@@ -19,6 +19,7 @@ jobs:
           node-version: 16.x
 
       - run: yarn install --frozen-lockfile
+        working-directory: web
 
       - uses: sonarsource/sonarqube-scan-action@master
         env:

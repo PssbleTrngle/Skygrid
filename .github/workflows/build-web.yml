@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [1.18.x]
-    paths: [web]
+    paths: [web/**]
 
 jobs:
   deploy:
@@ -14,6 +14,21 @@ jobs:
       - name: Copy skygrid data
         run: mkdir web/data/ && cp -a Common/src/generated/resources/data/** web/data/
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - run: yarn install --frozen-lockfile
+        working-directory: web
+
+      - name: Generate Data & Assets
+        run: yarn datagen
+        working-directory: web
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
+          VANILLA_DATA: ${{ secrets.VANILLA_DATA }}
+
       - name: Build & Publish Container
         uses: whoan/docker-build-with-cache-action@v5
         with:
@@ -21,6 +36,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           image_name: ${{ secrets.DOCKER_USERNAME }}/skygrid-web
           context: web
-        env:
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
-          VANILLA_DATA: ${{ secrets.VANILLA_DATA }}
