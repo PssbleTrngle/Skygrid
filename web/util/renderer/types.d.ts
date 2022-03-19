@@ -33,9 +33,7 @@ export interface BlockModel {
    animationCurrentTick?: number
 
    parent?: string
-   textures?: {
-      [key in BlockSides]?: string
-   }
+   textures?: Record<string, string>
    gui_light?: 'front' | 'side'
    display?: {
       gui?: Transform

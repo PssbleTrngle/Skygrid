@@ -1,17 +1,17 @@
 import rawCanvas from 'canvas'
-import { existsSync, readFileSync } from 'fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'fs'
 import { merge } from 'lodash'
 import { createCanvas, loadImage } from 'node-canvas-webgl'
-import { join } from 'path'
+import { join, parse } from 'path'
 import {
    BoxGeometry,
    DirectionalLight,
    Material,
    MathUtils,
    Mesh,
-   MeshStandardMaterial,
+   MeshBasicMaterial,
    NearestFilter,
-   PerspectiveCamera,
+   OrthographicCamera,
    Scene,
    Texture,
    Vector3,
@@ -24,11 +24,43 @@ import { AnimationMeta, BlockModel, BlockSides, Element, Face } from './types'
 
 const FACES = ['east', 'west', 'up', 'down', 'south', 'north'] as const
 
+const BUILTIN: BlockModel = {
+   display: {
+      gui: {
+         rotation: [-15, -90, 0],
+         scale: [0.625, 0.625, 0.625],
+         translation: [0, 0, 0],
+      },
+   },
+   elements: [
+      {
+         from: [0, 0, 0],
+         to: [16, 16, 16],
+         faces: {
+            up: { texture: '#layer0' },
+            down: { texture: '#layer0' },
+            north: { texture: '#layer0' },
+            east: { texture: '#layer0' },
+            south: { texture: '#layer0' },
+            west: { texture: '#layer0' },
+         },
+      },
+   ],
+}
+
 export default class Renderer {
-   private size = 128
+   private size = 512
+   private distance = 15
 
    private scene = new Scene()
-   private camera = new PerspectiveCamera(75, 1, 0.1, 1000)
+   private camera = new OrthographicCamera(
+      -this.distance,
+      this.distance,
+      this.distance,
+      -this.distance,
+      0.01,
+      20000
+   )
    private canvas = createCanvas(this.size, this.size)
    private renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -41,19 +73,34 @@ export default class Renderer {
       const light = new DirectionalLight(0xffffff, 1.2)
       light.position.set(-15, 30, -25)
       this.scene.add(light)
+      this.renderer.sortObjects = false
    }
 
    async getBlocks(): Promise<Named[]> {
-      return [{ mod: 'minecraft', id: 'dirt' }]
+      const namespaces = readdirSync(this.dir).filter(it =>
+         statSync(join(this.dir, it)).isDirectory()
+      )
+
+      return namespaces.flatMap(mod => {
+         const modelsDir = join(this.dir, mod, 'models', 'item')
+         if (!existsSync(modelsDir)) return []
+         const models = readdirSync(modelsDir).filter(it => it.endsWith('.json'))
+         return models.map(file => ({ mod, id: parse(file).name }))
+      })
    }
 
    async render(block: Named) {
-      const model = this.getModel(block)
-      const { elements, display } = model
-      if (!elements) throw new Error('No elements')
+      const model = this.getModel(block, 'item')
+      return this.renderModel(model)
+   }
 
+   async renderModel(model: BlockModel) {
+      const { elements, display } = model
       const { gui } = display ?? {}
       if (!gui) throw new Error('No gui configuration')
+      if (!elements) throw new Error('No elements')
+
+      this.camera.zoom = 1 / Math.sqrt(gui.scale[0] ** 2 + gui.scale[1] ** 2 + gui.scale[2] ** 2)
 
       this.scene.clear()
 
@@ -62,7 +109,8 @@ export default class Renderer {
             const calculatedSize = size(element.from, element.to)
 
             const geometry = new BoxGeometry(...calculatedSize, 1, 1, 1)
-            const cube = new Mesh(geometry, await this.constructBlockMaterial(model, element))
+            const materials = await this.constructBlockMaterial(model, element)
+            const cube = new Mesh(geometry, materials)
             cube.position.set(0, 0, 0)
             cube.position.add(new Vector3(...element.from))
             cube.position.add(new Vector3(...element.to))
@@ -92,8 +140,8 @@ export default class Renderer {
       return this.canvas.toBuffer() as Buffer
    }
 
-   private modelPath({ id, mod }: Named) {
-      const path = id.startsWith('block/') ? id : `block/${id}`
+   private modelPath({ id, mod }: Named, type: string) {
+      const path = id.includes('/') ? id : `${type}/${id}`
       return join(this.dir, mod ?? 'minecraft', 'models', `${path}.json`)
    }
 
@@ -103,13 +151,14 @@ export default class Renderer {
       return { mod, id }
    }
 
-   getModel(block: Named): BlockModel {
-      const path = this.modelPath(block)
+   getModel(block: Named, type: string): BlockModel {
+      const path = this.modelPath(block, type)
       const raw = readFileSync(path).toString()
       const parsed = JSON.parse(raw) as BlockModel
 
       if (parsed.parent) {
-         merge(parsed, this.getModel(this.keyFrom(parsed.parent)))
+         if (parsed.parent.includes('builtin')) merge(parsed, BUILTIN)
+         else merge(parsed, this.getModel(this.keyFrom(parsed.parent), type))
       }
 
       return parsed
@@ -207,13 +256,13 @@ export default class Renderer {
       texture.minFilter = NearestFilter
       texture.needsUpdate = true
 
-      return new MeshStandardMaterial({
+      return new MeshBasicMaterial({
          map: texture,
-         color: 0xffffff,
+         //color: 0xffffff,
          transparent: true,
-         roughness: 1,
-         metalness: 0,
-         emissive: 1,
+         //roughness: 1,
+         //metalness: 0,
+         //emissive: 1,
          alphaTest: 0.1,
       })
    }

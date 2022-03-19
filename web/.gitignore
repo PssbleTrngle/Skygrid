@@ -37,9 +37,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-public/blocks
-data
-lang
+/public/blocks
+/data
+/lang
 
 temp
 tmp

@@ -62,7 +62,7 @@ export default class XMLParser {
       }))
    }
 
-   async getResources(type: ResourceType): Promise<(Named & { lastModified?: number })[]> {
+   async getResources(type: ResourceType): Promise<(Named & { lastModified: number | null })[]> {
       const namespaces = await this.resolver.list('directory', 'data')
       const resouces = await Promise.all(
          namespaces.map(async mod => {
@@ -75,7 +75,7 @@ export default class XMLParser {
                   .map(async file => ({
                      mod,
                      id: file.substring(0, file.length - 4),
-                     lastModified: await this.resolver.lastModified?.(...dir, file),
+                     lastModified: (await this.resolver.lastModified?.(...dir, file)) ?? null,
                   }))
             )
          })
