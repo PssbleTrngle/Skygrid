@@ -51,9 +51,6 @@ async function fetchSource(source: Source, to: string, useCached: boolean): Prom
          const mod = await curseforge.get_mod(source.project)
          const file = await mod.get_file(source.file)
          await file.download(out)
-
-         //const url = `https://www.curseforge.com/minecraft/mc-mods/${project}/download/${file}`
-         //return fetchSource({ url, name: project }, to)
       } else if (source.url) {
          const url = replaceEnv(source.url)
 
