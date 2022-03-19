@@ -8,7 +8,7 @@ config({ path: '.env.local' })
 
 async function run() {
    const tempDir = 'temp/extracted'
-   const useCached = true
+   const useCached = false
 
    await fetchSources('temp/sources', useCached)
 
