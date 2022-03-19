@@ -19,7 +19,7 @@ import {
    WebGLRenderer,
 } from 'three'
 import { exists } from '../..'
-import { Named } from '../../../@types'
+import { Named } from '../../parser/types'
 import { size } from './math'
 import { AnimationMeta, BlockModel, BlockSides, Element, Face } from './types'
 

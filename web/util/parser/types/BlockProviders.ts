@@ -1,5 +1,5 @@
+import { Polymorph } from 'util/polymorphism'
 import { Named } from '.'
-import { Polymorph } from '../util/polymorphism'
 import { Extra } from './Extras'
 import { ModFilter, NameFilter, TagFilter } from './Filters'
 import WeightedEntry from './WeightedEntry'

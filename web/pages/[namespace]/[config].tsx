@@ -1,15 +1,16 @@
+import Page from 'components/basic/Page'
+import ConfigVisualizer from 'components/config/ConfigVisualizer'
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-import DimensionConfig from '../../@types/DimensionConfig'
-import Page from '../../components/basic/Page'
-import ConfigVisualizer from '../../components/config/ConfigVisualizer'
-import serverParser from '../../util/data/serverParser'
+import serverParser from 'util/parser/serverParser'
+import DimensionConfig from 'util/parser/types/DimensionConfig'
+import { ResourceType } from 'util/parser/XMLParser'
 
 interface Props {
    parsed: DimensionConfig
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-   const configs = await serverParser.getResources('dimensions')
+   const configs = await serverParser.getResources(ResourceType.CONFIG)
    return {
       paths: configs.map(({ mod, id }) => ({
          params: {

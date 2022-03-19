@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs'
 import { groupBy } from 'lodash'
 import { dirname } from 'path'
-import { Named } from '../../../@types'
+import { Named } from '../../parser/types'
 import Renderer from './Renderer'
 
 export default async function createBlockIcons(

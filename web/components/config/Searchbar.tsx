@@ -1,7 +1,7 @@
 import { debounce } from 'lodash'
 import { ChangeEvent, Dispatch, useCallback, useMemo, useState, VFC } from 'react'
 import styled from 'styled-components'
-import { BlockProvider, BlockProviders } from '../../@types/BlockProviders'
+import { BlockProvider, BlockProviders } from 'util/parser/types/BlockProviders'
 import { exists } from '../../util'
 import { forPolymorph } from '../../util/polymorphism'
 
@@ -19,7 +19,7 @@ function matchesables(provider: BlockProvider): string[] {
          tag: p => [p.id, p.mod],
          list: p => p.children.flatMap(matchesables),
          fallback: p => matchesables(p.children[0]),
-         reference: p => matchesables(p.provider),
+         reference: p => (p.provider ? matchesables(p.provider) : []),
       }) ?? []),
    ].filter(exists)
 }
@@ -27,7 +27,7 @@ function matchesables(provider: BlockProvider): string[] {
 export function useFiltered<B extends BlockProvider>(unfiltered: B[]) {
    const [filter, setInstant] = useState<Filter>({})
    const [lazyFilter, setLazy] = useState<Filter>({})
-   
+
    const filtered = useMemo(
       () =>
          unfiltered

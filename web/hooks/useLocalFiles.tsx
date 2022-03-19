@@ -11,9 +11,9 @@ import {
    useMemo,
    useState,
 } from 'react'
-import { Named } from '../@types'
 import Page from '../components/basic/Page'
 import LocalDataParser from '../util/parser/LocalDataParser'
+import { Named } from '../util/parser/types'
 import { Resource, ResourceType } from '../util/parser/XMLParser'
 
 type Consumer<T extends ResourceType = any> = (value: Resource<T>) => void
@@ -164,7 +164,7 @@ export const LocalFileProvider: FC = ({ children }) => {
    const subscribe = useCallback(
       function <T extends ResourceType>(type: T, subject: Named, consumer: Consumer<T>) {
          const key = keyOf(subject, type)
-         if (values.has(key)) consumer(values.get(key) as T)
+         if (values.has(key)) consumer(values.get(key) as Resource<T>)
          if (!subscribers.has(key)) subscribers.set(key, new Set<Consumer>())
          subscribers.get(key)?.add(consumer)
          return () => subscribers.get(key)?.delete(consumer)

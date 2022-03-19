@@ -1,6 +1,6 @@
 import { createElement, DispatchWithoutAction, FC, VFC } from 'react'
 import styled, { css } from 'styled-components'
-import { BlockProvider, BlockProviders, ProviderType } from '../../@types/BlockProviders'
+import { BlockProvider, BlockProviders, ProviderType } from 'util/parser/types/BlockProviders'
 import { forPolymorph } from '../../util/polymorphism'
 import Panel from './Panel'
 import BlockPanel from './providers/BlockPanel'

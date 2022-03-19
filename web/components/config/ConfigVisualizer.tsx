@@ -1,6 +1,6 @@
 import { useState, VFC } from 'react'
 import styled from 'styled-components'
-import DimensionConfig from '../../@types/DimensionConfig'
+import DimensionConfig from 'util/parser/types/DimensionConfig'
 import ActionBar from './ActionBar'
 import HierarchicalBlocks from './HierachicalBlocks'
 import UnwrappedBlocks from './UnwrappedBlocks'

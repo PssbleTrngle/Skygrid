@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { VFC } from 'react'
-import { Named } from '../@types'
+import { Named } from '../util/parser/types'
 
 const ResourceLinks: VFC<{ keys: Named[] }> = ({ keys }) => {
    const { pathname } = useRouter()

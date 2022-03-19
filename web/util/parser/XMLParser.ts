@@ -1,7 +1,4 @@
 import { nanoid } from 'nanoid'
-import { Parser } from 'xml2js'
-import { exists } from '..'
-import { Named } from '../../@types'
 import {
    Block,
    BlockProvider,
@@ -9,12 +6,15 @@ import {
    ProviderType,
    Reference,
    Tag,
-} from '../../@types/BlockProviders'
-import DimensionConfig from '../../@types/DimensionConfig'
-import { Extra, ExtrasType } from '../../@types/Extras'
-import Preset from '../../@types/Preset'
+} from 'util/parser/types/BlockProviders'
+import DimensionConfig from 'util/parser/types/DimensionConfig'
+import { Extra, ExtrasType } from 'util/parser/types/Extras'
+import Preset from 'util/parser/types/Preset'
+import { Parser } from 'xml2js'
+import { exists } from '..'
 import { forPolymorph, Polymorpher, toArray } from '../polymorphism'
 import DataResolver from './DataResolver'
+import { Named } from './types'
 
 const NUMERICS = ['weight', 'probability', 'offset', 'x', 'y', 'z']
 

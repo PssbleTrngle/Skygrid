@@ -2,14 +2,12 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSy
 import { dirname, join, parse, resolve } from 'path'
 import { PassThrough } from 'stream'
 import { Entry } from 'unzipper'
-import { Named } from '../../@types'
-import { Block } from '../../@types/BlockProviders'
+import { Block } from 'util/parser/types/BlockProviders'
 import DataResolver from '../parser/DataResolver'
 import XMLParser from '../parser/XMLParser'
+import { Named } from './types'
 
 const DATA_DIR = resolve('data')
-
-type FileSystemHandleKind = 'directory' | 'file'
 
 function isType(file: string, type: FileSystemHandleKind) {
    if (type === 'directory') return statSync(file).isDirectory()

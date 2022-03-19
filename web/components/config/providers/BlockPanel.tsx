@@ -1,5 +1,5 @@
 import { VFC } from 'react'
-import { GeneratedBlock } from '../../../@types/BlockProviders'
+import { GeneratedBlock } from 'util/parser/types/BlockProviders'
 import BlockIcon from '../BlockIcon'
 
 const BlockPanel: VFC<GeneratedBlock & { size: number }> = ({ ...block }) => (

@@ -2,7 +2,7 @@ import { omit, sumBy } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, VFC } from 'react'
 import styled from 'styled-components'
-import { BlockProvider, ProviderType } from '../../@types/BlockProviders'
+import { BlockProvider, ProviderType } from 'util/parser/types/BlockProviders'
 import Breadcrumbs from '../Breadcrumbs'
 import BlockGrid from './BlockGrid'
 import ProviderPanel from './ProviderPanel'
@@ -64,7 +64,9 @@ const HierarchicalBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
 
    return (
       <Style>
-         {path && <Breadcrumbs root={router.query.config as string} crumbs={path} onClick={navigate} />}
+         {path && (
+            <Breadcrumbs root={router.query.config as string} crumbs={path} onClick={navigate} />
+         )}
          <BlockGrid size={200}>
             {shown?.map((provider, i) => (
                <ProviderPanel key={i} size={200} provider={provider} onClick={click(provider)} />

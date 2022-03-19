@@ -7,7 +7,10 @@ import { ResourceType } from '../../../util/parser/XMLParser'
 
 const LocalConfig: NextPage = () => {
    const { namespace, config } = useRouter().query
-   const parsed = useLocalFile(ResourceType.CONFIG, { mod: namespace, id: config })
+   const parsed = useLocalFile(ResourceType.CONFIG, {
+      mod: namespace as string,
+      id: config as string,
+   })
 
    return <Page>{parsed && <ConfigVisualizer config={parsed} />}</Page>
 }

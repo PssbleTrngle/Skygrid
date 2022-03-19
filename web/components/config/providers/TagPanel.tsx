@@ -1,5 +1,5 @@
 import { useEffect, useReducer, VFC } from 'react'
-import { Tag } from '../../../@types/BlockProviders'
+import { Tag } from 'util/parser/types/BlockProviders'
 import BlockIcon from '../BlockIcon'
 
 const TagPanel: VFC<Tag & { size: number }> = ({ size, ...tag }) => {

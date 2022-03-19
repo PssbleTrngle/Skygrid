@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash'
-import { Named } from '../../@types'
-import { Block, BlockProvider, Reference, Tag } from '../../@types/BlockProviders'
+import { Block, BlockProvider, Reference, Tag } from 'util/parser/types/BlockProviders'
 import LocalDataResolver from './LocalDataResolver'
+import { Named } from './types'
 import XMLParser from './XMLParser'
 
 function request<R>(endpoint: string, body: unknown): Promise<R | undefined> {

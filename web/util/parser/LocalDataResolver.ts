@@ -1,4 +1,4 @@
-import { Block } from '../../@types/BlockProviders'
+import { Block } from 'util/parser/types/BlockProviders'
 import DataResolver from './DataResolver'
 
 type Handle<K extends FileSystemHandleKind> = K extends 'directory'

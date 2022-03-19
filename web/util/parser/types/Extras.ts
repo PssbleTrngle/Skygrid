@@ -1,4 +1,4 @@
-import { Polymorph } from '../util/polymorphism'
+import { Polymorph } from 'util/polymorphism'
 import { BlockProvider } from './BlockProviders'
 
 export enum ExtrasType {

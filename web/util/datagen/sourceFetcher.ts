@@ -27,7 +27,7 @@ function replaceEnv(string: string) {
       .map(it => it.slice(1))
       .reduce((s, key) => {
          const env = getEnv(key)
-         return s.replaceAll(s, env)
+         return s.replace(s, env)
       }, string)
 }
 

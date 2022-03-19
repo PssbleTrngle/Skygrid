@@ -1,5 +1,5 @@
 import { createElement, VFC } from 'react'
-import { Reference } from '../../../@types/BlockProviders'
+import { Reference } from 'util/parser/types/BlockProviders'
 import { panelComponent } from '../ProviderPanel'
 
 const ReferencePanel: VFC<Reference & { size: number }> = ({ provider, ...props }) => {

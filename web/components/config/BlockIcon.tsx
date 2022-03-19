@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useMemo, useState, VFC } from 'react'
-import { Block } from '../../@types/BlockProviders'
+import { Block } from 'util/parser/types/BlockProviders'
 
 const FALLBACK = 'unknown_block.png'
 

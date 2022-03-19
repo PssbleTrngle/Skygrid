@@ -1,8 +1,8 @@
 import type { GetStaticProps, NextPage } from 'next'
-import { Named } from '../@types'
+import serverParser from 'util/parser/serverParser'
 import Page from '../components/basic/Page'
 import ResourceLinks from '../components/ResourceLinks'
-import serverParser from '../util/data/serverParser'
+import { Named } from '../util/parser/types'
 import { ResourceType } from '../util/parser/XMLParser'
 
 interface Props {

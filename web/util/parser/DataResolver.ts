@@ -1,4 +1,4 @@
-import { Block } from '../../@types/BlockProviders'
+import { Block } from 'util/parser/types/BlockProviders'
 
 export default interface DataResolver {
    exists(type: FileSystemHandleKind, ...path: string[]): Promise<boolean>

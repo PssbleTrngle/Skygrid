@@ -1,5 +1,5 @@
 import { NextApiHandler } from 'next'
-import serverParser from '../../util/data/serverParser'
+import serverParser from 'util/parser/serverParser'
 
 const handle: NextApiHandler = async (req, res) => {
    const preset = await serverParser.getPreset(req.body)

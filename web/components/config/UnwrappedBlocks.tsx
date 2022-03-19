@@ -7,8 +7,8 @@ import {
    BlockProviders,
    GeneratedBlock,
    ProviderType,
-} from '../../@types/BlockProviders'
-import WeightedEntry from '../../@types/WeightedEntry'
+} from 'util/parser/types/BlockProviders'
+import WeightedEntry from 'util/parser/types/WeightedEntry'
 import { forPolymorph } from '../../util/polymorphism'
 import Checkbox from '../inputs/Checkbox'
 import BlockGrid from './BlockGrid'

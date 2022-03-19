@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash'
 import { useMemo, VFC } from 'react'
 import styled from 'styled-components'
-import { BlockList } from '../../../@types/BlockProviders'
+import { BlockList } from 'util/parser/types/BlockProviders'
 import BlockIcon from '../BlockIcon'
 import { unwrap } from '../UnwrappedBlocks'
 
