@@ -1,0 +1,26 @@
+name: Deploy Website
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [web]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Copy skygrid data
+        run: cp -a Common/src/generated/resources/data/** web/data/
+
+      - name: Build & Publish Container
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          image_name: ${{ secrets.DOCKER_USERNAME }}/skygrid-web
+          context: web
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
+          VANILLA_DATA: ${{ secrets.VANILLA_DATA }}
