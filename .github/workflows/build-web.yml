@@ -2,7 +2,7 @@ name: Deploy Website
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [1.18.x]
     paths: [web]
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Copy skygrid data
-        run: cp -a Common/src/generated/resources/data/** web/data/
+        run: mkdir web/data/ && cp -a Common/src/generated/resources/data/** web/data/
 
       - name: Build & Publish Container
         uses: whoan/docker-build-with-cache-action@v5
