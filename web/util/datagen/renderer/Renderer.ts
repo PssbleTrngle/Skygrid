@@ -1,6 +1,7 @@
 import rawCanvas from 'canvas'
 import { existsSync, readdirSync, readFileSync, statSync } from 'fs'
 import { merge } from 'lodash'
+//@ts-ignore
 import { createCanvas, loadImage } from 'node-canvas-webgl'
 import { join, parse } from 'path'
 import {
@@ -17,8 +18,8 @@ import {
    Vector3,
    WebGLRenderer,
 } from 'three'
-import { exists } from '..'
-import { Named } from '../../@types'
+import { exists } from '../..'
+import { Named } from '../../../@types'
 import { size } from './math'
 import { AnimationMeta, BlockModel, BlockSides, Element, Face } from './types'
 

@@ -9,6 +9,8 @@ import XMLParser from '../parser/XMLParser'
 
 const DATA_DIR = resolve('data')
 
+type FileSystemHandleKind = 'directory' | 'file'
+
 function isType(file: string, type: FileSystemHandleKind) {
    if (type === 'directory') return statSync(file).isDirectory()
    if (type === 'file') return statSync(file).isFile()
