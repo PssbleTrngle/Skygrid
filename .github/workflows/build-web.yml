@@ -14,6 +14,10 @@ jobs:
       - name: Copy skygrid data
         run: mkdir web/data/ && cp -a Common/src/generated/resources/data/** web/data/
 
+      - run: |
+          apt-get -y --force-yes install x-window-system| 
+          apt-get install -y mesa-utils
+
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
