@@ -1,0 +1,7 @@
+[
+   { "name": "skygrid", "type": "file", "path": "../Common/src/generated/resources" },
+   { "name": "quark", "type": "curseforge", "project": 243121, "file": 3687633 },
+   { "name": "biomes-o-plenty", "type": "curseforge", "project": 220318, "file": 3616582 },
+   { "name": "botania", "type": "curseforge", "project": 225643, "file": 3664223 },
+   { "name": "vanilla", "url": "$VANILLA_DATA" }
+]
