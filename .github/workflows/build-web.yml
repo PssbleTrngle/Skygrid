@@ -6,8 +6,8 @@ on:
     paths: [web/**]
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  generate:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -20,11 +20,28 @@ jobs:
         working-directory: datagen
 
       - name: Generate Data & Assets
-        run: yarn generate --from sources.json --data ../web/data --icons ../web/public/blocks --lang ../web/lang
+        run: yarn generate --from sources.json --data generated/data --icons generated/public/blocks --lang generated/lang
         working-directory: datagen
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
           VANILLA_DATA: ${{ secrets.VANILLA_DATA }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: data
+          path: datagen/generated
+          retention-days: 1
+
+  deploy:
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: data
+          path: web
 
       - name: Build & Publish Container
         uses: whoan/docker-build-with-cache-action@v5
