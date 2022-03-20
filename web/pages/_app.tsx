@@ -1,6 +1,6 @@
+import { FileSystemProvider } from 'hooks/useFileSystem'
 import type { AppProps } from 'next/app'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { LocalFileProvider } from '../hooks/useLocalFiles'
 import '../styles/reset.css'
 import dark from '../theme/dark'
 
@@ -8,9 +8,9 @@ function MyApp({ Component, pageProps }: AppProps) {
    return (
       <ThemeProvider theme={dark}>
          <Global />
-         <LocalFileProvider>
+         <FileSystemProvider>
             <Component {...pageProps} />
-         </LocalFileProvider>
+         </FileSystemProvider>
       </ThemeProvider>
    )
 }
@@ -21,6 +21,10 @@ const Global = createGlobalStyle`
       font-family: sans-serif;
       background: ${p => p.theme.bg};
       color: ${p => p.theme.text};
+   }
+
+   ul, li {
+      list-style: none;
    }
 `
 

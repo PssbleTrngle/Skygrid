@@ -1,16 +1,18 @@
+import CenteredPage from 'components/basic/CenteredPage'
+import { Subtitle } from 'components/basic/Text'
+import ResourceLinks from 'components/ResourceLinks'
+import useLocalFiles, { withLocalData } from 'hooks/useLocalFiles'
 import { NextPage } from 'next'
-import Page from '../../components/basic/Page'
-import ResourceLinks from '../../components/ResourceLinks'
-import useLocalFiles from '../../hooks/useLocalFiles'
 
-const Local: NextPage = () => {
+const Local: NextPage = withLocalData(() => {
    const { resources } = useLocalFiles()
 
    return (
-      <Page>
+      <CenteredPage>
+         <Subtitle>Found {resources.dimensions.length} skygrid config files</Subtitle>
          <ResourceLinks keys={resources.dimensions} />
-      </Page>
+      </CenteredPage>
    )
-}
+})
 
 export default Local

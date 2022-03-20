@@ -1,8 +1,8 @@
-import { get, set } from 'idb-keyval'
 import { isEqualWith } from 'lodash'
 import { NextPage } from 'next'
 import {
    createContext,
+   createElement,
    DispatchWithoutAction,
    FC,
    useCallback,
@@ -10,72 +10,44 @@ import {
    useEffect,
    useMemo,
    useState,
+   VFC,
 } from 'react'
 import Page from '../components/basic/Page'
 import LocalDataParser from '../util/parser/LocalDataParser'
 import { Named } from '../util/parser/types'
 import { Resource, ResourceType } from '../util/parser/XMLParser'
+import useFileSystem, { Status } from './useFileSystem'
 
 type Consumer<T extends ResourceType = any> = (value: Resource<T>) => void
-
-enum Status {
-   LOADING = 'loading',
-   PERMISSION_MISSING = 'permission_missing',
-   SELECTED = 'selected',
-   NOT_SELECTED = 'not_selected',
-}
-
-interface Context {
-   subscribe<T extends ResourceType>(type: T, config: Named, consumer: Consumer<T>): () => void
-   open(): Promise<void>
-   error?: Error
-   status: Status
-   resources: Record<ResourceType, Named[]>
-}
 
 const NO_RESOURCES = {
    dimensions: [],
    presets: [],
 }
 
-const CTX = createContext<Context>({
-   open: async () => console.error('Accessing outside of LocalFileProvider'),
-   subscribe: () => () => console.error('Accessing outside of LocalFileProvider'),
-   status: Status.LOADING,
-   resources: NO_RESOURCES,
-})
-
-export default function useLocalFiles() {
-   return useContext(CTX)
-}
-
-export function useLocalFile<T extends ResourceType>(type: T, subject: Named) {
-   const [value, setValue] = useState<Resource<T>>()
-   const { subscribe } = useLocalFiles()
-   useEffect(() => subscribe(type, subject, setValue), [type, subject, setValue, subscribe])
-   return value
-}
-
 const keyOf = (s: Named, type: string) => `${type}/${s.mod}:${s.id}`
 
-export const LocalFileProvider: FC = ({ children }) => {
-   const [status, setStatus] = useState<Status>(Status.LOADING)
-   const [directory, setHandle] = useState<FileSystemDirectoryHandle>()
+const CTX = createContext<{
+   subscribe<T extends ResourceType>(type: T, config: Named, consumer: Consumer<T>): () => void
+   error?: Error
+   status: Status
+   resources: Record<ResourceType, Named[]>
+}>({
+   subscribe: () => () => console.error('LocalFileEnsurer'),
+   resources: NO_RESOURCES,
+   status: Status.LOADING,
+})
 
-   const openDirectory = useCallback(
-      async (selected: FileSystemDirectoryHandle) => {
-         await set('directory', selected)
-         setHandle(selected)
-      },
-      [setHandle]
+export function withLocalData<P>(component: VFC<P>): VFC<P> {
+   const fc: VFC<P> = props => (
+      <LocalDataEnsurer>{createElement(component, props)}</LocalDataEnsurer>
    )
+   fc.displayName = component.displayName
+   return fc
+}
 
-   const updatePermission = useCallback(() => {
-      return directory?.queryPermission({ mode: 'read' }).then(permission => {
-         if (permission === 'granted') setStatus(Status.SELECTED)
-         else setStatus(Status.PERMISSION_MISSING)
-      })
-   }, [directory, setStatus])
+const LocalDataEnsurer: FC = ({ children }) => {
+   const { status, directory, updatePermission, setDirectory, open } = useFileSystem()
 
    const requestPermission = useCallback(async () => {
       await directory?.requestPermission({ mode: 'read' })
@@ -88,17 +60,6 @@ export const LocalFileProvider: FC = ({ children }) => {
    const values = useMemo(() => new Map<string, unknown>(), [directory])
    const lastModifed = useMemo(() => new Map<string, number>(), [directory])
    const [resources, setResources] = useState<Record<ResourceType, Named[]>>(NO_RESOURCES)
-
-   useEffect(() => {
-      if (!directory) {
-         get('directory').then(cached => {
-            if (cached) return openDirectory(cached)
-            else setStatus(Status.NOT_SELECTED)
-         })
-      } else {
-         updatePermission()
-      }
-   }, [directory, openDirectory, setStatus, updatePermission])
 
    const parser = useMemo(() => directory && new LocalDataParser(directory), [directory])
 
@@ -150,17 +111,6 @@ export const LocalFileProvider: FC = ({ children }) => {
       return () => clearInterval(interval)
    }, [load])
 
-   const open = useCallback(async () => {
-      setError(undefined)
-      try {
-         const selected = await window.showDirectoryPicker()
-         await openDirectory(selected)
-      } catch (e) {
-         console.error(e)
-         setError(e as Error)
-      }
-   }, [openDirectory])
-
    const subscribe = useCallback(
       function <T extends ResourceType>(type: T, subject: Named, consumer: Consumer<T>) {
          const key = keyOf(subject, type)
@@ -178,13 +128,20 @@ export const LocalFileProvider: FC = ({ children }) => {
       return <GrantPermission onRequest={requestPermission} onOpen={open} />
 
    if (status === Status.SELECTED)
-      return (
-         <CTX.Provider value={{ subscribe, open, error, resources, status }}>
-            {children}
-         </CTX.Provider>
-      )
+      return <CTX.Provider value={{ resources, status, subscribe, error }}>{children}</CTX.Provider>
 
-   throw new Error('Unkown Status')
+   throw new Error(`Unknown Status '${status}'`)
+}
+
+export function useLocalFile<T extends ResourceType>(type: T, subject: Named) {
+   const [value, setValue] = useState<Resource<T>>()
+   const { subscribe } = useLocalFiles()
+   useEffect(() => subscribe(type, subject, setValue), [type, subject, setValue, subscribe])
+   return value
+}
+
+export default function useLocalFiles() {
+   return useContext(CTX)
 }
 
 const GrantPermission: NextPage<{
