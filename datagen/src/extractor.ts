@@ -24,6 +24,7 @@ export default async function extractData(options: Options) {
    const merger = new Merger()
 
    if (options.data) {
+      ensureDirSync(options.data)
       merger.register<Record<string, string>>({
          pattern: /^data\/(\w+)\/skygrid\/([\w\/]+).xml$/,
          merge: (a, b) => ({ ...a, ...b }),
@@ -37,12 +38,14 @@ export default async function extractData(options: Options) {
       })
    }
 
-   if (options.lang)
+   if (options.lang) {
+      ensureDirSync(options.lang)
       merger.register<Record<string, string>>({
          pattern: /^assets\/\w+\/lang\/(\w+).json$/,
          merge: (a, b) => ({ ...a, ...b }),
          path: lang => join(options.lang!, `${lang}.json`),
       })
+   }
 
    const isCached = existsSync(out)
    if (!options.cached || !isCached) {
@@ -57,13 +60,15 @@ export default async function extractData(options: Options) {
       const folders = children.filter(f => statSync(f).isDirectory())
 
       const consumer: Consumer = async (entry, path) => {
-         await merger.extractData(entry, path)
+         const dataMatch = await merger.extractData(entry, path)
          if (assetFolders.some(it => it.test(path))) {
             const file = join(out, path)
             const folder = dirname(file)
             ensureDirSync(folder)
             entry.pipe(createWriteStream(file))
+            return true
          }
+         return dataMatch
       }
 
       await Promise.all([
@@ -77,7 +82,7 @@ export default async function extractData(options: Options) {
    }
 }
 
-type Consumer = (entry: NodeJS.ReadableStream, path: string) => Promise<void>
+type Consumer = (entry: NodeJS.ReadableStream, path: string) => Promise<boolean>
 
 async function handleFolder(folder: string, consumer: Consumer) {
    const entries = klaw(folder, { nodir: true })
@@ -94,6 +99,7 @@ async function extractJar(jar: string, consumer: Consumer) {
 
    for await (const entry of entries) {
       if (entry.type !== 'File') continue
-      await consumer(entry, entry.path)
+      const handled = await consumer(entry, entry.path)
+      if (!handled) entry.autodrain()
    }
 }

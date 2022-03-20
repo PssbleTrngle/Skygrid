@@ -25,7 +25,7 @@ export default class Merger {
    }
 
    async extractData(entry: NodeJS.ReadableStream, fileName: string) {
-      await Promise.all(
+      const matches = await Promise.all(
          this.mergers.map(async ({ pattern, path, merge }) => {
             const match = fileName.match(pattern)
             if (match)
@@ -48,7 +48,11 @@ export default class Merger {
                } catch (e) {
                   throw new Error(`Could not proccess ${fileName}: ${(e as Error).message}`)
                }
+
+            return !!match
          })
       )
+
+      return matches.some(it => it)
    }
 }
