@@ -1,6 +1,0 @@
-[
-   { "type": "curseforge", "name": "quark", "project": 243121, "file": 3687633 },
-   { "type": "curseforge", "name": "biomes-o-plenty", "project": 220318, "file": 3616582 },
-   { "type": "curseforge", "name": "botania", "project": 225643, "file": 3664223 },
-   { "name": "vanilla", "url": "$VANILLA_DATA" }
-]
