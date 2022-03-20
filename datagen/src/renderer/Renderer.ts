@@ -84,7 +84,7 @@ export default class Renderer {
       )
 
       return namespaces.flatMap(mod => {
-         const modelsDir = join(this.dir, mod, 'models', 'item')
+         const modelsDir = join(this.dir, mod, 'blockstates')
          if (!existsSync(modelsDir)) return []
          const models = readdirSync(modelsDir).filter(it => it.endsWith('.json'))
          return models.map(file => ({ mod, id: parse(file).name }))
@@ -155,6 +155,7 @@ export default class Renderer {
 
    getModel(block: Named, type: string): BlockModel {
       const path = this.modelPath(block, type)
+      if (!existsSync(path)) throw new Error('Model missing')
       const raw = readFileSync(path).toString()
       const parsed = JSON.parse(raw) as BlockModel
 

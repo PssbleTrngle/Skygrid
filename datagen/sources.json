@@ -3,5 +3,10 @@
    { "name": "quark", "type": "curseforge", "project": 243121, "file": 3687633 },
    { "name": "biomes-o-plenty", "type": "curseforge", "project": 220318, "file": 3616582 },
    { "name": "botania", "type": "curseforge", "project": 225643, "file": 3664223 },
+   { "name": "create", "type": "curseforge", "project": 328085, "file": 3687358 },
+   { "name": "atmospheric", "type": "curseforge", "project": 362393, "file": 3553332 },
+   { "name": "environmental", "type": "curseforge", "project": 388992, "file": 3561534 },
+   { "name": "endergetic", "type": "curseforge", "project": 291509, "file": 3154938 },
+   { "name": "aquatic", "type": "curseforge", "project": 326895, "file": 3561148 },
    { "name": "vanilla", "url": "$VANILLA_DATA" }
 ]

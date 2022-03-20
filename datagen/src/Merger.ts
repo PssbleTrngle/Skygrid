@@ -35,12 +35,16 @@ export default class Merger {
                   ensureDirSync(dirname(out))
 
                   if (extname(fileName) === '.json') {
-                     const resource = JSON.parse(content)
-                     if (existsSync(out)) {
-                        const existing = JSON.parse(readFileSync(out).toString())
-                        writeFileSync(out, JSON.stringify(merge(existing, resource), null, 2))
-                     } else {
-                        writeFileSync(out, content)
+                     try {
+                        const resource = JSON.parse(content)
+                        if (existsSync(out)) {
+                           const existing = JSON.parse(readFileSync(out).toString())
+                           writeFileSync(out, JSON.stringify(merge(existing, resource), null, 2))
+                        } else {
+                           writeFileSync(out, content)
+                        }
+                     } catch (e) {
+                        console.warn((e as Error).message)
                      }
                   } else {
                      writeFileSync(out, content)
