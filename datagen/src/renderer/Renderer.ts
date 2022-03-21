@@ -91,8 +91,16 @@ export default class Renderer {
       })
    }
 
+   getBlockModel(block: Named) {
+      try {
+         return this.getModel(block, 'item')
+      } catch {
+         return this.getModel(block, 'block')
+      }
+   }
+
    async render(block: Named) {
-      const model = this.getModel(block, 'item')
+      const model = this.getBlockModel(block)
       return this.renderModel(model)
    }
 

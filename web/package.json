@@ -8,7 +8,8 @@
       "start": "next start",
       "lint": "next lint",
       "type-check": "tsc --noEmit",
-      "test": "yarn type-check && yarn lint"
+      "test": "yarn type-check && yarn lint",
+      "clean": "rimraf data lang public/blocks"
    },
    "dependencies": {
       "idb-keyval": "^6.1.0",
