@@ -35,7 +35,11 @@ export function useFiltered<B extends BlockProvider & { mod?: string }>(unfilter
       () =>
          unfiltered
             .filter(p => lazyFilter.includeExtras !== false || !p.extra)
-            .filter(p => lazyFilter.mods.length === 0 || lazyFilter.mods.some(it => it === p.mod))
+            .filter(
+               p =>
+                  lazyFilter.mods.length === 0 ||
+                  lazyFilter.mods.some(it => it === (p.mod ?? 'minecraft'))
+            )
             .filter(provider => {
                const search = lazyFilter.text?.toLocaleLowerCase()
                if (!search) return true
@@ -76,7 +80,7 @@ const Searchbar: VFC<{
 
 const Style = styled.input`
    border: none;
-   width: 400px;
+   min-width: 400px;
 
    padding: 0.5em 1em;
    color: ${p => p.theme.text};

@@ -73,6 +73,7 @@ const Results = styled.p`
 const FilterBar = styled.section`
    display: grid;
    grid-auto-flow: column;
+   height: 5em;
    margin-bottom: 2em;
    align-items: center;
    justify-content: start;

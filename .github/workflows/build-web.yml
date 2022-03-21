@@ -19,6 +19,13 @@ jobs:
       - run: yarn install --frozen-lockfile
         working-directory: datagen
 
+      - name: Cache generated data
+        uses: actions/cache@v1
+        with:
+          path: datagen/generated
+          key: ${{ runner.os }}-data-${{ hashFiles('datagen/sources.json') }}
+          restore-keys: ${{ runner.os }}-gradle
+
       - name: Generate Data & Assets
         run: yarn generate --from sources.json --data generated/data --icons generated/public/blocks --lang generated/lang
         working-directory: datagen
