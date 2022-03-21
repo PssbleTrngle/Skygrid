@@ -1,4 +1,5 @@
-import { groupBy, orderBy, sumBy } from 'lodash'
+import Dropdown from 'components/inputs/Dropdown'
+import { groupBy, isString, orderBy, sumBy, uniq } from 'lodash'
 import { useMemo, VFC } from 'react'
 import styled from 'styled-components'
 import {
@@ -11,14 +12,24 @@ import {
 import WeightedEntry from 'util/parser/types/WeightedEntry'
 import { forPolymorph } from '../../util/polymorphism'
 import Checkbox from '../inputs/Checkbox'
+import Searchbar, { useFiltered } from '../inputs/Searchbar'
 import BlockGrid from './BlockGrid'
 import ProviderPanel from './ProviderPanel'
-import Searchbar, { useFiltered } from './Searchbar'
+
+const wrap = (value: string) => ({ value, label: value.replace(/[_-]/g, ' ') })
 
 const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
    const unwrapped = useMemo(() => unwrap(blocks), [blocks])
    const sorted = useMemo(() => orderBy(unwrapped, b => b.weight, 'desc'), [unwrapped])
    const size = 100
+
+   const mods = useMemo(
+      () =>
+         uniq(unwrapped.map(it => it.mod?.toLowerCase()))
+            .filter(isString)
+            .map(wrap),
+      [unwrapped]
+   )
 
    const { filter, setFilter, filtered } = useFiltered(sorted)
 
@@ -28,32 +39,44 @@ const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
             <Searchbar value={filter} onChange={setFilter} />
             <Checkbox
                id='includeExtras'
+               tooltip='Extras are blocks are generated adjacent to the base'
                value={filter.includeExtras ?? true}
                onChange={v => setFilter({ includeExtras: v })}>
                Include Extras?
             </Checkbox>
-            <p>{filtered.length} results</p>
+            <Dropdown
+               id='mods'
+               label='Mods:'
+               isClearable
+               isMulti
+               options={mods}
+               value={filter.mods?.map(wrap)}
+               onChange={v => setFilter({ mods: v.map(it => it.value) })}
+            />
          </FilterBar>
+         <Results>{filtered.length} blocks</Results>
          <BlockGrid size={size}>
             {filtered.map(block => (
-               <ProviderPanel key={block.uuid} size={size} provider={block}>
-                  <p>
-                     {/*TODO DUMB PLURAL*/}
-                     {block.occurenced} entr{block.occurenced === 1 ? 'y' : 'ies'}
-                  </p>
-               </ProviderPanel>
+               <ProviderPanel key={block.uuid} size={size} provider={block} />
             ))}
          </BlockGrid>
       </>
    )
 }
 
+const Results = styled.p`
+   font-style: italic;
+   text-align: center;
+   margin-bottom: 1em;
+`
+
 const FilterBar = styled.section`
    display: grid;
    grid-auto-flow: column;
    margin-bottom: 2em;
    align-items: center;
-   gap: 1em;
+   justify-content: start;
+   gap: 3em;
 `
 
 function withWeight<T extends Required<WeightedEntry>>(

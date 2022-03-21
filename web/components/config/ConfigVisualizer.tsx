@@ -1,23 +1,35 @@
-import { useState, VFC } from 'react'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect, VFC } from 'react'
 import styled from 'styled-components'
 import DimensionConfig from 'util/parser/types/DimensionConfig'
 import ActionBar from './ActionBar'
 import HierarchicalBlocks from './HierachicalBlocks'
 import UnwrappedBlocks from './UnwrappedBlocks'
 
-export const enum View {
+export enum View {
    HIERACHICAL = 'hierachical',
    UNWRAPPED = 'unwrapped',
 }
 
 const ConfigVisualizer: VFC<{ config: DimensionConfig }> = ({ config, ...props }) => {
-   const [view, setView] = useState(View.HIERACHICAL)
+   const { query, replace } = useRouter()
+
+   const setView = useCallback(
+      (v: View) => replace({ query: { ...query, view: v } }),
+      [query, replace]
+   )
+
+   useEffect(() => {
+      if (query.view && !Object.values(View).includes(query.view as View)) {
+         setView(View.HIERACHICAL)
+      }
+   }, [query, setView])
 
    return (
       <Style {...props}>
          <ActionBar onView={setView} />
-         {view === View.HIERACHICAL && <HierarchicalBlocks blocks={config.blocks.children} />}
-         {view === View.UNWRAPPED && <UnwrappedBlocks blocks={config.blocks.children} />}
+         {query.view === View.HIERACHICAL && <HierarchicalBlocks blocks={config.blocks.children} />}
+         {query.view === View.UNWRAPPED && <UnwrappedBlocks blocks={config.blocks.children} />}
       </Style>
    )
 }

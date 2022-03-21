@@ -1,4 +1,4 @@
-import { createElement, DispatchWithoutAction, FC, VFC } from 'react'
+import { createElement, DispatchWithoutAction, FC, memo, VFC } from 'react'
 import styled, { css } from 'styled-components'
 import { BlockProvider, BlockProviders, ProviderType } from 'util/parser/types/BlockProviders'
 import { forPolymorph } from '../../util/polymorphism'
@@ -18,18 +18,21 @@ export const panelComponent = (provider: BlockProvider) =>
       reference: () => ReferencePanel,
    }) ?? UnknownProvider
 
-const ProviderPanel: FC<{
-   provider: BlockProvider
+const ProviderPanel: VFC<{
+   provider: BlockProvider & { occurenced?: number }
    onClick?: DispatchWithoutAction
    size: number
-}> = ({ provider, size, children, ...props }) => {
+}> = ({ provider, size, ...props }) => {
    const component = panelComponent(provider)
 
    return (
       <Style {...props} reference={provider.type === ProviderType.REFERENCE} size={size}>
          {createElement(component, { ...provider, size })}
          <p key='weight'>{(provider.weight * 100).toFixed(2)}%</p>
-         {children}
+         <p>
+            {/*TODO DUMB PLURAL*/}
+            {provider.occurenced} entr{provider.occurenced === 1 ? 'y' : 'ies'}
+         </p>
       </Style>
    )
 }
@@ -43,4 +46,4 @@ const Style = styled(Panel)<{ size: number; reference?: boolean }>`
       `}
 `
 
-export default ProviderPanel
+export default memo(ProviderPanel)

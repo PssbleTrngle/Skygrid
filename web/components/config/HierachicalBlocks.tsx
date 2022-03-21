@@ -41,7 +41,7 @@ const HierarchicalBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
    }, [blocks, path])
 
    useEffect(() => {
-      if (shown === null) router.push({ query: {} })
+      if (shown === null) router.push({ query: omit(router.query, 'to') })
    }, [router, shown])
 
    const navigate = useCallback(

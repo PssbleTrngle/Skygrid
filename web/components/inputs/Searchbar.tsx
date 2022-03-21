@@ -1,4 +1,5 @@
 import { debounce } from 'lodash'
+import { mix } from 'polished'
 import { ChangeEvent, Dispatch, useCallback, useMemo, useState, VFC } from 'react'
 import styled from 'styled-components'
 import { BlockProvider, BlockProviders } from 'util/parser/types/BlockProviders'
@@ -6,7 +7,7 @@ import { exists } from '../../util'
 import { forPolymorph } from '../../util/polymorphism'
 
 interface Filter {
-   mod?: string[]
+   mods: string[]
    text?: string
    includeExtras?: boolean
 }
@@ -24,14 +25,17 @@ function matchesables(provider: BlockProvider): string[] {
    ].filter(exists)
 }
 
-export function useFiltered<B extends BlockProvider>(unfiltered: B[]) {
-   const [filter, setInstant] = useState<Filter>({})
-   const [lazyFilter, setLazy] = useState<Filter>({})
+const DEFAULT_FILTER: Filter = { mods: ['minecraft'] }
+
+export function useFiltered<B extends BlockProvider & { mod?: string }>(unfiltered: B[]) {
+   const [filter, setInstant] = useState<Filter>(DEFAULT_FILTER)
+   const [lazyFilter, setLazy] = useState<Filter>(DEFAULT_FILTER)
 
    const filtered = useMemo(
       () =>
          unfiltered
             .filter(p => lazyFilter.includeExtras !== false || !p.extra)
+            .filter(p => lazyFilter.mods.length === 0 || lazyFilter.mods.some(it => it === p.mod))
             .filter(provider => {
                const search = lazyFilter.text?.toLocaleLowerCase()
                if (!search) return true
@@ -48,9 +52,9 @@ export function useFiltered<B extends BlockProvider>(unfiltered: B[]) {
    const setFilter = useCallback(
       (partial: Partial<Filter>) => {
          setInstant(it => {
-            const filter = { ...it, ...partial }
-            debounced(filter)
-            return filter
+            const newFilter = { ...it, ...partial }
+            debounced(newFilter)
+            return newFilter
          })
       },
       [setInstant, debounced]
@@ -61,7 +65,7 @@ export function useFiltered<B extends BlockProvider>(unfiltered: B[]) {
 
 const Searchbar: VFC<{
    value: Filter
-   onChange: Dispatch<Filter>
+   onChange: Dispatch<Partial<Filter>>
 }> = ({ value, onChange }) => {
    const callback = useCallback(
       (e: ChangeEvent<HTMLInputElement>) => onChange({ text: e.target.value }),
@@ -71,8 +75,16 @@ const Searchbar: VFC<{
 }
 
 const Style = styled.input`
-   padding: 1em 2em;
-   background: #0001;
+   border: none;
+   width: 400px;
+
+   padding: 0.5em 1em;
+   color: ${p => p.theme.text};
+
+   outline: 1px ${p => mix(0.8, p.theme.bg, p.theme.text)} solid;
+   &:focus-visible {
+      outline: 2px ${p => p.theme.accent} solid;
+   }
 `
 
 export default Searchbar

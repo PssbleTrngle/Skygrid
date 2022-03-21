@@ -1,14 +1,11 @@
 import { groupBy } from 'lodash'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { mix } from 'polished'
 import { useMemo, VFC } from 'react'
 import styled from 'styled-components'
 import { Named } from 'util/parser/types'
+import { InvisibleLink } from './basic/Link'
 
 const ResourceLinks: VFC<{ keys: Named[] }> = ({ keys }) => {
-   const { asPath } = useRouter()
-
    const grouped = useMemo(() => Object.entries(groupBy(keys, it => it.mod)), [keys])
 
    return (
@@ -20,11 +17,9 @@ const ResourceLinks: VFC<{ keys: Named[] }> = ({ keys }) => {
                </h3>
                <ul>
                   {keys.map(({ id }) => (
-                     <Link key={id} href={`${asPath}/${mod}/${id}`} passHref>
-                        <InvisibleLink>
-                           <ResourceLink>{id}</ResourceLink>
-                        </InvisibleLink>
-                     </Link>
+                     <InvisibleLink key={id} href={`./${mod}/${id}`}>
+                        <ResourceLink>{id}</ResourceLink>
+                     </InvisibleLink>
                   ))}
                </ul>
             </Group>
@@ -45,11 +40,6 @@ const Group = styled.div`
       display: grid;
       gap: 1em;
    }
-`
-
-const InvisibleLink = styled.a`
-   text-decoration: none;
-   color: ${p => p.theme.text};
 `
 
 const ResourceLink = styled.li`

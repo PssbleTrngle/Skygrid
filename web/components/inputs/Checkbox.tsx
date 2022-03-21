@@ -1,26 +1,15 @@
 import { Dispatch, FC } from 'react'
-import styled from 'styled-components'
+import Labeled from './Labeled'
 
 const Checkbox: FC<{
    id: string
    value: boolean
+   tooltip?: string
    onChange: Dispatch<boolean>
-}> = ({ id, value, onChange, children }) => (
-   <Style>
-      <input
-         id='includeExtras'
-         type='checkbox'
-         checked={value}
-         onChange={e => onChange(e.target.checked)}
-      />
-      <Label htmlFor='includeExtras'>{children}</Label>
-   </Style>
+}> = ({ id, value, onChange, tooltip, children }) => (
+   <Labeled htmlFor={id} tooltip={tooltip} label={children}>
+      <input id={id} type='checkbox' checked={value} onChange={e => onChange(e.target.checked)} />
+   </Labeled>
 )
-
-const Label = styled.label`
-   margin-left: 1em;
-`
-
-const Style = styled.div``
 
 export default Checkbox
