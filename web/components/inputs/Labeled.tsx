@@ -3,15 +3,17 @@ import styled from 'styled-components'
 
 const Labeled: FC<{
    htmlFor: string
-   label: ReactNode
+   label?: ReactNode
    tooltip?: string
    prefix?: boolean
 }> = ({ htmlFor, label, children, prefix, tooltip }) => (
    <Style>
       {prefix || children}
-      <label title={tooltip} htmlFor={htmlFor}>
-         {label}
-      </label>
+      {label && (
+         <label title={tooltip} htmlFor={htmlFor}>
+            {label}
+         </label>
+      )}
       {prefix && children}
    </Style>
 )

@@ -9,7 +9,7 @@ export type Polymorph<Morph, Type extends keyof Morph = keyof Morph> = Morph[Typ
    type: Type
 }
 
-type MorphMap<Morph, R> = {
+export type MorphMap<Morph, R> = {
    [Type in keyof Morph]?: (v: Polymorph<Morph, Type>) => R
 }
 
@@ -25,7 +25,7 @@ export class Polymorpher {
    private polymorphs: Array<{
       enum: Record<string, string>
       to: string
-      transform: (v: any) => unknown
+      transform: (v: any, i: number) => unknown
    }> = []
 
    async applyPolymorphs<R extends object>(input: R): Promise<R> {
@@ -52,7 +52,7 @@ export class Polymorpher {
                .map(({ key, value }) => ({ key, value: toArray(value) }))
                .map(({ key, value }) =>
                   Promise.all(
-                     value.map(provider => polymorph.transform({ type: key, ...provider }))
+                     value.map((provider, i) => polymorph.transform({ type: key, ...provider }, i))
                   )
                )
          )
@@ -66,7 +66,7 @@ export class Polymorpher {
    register<T extends object>(
       to: string,
       enm: Record<string, string>,
-      transform: (v: T) => T | Promise<T> = v => v
+      transform: (v: T, i: number) => T | Promise<T> = v => v
    ) {
       this.polymorphs.push({ to, enum: enm, transform })
    }

@@ -1,6 +1,8 @@
+import Dropdown from 'components/inputs/Dropdown'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, VFC } from 'react'
+import { useCallback, useEffect, useMemo, VFC } from 'react'
 import styled from 'styled-components'
+import { Named } from 'util/parser/types'
 import DimensionConfig from 'util/parser/types/DimensionConfig'
 import ActionBar from './ActionBar'
 import HierarchicalBlocks from './HierachicalBlocks'
@@ -11,25 +13,50 @@ export enum View {
    UNWRAPPED = 'unwrapped',
 }
 
-const ConfigVisualizer: VFC<{ config: DimensionConfig }> = ({ config, ...props }) => {
-   const { query, replace } = useRouter()
+const ConfigVisualizer: VFC<{
+   config: DimensionConfig
+   options?: Named[]
+}> = ({ config, options, ...props }) => {
+   const { query, replace, push } = useRouter()
 
+   const view = useMemo(() => (query.view as View) ?? View.HIERACHICAL, [query])
    const setView = useCallback(
       (v: View) => replace({ query: { ...query, view: v } }),
       [query, replace]
    )
 
    useEffect(() => {
-      if (query.view && !Object.values(View).includes(query.view as View)) {
+      if (!Object.values(View).includes(view)) {
          setView(View.HIERACHICAL)
       }
-   }, [query, setView])
+   }, [setView, view])
+
+   const labelledOptions = useMemo(
+      () => options?.map(value => ({ value, label: `${value.mod}:${value.id}` })),
+      [options]
+   )
 
    return (
       <Style {...props}>
-         <ActionBar onView={setView} />
-         {query.view === View.HIERACHICAL && <HierarchicalBlocks blocks={config.blocks.children} />}
-         {query.view === View.UNWRAPPED && <UnwrappedBlocks blocks={config.blocks.children} />}
+         <ActionBar view={view} onView={setView}>
+            {labelledOptions && (
+               <Dropdown
+                  id='skygrid-config'
+                  label=''
+                  options={labelledOptions}
+                  onChange={it =>
+                     push({
+                        query: { ...query, namespace: it?.value.mod, config: it?.value.id },
+                     })
+                  }
+                  value={labelledOptions.find(
+                     it => it.value.mod === query.namespace && it.value.id == query.config
+                  )}
+               />
+            )}
+         </ActionBar>
+         {view === View.HIERACHICAL && <HierarchicalBlocks blocks={config.blocks.children} />}
+         {view === View.UNWRAPPED && <UnwrappedBlocks blocks={config.blocks.children} />}
       </Style>
    )
 }

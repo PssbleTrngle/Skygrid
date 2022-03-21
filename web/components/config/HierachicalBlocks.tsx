@@ -2,23 +2,36 @@ import { omit, sumBy } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, VFC } from 'react'
 import styled from 'styled-components'
-import { BlockProvider, ProviderType } from 'util/parser/types/BlockProviders'
+import { BlockList, BlockProvider, BlockProviders } from 'util/parser/types/BlockProviders'
+import { forPolymorph, MorphMap } from 'util/polymorphism'
+import { exists } from '../../util'
 import Breadcrumbs from '../Breadcrumbs'
 import BlockGrid from './BlockGrid'
 import ProviderPanel from './ProviderPanel'
 
-function isList(p: BlockProvider): p is BlockProvider<ProviderType.LIST> {
-   return 'children' in p && p.children.length > 0
+function recurseList(it: BlockList) {
+   return (rest: string[]) => {
+      if (rest.length === 0) return it.children
+      return findRecursive(rest, it.children)
+   }
+}
+
+const recurseStep: MorphMap<BlockProviders, (rest: string[]) => BlockProvider[] | null> = {
+   list: recurseList,
+   fallback: recurseList,
+   reference: it => rest => {
+      console.log(it)
+      const children = [it.provider].filter(exists)
+      if (rest.length === 0) return children
+      return findRecursive(rest, children)
+   },
 }
 
 function findRecursive(path: string[], blocks: BlockProvider[]): BlockProvider[] | null {
    const [search, ...rest] = path
    if (!search) return null
    const match = blocks.find(b => b.uuid === search || b.name === search)
-   if (match && isList(match)) {
-      if (rest.length === 0) return match.children
-      if (isList(match)) return findRecursive(rest, match.children)
-   }
+   if (match) return forPolymorph(match, recurseStep)?.(rest) ?? null
    return null
 }
 
@@ -54,7 +67,7 @@ const HierarchicalBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
 
    const click = useCallback(
       (provider: BlockProvider) => () => {
-         if (isList(provider)) {
+         if (Object.keys(recurseStep).includes(provider.type)) {
             const id = provider.name ?? provider.uuid
             navigate([...path, id])
          }

@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash'
 import { useMemo, VFC } from 'react'
 import styled from 'styled-components'
-import { BlockList } from 'util/parser/types/BlockProviders'
+import { BlockList, BlockProvider } from 'util/parser/types/BlockProviders'
 import BlockIcon from '../BlockIcon'
 import { unwrap } from '../UnwrappedBlocks'
 
@@ -10,7 +10,12 @@ const Previewed = styled.div`
    grid-template-columns: repeat(5, 1fr);
 `
 
-const ListPanel: VFC<BlockList & { size: number }> = ({ name, children, size }) => {
+const ListPanel: VFC<
+   BlockProvider &
+      BlockList & {
+         size: number
+      }
+> = ({ name, children, size, type }) => {
    const blocks = useMemo(
       () =>
          orderBy(
@@ -27,7 +32,7 @@ const ListPanel: VFC<BlockList & { size: number }> = ({ name, children, size }) 
                <BlockIcon {...block} key={i} size={size / 5} />
             ))}
          </Previewed>
-         <p>{name ?? <i>list</i>}</p>
+         <p>{name ?? <i>{type}</i>}</p>
          <p>({children.length} entries)</p>
       </>
    )

@@ -39,7 +39,7 @@ const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
             <Searchbar value={filter} onChange={setFilter} />
             <Checkbox
                id='includeExtras'
-               tooltip='Extras are blocks are generated adjacent to the base'
+               tooltip='Extras are blocks that are generated adjacent to the base'
                value={filter.includeExtras ?? true}
                onChange={v => setFilter({ includeExtras: v })}>
                Include Extras?

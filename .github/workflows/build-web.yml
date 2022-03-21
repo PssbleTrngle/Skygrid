@@ -24,7 +24,7 @@ jobs:
         with:
           path: datagen/generated
           key: ${{ runner.os }}-data-${{ hashFiles('datagen/sources.json') }}
-          restore-keys: ${{ runner.os }}-gradle
+          restore-keys: ${{ runner.os }}-data
 
       - name: Generate Data & Assets
         run: yarn generate --from sources.json --data generated/data --icons generated/public/blocks --lang generated/lang

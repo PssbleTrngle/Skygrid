@@ -43,18 +43,23 @@ export default class XMLParser {
    private polymorpher = new Polymorpher()
 
    constructor(private resolver: DataResolver) {
-      this.polymorpher.register<BlockProvider>('children', ProviderType, async provider => {
-         const weight = provider.weight ?? 1
-         const uuid = nanoid(8)
-         const extra = await forPolymorph<BlockProviders, Promise<{}> | {}>(provider, {
-            tag: async p => ({
-               matches: await this.getBlocksFor(p),
-            }),
-            block: b => this.extendBlock(b),
-            reference: async p => ({ provider: await this.getPreset(p) }),
-         })
-         return { ...provider, ...extra, weight, uuid }
-      })
+      this.polymorpher.register<BlockProvider>(
+         'children',
+         ProviderType,
+         async (provider, index) => {
+            const weight = provider.weight ?? 1
+            const uuid =
+               provider.type === ProviderType.BLOCK ? nanoid(8) : `${provider.type}-${index + 1}`
+            const extra = await forPolymorph<BlockProviders, Promise<{}> | {}>(provider, {
+               tag: async p => ({
+                  matches: await this.getBlocksFor(p),
+               }),
+               block: b => this.extendBlock(b),
+               reference: async p => ({ provider: await this.getPreset(p) }),
+            })
+            return { ...provider, ...extra, weight, uuid }
+         }
+      )
 
       this.polymorpher.register<Extra>('extras', ExtrasType, async e => ({
          ...e,

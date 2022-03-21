@@ -43,33 +43,35 @@ function useStyles() {
    return { theme, styles }
 }
 
-interface Option {
+interface Option<V> {
    label: string
-   value: string
+   value: V
 }
 
-function Dropdown<Multi extends boolean>({
+const ALL = Symbol()
+
+function Dropdown<V, Multi extends boolean = false>({
    label,
    ...props
-}: Props<Option, Multi> &
-   Required<Pick<Props<Option, Multi>, 'id' | 'options'>> & {
-      label: ReactNode
+}: Props<Option<V>, Multi> &
+   Required<Pick<Props<Option<V>, Multi>, 'id' | 'options'>> & {
+      label?: ReactNode
    }) {
    const styles = useStyles()
 
    const options = useMemo(
       () =>
          props.isMulti
-            ? [{ label: 'Select All', value: 'ALL' }, ...(props.options ?? [])]
+            ? [{ label: 'Select All', value: ALL }, ...(props.options ?? [])]
             : props.options,
       [props.isMulti, props.options]
    )
 
    const onChange = useCallback(
-      (value: OnChangeValue<Option, Multi>, meta: ActionMeta<Option>) => {
+      (value: OnChangeValue<Option<V>, Multi>, meta: ActionMeta<Option<V>>) => {
          if (!props.isMulti) return props.onChange?.(value, meta)
-         const values = (value as MultiValue<Option>).some(it => it.value === 'ALL')
-            ? (props.options as OnChangeValue<Option, Multi>)
+         const values = (value as MultiValue<Option<V | typeof ALL>>).some(it => it.value === ALL)
+            ? (props.options as OnChangeValue<Option<V>, Multi>)
             : value
          return props.onChange?.(values, meta)
       },

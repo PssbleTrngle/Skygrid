@@ -15,6 +15,7 @@ export const panelComponent = (provider: BlockProvider) =>
       block: () => BlockPanel,
       tag: () => TagPanel,
       list: () => ListPanel,
+      fallback: () => ListPanel,
       reference: () => ReferencePanel,
    }) ?? UnknownProvider
 
