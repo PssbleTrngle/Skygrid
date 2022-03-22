@@ -355,11 +355,11 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                 listOf("quark:jasper",
                                     "quark:shale",
                                     "quark:limestone",
-                                    "granite",
-                                    "diorite",
-                                    "andesite",
-                                    "calcite",
-                                    "dripstone").map(::ResourceLocation)
+                                    "minecraft:granite",
+                                    "minecraft:diorite",
+                                    "minecraft:andesite",
+                                    "quark:calcite",
+                                    "quark:dripstone").map(::ResourceLocation)
                                     .forEach {
                                         block("polished_${it.path}", mod = it.namespace)
                                         block("${it.path}_pillar", mod = "quark")
