@@ -26,6 +26,11 @@ interface BaseBlockProvider extends WeightedEntry {
    uuid: string
    extras?: Extra[]
    extra?: boolean
+   except?: {
+      mod?: ModFilter[] | ModFilter
+      name?: NameFilter[] | NameFilter
+      tag?: TagFilter[] | TagFilter
+   }
 }
 
 export interface Block extends BaseBlockProvider, Named {
@@ -40,11 +45,6 @@ export interface GeneratedBlock extends Block {
 
 export interface Tag extends BaseBlockProvider, Named {
    matches: Block[]
-   except?: {
-      mod?: ModFilter[] | ModFilter
-      name?: NameFilter[] | NameFilter
-      tag?: TagFilter[] | TagFilter
-   }
 }
 
 export interface Reference extends BaseBlockProvider {

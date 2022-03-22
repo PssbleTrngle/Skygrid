@@ -1,3 +1,4 @@
+import { uniq } from 'lodash'
 import { nanoid } from 'nanoid'
 import {
    Block,
@@ -39,6 +40,14 @@ export interface TagDefinition {
    values: string[]
 }
 
+function merge<T>(a: T, b: T): T {
+   if (!a) return b
+   if (!b) return a
+   const keys = uniq([...Object.keys(a), ...Object.keys(b)]) as (keyof T)[]
+   const entries = keys.map(key => [key, [a[key], b[key]].filter(exists)])
+   return Object.fromEntries(entries) as T
+}
+
 export default class XMLParser {
    private polymorpher = new Polymorpher()
 
@@ -46,17 +55,21 @@ export default class XMLParser {
       this.polymorpher.register<BlockProvider>(
          'children',
          ProviderType,
-         async (provider, index) => {
+         async (provider, index, parent) => {
             const weight = provider.weight ?? 1
             const uuid =
                provider.type === ProviderType.BLOCK ? nanoid(8) : `${provider.type}-${index + 1}`
+
+            const except = merge(provider.except, parent?.except)
+
             const extra = await forPolymorph<BlockProviders, Promise<{}> | {}>(provider, {
                tag: async p => ({
-                  matches: await this.getBlocksFor(p),
+                  matches: await this.getBlocksFor({ ...p, except }),
                }),
                block: b => this.extendBlock(b),
                reference: async p => ({ provider: await this.getPreset(p) }),
             })
+
             return { ...provider, ...extra, weight, uuid }
          }
       )
@@ -107,6 +120,7 @@ export default class XMLParser {
 
    async extendBlock(block: Block) {
       return {
+         mod: block.mod ?? 'minecraft',
          name: await this.resolver.getName(block),
          icon: await this.getIcon(block),
       }

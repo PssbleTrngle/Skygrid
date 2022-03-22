@@ -25,7 +25,7 @@ export class Polymorpher {
    private polymorphs: Array<{
       enum: Record<string, string>
       to: string
-      transform: (v: any, i: number) => unknown
+      transform: (v: any, i: number, parent?: any) => unknown
    }> = []
 
    async applyPolymorphs<R extends object>(input: R): Promise<R> {
@@ -42,6 +42,8 @@ export class Polymorpher {
          })
       )
 
+      const parent = props.reduce((o, { key, value }) => ({ ...o, [key]: value }), {} as R)
+
       const mapped = await this.polymorphs.reduce(async (value, polymorph) => {
          const keys = Object.values(polymorph.enum)
 
@@ -52,7 +54,9 @@ export class Polymorpher {
                .map(({ key, value }) => ({ key, value: toArray(value) }))
                .map(({ key, value }) =>
                   Promise.all(
-                     value.map((provider, i) => polymorph.transform({ type: key, ...provider }, i))
+                     value.map((provider, i) =>
+                        polymorph.transform({ type: key, ...provider }, i, parent)
+                     )
                   )
                )
          )
@@ -66,7 +70,7 @@ export class Polymorpher {
    register<T extends object>(
       to: string,
       enm: Record<string, string>,
-      transform: (v: T, i: number) => T | Promise<T> = v => v
+      transform: (v: T, i: number, parent?: T) => T | Promise<T> = v => v
    ) {
       this.polymorphs.push({ to, enum: enm, transform })
    }
