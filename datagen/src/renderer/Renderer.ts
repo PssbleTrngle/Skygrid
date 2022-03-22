@@ -120,7 +120,7 @@ export default class Renderer {
 
             const geometry = new BoxGeometry(...calculatedSize, 1, 1, 1)
             const materials = await this.constructBlockMaterial(model, element)
-            const cube = new Mesh(geometry, materials)
+            const cube = new Mesh(geometry, materials as Material[])
             cube.position.set(0, 0, 0)
             cube.position.add(new Vector3(...element.from))
             cube.position.add(new Vector3(...element.to))
@@ -193,7 +193,10 @@ export default class Renderer {
       return this.constructTextureMaterial(block, decodedTexture, face)
    }
 
-   private async constructBlockMaterial(block: BlockModel, element: Element): Promise<Material[]> {
+   private async constructBlockMaterial(
+      block: BlockModel,
+      element: Element
+   ): Promise<(Material | null)[]> {
       if (!element?.faces) return []
       const materials = await Promise.all(
          FACES.map(direction => {
@@ -202,7 +205,7 @@ export default class Renderer {
             return this.decodeFace(face, block)
          })
       )
-      return materials.filter(it => !!it) as Material[]
+      return materials
    }
 
    private decodeTexture(texture: string, block: BlockModel): string | null {
@@ -221,21 +224,6 @@ export default class Renderer {
 
       const width = image.width
       let height = animationMeta ? width : image.height
-      let frame = 0
-
-      if (animationMeta) {
-         const frameCount = image.height / width
-
-         if (block.animationCurrentTick == 0) {
-            block.animationMaxTicks = Math.max(
-               block.animationMaxTicks || 1,
-               frameCount * (animationMeta.frametime || 1)
-            )
-         } else {
-            frame =
-               Math.floor(block.animationCurrentTick! / (animationMeta.frametime || 1)) % frameCount
-         }
-      }
 
       const canvas = rawCanvas.createCanvas(width, height)
       const ctx = canvas.getContext('2d')
@@ -250,17 +238,7 @@ export default class Renderer {
 
       const uv = face.uv ?? [0, 0, width, height]
 
-      ctx.drawImage(
-         image,
-         uv[0],
-         uv[1] + frame * height,
-         uv[2] - uv[0],
-         uv[3] - uv[1],
-         0,
-         0,
-         width,
-         height
-      )
+      ctx.drawImage(image, uv[0], uv[1], uv[2] - uv[0], uv[3] - uv[1], 0, 0, width, height)
 
       const texture = new Texture(canvas as any)
       texture.magFilter = NearestFilter

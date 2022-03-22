@@ -8,5 +8,6 @@
    { "name": "environmental", "type": "curseforge", "project": 388992, "file": 3561534 },
    { "name": "endergetic", "type": "curseforge", "project": 291509, "file": 3154938 },
    { "name": "aquatic", "type": "curseforge", "project": 326895, "file": 3561148 },
+   { "name": "neapolitan", "type": "curseforge", "project": 382016, "file": 3567243 },
    { "name": "vanilla", "url": "$VANILLA_DATA" }
 ]

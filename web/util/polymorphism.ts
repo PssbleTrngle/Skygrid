@@ -44,10 +44,10 @@ export class Polymorpher {
 
       const parent = props.reduce((o, { key, value }) => ({ ...o, [key]: value }), {} as R)
 
-      const mapped = await this.polymorphs.reduce(async (value, polymorph) => {
+      const mapped = await this.polymorphs.reduce(async (initial, polymorph) => {
          const keys = Object.values(polymorph.enum)
 
-         const [match, noMatch] = partition(await value, ({ key }) => keys.includes(key))
+         const [match, noMatch] = partition(await initial, ({ key }) => keys.includes(key))
 
          const children = await Promise.all(
             match

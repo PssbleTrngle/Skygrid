@@ -641,7 +641,7 @@
     "@babel/runtime" "^7.10.5"
     "@styled-icons/styled-icon" "^10.6.0"
 
-"@styled-icons/simple-icons@10.45.0", "@styled-icons/simple-icons@^10.45.0":
+"@styled-icons/simple-icons@10.45.0":
   version "10.45.0"
   resolved "https://registry.yarnpkg.com/@styled-icons/simple-icons/-/simple-icons-10.45.0.tgz#fc102e514e0b417cc8cd3b773cc33005a07852dc"
   integrity sha512-2agGgrxuiBjicbz5kgF1M691oNfRUYwSWy80kqJCEGXyJ9YGtLWXTSNdLYMk0Dt4JnL0/3eKItU9jYf24rCcJg==

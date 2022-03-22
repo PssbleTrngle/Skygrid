@@ -5,7 +5,9 @@
    "scripts": {
       "generate": "ts-node src",
       "lint": "eslint src --ext .ts",
-      "type-check": "tsc --noEmit"
+      "type-check": "tsc --noEmit",
+      "dev": "yarn generate --from sources.json --data generated/data --icons generated/blocks --lang generated/lang",
+      "clean": "rimraf generated tmp"
    },
    "dependencies": {
       "@types/fs-extra": "^9.0.13",
