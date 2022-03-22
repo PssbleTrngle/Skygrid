@@ -48,7 +48,7 @@ interface Option<V> {
    value: V
 }
 
-const ALL = Symbol()
+const ALL = 'ALL'
 
 function Dropdown<V, Multi extends boolean = false>({
    label,

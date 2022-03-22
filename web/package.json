@@ -12,6 +12,7 @@
       "clean": "rimraf data lang public/blocks"
    },
    "dependencies": {
+      "@styled-icons/boxicons-regular": "^10.38.0",
       "idb-keyval": "^6.1.0",
       "lodash": "^4.17.21",
       "nanoid": "^3.3.1",
@@ -22,6 +23,7 @@
       "react-select": "^5.2.2",
       "sharp": "^0.30.2",
       "styled-components": "^5.3.3",
+      "styled-icons": "^10.45.0",
       "typescript": "^4.6.2",
       "xml2js": "^0.4.23"
    },

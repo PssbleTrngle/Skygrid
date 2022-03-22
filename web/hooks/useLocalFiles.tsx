@@ -1,3 +1,6 @@
+import Button, { ButtonLink } from 'components/basic/Button'
+import CenteredPage from 'components/basic/CenteredPage'
+import { Subtitle } from 'components/basic/Text'
 import { isEqualWith } from 'lodash'
 import { NextPage } from 'next'
 import {
@@ -12,10 +15,9 @@ import {
    useState,
    VFC,
 } from 'react'
-import Page from '../components/basic/Page'
-import LocalDataParser from '../util/parser/LocalDataParser'
-import { Named } from '../util/parser/types'
-import { Resource, ResourceType } from '../util/parser/XMLParser'
+import LocalDataParser from 'util/parser/LocalDataParser'
+import { Named } from 'util/parser/types'
+import { Resource, ResourceType } from 'util/parser/XMLParser'
 import useFileSystem, { Status } from './useFileSystem'
 
 type Consumer<T extends ResourceType = any> = (value: Resource<T>) => void
@@ -148,18 +150,19 @@ const GrantPermission: NextPage<{
    onRequest: DispatchWithoutAction
    onOpen: DispatchWithoutAction
 }> = ({ onRequest, onOpen }) => (
-   <Page>
-      <button onClick={onRequest}>Give permission</button>
-      <button onClick={onOpen}>Select a different folder</button>
-   </Page>
+   <CenteredPage>
+      <Subtitle>Grant permission to access your last directory</Subtitle>
+      <Button onClick={onRequest}>Give permission</Button>
+      <ButtonLink onClick={onOpen}>Select a different folder</ButtonLink>
+   </CenteredPage>
 )
 
 const SelectFolder: NextPage<{
    onOpen: DispatchWithoutAction
 }> = ({ onOpen }) => (
-   <Page>
+   <CenteredPage>
       <button onClick={onOpen}>
          Select <code>datapack</code> Folder
       </button>
-   </Page>
+   </CenteredPage>
 )

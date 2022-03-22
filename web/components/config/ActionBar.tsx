@@ -1,3 +1,4 @@
+import HomeLink from 'components/HomeIcon'
 import { Dispatch, FC } from 'react'
 import styled, { css } from 'styled-components'
 import { View } from './ConfigVisualizer'
@@ -8,6 +9,7 @@ const ActionBar: FC<{
 }> = ({ onView, view, children, ...props }) => {
    return (
       <Style {...props}>
+         <HomeLink />
          {children}
          <Button active={view === View.HIERACHICAL} onClick={() => onView(View.HIERACHICAL)}>
             Hierachical

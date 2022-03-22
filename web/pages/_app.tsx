@@ -1,3 +1,4 @@
+import Footer from 'components/Footer'
 import { FileSystemProvider } from 'hooks/useFileSystem'
 import type { AppProps } from 'next/app'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
@@ -10,6 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
          <Global />
          <FileSystemProvider>
             <Component {...pageProps} />
+            <Footer />
          </FileSystemProvider>
       </ThemeProvider>
    )
@@ -23,7 +25,7 @@ const Global = createGlobalStyle`
       color: ${p => p.theme.text};
    }
 
-   ul, li {
+   ul, ol {
       list-style: none;
    }
 `
