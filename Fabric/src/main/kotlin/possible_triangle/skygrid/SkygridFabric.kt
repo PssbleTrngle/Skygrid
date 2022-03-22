@@ -20,7 +20,7 @@ import possible_triangle.skygrid.world.SkygridGenerator
 object SkygridFabric : ModInitializer {
 
     override fun onInitialize() {
-        SkygridMod.init()
+        SkygridMod.setup()
         FabricPlatformHelper.register()
 
         XMLResource.register {

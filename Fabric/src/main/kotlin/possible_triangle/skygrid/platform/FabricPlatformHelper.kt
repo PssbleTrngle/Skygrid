@@ -1,11 +1,10 @@
 package possible_triangle.skygrid.platform
 
 import com.google.common.collect.Maps
-import net.fabricmc.fabric.api.tag.TagFactory
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.Tag
+import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.platform.services.IPlatformHelper
@@ -42,7 +41,7 @@ class FabricPlatformHelper : IPlatformHelper {
     }
 
     @Nonnull
-    override fun createBlockTag(id: ResourceLocation): Tag.Named<Block> {
-        return TagFactory.BLOCK.create(id)
+    override fun createBlockTag(id: ResourceLocation): TagKey<Block> {
+        return TagKey.create(Registry.BLOCK_REGISTRY, id)
     }
 }

@@ -1,6 +1,7 @@
 package possible_triangle.skygrid.world
 
-import com.mojang.datafixers.util.Function4
+import com.mojang.datafixers.util.Function5
+import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Lifecycle
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -10,6 +11,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.WorldGenRegion
+import net.minecraft.tags.ConfiguredStructureTags
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.LevelHeightAccessor
 import net.minecraft.world.level.NoiseColumn
@@ -23,10 +25,11 @@ import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.level.dimension.LevelStem
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.levelgen.StructureSettings
 import net.minecraft.world.level.levelgen.WorldGenSettings
 import net.minecraft.world.level.levelgen.blending.Blender
-import net.minecraft.world.level.levelgen.feature.StructureFeature
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature
+import net.minecraft.world.level.levelgen.structure.StructureSet
+import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement
 import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.xml.DimensionConfig
 import possible_triangle.skygrid.data.xml.Preset
@@ -38,10 +41,11 @@ import kotlin.random.Random
 
 class SkygridChunkGenerator(
     biomeSource: BiomeSource,
+    structures: Registry<StructureSet>,
     private val configKey: String,
     private val seed: Long?,
     private val endPortals: Boolean,
-) : ChunkGenerator(biomeSource, StructureSettings(Optional.of(StructureSettings.DEFAULT_STRONGHOLD), emptyMap())) {
+) : ChunkGenerator(structures, Optional.empty(), biomeSource) {
 
     companion object {
         fun create(
@@ -51,8 +55,11 @@ class SkygridChunkGenerator(
             biomeSource: BiomeSource? = null,
         ): ChunkGenerator {
             val biomes = registries.registryOrThrow(Registry.BIOME_REGISTRY)
+            val structures = registries.registryOrThrow(Registry.STRUCTURE_SET_REGISTRY)
             val config = dimension?.location() ?: ResourceLocation(SkygridMod.MOD_ID, "default")
-            return SkygridChunkGenerator(biomeSource ?: FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)),
+            return SkygridChunkGenerator(
+                biomeSource ?: FixedBiomeSource(biomes.getHolderOrThrow(Biomes.THE_VOID)),
+                structures,
                 config.toString(),
                 seed,
                 dimension == LevelStem.OVERWORLD)
@@ -63,7 +70,7 @@ class SkygridChunkGenerator(
             seed: Long,
             bonusChest: Boolean,
         ): WorldGenSettings {
-            val dimensions = MappedRegistry(Registry.LEVEL_STEM_REGISTRY, Lifecycle.experimental())
+            val dimensions = MappedRegistry(Registry.LEVEL_STEM_REGISTRY, Lifecycle.experimental(), null)
             val biomes = registries.registryOrThrow(Registry.BIOME_REGISTRY)
 
             fun register(
@@ -72,27 +79,26 @@ class SkygridChunkGenerator(
                 biomeSource: BiomeSource,
             ) {
                 val generator = create(registries, seed, stem, biomeSource)
-                dimensions.register(stem, LevelStem({
-                    registries.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrThrow(dimension)
-                }, generator), Lifecycle.stable())
+                dimensions.register(stem, LevelStem(
+                    registries.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getHolderOrThrow(dimension),
+                    generator), Lifecycle.stable())
             }
 
             register(
                 LevelStem.OVERWORLD,
                 DimensionType.OVERWORLD_LOCATION,
-                //ChunkyBiomeSource(ChunkyBiomeSource.Preset.OVERWORLD.biomes(biomes), seed),
-                FixedBiomeSource { biomes.getOrThrow(Biomes.PLAINS) }
+                FixedBiomeSource(biomes.getHolderOrThrow(Biomes.PLAINS))
             )
 
             register(LevelStem.NETHER,
                 DimensionType.NETHER_LOCATION,
-                //ChunkyBiomeSource(ChunkyBiomeSource.Preset.NETHER.biomes(biomes), seed),
-                FixedBiomeSource { biomes.getOrThrow(Biomes.NETHER_WASTES) }
+                FixedBiomeSource(biomes.getHolderOrThrow(Biomes.NETHER_WASTES))
             )
 
             register(LevelStem.END,
                 DimensionType.END_LOCATION,
-                FixedBiomeSource { biomes.getOrThrow(Biomes.THE_END) })
+                FixedBiomeSource(biomes.getHolderOrThrow(Biomes.THE_END))
+            )
 
             return WorldGenSettings(seed, false, bonusChest, dimensions)
         }
@@ -101,16 +107,17 @@ class SkygridChunkGenerator(
         private val BEDROCK = Blocks.BEDROCK.defaultBlockState()
 
         val CODEC: Codec<SkygridChunkGenerator> = RecordCodecBuilder.create { builder ->
-            builder.group(
+            commonCodec(builder).and(builder.group(
                 BiomeSource.CODEC.fieldOf("biome_source").forGetter { it.biomeSource },
                 Codec.STRING.fieldOf("config").forGetter { it.configKey },
                 Codec.LONG.optionalFieldOf("seed").forGetter { Optional.ofNullable(it.seed) },
                 Codec.BOOL.optionalFieldOf("endPortals").forGetter { Optional.of(it.endPortals) },
-            ).apply(
+            )).apply(
                 builder,
-                builder.stable(Function4 { source, key, seed, endPortals ->
+                builder.stable(Function5 { structures, source, key, seed, endPortals ->
                     SkygridChunkGenerator(
                         source,
+                        structures,
                         key,
                         seed.orElse(null),
                         endPortals.orElse(false),
@@ -120,14 +127,14 @@ class SkygridChunkGenerator(
         }
     }
 
-    private val climate = Climate.Sampler { _, _, _ -> Climate.TargetPoint(1L, 1L, 1L, 1L, 1L, 1L) }
+    private val climate = Climate.empty()
 
     override fun codec(): Codec<out ChunkGenerator> {
         return CODEC
     }
 
     override fun withSeed(seed: Long): SkygridChunkGenerator {
-        return SkygridChunkGenerator(biomeSource, configKey, seed, endPortals)
+        return SkygridChunkGenerator(biomeSource, structureSets, configKey, seed, endPortals)
     }
 
     private val random = seed?.let { Random(it) } ?: Random
@@ -139,7 +146,11 @@ class SkygridChunkGenerator(
     private val endPortal
         get() = Preset[ResourceLocation("end_portal")]
 
-    private val endPortalPositions: List<ChunkPos> = settings.stronghold()?.let {
+    private val strongholdSettings =
+        if (endPortals) ConcentricRingsStructurePlacement(32, 3, 128)
+        else null
+
+    private val endPortalPositions: List<ChunkPos> = strongholdSettings?.let {
         val distance = it.distance()
         val count = it.count()
         var spread = it.spread()
@@ -242,19 +253,20 @@ class SkygridChunkGenerator(
 
     override fun findNearestMapFeature(
         level: ServerLevel,
-        structure: StructureFeature<*>,
+        structures: HolderSet<ConfiguredStructureFeature<*, *>?>,
         pos: BlockPos,
         something: Int,
         somethingElse: Boolean,
-    ): BlockPos? {
+    ): Pair<BlockPos, Holder<ConfiguredStructureFeature<*, *>>>? {
         val distance = config.distance
-        return if (structure == StructureFeature.STRONGHOLD) {
-            endPortalPositions.map {
+        return if (structures == ConfiguredStructureTags.EYE_OF_ENDER_LOCATED) {
+            val pos = endPortalPositions.map {
                 BlockPos(it.minBlockX + distance.x,
                     level.minBuildHeight,
                     it.minBlockZ + distance.z)
             }.minByOrNull { it.distSqr(pos) }
-        } else super.findNearestMapFeature(level, structure, pos, something, somethingElse)
+            Pair(pos, null)
+        } else super.findNearestMapFeature(level, structures, pos, something, somethingElse)
     }
 
     override fun climateSampler(): Climate.Sampler {
@@ -303,5 +315,9 @@ class SkygridChunkGenerator(
 
     override fun getBaseColumn(x: Int, z: Int, accessor: LevelHeightAccessor): NoiseColumn {
         return NoiseColumn(minY, emptyArray<BlockState>())
+    }
+
+    override fun addDebugScreenInfo(info: MutableList<String>, pos: BlockPos) {
+        // No debug screen info for now
     }
 }

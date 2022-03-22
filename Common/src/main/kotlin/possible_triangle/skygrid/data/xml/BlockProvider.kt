@@ -3,7 +3,6 @@ package possible_triangle.skygrid.data.xml
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
-import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import possible_triangle.skygrid.SkygridMod.LOGGER
@@ -41,10 +40,9 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
 
             override fun internalValidate(
                 blocks: Registry<Block>,
-                tags: TagContainer,
                 references: ReferenceContext,
                 filters: List<FilterOperator>,
-            ): Boolean = parent.internalValidate(blocks, tags, references, filters)
+            ): Boolean = parent.internalValidate(blocks, references, filters)
 
             override fun base(random: Random): Block = parent.base(random)
 
@@ -59,20 +57,18 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
 
     protected abstract fun internalValidate(
         blocks: Registry<Block>,
-        tags: TagContainer,
         references: ReferenceContext,
         filters: List<FilterOperator>,
     ): Boolean
 
     final override fun validate(
         blocks: Registry<Block>,
-        tags: TagContainer,
         references: ReferenceContext,
         additionalFilters: List<FilterOperator>,
     ): Boolean {
         val referencesWithThis = references.with(this)
-        validExtras = extras.filter { it.validate(blocks, tags, referencesWithThis) }
-        return internalValidate(blocks, tags, references, additionalFilters + filters).also {
+        validExtras = extras.filter { it.validate(blocks, referencesWithThis) }
+        return internalValidate(blocks, references, additionalFilters + filters).also {
             if (!it) LOGGER.debug("Invalid BlockProvider ${name ?: "(anonymous)"} of type ${javaClass.name}")
         }
     }

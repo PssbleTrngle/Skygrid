@@ -2,7 +2,7 @@ package possible_triangle.skygrid.platform
 
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
-import net.minecraft.tags.Tag
+import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.fml.loading.FMLLoader
 import possible_triangle.skygrid.SkygridForge.BLOCKS
@@ -17,7 +17,8 @@ class ForgePlatformHelper : IPlatformHelper {
         get() = !FMLLoader.isProduction()
 
     override fun getTags(block: Block): Collection<ResourceLocation> {
-        return block.tags
+        // TODO
+        return emptyList()
     }
 
     @Nonnull
@@ -26,7 +27,7 @@ class ForgePlatformHelper : IPlatformHelper {
     }
 
     @Nonnull
-    override fun createBlockTag(id: ResourceLocation): Tag.Named<Block> {
-        return BlockTags.createOptional(id)
+    override fun createBlockTag(id: ResourceLocation): TagKey<Block> {
+        return BlockTags.create(id)
     }
 }

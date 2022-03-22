@@ -1,8 +1,12 @@
 package possible_triangle.skygrid.data.generation.builder
 
-import net.minecraft.tags.Tag
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.data.xml.Filter
-import possible_triangle.skygrid.data.xml.impl.*
+import possible_triangle.skygrid.data.xml.impl.ExceptFilter
+import possible_triangle.skygrid.data.xml.impl.ModFilter
+import possible_triangle.skygrid.data.xml.impl.NameFilter
+import possible_triangle.skygrid.data.xml.impl.TagFilter
 
 class ExceptFilterBuilder {
 
@@ -12,8 +16,8 @@ class ExceptFilterBuilder {
         filters.add(NameFilter(pattern))
     }
 
-    fun tag(tag: Tag.Named<SingleBlock>) {
-        tag(tag.name.namespace, tag.name.path)
+    fun tag(tag: TagKey<Block>) {
+        tag(tag.location.namespace, tag.location.path)
     }
 
     fun tag(id: String, mod: String = "minecraft") {

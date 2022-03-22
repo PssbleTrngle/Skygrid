@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Registry
-import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
@@ -20,7 +19,7 @@ data class Side(
     override val shared: Boolean = false,
 ) : Extra() {
 
-    override fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean {
+    override fun internalValidate(blocks: Registry<Block>): Boolean {
         return Direction.byName(on) != null && offset > 0
     }
 

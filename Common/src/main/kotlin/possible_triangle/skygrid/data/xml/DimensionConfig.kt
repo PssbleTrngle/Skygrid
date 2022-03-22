@@ -9,7 +9,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
-import net.minecraft.tags.TagContainer
+import net.minecraft.tags.TagKey
 import net.minecraft.util.random.SimpleWeightedRandomList
 import net.minecraft.world.level.SpawnData
 import net.minecraft.world.level.block.Block
@@ -56,15 +56,18 @@ data class DimensionConfig(
     @Transient
     lateinit var gap: Optional<SingleBlock>
 
-    fun validate(registries: RegistryAccess, tags: TagContainer): Boolean {
+
+    fun validate(registries: RegistryAccess): Boolean {
         val blockRegistry = registries.registryOrThrow(Registry.BLOCK_REGISTRY)
         val entityRegistry = registries.registryOrThrow(Registry.ENTITY_TYPE_REGISTRY)
         val references = ReferenceContext()
 
+        val getTag = { it: TagKey<Block> -> blockRegistry.getTagOrEmpty(it).map { it.value() } }
+
         loot.validate { true }
         mobs.validate { entityRegistry.containsKey(it.key) }
-        gap = Optional.ofNullable(unsafeGap).filter { it.validate(blockRegistry, tags, references) }
-        return blocks.validate { it.validate(blockRegistry, tags, references) }
+        gap = Optional.ofNullable(unsafeGap).filter { it.validate(blockRegistry, references) }
+        return blocks.validate { it.validate(blockRegistry, references) }
     }
 
     override fun generate(random: Random, access: BlockAccess): Boolean {
@@ -146,7 +149,7 @@ data class DimensionConfig(
         }
 
         override fun validate(value: DimensionConfig, server: MinecraftServer): Boolean {
-            return value.validate(server.registryAccess(), server.tags)
+            return value.validate(server.registryAccess())
         }
 
     }

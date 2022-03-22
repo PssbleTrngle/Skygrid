@@ -34,14 +34,16 @@ object SkygridGenerator : WorldPreset("${MOD_ID}.${MOD_ID}") {
     override fun generator(registries: RegistryAccess, seed: Long): ChunkGenerator {
         val biomes = registries.registryOrThrow(
             Registry.BIOME_REGISTRY)
+        val structures = registries.registryOrThrow(
+            Registry.STRUCTURE_SET_REGISTRY)
         val config = ResourceLocation(MOD_ID, "default")
         return SkygridChunkGenerator(
-            FixedBiomeSource(biomes.getOrThrow(Biomes.THE_VOID)), config.toString(), seed, false
+            FixedBiomeSource(biomes.getHolderOrThrow(Biomes.THE_VOID)), structures, config.toString(), seed, false
         )
     }
 
     override fun create(
-        registries: RegistryAccess.RegistryHolder,
+        registries: RegistryAccess,
         seed: Long,
         generateFeatures: Boolean,
         bonusChest: Boolean,

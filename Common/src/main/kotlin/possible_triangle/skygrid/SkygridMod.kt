@@ -27,12 +27,13 @@ object SkygridMod {
     val STIFF_AIR by Services.PLATFORM.createBlock("stiff_air") { StiffAir() }
 
     fun init() {
-        LOGGER.info("Skygrid booting")
-
-        Registry.register(Registry.CHUNK_GENERATOR, ResourceLocation(MOD_ID, MOD_ID), SkygridChunkGenerator.CODEC)
-
         Preset.register()
         DimensionConfig.register()
+    }
+
+    fun setup() {
+        LOGGER.info("Skygrid booting")
+        Registry.register(Registry.CHUNK_GENERATOR, ResourceLocation(MOD_ID, MOD_ID), SkygridChunkGenerator.CODEC)
     }
 
     fun onItemTooltip(stack: ItemStack, flags: TooltipFlag, tooltip: MutableList<Component>) {

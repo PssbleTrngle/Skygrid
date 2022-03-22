@@ -1,6 +1,6 @@
 package possible_triangle.skygrid.data.generation.builder
 
-import net.minecraft.tags.Tag
+import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.data.generation.builder.providers.*
 
@@ -22,13 +22,13 @@ fun interface IBlocksBuilder {
     }
 
     fun tag(
-        tag: Tag.Named<Block>,
+        tag: TagKey<Block>,
         weight: Double = 1.0,
         expand: Boolean = false,
         random: Boolean = true,
         builder: TagBuilder.() -> Unit = {},
     ): TagBuilder {
-        return tag(tag.name.path, tag.name.namespace, weight, expand, random, builder)
+        return tag(tag.location.path, tag.location.namespace, weight, expand, random, builder)
     }
 
     fun tag(

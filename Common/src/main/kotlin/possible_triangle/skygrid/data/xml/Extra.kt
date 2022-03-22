@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
-import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.data.ReferenceContext
 import possible_triangle.skygrid.data.Validating
@@ -23,18 +22,17 @@ abstract class Extra : Generator<IBlockAccess>, Validating {
     @Transient
     lateinit var validProviders: WeightedList<BlockProvider>
 
-    abstract fun internalValidate(blocks: Registry<Block>, tags: TagContainer): Boolean
+    abstract fun internalValidate(blocks: Registry<Block>): Boolean
 
     abstract fun offset(pos: BlockPos): BlockPos
 
     override fun validate(
         blocks: Registry<Block>,
-        tags: TagContainer,
         references: ReferenceContext,
         additionalFilters: List<FilterOperator>
     ): Boolean {
-        validProviders = WeightedList(providers.filter { it.validate(blocks, tags, references, ) })
-        return internalValidate(blocks, tags) && validProviders.isNotEmpty()
+        validProviders = WeightedList(providers.filter { it.validate(blocks, references, ) })
+        return internalValidate(blocks) && validProviders.isNotEmpty()
     }
 
     override fun generate(random: Random, access: IBlockAccess): Boolean {

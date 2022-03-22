@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
-import net.minecraft.tags.TagContainer
+import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import possible_triangle.skygrid.data.ReferenceContext
@@ -32,7 +32,10 @@ data class Tag(
     private lateinit var blocks: List<Block>
 
     @Transient
-    private val key = keyFrom(id, mod)
+    private val location = keyFrom(id, mod)
+
+    @Transient
+    private val key = TagKey.create(Registry.BLOCK_REGISTRY, location)
 
     override val weight: Double
         get() = if (expand)
@@ -40,18 +43,17 @@ data class Tag(
         else tagWeight
 
     override val name: String
-        get() = "#$key"
+        get() = "#$location"
 
     override fun flat(): List<Pair<Block, Double>> = blocks.map { it to 1.0 }
 
     override fun internalValidate(
         blocks: Registry<Block>,
-        tags: TagContainer,
         references: ReferenceContext,
         filters: List<FilterOperator>,
     ): Boolean {
-        this.blocks = tags.getOrEmpty(Registry.BLOCK_REGISTRY).getTagOrEmpty(key).values.filter {
-            filters.all { filter -> filter.test(it, blocks, tags) }
+        this.blocks = blocks.getTagOrEmpty(key).map { it.value() }.filter {
+            filters.all { filter -> filter.test(it, blocks) }
         }
         return this.blocks.isNotEmpty()
     }

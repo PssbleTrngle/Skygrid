@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
-import net.minecraft.tags.TagContainer
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.SkygridMod
 import possible_triangle.skygrid.data.ReferenceContext
@@ -45,7 +44,6 @@ data class SingleBlock(
 
     override fun internalValidate(
         blocks: Registry<Block>,
-        tags: TagContainer,
         references: ReferenceContext,
         filters: List<FilterOperator>,
     ): Boolean {
