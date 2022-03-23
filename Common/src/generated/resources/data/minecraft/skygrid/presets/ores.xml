@@ -26,7 +26,7 @@
          <block id="redstone_block" weight="6.0"/>
          <tag id="storage_blocks/raw_zinc" mod="forge" weight="8.0"/>
       </list>
-      <list name="crystals">
+      <list name="crystals" weight="0.05">
          <block id="amethyst_block">
             <side on="down" probability="0.5">
                <tag id="amethyst_clusters" mod="skygrid">

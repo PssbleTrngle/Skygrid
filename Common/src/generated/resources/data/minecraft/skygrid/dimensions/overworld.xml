@@ -202,24 +202,24 @@
             <block id="glow_shroom_block" mod="biomesoplenty" weight="0.1"/>
          </list>
       </list>
-      <list weight="14.0" name="building">
+      <list weight="20.0" name="building">
+         <list name="copper" weight="0.05">
+            <block id="waxed_copper_block"/>
+            <block id="waxed_oxidized_copper"/>
+            <block id="waxed_exposed_copper"/>
+            <block id="waxed_weathered_copper"/>
+            <block id="waxed_cut_copper"/>
+            <block id="waxed_oxidized_cut_copper"/>
+            <block id="waxed_exposed_cut_copper"/>
+            <block id="waxed_weathered_cut_copper"/>
+         </list>
          <list name="bricks">
             <block id="cobblestone"/>
             <block id="cobbled_deepslate" weight="0.5"/>
             <block id="mossy_cobblestone" weight="0.1"/>
             <block id="smooth_stone" weight="0.1"/>
-            <list name="copper">
-               <block id="waxed_copper_block"/>
-               <block id="waxed_oxidized_copper"/>
-               <block id="waxed_exposed_copper"/>
-               <block id="waxed_weathered_copper"/>
-               <block id="waxed_cut_copper"/>
-               <block id="waxed_oxidized_cut_copper"/>
-               <block id="waxed_exposed_cut_copper"/>
-               <block id="waxed_weathered_cut_copper"/>
-            </list>
             <list name="bricks">
-               <block id="bricks"/>
+               <block id="bricks" weight="0.1"/>
                <list name="stone bricks">
                   <block id="stone_bricks"/>
                   <block id="mossy_stone_bricks" weight="0.5"/>
@@ -238,7 +238,7 @@
                   <block id="cobblestone_bricks" mod="quark"/>
                   <block id="mossy_cobblestone_bricks" mod="quark" weight="0.5"/>
                </list>
-               <list name="stone variants bricks">
+               <list name="stone variants bricks" weight="10">
                   <cycle key="axis"/>
                   <block id="polished_jasper" mod="quark"/>
                   <block id="jasper_pillar" mod="quark"/>
@@ -275,12 +275,14 @@
                </list>
             </list>
          </list>
-         <fallback weight="0.05">
+         <list weight="0.05">
             <tag id="bookshelves" mod="forge"/>
             <block id="bookshelf"/>
-         </fallback>
-         <tag id="glass/silica" mod="forge"/>
-         <tag id="wool"/>
+         </list>
+         <list name="misc" weight="0.1">
+            <tag id="glass/silica" mod="forge" />
+            <tag id="wool" />
+         </list>
          <block id="bamboo_mat" mod="quark" weight="0.05"/>
          <list weight="0.01" name="midori">
             <cycle key="axis"/>
@@ -307,7 +309,7 @@
                <block id="ender_eye_block" mod="botania"/>
             </fallback>
          </list>
-         <list weight="0.1" name="workstations">
+         <list weight="0.05" name="workstations">
             <block id="crafting_table" weight="20.0"/>
             <list weight="3.0">
                <block id="furnace"/>
@@ -340,7 +342,8 @@
          <tag id="chests/wooden" mod="forge"/>
       </list>
       <block id="spawner"/>
-      <reference id="ocean"/>
+
+      <reference id="ocean" weight="0.1"/>
       <reference id="ores" weight="30.0"/>
       <list weight="6.0" name="compressed">
          <cycle key="axis"/>

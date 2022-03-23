@@ -312,26 +312,15 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                     }
                 }
 
-                list("building", weight = 14.0) {
+                list("building", weight = 20.0) {
                     list("bricks") {
                         block(Blocks.COBBLESTONE)
                         block(Blocks.COBBLED_DEEPSLATE, weight = 0.5)
                         block(Blocks.MOSSY_COBBLESTONE, weight = 0.1)
                         block(Blocks.SMOOTH_STONE, weight = 0.1)
 
-                        list("copper") {
-                            block(Blocks.WAXED_COPPER_BLOCK)
-                            block(Blocks.WAXED_OXIDIZED_COPPER)
-                            block(Blocks.WAXED_EXPOSED_COPPER)
-                            block(Blocks.WAXED_WEATHERED_COPPER)
-                            block(Blocks.WAXED_CUT_COPPER)
-                            block(Blocks.WAXED_OXIDIZED_CUT_COPPER)
-                            block(Blocks.WAXED_EXPOSED_CUT_COPPER)
-                            block(Blocks.WAXED_WEATHERED_CUT_COPPER)
-                        }
-
                         list("bricks") {
-                            block(Blocks.BRICKS)
+                            block(Blocks.BRICKS, weight = 0.1)
                             list("stone bricks") {
                                 block(Blocks.STONE_BRICKS)
                                 block(Blocks.MOSSY_STONE_BRICKS, weight = 0.5)
@@ -350,7 +339,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                 block("cobblestone_bricks", "quark")
                                 block("mossy_cobblestone_bricks", "quark", weight = 0.5)
                             }
-                            list("stone variants bricks") {
+                            list("stone variants bricks", weight = 10.0) {
                                 cycle(BlockStateProperties.AXIS)
                                 listOf("quark:jasper",
                                     "quark:shale",
@@ -370,12 +359,26 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         }
                     }
 
-                    fallback(weight = 0.05) {
-                        tag("bookshelves", mod = "forge")
+                    list("copper", weight = 0.05) {
+                        block(Blocks.WAXED_COPPER_BLOCK)
+                        block(Blocks.WAXED_OXIDIZED_COPPER)
+                        block(Blocks.WAXED_EXPOSED_COPPER)
+                        block(Blocks.WAXED_WEATHERED_COPPER)
+                        block(Blocks.WAXED_CUT_COPPER)
+                        block(Blocks.WAXED_OXIDIZED_CUT_COPPER)
+                        block(Blocks.WAXED_EXPOSED_CUT_COPPER)
+                        block(Blocks.WAXED_WEATHERED_CUT_COPPER)
+                    }
+
+                    list(weight = 0.05) {
+                        tag("bookshelves", mod = "forge", expand = true)
                         block(Blocks.BOOKSHELF)
                     }
-                    tag(Tags.Blocks.GLASS_SILICA)
-                    tag(BlockTags.WOOL)
+
+                    list("misc", weight = 0.1) {
+                        tag(Tags.Blocks.GLASS_SILICA)
+                        tag(BlockTags.WOOL)
+                    }
 
                     block("bamboo_mat", mod = "quark", weight = 0.05)
 
@@ -406,7 +409,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         }
                     }
 
-                    list("workstations", weight = 0.1) {
+                    list("workstations", weight = 0.06) {
                         block(Blocks.CRAFTING_TABLE, weight = 20.0)
                         list(weight = 3.0) {
                             block(Blocks.FURNACE)
@@ -435,7 +438,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
 
                 block(Blocks.SPAWNER)
 
-                preset("ocean") {
+                preset("ocean", weight = 0.1) {
                     tag(BlockTags.CORAL_BLOCKS) {
                         side(UP) {
                             tag(BlockTags.CORAL_PLANTS) {
