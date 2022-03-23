@@ -49,7 +49,7 @@ export function withLocalData<P>(component: VFC<P>): VFC<P> {
 }
 
 const LocalDataEnsurer: FC = ({ children }) => {
-   const { status, directory, updatePermission, setDirectory, open } = useFileSystem()
+   const { status, directory, updatePermission, open } = useFileSystem()
 
    const requestPermission = useCallback(async () => {
       await directory?.requestPermission({ mode: 'read' })

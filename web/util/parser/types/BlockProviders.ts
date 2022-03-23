@@ -26,6 +26,7 @@ interface BaseBlockProvider extends WeightedEntry {
    uuid: string
    extras?: Extra[]
    extra?: boolean
+   icon?: string | null
    except?: {
       mod?: ModFilter[] | ModFilter
       name?: NameFilter[] | NameFilter
@@ -33,9 +34,7 @@ interface BaseBlockProvider extends WeightedEntry {
    }
 }
 
-export interface Block extends BaseBlockProvider, Named {
-   icon?: string | null
-}
+export interface Block extends BaseBlockProvider, Named {}
 
 interface Generated {
    occurenced: number

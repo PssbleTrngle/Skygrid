@@ -14,17 +14,9 @@
       "isolatedModules": true,
       "jsx": "preserve",
       "incremental": true,
-      "types": ["jest"],
+      "types": ["jest", "@types/wicg-file-system-access"],
       "baseUrl": "."
    },
    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-   "exclude": ["node_modules"],
-   "ts-node": {
-      "files": true,
-      "require": ["tsconfig-paths/register"],
-      "compilerOptions": {
-         "module": "CommonJS",
-         "typeRoots": ["@types", "node_modules/@types"]
-      }
-   }
+   "exclude": ["node_modules"]
 }
