@@ -29,7 +29,7 @@ const ProviderPanel: VFC<{
    return (
       <Style {...props} reference={provider.type === ProviderType.REFERENCE} size={size}>
          {createElement(component, { ...provider, size })}
-         <p key='weight'>{(provider.weight * 100).toFixed(2)}%</p>
+         <p key='weight'>{(provider.weight * 100).toFixed(4)}%</p>
          <p>
             {/*TODO DUMB PLURAL*/}
             {provider.occurenced} entr{provider.occurenced === 1 ? 'y' : 'ies'}

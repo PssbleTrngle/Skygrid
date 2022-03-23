@@ -1,10 +1,11 @@
-import { useEffect, useReducer, VFC } from 'react'
+import { useEffect, useMemo, useReducer, VFC } from 'react'
 import { Tag } from 'util/parser/types/BlockProviders'
 import BlockIcon from '../BlockIcon'
 
 const TagPanel: VFC<Tag & { size: number }> = ({ size, ...tag }) => {
-   const [viewed, tick] = useReducer((i: number) => (i + 1) % tag.matches.length, 0)
-   const block = tag.matches[viewed]
+   const displayed = useMemo(() => tag.matches.filter(it => !!it.icon), [tag])
+   const [viewed, tick] = useReducer((i: number) => (i + 1) % displayed.length, 0)
+   const block = displayed[viewed]
 
    useEffect(() => {
       const interval = setInterval(tick, 1500)
@@ -15,7 +16,7 @@ const TagPanel: VFC<Tag & { size: number }> = ({ size, ...tag }) => {
       <>
          <BlockIcon {...block} size={size} />
          <p>{tag.mod ?? 'minecraft'}</p>
-         <p>{tag.id}</p>
+         <p>#{tag.id}</p>
          <p>{tag.matches.length} matches</p>
       </>
    )

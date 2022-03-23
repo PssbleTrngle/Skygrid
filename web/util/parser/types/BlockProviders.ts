@@ -37,10 +37,16 @@ export interface Block extends BaseBlockProvider, Named {
    icon?: string | null
 }
 
-export interface GeneratedBlock extends Block {
-   extra: boolean
+interface Generated {
    occurenced: number
+}
+
+export interface GeneratedBlock extends Block, Generated {
    type: ProviderType.BLOCK
+}
+
+export interface GeneratedTag extends Tag, Generated {
+   type: ProviderType.TAG
 }
 
 export interface Tag extends BaseBlockProvider, Named {

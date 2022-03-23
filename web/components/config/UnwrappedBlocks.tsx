@@ -1,12 +1,12 @@
 import Dropdown from 'components/inputs/Dropdown'
 import { groupBy, isString, orderBy, sumBy, uniq } from 'lodash'
-import { useMemo, VFC } from 'react'
+import { useMemo, useState, VFC } from 'react'
 import styled from 'styled-components'
 import {
-   Block,
    BlockProvider,
    BlockProviders,
    GeneratedBlock,
+   GeneratedTag,
    ProviderType,
 } from 'util/parser/types/BlockProviders'
 import WeightedEntry from 'util/parser/types/WeightedEntry'
@@ -19,7 +19,10 @@ import ProviderPanel from './ProviderPanel'
 const wrap = (value: string) => ({ value, label: value.replace(/[_-]/g, ' ') })
 
 const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
-   const unwrapped = useMemo(() => unwrap(blocks), [blocks])
+   const [unwrapTags, setUnwrapTags] = useState(false)
+
+   const unwrapped = useMemo(() => unwrap(blocks, !unwrapTags), [blocks, unwrapTags])
+
    const sorted = useMemo(() => orderBy(unwrapped, b => b.weight, 'desc'), [unwrapped])
    const size = 100
 
@@ -43,6 +46,9 @@ const UnwrappedBlocks: VFC<{ blocks: BlockProvider[] }> = ({ blocks }) => {
                value={filter.includeExtras ?? true}
                onChange={v => setFilter({ includeExtras: v })}>
                Include Extras?
+            </Checkbox>
+            <Checkbox id='unwrapTsgs' value={unwrapTags} onChange={setUnwrapTags}>
+               Unwrap Tags?
             </Checkbox>
             <Dropdown
                id='mods'
@@ -87,26 +93,32 @@ function withWeight<T extends Required<WeightedEntry>>(
    return blocks.map(b => ({ ...b, weight: func(b.weight) }))
 }
 
-function unwrapProvider(provider: BlockProvider): Block[] {
+function unwrapProvider(provider: BlockProvider, wrappedTags?: boolean): BlockProvider[] {
    return (
-      forPolymorph<BlockProviders, Block[]>(provider, {
-         block: p => withWeight([p]),
-         tag: p => withWeight(p.matches, w => w / p.matches.length),
-         list: p => withWeight(unwrap(p.children), w => w * p.weight),
-         fallback: p => withWeight(unwrap(p.children).slice(0, 1), () => p.weight),
-         reference: p => (p.provider ? withWeight(unwrapProvider(p.provider), () => p.weight) : []),
+      forPolymorph<BlockProviders, BlockProvider<any>[]>(provider, {
+         block: p => [p as BlockProvider],
+         tag: p => (wrappedTags ? [p] : withWeight(p.matches, w => w / p.matches.length)),
+         list: p => withWeight(unwrap(p.children, wrappedTags), w => w * p.weight),
+         fallback: p => withWeight(unwrap(p.children, wrappedTags).slice(0, 1), () => p.weight),
+         reference: p =>
+            p.provider ? withWeight(unwrapProvider(p.provider, wrappedTags), () => p.weight) : [],
       }) ?? []
    )
 }
 
-export function unwrap(providers: BlockProvider[]): GeneratedBlock[] {
-   const unwrapped = providers.flatMap(p => unwrapProvider(p))
+export function unwrap<TWrappedTags extends boolean = true>(
+   providers: BlockProvider[],
+   wrappedTags?: TWrappedTags
+): Array<TWrappedTags extends true ? GeneratedTag | GeneratedBlock : GeneratedBlock> {
+   const unwrapped = providers.flatMap(p => unwrapProvider(p, wrappedTags)) as GeneratedBlock[]
    const total = sumBy(unwrapped, w => w.weight)
    const normalized = unwrapped
       .map(p => ({ ...p, weight: p.weight / total }))
-      .flatMap<Omit<GeneratedBlock, 'occurenced' | 'type'>>(({ extras, ...provider }) => {
+      .flatMap(({ extras, ...provider }) => {
          const unwrappedExtras = extras
-            ? extras.flatMap(it => withWeight(unwrap(it.children), w => w * it.probability))
+            ? extras.flatMap(it =>
+                 withWeight(unwrap(it.children, wrappedTags), w => w * it.probability)
+              )
             : []
 
          return [
@@ -118,11 +130,12 @@ export function unwrap(providers: BlockProvider[]): GeneratedBlock[] {
          ]
       })
 
-   return Object.values(groupBy(normalized, n => `${n.mod}:${n.id}`)).map(occurences => ({
+   return Object.values(groupBy(normalized, n => `${n.mod}:${n.id}`)).map((occurences, i) => ({
       ...occurences[0],
       occurenced: occurences.length,
       weight: sumBy(occurences, it => it.weight),
-      type: ProviderType.BLOCK,
+      uuid: `unwrapped-${i}`,
+      type: occurences[0].type ?? ProviderType.BLOCK,
    }))
 }
 

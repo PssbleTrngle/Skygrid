@@ -25,7 +25,7 @@ function matchesables(provider: BlockProvider): string[] {
    ].filter(exists)
 }
 
-const DEFAULT_FILTER: Filter = { mods: ['minecraft'] }
+const DEFAULT_FILTER: Filter = { mods: ['minecraft', 'forge', 'fabric'] }
 
 export function useFiltered<B extends BlockProvider & { mod?: string }>(unfiltered: B[]) {
    const [filter, setInstant] = useState<Filter>(DEFAULT_FILTER)
