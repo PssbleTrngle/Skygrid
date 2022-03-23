@@ -100,7 +100,7 @@ class SkygridChunkGenerator(
                 FixedBiomeSource(biomes.getHolderOrThrow(Biomes.THE_END))
             )
 
-            return WorldGenSettings(seed, false, bonusChest, dimensions)
+            return WorldGenSettings(seed, true, bonusChest, dimensions)
         }
 
 
@@ -259,14 +259,15 @@ class SkygridChunkGenerator(
         somethingElse: Boolean,
     ): Pair<BlockPos, Holder<ConfiguredStructureFeature<*, *>>>? {
         val distance = config.distance
-        return if (structures == ConfiguredStructureTags.EYE_OF_ENDER_LOCATED) {
+        val structureTag = structures.unwrap().left().orElse(null)
+        return if (structureTag == ConfiguredStructureTags.EYE_OF_ENDER_LOCATED) {
             val pos = endPortalPositions.map {
                 BlockPos(it.minBlockX + distance.x,
                     level.minBuildHeight,
                     it.minBlockZ + distance.z)
             }.minByOrNull { it.distSqr(pos) }
             Pair(pos, null)
-        } else super.findNearestMapFeature(level, structures, pos, something, somethingElse)
+        } else null
     }
 
     override fun climateSampler(): Climate.Sampler {

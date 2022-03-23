@@ -4,25 +4,23 @@ import net.minecraft.client.gui.screens.worldselection.WorldPreset
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.dedicated.DedicatedServerProperties
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.biome.FixedBiomeSource
 import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.levelgen.WorldGenSettings
 import possible_triangle.skygrid.SkygridMod.MOD_ID
-import java.util.*
 import kotlin.random.Random
 
 object SkygridGenerator : WorldPreset("${MOD_ID}.${MOD_ID}") {
 
-    fun fromServerProperties(registries: RegistryAccess, properties: Properties): WorldGenSettings? {
-        val levelType = properties.getProperty("level-type")
+    fun fromServerProperties(registries: RegistryAccess, properties: DedicatedServerProperties.WorldGenProperties): WorldGenSettings? {
+        val levelType = properties.levelType
         if (levelType != MOD_ID) return null
 
-        val seedString = properties.getProperty("level-seed")
-
-        val seed = properties.getProperty("level-seed").takeIf { it.isNotEmpty() }.let {
+        val seed = properties.levelSeed.takeIf { it.isNotEmpty() }?.let {
             try {
-                seedString.toLong()
+                it.toLong()
             } catch (ex: NumberFormatException) {
                 it.hashCode().toLong()
             }

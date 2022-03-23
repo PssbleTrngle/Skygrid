@@ -15,7 +15,7 @@ credits = "Sethbling for the original idea"
 [[dependencies.skygrid]]
 modId = "forge"
 mandatory = true
-versionRange = "[38,)"
+versionRange = "[40.0.22,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.skygrid]]

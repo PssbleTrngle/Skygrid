@@ -26,7 +26,7 @@ import thedarkcolour.kotlinforforge.forge.registerObject
 @Mod(MOD_ID)
 object SkygridForge {
 
-    private val WORLD_TYPES = DeferredRegister.create(ForgeRegistries.WORLD_TYPES, MOD_ID)!!
+    private val WORLD_TYPES = DeferredRegister.create(ForgeRegistries.Keys.WORLD_TYPES, MOD_ID)!!
     val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID)!!
 
     init {
