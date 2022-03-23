@@ -4,7 +4,7 @@ import LocalDataResolver from './LocalDataResolver'
 import { Named } from './types'
 import XMLParser from './XMLParser'
 
-function request<R>(endpoint: string, body: unknown): Promise<R | undefined> {
+function request<R>(endpoint: string, body: unknown): Promise<R | null> {
    return fetch(`/api/${endpoint}`, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -14,7 +14,7 @@ function request<R>(endpoint: string, body: unknown): Promise<R | undefined> {
       },
    })
       .then(r => r.json())
-      .catch(e => undefined)
+      .catch(() => null)
 }
 
 export default class LocalDataParser extends XMLParser {
@@ -33,7 +33,7 @@ export default class LocalDataParser extends XMLParser {
    async getPreset(reference: Reference) {
       const local = await super.getPreset(reference)
       if (local) return local
-      return request<BlockProvider | undefined>('preset', reference)
+      return request<BlockProvider>('preset', reference)
    }
 
    async getIcon({ mod, id }: Named) {

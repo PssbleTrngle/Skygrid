@@ -80,7 +80,7 @@ export default class XMLParser {
       }))
    }
 
-   async getResources(type: ResourceType): Promise<(Named & { lastModified: number | null })[]> {
+   async getResources(type: ResourceType) {
       const namespaces = await this.resolver.list('directory', 'data')
       const resouces = await Promise.all(
          namespaces.map(async mod => {
@@ -106,10 +106,10 @@ export default class XMLParser {
       return this.parseFile<DimensionConfig>(...path)
    }
 
-   async getPreset(reference: Reference) {
+   async getPreset(reference: Reference): Promise<BlockProvider | null> {
       const path = this.getDataPath(reference, `skygrid/${ResourceType.PRESET}`, 'xml')
       const parsed = await this.parseFile<Preset>(...path)
-      return parsed?.children?.[0]
+      return parsed?.children?.[0] ?? null
    }
 
    async getIcon(block: Named) {

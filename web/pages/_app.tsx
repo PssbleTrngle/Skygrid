@@ -3,7 +3,7 @@ import { FileSystemProvider } from 'hooks/useFileSystem'
 import type { AppProps } from 'next/app'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import '../styles/reset.css'
-import dark from '../theme/dark'
+import dark from '../styles/theme/dark'
 
 function MyApp({ Component, pageProps }: AppProps) {
    return (
