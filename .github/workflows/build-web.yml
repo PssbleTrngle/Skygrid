@@ -32,6 +32,7 @@ jobs:
         env:
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
           VANILLA_DATA: ${{ secrets.VANILLA_DATA }}
+          FORGE_DATA: ${{ secrets.FORGE_DATA }}
 
       - uses: actions/upload-artifact@v3
         with:
