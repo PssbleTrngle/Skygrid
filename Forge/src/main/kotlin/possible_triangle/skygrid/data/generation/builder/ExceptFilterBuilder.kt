@@ -17,7 +17,7 @@ class ExceptFilterBuilder {
     }
 
     fun tag(tag: TagKey<Block>) {
-        tag(tag.location.namespace, tag.location.path)
+        tag(tag.location.path, tag.location.namespace)
     }
 
     fun tag(id: String, mod: String = "minecraft") {

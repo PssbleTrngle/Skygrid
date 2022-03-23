@@ -2,9 +2,10 @@
    <list>
       <tag id="coral_blocks">
          <side on="up">
-            <tag id="wall_corals"/>
             <tag id="coral_plants">
-               <except/>
+               <except>
+                  <tag id="wall_corals"/>
+               </except>
             </tag>
          </side>
       </tag>
