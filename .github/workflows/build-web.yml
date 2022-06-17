@@ -64,4 +64,3 @@ jobs:
           image_name: ${{ secrets.DOCKER_USERNAME }}/skygrid-web
           image_tag: ${{ steps.extract_branch.outputs.branch }}
           context: web
-          build_extra_args: --build-arg basePath=/${{ steps.extract_branch.outputs.branch }}
