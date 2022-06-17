@@ -65,4 +65,4 @@ jobs:
           image_tag: ${{ steps.extract_branch.outputs.branch }}
           context: web
         env:
-          NEXTJS_BASE_PATH: ${{ steps.extract_branch.outputs.branch }}
+          NEXTJS_BASE_PATH: /${{ steps.extract_branch.outputs.branch }}

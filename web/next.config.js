@@ -1,4 +1,4 @@
-const basePath = process.env.NEXTJS_BASE_PATH
+const basePath = process.env.NEXTJS_BASE_PATH || undefined
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
