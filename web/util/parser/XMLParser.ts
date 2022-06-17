@@ -35,9 +35,16 @@ function modify<T, R>(ifIn: string[], mod: (v: T) => R) {
    return (value: T, name: string) => (ifIn.includes(name) ? mod(value) : value)
 }
 
+export type TagValue =
+   | string
+   | {
+        id: string
+        required?: boolean
+     }
+
 export interface TagDefinition {
    replace?: boolean
-   values: string[]
+   values: TagValue[]
 }
 
 function merge<T>(a: T, b: T): T {
@@ -164,8 +171,9 @@ export default class XMLParser {
 
       const resolved = await Promise.all(
          definition.values.map(async value => {
-            const [mod, id] = value.split(':')
-            if (value.startsWith('#')) return this.getBlocksFor({ mod: mod.substring(1), id })
+            const tagID = typeof value === 'string' ? value : value.id
+            const [mod, id] = tagID.split(':')
+            if (tagID.startsWith('#')) return this.getBlocksFor({ mod: mod.substring(1), id })
             else return [{ id, mod, weight: 1, uuid: nanoid(8) }]
          })
       )
