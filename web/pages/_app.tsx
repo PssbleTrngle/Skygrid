@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={dark}>
          <Global />
          <FileSystemProvider>
+            {/* @ts-ignore */}
             <Component {...pageProps} />
             <Footer />
          </FileSystemProvider>

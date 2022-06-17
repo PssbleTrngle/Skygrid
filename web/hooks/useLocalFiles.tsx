@@ -2,7 +2,6 @@ import Button, { ButtonLink } from 'components/basic/Button'
 import CenteredPage from 'components/basic/CenteredPage'
 import { Subtitle } from 'components/basic/Text'
 import { isEqualWith } from 'lodash'
-import { NextPage } from 'next'
 import {
    createContext,
    createElement,
@@ -146,7 +145,7 @@ export default function useLocalFiles() {
    return useContext(CTX)
 }
 
-const GrantPermission: NextPage<{
+const GrantPermission: FC<{
    onRequest: DispatchWithoutAction
    onOpen: DispatchWithoutAction
 }> = ({ onRequest, onOpen }) => (
@@ -157,7 +156,7 @@ const GrantPermission: NextPage<{
    </CenteredPage>
 )
 
-const SelectFolder: NextPage<{
+const SelectFolder: FC<{
    onOpen: DispatchWithoutAction
 }> = ({ onOpen }) => (
    <CenteredPage>
