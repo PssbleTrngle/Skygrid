@@ -7,8 +7,10 @@
     "MinecraftServerMixin",
     "FallingBlockMixin",
     "EnderEyeItemMixin",
-    "WorldPresetMixin",
     "WorldGenSettingsMixin"
+  ],
+  "client": [
+    "WorldPresetMixin"
   ],
   "injectors": {
     "defaultRequire": 1
