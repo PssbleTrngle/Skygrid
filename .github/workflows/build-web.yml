@@ -64,5 +64,4 @@ jobs:
           image_name: ${{ secrets.DOCKER_USERNAME }}/skygrid-web
           image_tag: ${{ steps.extract_branch.outputs.branch }}
           context: web
-        env:
-          NEXTJS_BASE_PATH: /${{ steps.extract_branch.outputs.branch }}
+          build_extra_args: --build-arg basePath=/${{ steps.extract_branch.outputs.branch }}
