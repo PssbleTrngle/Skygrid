@@ -138,6 +138,7 @@ processResources {
 }
 
 
+
 import java.util.stream.Collectors
 
 jar {
@@ -181,8 +182,6 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
     }
 }
 
-import com.modrinth.minotaur.dependencies.ModDependency
-
 if (ENV.MODRINTH_TOKEN) modrinth {
     projectId = modrinth_project_id
 
@@ -194,9 +193,9 @@ if (ENV.MODRINTH_TOKEN) modrinth {
     gameVersions = [minecraft_version]
     loaders = ["forge"]
 
-    dependencies = [
-            new ModDependency("ordsPcFz", "required"),
-    ]
+    dependencies {
+        required.project "ordsPcFz"
+    }
 }
 
 rootProject.tasks.curseforge.dependsOn tasks.curseforge

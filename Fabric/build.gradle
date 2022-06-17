@@ -91,8 +91,6 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
     }
 }
 
-import com.modrinth.minotaur.dependencies.ModDependency
-
 if (ENV.MODRINTH_TOKEN) modrinth {
     projectId = modrinth_project_id
 
@@ -104,10 +102,10 @@ if (ENV.MODRINTH_TOKEN) modrinth {
     gameVersions = [minecraft_version]
     loaders = ["fabric"]
 
-    dependencies = [
-            new ModDependency("P7dR8mSH", "required"),
-            new ModDependency("Ha28R6CL", "required"),
-    ]
+    dependencies {
+        required.project "P7dR8mSH"
+        required.project "Ha28R6CL"
+    }
 }
 
 rootProject.tasks.curseforge.dependsOn tasks.curseforge
