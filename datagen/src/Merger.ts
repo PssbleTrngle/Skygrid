@@ -44,7 +44,7 @@ export default class Merger {
                            writeFileSync(out, content)
                         }
                      } catch (e) {
-                        console.warn((e as Error).message)
+                        console.log(`Skipping ${fileName}: ${(e as Error).message}`)
                      }
                   } else {
                      writeFileSync(out, content)
