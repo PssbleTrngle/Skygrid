@@ -1,8 +1,10 @@
+import getConfig from 'next/config'
 import Image from 'next/image'
 import { useEffect, useMemo, useState, VFC } from 'react'
 import { Block } from 'util/parser/types/BlockProviders'
 
-const FALLBACK = 'unknown_block.png'
+const { basePath } = getConfig().publicRuntimeConfig
+const FALLBACK = `${basePath}/unknown_block.png`
 
 const BlockIcon: VFC<Block & { size: number }> = ({ size, id, icon }) => {
    const defaultSrc = useMemo(() => icon ?? FALLBACK, [icon])

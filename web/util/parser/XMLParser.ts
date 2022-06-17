@@ -124,8 +124,10 @@ export default class XMLParser {
 
    async getIcon(block: Named) {
       const mod = block.mod ?? 'minecraft'
-      const icon = `${publicRuntimeConfig.basePath}/blocks/${mod}/${block.id}.png`
-      if (await this.resolver.exists('file', 'public', icon)) return icon
+      const icon = `blocks/${mod}/${block.id}.png`
+      if (await this.resolver.exists('file', 'public', icon)) {
+         return `${publicRuntimeConfig.basePath}/${icon}`
+      }
       return null
    }
 
