@@ -15,12 +15,12 @@ credits = "Sethbling for the original idea"
 [[dependencies.skygrid]]
 modId = "forge"
 mandatory = true
-versionRange = "[40.0.22,)"
+versionRange = "[41,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.skygrid]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18.1,)"
+versionRange = "[1.19,)"
 ordering = "NONE"
 side = "BOTH"

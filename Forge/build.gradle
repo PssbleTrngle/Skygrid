@@ -86,9 +86,15 @@ repositories {
         name "blamejared"
         url "https://maven.blamejared.com/"
     }
-    maven { // for JEI
-        name "progwml6"
-        url "https://dvs1.progwml6.com/files/maven"
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
     }
     maven {
         url "https://cursemaven.com"
@@ -114,8 +120,12 @@ dependencies {
     library "io.github.pdvrieze.xmlutil:core:0.84.0"
     library "io.github.pdvrieze.xmlutil:serialization:0.84.0"
 
-    compileOnly fg.deobf("mezz.jei:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:${jei_version}")
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    // at runtime, use the full JEI
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     //runtimeOnly fg.deobf("vazkii.autoreglib:AutoRegLib:${arl_version}")
     //compileOnly fg.deobf("vazkii.autoreglib:AutoRegLib:${arl_version}")

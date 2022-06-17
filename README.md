@@ -1,10 +1,10 @@
-![Banner](https://github.com/PssbleTrngle/Skygrid/raw/1.18.x/web/public/banner.png)
+![Banner](https://github.com/PssbleTrngle/Skygrid/raw/1.19.x/web/public/banner.png)
 
 [issues]: https://github.com/PssbleTrngle/Skygrid/issues
 [forge]: https://www.curseforge.com/minecraft/mc-mods/skygrid/files/all?filter-status=1&filter-game-version=2020709689%3A7498
 [fabric]: https://www.curseforge.com/minecraft/mc-mods/skygrid/files/all?filter-status=1&filter-game-version=2020709689%3A7499brazier-fabric
 [download]: https://www.curseforge.com/minecraft/mc-mods/skygrid/files
-[license]: https://github.com/PssbleTrngle/Skygrid/blob/1.18.x/LICENSE
+[license]: https://github.com/PssbleTrngle/Skygrid/blob/1.19.x/LICENSE
 [releases]: https://github.com/PssbleTrngle/Skygrid/releases
 [commits]: https://github.com/PssbleTrngle/Skygrid/commits/
 [sonar]: https://sonar.somethingcatchy.net/dashboard?id=skygrid

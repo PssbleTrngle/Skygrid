@@ -2,7 +2,7 @@ name: Generate Data
 on:
   workflow_dispatch:
   push:
-    branches: [1.18.x]
+    branches: [1.19.x]
     paths: [Forge/src/main/kotlin/data/generation/**]
 
 jobs:
