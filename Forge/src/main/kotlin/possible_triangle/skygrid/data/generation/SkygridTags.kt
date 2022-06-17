@@ -27,6 +27,14 @@ class SkygridTags(generator: DataGenerator, files: ExistingFileHelper) :
             .addOptionalTag(Tags.Blocks.BARRELS.location)
             .addOptionalTag(Tags.Blocks.CHESTS.location)
 
+        tag(SkygridMod.CHESTS)
+            .add(Blocks.CHEST)
+            .addOptionalTag(Tags.Blocks.CHESTS_WOODEN.location)
+
+        tag(SkygridMod.BARRELS)
+            .add(Blocks.BARREL)
+            .addOptionalTag(Tags.Blocks.BARRELS_WOODEN.location)
+
     }
 
 }

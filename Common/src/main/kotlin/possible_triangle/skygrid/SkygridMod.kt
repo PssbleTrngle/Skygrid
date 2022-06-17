@@ -23,6 +23,8 @@ object SkygridMod {
 
     val AMETHYST_CLUSTERS = Services.PLATFORM.createBlockTag(ResourceLocation(MOD_ID, "amethyst_clusters"))
     val LOOT_CONTAINERS = Services.PLATFORM.createBlockTag(ResourceLocation(MOD_ID, "loot_containers"))
+    val BARRELS = Services.PLATFORM.createBlockTag(ResourceLocation(MOD_ID, "barrels"))
+    val CHESTS = Services.PLATFORM.createBlockTag(ResourceLocation(MOD_ID, "chests"))
 
     val STIFF_AIR by Services.PLATFORM.createBlock("stiff_air") { StiffAir() }
 

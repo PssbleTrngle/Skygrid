@@ -338,8 +338,8 @@
             <mod id="botania"/>
             <mod id="simplefarming"/>
          </except>
-         <tag id="barrels/wooden" mod="forge"/>
-         <tag id="chests/wooden" mod="forge"/>
+         <tag id="barrels" mod="skygrid"/>
+         <tag id="chests" mod="skygrid"/>
       </list>
       <block id="spawner"/>
       <reference id="ocean" weight="0.1"/>

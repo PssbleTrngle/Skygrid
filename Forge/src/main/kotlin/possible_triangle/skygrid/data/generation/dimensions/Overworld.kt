@@ -432,8 +432,8 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
 
                 list("loot") {
                     overworldWood()
-                    tag(Tags.Blocks.BARRELS_WOODEN)
-                    tag(Tags.Blocks.CHESTS_WOODEN)
+                    tag(SkygridMod.BARRELS)
+                    tag(SkygridMod.CHESTS)
                 }
 
                 block(Blocks.SPAWNER)
