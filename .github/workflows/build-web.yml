@@ -62,5 +62,5 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           image_name: ${{ secrets.DOCKER_USERNAME }}/skygrid-web
-          image_tag: ${{ steps.extract_branch.outputs.branch }},latest
+          image_tag: ${{ steps.extract_branch.outputs.branch }}
           context: web
