@@ -1,5 +1,6 @@
 import { uniq } from 'lodash'
 import { nanoid } from 'nanoid'
+import getConfig from 'next/config'
 import {
    Block,
    BlockProvider,
@@ -16,6 +17,8 @@ import { exists } from '..'
 import { forPolymorph, Polymorpher, toArray } from '../polymorphism'
 import DataResolver from './DataResolver'
 import { Named } from './types'
+
+const { publicRuntimeConfig } = getConfig()
 
 const NUMERICS = ['weight', 'probability', 'offset', 'x', 'y', 'z']
 
@@ -120,7 +123,8 @@ export default class XMLParser {
    }
 
    async getIcon(block: Named) {
-      const icon = `blocks/${block.mod ?? 'minecraft'}/${block.id}.png`
+      const mod = block.mod ?? 'minecraft'
+      const icon = `${publicRuntimeConfig.basePath}/blocks/${mod}/${block.id}.png`
       if (await this.resolver.exists('file', 'public', icon)) return icon
       return null
    }

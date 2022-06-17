@@ -14,7 +14,7 @@ const BlockIcon: VFC<Block & { size: number }> = ({ size, id, icon }) => {
       <Image
          objectFit='contain'
          alt={id}
-         src={`/${src}`}
+         src={src}
          height={size}
          width={size}
          onError={() => setSrc(FALLBACK)}

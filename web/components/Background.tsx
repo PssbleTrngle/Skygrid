@@ -1,11 +1,14 @@
+import getConfig from 'next/config'
 import Image from 'next/image'
 import { VFC } from 'react'
 import styled from 'styled-components'
 
+const { basePath } = getConfig().publicRuntimeConfig
+
 const Background: VFC = () => (
    <Style>
       <Image
-         src='/screenshot.png'
+         src={`${basePath}/screenshot.png`}
          layout='fill'
          objectFit='cover'
          alt='screenshot of the generation'

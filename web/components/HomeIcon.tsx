@@ -1,12 +1,15 @@
 import Link from 'components/basic/Link'
+import getConfig from 'next/config'
 import Image from 'next/image'
 import { VFC } from 'react'
 import styled from 'styled-components'
 
+const { basePath } = getConfig().publicRuntimeConfig
+
 const HomeLink: VFC = () => (
    <Container underline='none' href='/'>
       <Backdrop>
-         <Image src='/screenshot.png' layout='fill' objectFit='cover' />
+         <Image src={`${basePath}/screenshot.png`} layout='fill' objectFit='cover' />
       </Backdrop>
       <Icon />
    </Container>
