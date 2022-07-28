@@ -26,6 +26,15 @@ dependencies {
 
     implementation "io.github.pdvrieze.xmlutil:core:0.84.0"
     implementation "io.github.pdvrieze.xmlutil:serialization:0.84.0"
+
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 processResources {
