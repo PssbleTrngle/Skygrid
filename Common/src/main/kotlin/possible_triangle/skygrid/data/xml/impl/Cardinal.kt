@@ -36,6 +36,7 @@ data class Cardinal(
     }
 
     override fun transform(state: BlockState, random: Random): BlockState {
+        if(!rotate) return state
         val direction = getDirection(random)
         val rotations = DIRECTIONS.indexOf(direction)
         return state.rotate(Rotation.values()[rotations % 4])
