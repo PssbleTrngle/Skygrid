@@ -4,6 +4,7 @@ import { BlockProvider } from './BlockProviders'
 export enum ExtrasType {
    SIDE = 'side',
    OFFSET = 'offset',
+   CARDINAL = 'cardinal',
 }
 
 interface BaseExtra {
@@ -22,7 +23,7 @@ enum Direction {
 
 interface SideExtra extends BaseExtra {
    offset?: number
-   side: Direction
+   on?: Direction
 }
 
 interface OffsetExtra extends BaseExtra {
@@ -31,8 +32,13 @@ interface OffsetExtra extends BaseExtra {
    z?: number
 }
 
+interface CardinalExtra extends BaseExtra {
+   offset?: number
+}
+
 export interface Extras extends Record<ExtrasType, BaseExtra> {
    side: SideExtra
+   cardinal: CardinalExtra
    offset: OffsetExtra
 }
 

@@ -255,15 +255,13 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                     }
 
                     block(Blocks.JUNGLE_WOOD, weight = 0.01) {
-                        side(NORTH) {
-                            block(Blocks.COCOA) {
-                                property(CocoaBlock.FACING, SOUTH)
-                            }
+                        cardinal {
+                            block(Blocks.COCOA)
                         }
                     }
 
                     block(Blocks.SAND, weight = 0.5) {
-                        side(NORTH) { block(Blocks.WATER) }
+                        cardinal { block(Blocks.WATER) }
                         double {
                             block(Blocks.SUGAR_CANE)
                         }
