@@ -49,7 +49,7 @@ abstract class Extra : Generator<IBlockAccess>, Validating {
 
         return validProviders.random(random).generate(providerRandom) { state, pos ->
             val transformed = transform(state, Random(offsetRandom))
-            access.set(state, pos.offset(at))
+            access.set(transformed, pos.offset(at))
         }
     }
 
