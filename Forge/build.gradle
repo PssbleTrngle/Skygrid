@@ -148,16 +148,7 @@ jar {
             .map { it.isDirectory() ? it : zipTree(it) }
             .collect(Collectors.toList())
     duplicatesStrategy = 'exclude'
-    //exclude 'kotlinx/**'
-    //exclude 'kotlin/**'
 }
-
-//reobf {
-//    shadowJar {}
-//}
-//
-//tasks.build.dependsOn shadowJar
-//jar.finalizedBy('reobfShadowJar')
 
 def ENV = System.getenv()
 if (ENV.CURSEFORGE_TOKEN) curseforge {
@@ -196,6 +187,10 @@ if (ENV.MODRINTH_TOKEN) modrinth {
     dependencies {
         required.project "ordsPcFz"
     }
+
+
+    syncBodyFrom = rootProject.file("README.md").text
 }
 
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 rootProject.tasks.curseforge.dependsOn tasks.curseforge
