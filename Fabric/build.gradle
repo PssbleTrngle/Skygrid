@@ -74,11 +74,13 @@ def ENV = System.getenv()
 if (ENV.CURSEFORGE_TOKEN) curseforge {
     apiKey = ENV.CURSEFORGE_TOKEN
     project {
-        id = curseforge_project_id
+        id = rootProject.curseforge_project_id
         addGameVersion minecraft_version
         addGameVersion 'Fabric'
 
-        mainArtifact remapJar.archiveFile
+        mainArtifact(remapJar) {
+            displayName = "Fabric ${rootProject.mod_version} (${rootProject.minecraft_version})"
+        }
 
         releaseType = release_type
         changelog = ENV.CHANGELOG
@@ -93,9 +95,11 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
 }
 
 if (ENV.MODRINTH_TOKEN) modrinth {
-    projectId = modrinth_project_id
+    token =  ENV.MODRINTH_TOKEN
+    projectId = rootProject.modrinth_project_id
 
     versionNumber = "fabric-${rootProject.mod_version}"
+    versionName = "Fabric ${rootProject.mod_version} (${rootProject.minecraft_version})"
     versionType = release_type
     uploadFile = remapJar.archiveFile
     changelog = ENV.CHANGELOG
