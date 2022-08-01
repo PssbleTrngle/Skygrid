@@ -37,7 +37,7 @@ processResources {
     }
 }
 
-
+def ENV = System.getenv()
 publishing {
     publications {
         gpr(MavenPublication) {
