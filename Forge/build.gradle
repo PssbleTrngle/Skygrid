@@ -190,7 +190,6 @@ if (ENV.MODRINTH_TOKEN) modrinth {
         required.project "ordsPcFz"
     }
 
-
     syncBodyFrom = rootProject.file("README.md").text
 }
 
@@ -200,9 +199,9 @@ rootProject.tasks.curseforge.dependsOn tasks.curseforge
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId rootProject.group
-            artifactId "${rootProject.mod_id}-forge"
-            version rootProject.mod_version
+            groupId = rootProject.group
+            artifactId = "${rootProject.mod_id}-forge"
+            version = rootProject.mod_version
             artifact jar
         }
     }

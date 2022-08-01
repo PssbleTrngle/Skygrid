@@ -42,7 +42,7 @@ publishing {
     publications {
         gpr(MavenPublication) {
             groupId = rootProject.group
-            artifactId "${rootProject.mod_id}-common"
+            artifactId = "${rootProject.mod_id}-common"
             version = rootProject.mod_version
             from(components.java)
         }

@@ -114,10 +114,10 @@ rootProject.tasks.curseforge.dependsOn tasks.curseforge
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId rootProject.group
-            artifactId "${rootProject.mod_id}-fabric"
-            version rootProject.mod_version
-            from components.java
+            groupId = rootProject.group
+            artifactId = "${rootProject.mod_id}-fabric"
+            version = rootProject.mod_version
+            artifact remapJar
         }
     }
     repositories {
