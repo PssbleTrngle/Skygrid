@@ -46,10 +46,10 @@ loom {
 
 processResources {
     from project(":Common").sourceSets.main.resources
-    inputs.property "version", project.mod_version
+    inputs.property "version", rootProject.mod_version
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.mod_version
+        expand "version": rootProject.mod_version
     }
 }
 

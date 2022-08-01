@@ -29,9 +29,9 @@ subprojects {
             attributes([
                     'Specification-Title'     : mod_name,
                     'Specification-Vendor'    : mod_author,
-                    'Specification-Version'   : project.jar.archiveVersion,
+                    'Specification-Version'   : rootProject.mod_version,
                     'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Version'  : rootProject.mod_version,
                     'Implementation-Vendor'   : mod_author,
                     'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                     'Timestampe'              : System.currentTimeMillis(),
@@ -106,7 +106,7 @@ subprojects {
 
 sonarqube {
     properties {
-        property 'sonar.projectVersion', version
+        property 'sonar.projectVersion', rootProject.mod_version
         property 'sonar.projectKey', mod_id
     }
 }
