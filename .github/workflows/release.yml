@@ -29,8 +29,8 @@ jobs:
       - name: Update mod version
         uses: christian-draeger/write-properties@1.0.1
         with:
-          path: 'gradle.properties'
-          property: 'version'
+          path: "gradle.properties"
+          property: "version"
           value: ${{ github.event.release.tag_name }}
 
       - name: Build
