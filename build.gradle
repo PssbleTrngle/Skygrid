@@ -37,7 +37,7 @@ subprojects {
                     'Timestampe'              : System.currentTimeMillis(),
                     'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
                     'Build-On-Minecraft'      : minecraft_version,
-                    "MixinConfigs": "${mod_id}.${project.name.toLowerCase()}.mixins.json"
+                    //"MixinConfigs": "${mod_id}.${project.name.toLowerCase()}.mixins.json"
             ])
         }
     }

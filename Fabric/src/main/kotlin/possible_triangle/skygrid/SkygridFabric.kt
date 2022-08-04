@@ -18,7 +18,7 @@ import possible_triangle.skygrid.world.SkygridGenerator
 @ExperimentalSerializationApi
 @ExperimentalXmlUtilApi
 @Suppress("unused")
-object SkygridFabric : ModInitializer {
+object SkygridFabric : ModInitializer, ClientModInitializer {
 
     override fun onInitialize() {
         SkygridMod.init()
@@ -35,8 +35,10 @@ object SkygridFabric : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register { it, _ -> SkygridCommand.register(it) }
 
-        WorldPresetMixin.presets().add(SkygridGenerator)
+    }
 
+    override fun onInitializeClient() {
+        WorldPresetMixin.presets().add(SkygridGenerator)
     }
 
 }
