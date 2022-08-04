@@ -7,6 +7,7 @@ import net.minecraft.core.Registry
 import net.minecraft.world.level.block.Block
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
+import kotlin.random.Random
 
 @Serializable
 @SerialName("offset")
@@ -23,7 +24,7 @@ data class Offset(
         return true
     }
 
-    override fun offset(pos: BlockPos): BlockPos {
+    override fun offset(pos: BlockPos, random: Random): BlockPos {
         return pos.offset(x, y, z)
     }
 

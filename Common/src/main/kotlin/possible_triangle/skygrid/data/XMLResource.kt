@@ -46,6 +46,7 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
 
             polymorphic(Extra::class) {
                 subclass(Side::class)
+                subclass(Cardinal::class)
                 subclass(Offset::class)
             }
 
