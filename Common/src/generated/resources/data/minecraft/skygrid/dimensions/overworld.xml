@@ -134,16 +134,14 @@
             </side>
          </block>
          <block id="jungle_wood" weight="0.01">
-            <side on="north">
-               <block id="cocoa">
-                  <set key="facing" value="south"/>
-               </block>
-            </side>
+            <cardinal>
+               <block id="cocoa"/>
+            </cardinal>
          </block>
          <block id="sand" weight="0.5">
-            <side on="north">
+            <cardinal>
                <block id="water"/>
-            </side>
+            </cardinal>
             <side on="up" shared="true">
                <block id="sugar_cane">
                   <set key="half" value="lower"/>

@@ -11,10 +11,7 @@ import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.FilterOperator
 import possible_triangle.skygrid.data.xml.Transformer
-import possible_triangle.skygrid.data.xml.impl.CyclePropertyTransformer
-import possible_triangle.skygrid.data.xml.impl.Offset
-import possible_triangle.skygrid.data.xml.impl.SetPropertyTransformer
-import possible_triangle.skygrid.data.xml.impl.Side
+import possible_triangle.skygrid.data.xml.impl.*
 
 abstract class BlockProviderBuilder<T : BlockProvider> {
 
@@ -41,6 +38,19 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         BasicBlocksBuilder(registries).also {
             builder(it)
             extras.add(Side(on.name.lowercase(), it.build(), offset, probability, shared))
+        }
+    }
+
+    fun cardinal(
+        offset: Int = 1,
+        rotate: Boolean = true,
+        probability: Double = 1.0,
+        shared: Boolean = false,
+        builder: BasicBlocksBuilder.() -> Unit,
+    ) {
+        BasicBlocksBuilder().also {
+            builder(it)
+            extras.add(Cardinal(it.build(), offset, rotate, probability, shared))
         }
     }
 

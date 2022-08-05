@@ -10,6 +10,8 @@ buildscript {
     }
 }
 
+apply plugin: 'maven-publish'
+
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'com.modrinth.minotaur'
 
@@ -148,26 +150,19 @@ jar {
             .map { it.isDirectory() ? it : zipTree(it) }
             .collect(Collectors.toList())
     duplicatesStrategy = 'exclude'
-    //exclude 'kotlinx/**'
-    //exclude 'kotlin/**'
 }
-
-//reobf {
-//    shadowJar {}
-//}
-//
-//tasks.build.dependsOn shadowJar
-//jar.finalizedBy('reobfShadowJar')
 
 def ENV = System.getenv()
 if (ENV.CURSEFORGE_TOKEN) curseforge {
     apiKey = ENV.CURSEFORGE_TOKEN
     project {
-        id = curseforge_project_id
+        id = rootProject.curseforge_project_id
         addGameVersion minecraft_version
         addGameVersion 'Forge'
 
-        mainArtifact jar.archiveFile
+        mainArtifact(jar) {
+            displayName = "Forge ${rootProject.mod_version} (${rootProject.minecraft_version})"
+        }
 
         releaseType = release_type
         changelog = ENV.CHANGELOG
@@ -183,9 +178,11 @@ if (ENV.CURSEFORGE_TOKEN) curseforge {
 }
 
 if (ENV.MODRINTH_TOKEN) modrinth {
-    projectId = modrinth_project_id
+    token =  ENV.MODRINTH_TOKEN
+    projectId = rootProject.modrinth_project_id
 
-    versionNumber = "forge-${version}"
+    versionNumber = "forge-${rootProject.mod_version}"
+    versionName = "Forge ${rootProject.mod_version} (${rootProject.minecraft_version})"
     versionType = release_type
     uploadFile = jar.archiveFile
     changelog = ENV.CHANGELOG
@@ -196,6 +193,30 @@ if (ENV.MODRINTH_TOKEN) modrinth {
     dependencies {
         required.project "ordsPcFz"
     }
+
+    syncBodyFrom = rootProject.file("README.md").text
 }
 
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 rootProject.tasks.curseforge.dependsOn tasks.curseforge
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = rootProject.group
+            artifactId = "${rootProject.mod_id}-forge"
+            version = rootProject.mod_version
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/pssbletrngle/${project.mod_id}")
+            credentials {
+                username = ENV.GITHUB_ACTOR
+                password = ENV.GITHUB_TOKEN
+            }
+        }
+    }
+}

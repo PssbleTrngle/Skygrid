@@ -10,6 +10,7 @@
 [sonar]: https://sonar.somethingcatchy.net/dashboard?id=skygrid
 [wiki]: https://github.com/PssbleTrngle/Skygrid/wiki
 
+<!-- modrinth_exclude.start -->
 <div align="center">
 
 [![Last Commit](https://img.shields.io/github/last-commit/PssbleTrngle/Skygrid)][commits]
@@ -25,12 +26,7 @@
 [![Minecraft Version](https://cf.way2muchnoise.eu/versions/316763_latest.svg)][download]
 
 </div>
-
-<br>
-<h3 style='background: #d9a71133; border-radius: 1em; border: 1px dashed #d9a711; padding: 1em' align='center'>
-   <b>DISCLAIMER</b>: This mod is  still in <b>alpha</b> and is neither feature-complete, nor balanced correctly 
-</h3>
-<br>
+<!-- modrinth_exclude.end -->
 
 > If you need any information about how to customize & configurate using datapacks, visit the [Wiki][WIKI]  
 > If you noticed a bug or run into an issue, report it to the [Tracker][ISSUES]

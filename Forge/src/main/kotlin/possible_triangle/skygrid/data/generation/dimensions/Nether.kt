@@ -25,6 +25,15 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                 mob(EntityType.MAGMA_CUBE, weight = 0.3)
             }
 
+            loot {
+                table("chests/bastion_bridge", weight = 2.0)
+                table("chests/bastion_other", weight = 2.0)
+                table("chests/bastion_hoglin_stable")
+                table("chests/bastion_treasure")
+                table("chests/nether_bridge", weight = 10.0)
+                table("chests/ruined_portal", weight = 10.0)
+            }
+
             blocks {
                 list("fluids", weight = 0.1) {
                     block(Blocks.LAVA, weight = 0.5)

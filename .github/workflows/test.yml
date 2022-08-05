@@ -1,9 +1,7 @@
-name: Build & Analyze
+name: Test & Analyze
 on:
+  pull_request:
   push:
-    paths:
-      - '**/*.kt'
-      - '**/*.java'
 
 jobs:
   build:
@@ -40,4 +38,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: ./gradlew build sonarqube
+        run: ./gradlew build test sonarqube
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: junit-test-results
+          path: "**/build/test-results/test/TEST-*.xml"
+          retention-days: 1
