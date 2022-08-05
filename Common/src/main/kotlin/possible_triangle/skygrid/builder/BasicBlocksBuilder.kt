@@ -1,9 +1,10 @@
-package possible_triangle.skygrid.data.generation.builder
+package possible_triangle.skygrid.builder
 
-import possible_triangle.skygrid.data.generation.builder.providers.BlockProviderBuilder
+import net.minecraft.core.RegistryAccess
+import possible_triangle.skygrid.builder.providers.BlockProviderBuilder
 import possible_triangle.skygrid.data.xml.BlockProvider
 
-class BasicBlocksBuilder : IBlocksBuilder {
+class BasicBlocksBuilder(override val registries: RegistryAccess) : IBlocksBuilder {
 
     private val children = arrayListOf<BlockProviderBuilder<*>>()
 

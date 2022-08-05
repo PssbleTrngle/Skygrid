@@ -39,6 +39,14 @@ fun Collection<BlockProvider>.flat(): List<Pair<Block, Double>> {
     }
 }
 
+fun Collection<BlockProvider>.weights(): Map<Block, Double> {
+    val flat = this.flat()
+    return hashMapOf<Block, Double>().apply {
+        flat.forEach { (block, weight) ->
+            put(block, getOrDefault(block, 0.0) + weight)
+        }
+    }
+}
 
 @Serializable
 @SerialName("dimension")

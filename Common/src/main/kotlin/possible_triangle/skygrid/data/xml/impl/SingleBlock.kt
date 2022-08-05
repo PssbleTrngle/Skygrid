@@ -47,7 +47,7 @@ data class SingleBlock(
         references: ReferenceContext,
         filters: List<FilterOperator>,
     ): Boolean {
-        SkygridMod.LOGGER.info("Validating $name")
+        SkygridMod.LOGGER.debug("Validating $name")
         return blocks.getOptional(key).map {
             block = it
         }.isPresent

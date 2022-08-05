@@ -1,4 +1,4 @@
-package possible_triangle.skygrid.data.generation.builder
+package possible_triangle.skygrid.builder
 
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block

@@ -69,7 +69,7 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
         val referencesWithThis = references.with(this)
         validExtras = extras.filter { it.validate(blocks, referencesWithThis) }
         return internalValidate(blocks, references, additionalFilters + filters).also {
-            if (!it) LOGGER.debug("Invalid BlockProvider ${name ?: "(anonymous)"} of type ${javaClass.name}")
+            if (!it) LOGGER.debug("Invalid BlockProvider ${name ?: "(anonymous)"} of type ${javaClass.simpleName}")
         }
     }
 

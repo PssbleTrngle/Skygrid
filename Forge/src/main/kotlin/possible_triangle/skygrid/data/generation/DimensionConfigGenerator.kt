@@ -2,6 +2,7 @@ package possible_triangle.skygrid.data.generation
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
+import net.minecraft.core.RegistryAccess
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.DataProvider
 import net.minecraft.data.HashCache
@@ -10,10 +11,10 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import possible_triangle.skygrid.SkygridMod
+import possible_triangle.skygrid.builder.BasicBlocksBuilder
+import possible_triangle.skygrid.builder.DimensionConfigBuilder
+import possible_triangle.skygrid.builder.IBlocksBuilder
 import possible_triangle.skygrid.data.XMLResource
-import possible_triangle.skygrid.data.generation.builder.BasicBlocksBuilder
-import possible_triangle.skygrid.data.generation.builder.DimensionConfigBuilder
-import possible_triangle.skygrid.data.generation.builder.IBlocksBuilder
 import possible_triangle.skygrid.data.xml.DimensionConfig
 import possible_triangle.skygrid.data.xml.Preset
 import possible_triangle.skygrid.data.xml.impl.BlockList
@@ -28,6 +29,7 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
 
     private val configs = hashMapOf<ResourceLocation, DimensionConfig>()
     private val presets = hashMapOf<ResourceLocation, Preset>()
+    private val registries = RegistryAccess.BUILTIN.get()
 
     var datapack: String? = null
 
@@ -35,15 +37,12 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
         dimension(key.location(), builder)
 
     fun dimension(key: ResourceLocation, builder: DimensionConfigBuilder.() -> Unit) {
-        DimensionConfigBuilder().apply {
-            builder(this)
-            configs[key] = build()
-        }
+        configs[key] = DimensionConfigBuilder.create(registries, builder)
     }
 
     fun preset(key: String, builder: IBlocksBuilder.() -> Unit) = preset(ResourceLocation(key), builder)
     fun preset(key: ResourceLocation, builder: IBlocksBuilder.() -> Unit) {
-        val providers = BasicBlocksBuilder().also(builder).build()
+        val providers = BasicBlocksBuilder(registries).also(builder).build()
         require(providers.isNotEmpty())
         val provider = when (providers.size) {
             1 -> providers.first()

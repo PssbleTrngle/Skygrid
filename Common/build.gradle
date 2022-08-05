@@ -28,6 +28,7 @@ dependencies {
     implementation "io.github.pdvrieze.xmlutil:serialization:0.84.0"
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation 'io.github.origin-energy:java-snapshot-testing-junit5:3.2.7'
 }
 
 test {

@@ -15,9 +15,9 @@ import net.minecraft.world.level.dimension.LevelStem
 import net.minecraftforge.common.Tags
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import possible_triangle.skygrid.SkygridMod
+import possible_triangle.skygrid.builder.IBlocksBuilder
+import possible_triangle.skygrid.builder.providers.BlockProviderBuilder
 import possible_triangle.skygrid.data.generation.DimensionConfigGenerator
-import possible_triangle.skygrid.data.generation.builder.IBlocksBuilder
-import possible_triangle.skygrid.data.generation.builder.providers.BlockProviderBuilder
 
 fun BlockProviderBuilder<*>.overworldWood() {
     except {

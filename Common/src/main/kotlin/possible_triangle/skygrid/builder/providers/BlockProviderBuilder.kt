@@ -1,11 +1,12 @@
-package possible_triangle.skygrid.data.generation.builder.providers
+package possible_triangle.skygrid.builder.providers
 
 import net.minecraft.core.Direction
+import net.minecraft.core.RegistryAccess
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.Property
-import possible_triangle.skygrid.data.generation.builder.BasicBlocksBuilder
-import possible_triangle.skygrid.data.generation.builder.ExceptFilterBuilder
+import possible_triangle.skygrid.builder.BasicBlocksBuilder
+import possible_triangle.skygrid.builder.ExceptFilterBuilder
 import possible_triangle.skygrid.data.xml.BlockProvider
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.FilterOperator
@@ -16,6 +17,8 @@ import possible_triangle.skygrid.data.xml.impl.SetPropertyTransformer
 import possible_triangle.skygrid.data.xml.impl.Side
 
 abstract class BlockProviderBuilder<T : BlockProvider> {
+
+    abstract val registries: RegistryAccess
 
     private val extras = arrayListOf<Extra>()
     private val transformers = arrayListOf<Transformer>()
@@ -35,7 +38,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         shared: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
-        BasicBlocksBuilder().also {
+        BasicBlocksBuilder(registries).also {
             builder(it)
             extras.add(Side(on.name.lowercase(), it.build(), offset, probability, shared))
         }
@@ -49,7 +52,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         shared: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
-        BasicBlocksBuilder().also {
+        BasicBlocksBuilder(registries).also {
             builder(it)
             extras.add(Offset(x, y, z, it.build(), probability, shared))
         }

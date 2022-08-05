@@ -1,5 +1,6 @@
-package possible_triangle.skygrid.data.generation.builder.providers
+package possible_triangle.skygrid.builder.providers
 
+import net.minecraft.core.RegistryAccess
 import possible_triangle.skygrid.data.xml.Extra
 import possible_triangle.skygrid.data.xml.FilterOperator
 import possible_triangle.skygrid.data.xml.Transformer
@@ -11,6 +12,7 @@ class TagBuilder(
     private val weight: Double = 1.0,
     private val random: Boolean,
     private val expand: Boolean,
+    override val registries: RegistryAccess,
 ) :
     BlockProviderBuilder<Tag>() {
 
