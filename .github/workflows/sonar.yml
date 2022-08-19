@@ -35,6 +35,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Update mod version
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'gradle.properties'
+          property: 'mod_version'
+          value: ${{ github.sha }}
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

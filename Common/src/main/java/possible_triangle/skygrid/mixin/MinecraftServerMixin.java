@@ -16,7 +16,7 @@ public class MinecraftServerMixin {
     @Inject(at = @At("RETURN"), method = "reloadResources(Ljava/util/Collection;)Ljava/util/concurrent/CompletableFuture;", cancellable = true)
     public void onReload(Collection<String> packs, CallbackInfoReturnable<CompletableFuture<Void>> callback) {
         var self = (MinecraftServer) (Object) this;
-        callback.getReturnValue().thenAccept($ -> XMLResource.Companion.reload(self));
+        callback.setReturnValue(callback.getReturnValue().thenAccept($ -> XMLResource.Companion.reload(self)));
     }
 
 }

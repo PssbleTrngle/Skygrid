@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.List;
 
 @Mixin(WorldPreset.class)
-public interface WorldPresetMixin {
+public interface WorldPresetAccessor {
 
     @Accessor("PRESETS")
     static List<WorldPreset> presets() {

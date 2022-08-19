@@ -20,12 +20,18 @@
         "adapter": "kotlin",
         "value": "possible_triangle.skygrid.SkygridFabric"
       }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "possible_triangle.skygrid.SkygridFabric"
+      }
     ]
   },
   "mixins": [
     "skygrid.fabric.mixins.json"
   ],
-  "accessWidener" : "skygrid.accesswidener",
+  "accessWidener": "skygrid.accesswidener",
   "depends": {
     "fabricloader": ">=0.12",
     "fabric": "*",
