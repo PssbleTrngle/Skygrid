@@ -10,7 +10,7 @@
     "WorldGenSettingsMixin"
   ],
   "client": [
-    "WorldPresetMixin"
+    "WorldPresetAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
