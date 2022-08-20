@@ -20,11 +20,9 @@ import possible_triangle.skygrid.world.SkygridGenerator
 object SkygridFabric : ModInitializer, ClientModInitializer {
 
     override fun onInitialize() {
-        SkygridMod.LOGGER.info("Common Initialize")
         SkygridMod.init()
         SkygridMod.setup()
         FabricPlatformHelper.register()
-
 
         XMLResource.register {
             val listener = FabricReloadListener(it, it.path)
@@ -38,7 +36,6 @@ object SkygridFabric : ModInitializer, ClientModInitializer {
     }
 
     override fun onInitializeClient() {
-        SkygridMod.LOGGER.info("Client Initialize")
         WorldPresetAccessor.presets().add(SkygridGenerator)
     }
 
