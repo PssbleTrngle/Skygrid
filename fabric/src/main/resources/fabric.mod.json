@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "Skygrid",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "sources": "https://github.com/PssbleTrngle/${repository}",
+    "issues": "https://github.com/PssbleTrngle/${repository}/issues"
+  },
+  "license": "https://github.com/PssbleTrngle/${repository}/blob/1.18.x/LICENSE.txt",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "possible_triangle.skygrid.SkygridFabric"
+      }
+    ]
+  },
+  "mixins": [
+    "${mod_id}.fabric.mixins.json"
+  ],
+  "accessWidener" : "${mod_id}.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": ">=1.19.2",
+    "fabric-language-kotlin": ">=1.7.1+kotlin.1.6.10",
+    "java": ">=17"
+  }
+}
+  

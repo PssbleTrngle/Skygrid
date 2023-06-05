@@ -1,0 +1,16 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "possible_triangle.skygrid.mixin",
+    "compatibilityLevel": "JAVA_16",
+    "refmap":  "${mod_id}.mixins.refmap.json",
+    "mixins": [
+      "MinecraftServerMixin",
+      "FallingBlockMixin",
+      "EnderEyeItemMixin"
+    ],
+    "injectors": {
+      "defaultRequire": 1
+    }
+  }
+  
