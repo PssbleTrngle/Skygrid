@@ -13,7 +13,7 @@ plugins {
 }
 
 base {
-    archivesName.set("${mod_id}-fabric-${mod_version}")
+    archivesName.set("${mod_id}-fabric")
 }
 
 val dependencyProjects = listOf(

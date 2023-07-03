@@ -10,7 +10,7 @@ plugins {
 }
 
 base {
-    archivesName.set("${mod_id}-common-${mod_version}")
+    archivesName.set("${mod_id}-common")
 }
 
 minecraft {
@@ -22,4 +22,14 @@ dependencies {
 
     implementation("io.github.pdvrieze.xmlutil:core:${xmlutil_version}")
     implementation("io.github.pdvrieze.xmlutil:serialization:${xmlutil_version}")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("io.github.origin-energy:java-snapshot-testing-junit5:4.0.6")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }

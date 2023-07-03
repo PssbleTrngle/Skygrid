@@ -17,12 +17,12 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "possible_triangle.skygrid.SkygridFabric"
+        "value": "possible_triangle.skygrid.fabric.SkygridFabric"
       }
     ]
   },
   "mixins": [
-    "${mod_id}.fabric.mixins.json"
+    "${mod_id}.mixins.json"
   ],
   "accessWidener" : "${mod_id}.accesswidener",
   "depends": {
