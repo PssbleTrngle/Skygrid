@@ -3,7 +3,7 @@ package com.possible_triangle.skygrid.xml.resources
 import com.possible_triangle.skygrid.api.extensions.flat
 import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
-import com.possible_triangle.skygrid.api.xml.elements.impl.SingleBlock
+import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
 import com.possible_triangle.skygrid.xml.ReferenceContext
 import com.possible_triangle.skygrid.xml.XMLResource
 import net.minecraft.resources.ResourceLocation

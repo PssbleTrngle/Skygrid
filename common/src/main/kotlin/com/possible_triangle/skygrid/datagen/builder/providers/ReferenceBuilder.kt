@@ -4,7 +4,7 @@ import net.minecraft.core.RegistryAccess
 import com.possible_triangle.skygrid.api.xml.elements.Extra
 import com.possible_triangle.skygrid.api.xml.elements.FilterOperator
 import com.possible_triangle.skygrid.api.xml.elements.Transformer
-import com.possible_triangle.skygrid.api.xml.elements.impl.Reference
+import com.possible_triangle.skygrid.api.xml.elements.providers.Reference
 
 class ReferenceBuilder(
     private val id: String,

@@ -2,7 +2,7 @@ package com.possible_triangle.skygrid.datagen.builder
 
 import net.minecraft.resources.ResourceLocation
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
-import com.possible_triangle.skygrid.api.xml.elements.impl.LootTable
+import com.possible_triangle.skygrid.api.xml.elements.LootTable
 
 class LootBuilder {
 

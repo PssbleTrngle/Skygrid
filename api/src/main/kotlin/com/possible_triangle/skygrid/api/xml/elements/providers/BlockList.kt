@@ -1,4 +1,4 @@
-package com.possible_triangle.skygrid.api.xml.elements.impl
+package com.possible_triangle.skygrid.api.xml.elements.providers
 
 import com.possible_triangle.skygrid.api.WeightedList
 import com.possible_triangle.skygrid.api.extensions.flat

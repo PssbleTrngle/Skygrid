@@ -1,6 +1,5 @@
-package com.possible_triangle.skygrid.api.xml.elements.impl
+package com.possible_triangle.skygrid.api.xml.elements
 
-import com.possible_triangle.skygrid.api.xml.elements.WeightedEntry
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

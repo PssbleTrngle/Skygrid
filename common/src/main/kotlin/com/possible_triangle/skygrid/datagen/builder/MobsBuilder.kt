@@ -1,7 +1,7 @@
 package com.possible_triangle.skygrid.datagen.builder
 
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
-import com.possible_triangle.skygrid.api.xml.elements.impl.SpawnerEntry
+import com.possible_triangle.skygrid.api.xml.elements.SpawnerEntry
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.resources.ResourceLocation

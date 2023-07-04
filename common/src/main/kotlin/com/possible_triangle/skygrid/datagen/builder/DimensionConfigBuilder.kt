@@ -4,7 +4,7 @@ import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
 import com.possible_triangle.skygrid.api.xml.elements.Distance
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
-import com.possible_triangle.skygrid.api.xml.elements.impl.SingleBlock
+import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
 import com.possible_triangle.skygrid.datagen.builder.providers.BlockBuilder
 import com.possible_triangle.skygrid.xml.ReferenceContext
 import net.minecraft.core.RegistryAccess

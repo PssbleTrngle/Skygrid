@@ -1,4 +1,4 @@
-package com.possible_triangle.skygrid.api.xml.elements.impl
+package com.possible_triangle.skygrid.api.xml.elements.providers
 
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.elements.*
@@ -10,18 +10,15 @@ import net.minecraft.world.level.block.Block
 import kotlin.random.Random
 
 @Serializable
-@SerialName("reference")
-class Reference(
-    private val id: String,
+@SerialName("fallback")
+data class Fallback(
+    override val name: String? = null,
     override val weight: Double = 1.0,
     override val extras: List<Extra> = listOf(),
     override val transformers: List<Transformer> = listOf(),
     override val filters: List<FilterOperator> = listOf(),
-) :
-    ProxyProvider() {
-
-    override val name: String
-        get() = id
+    val children: List<BlockProvider>,
+) : ProxyProvider() {
 
     @Transient
     private lateinit var provider: BlockProvider
@@ -31,14 +28,14 @@ class Reference(
     override fun internalValidate(
         blocks: Registry<Block>,
         references: IReferenceContext,
-        filters: List<FilterOperator>
+        filters: List<FilterOperator>,
     ): Boolean {
-        return references[id]?.also {
-            provider = it
-        } != null
+        provider = children.firstOrNull { it.validate(blocks, references, filters) } ?: return false
+        return true
     }
 
     override fun get(random: Random): BlockProvider {
         return provider
     }
+
 }

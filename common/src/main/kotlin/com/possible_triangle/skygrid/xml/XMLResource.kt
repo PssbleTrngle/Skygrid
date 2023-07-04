@@ -4,7 +4,16 @@ import com.possible_triangle.skygrid.SkygridMod.LOGGER
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.api.xml.DeserializationException
 import com.possible_triangle.skygrid.api.xml.elements.*
-import com.possible_triangle.skygrid.api.xml.elements.impl.*
+import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
+import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
+import com.possible_triangle.skygrid.api.xml.elements.extras.Side
+import com.possible_triangle.skygrid.api.xml.elements.filters.ExceptFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.ModFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.NameFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.TagFilter
+import com.possible_triangle.skygrid.api.xml.elements.providers.*
+import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
+import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.modules.SerializersModule

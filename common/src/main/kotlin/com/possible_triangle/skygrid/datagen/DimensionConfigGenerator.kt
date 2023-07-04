@@ -3,7 +3,7 @@ package com.possible_triangle.skygrid.datagen
 import com.google.common.hash.HashCode
 import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
 import com.possible_triangle.skygrid.api.xml.elements.Preset
-import com.possible_triangle.skygrid.api.xml.elements.impl.BlockList
+import com.possible_triangle.skygrid.api.xml.elements.providers.BlockList
 import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.DimensionConfigBuilder
 import com.possible_triangle.skygrid.datagen.builder.IBlocksBuilder

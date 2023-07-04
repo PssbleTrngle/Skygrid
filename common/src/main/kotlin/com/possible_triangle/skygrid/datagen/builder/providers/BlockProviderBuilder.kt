@@ -10,8 +10,12 @@ import com.possible_triangle.skygrid.datagen.builder.ExceptFilterBuilder
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
 import com.possible_triangle.skygrid.api.xml.elements.Extra
 import com.possible_triangle.skygrid.api.xml.elements.FilterOperator
-import com.possible_triangle.skygrid.api.xml.elements.impl.*
 import com.possible_triangle.skygrid.api.xml.elements.Transformer
+import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
+import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
+import com.possible_triangle.skygrid.api.xml.elements.extras.Side
+import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
+import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
 
 abstract class BlockProviderBuilder<T : BlockProvider> {
 

@@ -1,4 +1,4 @@
-package com.possible_triangle.skygrid.api.xml.elements.impl
+package com.possible_triangle.skygrid.api.xml.elements.filters
 
 import com.possible_triangle.skygrid.api.extensions.keyFrom
 import com.possible_triangle.skygrid.api.xml.elements.Filter

@@ -3,7 +3,7 @@ package com.possible_triangle.skygrid.datagen.builder.providers
 import com.possible_triangle.skygrid.api.xml.elements.Extra
 import com.possible_triangle.skygrid.api.xml.elements.FilterOperator
 import com.possible_triangle.skygrid.api.xml.elements.Transformer
-import com.possible_triangle.skygrid.api.xml.elements.impl.Fallback
+import com.possible_triangle.skygrid.api.xml.elements.providers.Fallback
 import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.IBlocksBuilder
 import net.minecraft.core.RegistryAccess

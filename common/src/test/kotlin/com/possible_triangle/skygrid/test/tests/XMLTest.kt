@@ -2,7 +2,6 @@ package com.possible_triangle.skygrid.test.tests
 
 import au.com.origin.snapshots.Expect
 import au.com.origin.snapshots.junit5.SnapshotExtension
-import com.possible_triangle.skygrid.api.xml.elements.impl.*
 import com.possible_triangle.skygrid.test.TestExtension
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
@@ -12,6 +11,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import com.possible_triangle.skygrid.xml.XMLResource
 import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
+import com.possible_triangle.skygrid.api.xml.elements.extras.Side
+import com.possible_triangle.skygrid.api.xml.elements.filters.ExceptFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.ModFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.NameFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.TagFilter
+import com.possible_triangle.skygrid.api.xml.elements.providers.*
+import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
+import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
 
 @ExperimentalSerializationApi
 @ExperimentalXmlUtilApi

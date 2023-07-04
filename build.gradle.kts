@@ -169,3 +169,8 @@ subprojects {
         }
     }
 }
+
+idea {
+    module.excludeDirs.add(file("web"))
+    module.excludeDirs.add(file("datagen"))
+}

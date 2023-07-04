@@ -3,10 +3,10 @@ package com.possible_triangle.skygrid.datagen.builder
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 import com.possible_triangle.skygrid.api.xml.elements.Filter
-import com.possible_triangle.skygrid.api.xml.elements.impl.ExceptFilter
-import com.possible_triangle.skygrid.api.xml.elements.impl.ModFilter
-import com.possible_triangle.skygrid.api.xml.elements.impl.NameFilter
-import com.possible_triangle.skygrid.api.xml.elements.impl.TagFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.ExceptFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.ModFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.NameFilter
+import com.possible_triangle.skygrid.api.xml.elements.filters.TagFilter
 
 class ExceptFilterBuilder {
 

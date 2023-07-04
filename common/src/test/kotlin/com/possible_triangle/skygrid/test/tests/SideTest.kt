@@ -1,8 +1,8 @@
 package com.possible_triangle.skygrid.test.tests
 
 import com.possible_triangle.skygrid.api.xml.elements.Extra
-import com.possible_triangle.skygrid.api.xml.elements.impl.Side
-import com.possible_triangle.skygrid.api.xml.elements.impl.SingleBlock
+import com.possible_triangle.skygrid.api.xml.elements.extras.Side
+import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
 import com.possible_triangle.skygrid.test.TestExtension
 import com.possible_triangle.skygrid.test.mocks.WorldMock
 import net.minecraft.core.BlockPos

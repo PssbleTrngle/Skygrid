@@ -1,4 +1,4 @@
-package com.possible_triangle.skygrid.api.xml.elements.impl
+package com.possible_triangle.skygrid.api.xml.elements.transformers
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

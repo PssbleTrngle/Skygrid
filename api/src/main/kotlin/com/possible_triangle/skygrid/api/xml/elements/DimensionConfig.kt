@@ -4,9 +4,7 @@ import com.possible_triangle.skygrid.api.SkygridTags
 import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
-import com.possible_triangle.skygrid.api.xml.elements.impl.LootTable
-import com.possible_triangle.skygrid.api.xml.elements.impl.SingleBlock
-import com.possible_triangle.skygrid.api.xml.elements.impl.SpawnerEntry
+import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
