@@ -17,7 +17,7 @@ import possible_triangle.skygrid.SkygridMod.MOD_ID
 import possible_triangle.skygrid.command.SkygridCommand
 import possible_triangle.skygrid.data.XMLResource
 import possible_triangle.skygrid.forge.platform.ForgeConfig
-import possible_triangle.skygrid.forge.world.SkygridPreset
+import possible_triangle.skygrid.world.SkygridPreset
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.registerObject

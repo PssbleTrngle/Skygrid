@@ -1,7 +1,6 @@
-package possible_triangle.skygrid.forge.world
+package possible_triangle.skygrid.world
 
 import net.minecraft.world.level.levelgen.presets.WorldPreset
-import possible_triangle.skygrid.world.SkygridChunkGenerator
 
 class SkygridPreset : WorldPreset(null) {
 

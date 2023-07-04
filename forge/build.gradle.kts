@@ -99,8 +99,8 @@ dependencies {
 
     implementation("thedarkcolour:kotlinforforge:3.9.1")
 
-    include("io.github.pdvrieze.xmlutil:core:${xmlutil_version}")
-    include("io.github.pdvrieze.xmlutil:serialization:${xmlutil_version}")
+    include("io.github.pdvrieze.xmlutil:core-jvm:${xmlutil_version}")
+    include("io.github.pdvrieze.xmlutil:serialization-jvm:${xmlutil_version}")
 
     //runtimeOnly fg.deobf("vazkii.autoreglib:AutoRegLib:${arl_version}")
 

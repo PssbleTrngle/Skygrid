@@ -1,33 +1,73 @@
 com.possible_triangle.skygrid.test.tests.XMLTest.encodesCorrectly=[
 <dimension>
    <blocks>
-      <block id="some_block" mod="some_mod">
-         <side on="down">
-            <block id="something_below"/>
-         </side>
-      </block>
-      <block id="another_block" weight="0.1"/>
-      <fallback>
-         <except>
-            <tag id="exclude_this" mod="a_mod"/>
-            <tag id="exclude_that"/>
-            <name pattern="_stripped"/>
-            <mod id="another_mod"/>
-         </except>
-         <tag id="type/material" mod="forge"/>
-         <reference id="a_preset" weight="12.5"/>
-      </fallback>
-      <list>
-         <set key="the_key" value="some_value"/>
-         <cycle key="axis_or_something"/>
-         <tag id="stuff"/>
-         <list>
-            <block id="yet_another_block"/>
-            <block id="maybe_a_crafting_table" weight="24.2">
-               <set key="numerical_property" value="23"/>
-            </block>
-         </list>
-      </list>
+      <children type="block">
+         <value id="some_block" mod="some_mod">
+            <extras type="side">
+               <value on="down">
+                  <providers type="block">
+                     <value id="something_below"/>
+                  </providers>
+               </value>
+            </extras>
+         </value>
+      </children>
+      <children type="block">
+         <value id="another_block" weight="0.1"/>
+      </children>
+      <children type="fallback">
+         <value>
+            <filters type="except">
+               <value>
+                  <filters type="tag">
+                     <value id="exclude_this" mod="a_mod"/>
+                  </filters>
+                  <filters type="tag">
+                     <value id="exclude_that"/>
+                  </filters>
+                  <filters type="name">
+                     <value pattern="_stripped"/>
+                  </filters>
+                  <filters type="mod">
+                     <value id="another_mod"/>
+                  </filters>
+               </value>
+            </filters>
+            <children type="tag">
+               <value id="type/material" mod="forge"/>
+            </children>
+            <children type="reference">
+               <value id="a_preset" weight="12.5"/>
+            </children>
+         </value>
+      </children>
+      <children type="list">
+         <value>
+            <transformers type="set">
+               <value key="the_key" value="some_value"/>
+            </transformers>
+            <transformers type="cycle">
+               <value key="axis_or_something"/>
+            </transformers>
+            <children type="tag">
+               <value id="stuff"/>
+            </children>
+            <children type="list">
+               <value>
+                  <children type="block">
+                     <value id="yet_another_block"/>
+                  </children>
+                  <children type="block">
+                     <value id="maybe_a_crafting_table" weight="24.2">
+                        <transformers type="set">
+                           <value key="numerical_property" value="23"/>
+                        </transformers>
+                     </value>
+                  </children>
+               </value>
+            </children>
+         </value>
+      </children>
    </blocks>
 </dimension>
 ]

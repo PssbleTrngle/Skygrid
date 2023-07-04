@@ -20,8 +20,8 @@ minecraft {
 dependencies {
     compileOnly("org.spongepowered:mixin:0.8.5")
 
-    implementation("io.github.pdvrieze.xmlutil:core:${xmlutil_version}")
-    implementation("io.github.pdvrieze.xmlutil:serialization:${xmlutil_version}")
+    implementation("io.github.pdvrieze.xmlutil:core-jvm:${xmlutil_version}")
+    implementation("io.github.pdvrieze.xmlutil:serialization-jvm:${xmlutil_version}")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("io.github.origin-energy:java-snapshot-testing-junit5:4.0.6")
@@ -32,4 +32,5 @@ tasks.test {
     testLogging {
         events("passed", "skipped", "failed")
     }
+    workingDir = project.file("run")
 }

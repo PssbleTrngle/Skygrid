@@ -57,15 +57,17 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
                 subclass(TagFilter::class)
             }
         }) {
-            encodeDefault = XmlSerializationPolicy.XmlEncodeDefault.NEVER
             autoPolymorphic = true
             indentString = " ".repeat(3)
-            unknownChildHandler = UnknownChildHandler { input, _, descriptor, name, candidates ->
-                throw DeserializationException(
-                    input.locationInfo,
-                    "${descriptor.tagName}/${name ?: "<CDATA>"}",
-                    candidates
-                )
+            defaultPolicy {
+                encodeDefault = XmlSerializationPolicy.XmlEncodeDefault.NEVER
+                unknownChildHandler = UnknownChildHandler { input, _, descriptor, name, candidates ->
+                    throw DeserializationException(
+                        input.locationInfo,
+                        "${descriptor.tagName}/${name ?: "<CDATA>"}",
+                        candidates
+                    )
+                }
             }
         }
 

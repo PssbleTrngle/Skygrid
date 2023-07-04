@@ -54,7 +54,7 @@ class SkygridChunkGenerator(
 ) : ChunkGenerator(structures, Optional.empty(), biomeSource) {
 
     companion object {
-        fun create(
+        private fun create(
             seed: Long,
             dimension: ResourceKey<LevelStem>?,
             biomeSource: BiomeSource? = null,

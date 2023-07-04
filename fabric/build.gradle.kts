@@ -27,8 +27,8 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
-    implementation(include("io.github.pdvrieze.xmlutil:core:${xmlutil_version}")!!)
-    implementation(include("io.github.pdvrieze.xmlutil:serialization:${xmlutil_version}")!!)
+    implementation(include("io.github.pdvrieze.xmlutil:core-jvm:${xmlutil_version}")!!)
+    implementation(include("io.github.pdvrieze.xmlutil:serialization-jvm:${xmlutil_version}")!!)
 
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.1+kotlin.1.8.10")
 
@@ -36,6 +36,7 @@ dependencies {
 }
 
 loom {
+    //accessWidenerPath.set(file("src/main/resources/${mod_id}.accesswidener"))
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
     }
