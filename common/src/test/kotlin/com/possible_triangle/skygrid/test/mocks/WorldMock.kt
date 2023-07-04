@@ -1,14 +1,16 @@
 package com.possible_triangle.skygrid.test.mocks
 
+import com.possible_triangle.skygrid.api.xml.IReferenceContext
+import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
+import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
+import com.possible_triangle.skygrid.world.BlockAccess
+import com.possible_triangle.skygrid.xml.ReferenceContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import possible_triangle.skygrid.data.xml.BlockProvider
-import possible_triangle.skygrid.data.xml.DimensionConfig
-import possible_triangle.skygrid.data.xml.ListWrapper
-import possible_triangle.skygrid.world.BlockAccess
 import kotlin.random.Random
 import kotlin.test.assertEquals
 
@@ -24,8 +26,8 @@ object WorldMock {
     fun getNBT(pos: BlockPos) = nbt[pos]
 
     fun generate(vararg blocks: BlockProvider) = generate(DimensionConfig(blocks = ListWrapper(*blocks)))
-    fun generate(config: DimensionConfig) {
-        config.validate(registryAccess)
+    fun generate(config: DimensionConfig, references: IReferenceContext = ReferenceContext()) {
+        config.validate(registryAccess, references)
         config.generate(random, access)
     }
 

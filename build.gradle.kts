@@ -12,6 +12,7 @@ val artifactGroup: String by extra
 
 plugins {
     java
+    idea
     id("maven-publish")
     id("org.jetbrains.kotlin.jvm") version ("1.8.21") apply (false)
     id("org.jetbrains.kotlin.plugin.serialization") version ("1.8.21") apply (false)
@@ -71,11 +72,19 @@ subprojects {
         }
 
         maven {
+            url = uri("https://api.modrinth.com/maven")
+            content {
+                includeGroup("maven.modrinth")
+            }
+        }
+
+        maven {
             url = uri("https://www.cursemaven.com")
             content {
                 includeGroup("curse.maven")
             }
         }
+
         maven {
             url = uri("https://maven.theillusivec4.top/")
             content {

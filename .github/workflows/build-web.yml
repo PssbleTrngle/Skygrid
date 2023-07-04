@@ -2,7 +2,7 @@ name: Deploy Website
 on:
   workflow_dispatch:
   push:
-    branches: [1.18.x]
+    branches: [1.19.x]
     paths: [web/**]
 
 jobs:

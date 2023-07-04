@@ -33,6 +33,7 @@ configure<MixinExtension> {
 }
 
 val dependencyProjects = listOf(
+    project(":api"),
     project(":common"),
 )
 
@@ -116,11 +117,15 @@ dependencies {
 }
 
 tasks.withType<JavaCompile> {
-    source(project(":common").sourceSets["main"].allSource)
+    dependencyProjects.forEach {
+        source(it.sourceSets["main"].allSource)
+    }
 }
 
 tasks.withType<KotlinCompile> {
-    source(project(":common").sourceSets["main"].allSource)
+    dependencyProjects.forEach {
+        source(it.sourceSets["main"].allSource)
+    }
 }
 
 tasks.jar {

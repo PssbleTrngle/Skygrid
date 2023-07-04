@@ -1,5 +1,8 @@
 package com.possible_triangle.skygrid.test.tests
 
+import com.possible_triangle.skygrid.api.xml.elements.Extra
+import com.possible_triangle.skygrid.api.xml.elements.impl.Side
+import com.possible_triangle.skygrid.api.xml.elements.impl.SingleBlock
 import com.possible_triangle.skygrid.test.TestExtension
 import com.possible_triangle.skygrid.test.mocks.WorldMock
 import net.minecraft.core.BlockPos
@@ -7,9 +10,6 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.block.Blocks
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import possible_triangle.skygrid.data.xml.Extra
-import possible_triangle.skygrid.data.xml.impl.Side
-import possible_triangle.skygrid.data.xml.impl.SingleBlock
 
 @ExtendWith(TestExtension::class)
 class SideTest {

@@ -4,6 +4,7 @@ val mod_id: String by extra
 val fabric_loader_version: String by extra
 val fabric_version: String by extra
 val xmlutil_version: String by extra
+val create_fabric_version: String by extra
 
 plugins {
     id("fabric-loom") version ("1.0-SNAPSHOT")
@@ -17,6 +18,7 @@ base {
 }
 
 val dependencyProjects = listOf(
+    project(":api"),
     project(":common"),
 )
 
@@ -32,6 +34,8 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-language-kotlin:1.9.1+kotlin.1.8.10")
 
+    modRuntimeOnly("maven.modrinth:create-fabric:${create_fabric_version}")
+
     dependencyProjects.forEach { implementation(it) }
 }
 
@@ -45,20 +49,41 @@ loom {
         named("client") {
             client()
             configName = "Fabric Client"
-            ideConfigGenerated(true)
             runDir("run")
         }
         named("server") {
             server()
             configName = "Fabric Server"
-            ideConfigGenerated(true)
             runDir("run/server")
+        }
+        create("data ") {
+            client()
+            configName = "Fabric Datagen"
+            runDir("run/datagen")
+
+            vmArg("-Dfabric-api.datagen")
+            vmArg("-Dfabric-api.datagen.output-dir=${project(":common").file("src/generated/resources")}")
+            vmArg("-Dfabric-api.datagen.modid=${mod_id}")
+        }
+        forEach { run ->
+            run.ideConfigGenerated(true)
+        }
+    }
+
+    mods {
+        create(mod_id) {
+            sourceSet(sourceSets.main.get())
+            dependencyProjects.forEach {
+                sourceSet(it.sourceSets.main.get())
+            }
         }
     }
 }
 
 tasks.withType<JavaCompile> {
-    source(project(":common").sourceSets["main"].allSource)
+    dependencyProjects.forEach {
+        source(it.sourceSets["main"].allSource)
+    }
 }
 
 tasks.jar {

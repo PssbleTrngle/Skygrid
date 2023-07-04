@@ -31,7 +31,7 @@
                <block id="hanging_roots"/>
             </side>
             <block id="dirt"/>
-            <block id="mud" mod="biomesoplenty" weight="0.1"/>
+            <block id="mud" weight="0.1"/>
             <block id="dirt_path" weight="0.1"/>
             <block id="coarse_dirt" weight="0.1"/>
             <list weight="4.0" name="grass">
@@ -208,6 +208,7 @@
             <block id="smooth_stone" weight="0.1"/>
             <list name="bricks">
                <block id="bricks" weight="0.1"/>
+               <block id="mud_bricks" weight="0.1"/>
                <list name="stone bricks">
                   <block id="stone_bricks"/>
                   <block id="mossy_stone_bricks" weight="0.5"/>
@@ -278,7 +279,7 @@
             <block id="bookshelf"/>
          </list>
          <list weight="0.1" name="misc">
-            <tag id="glass/silica" mod="forge"/>
+            <tag id="silica_glass" mod="skygrid"/>
             <tag id="wool"/>
          </list>
          <block id="bamboo_mat" mod="quark" weight="0.05"/>

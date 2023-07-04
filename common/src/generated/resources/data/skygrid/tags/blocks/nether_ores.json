@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:ores_in_ground/netherrack",
+      "required": false
+    }
+  ]
+}

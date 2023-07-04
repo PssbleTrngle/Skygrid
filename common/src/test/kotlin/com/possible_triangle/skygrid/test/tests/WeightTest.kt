@@ -1,13 +1,13 @@
 package com.possible_triangle.skygrid.test.tests
 
+import com.possible_triangle.skygrid.datagen.builder.DimensionConfigBuilder
+import com.possible_triangle.skygrid.extensions.weights
 import com.possible_triangle.skygrid.test.TestExtension
 import com.possible_triangle.skygrid.test.assertApproximately
 import net.minecraft.core.RegistryAccess
 import net.minecraft.world.level.block.Blocks
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import possible_triangle.skygrid.builder.DimensionConfigBuilder
-import possible_triangle.skygrid.extensions.weights
 
 @ExtendWith(TestExtension::class)
 class WeightTest {

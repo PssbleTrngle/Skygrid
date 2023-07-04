@@ -2,7 +2,7 @@
    <list>
       <list weight="20.0" name="ores">
          <except>
-            <tag id="ores_in_ground/netherrack" mod="forge"/>
+            <tag id="nether_ores" mod="skygrid"/>
             <name pattern="nether_"/>
          </except>
          <tag id="coal_ores" weight="10.0"/>
