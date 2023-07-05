@@ -1,10 +1,10 @@
 package com.possible_triangle.skygrid.forge.platform
 
+import com.possible_triangle.skygrid.forge.SkygridForge.BLOCKS
+import com.possible_triangle.skygrid.platform.services.IPlatformHelper
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.fml.loading.FMLLoader
-import com.possible_triangle.skygrid.forge.SkygridForge.BLOCKS
-import com.possible_triangle.skygrid.platform.services.IPlatformHelper
 import thedarkcolour.kotlinforforge.forge.registerObject
 import javax.annotation.Nonnull
 import kotlin.properties.ReadOnlyProperty

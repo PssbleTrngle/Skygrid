@@ -1,24 +1,12 @@
 package com.possible_triangle.skygrid.xml
 
+import com.google.common.base.Suppliers
 import com.possible_triangle.skygrid.SkygridMod.LOGGER
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.api.xml.DeserializationException
-import com.possible_triangle.skygrid.api.xml.elements.*
-import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
-import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
-import com.possible_triangle.skygrid.api.xml.elements.extras.Side
-import com.possible_triangle.skygrid.api.xml.elements.filters.ExceptFilter
-import com.possible_triangle.skygrid.api.xml.elements.filters.ModFilter
-import com.possible_triangle.skygrid.api.xml.elements.filters.NameFilter
-import com.possible_triangle.skygrid.api.xml.elements.filters.TagFilter
-import com.possible_triangle.skygrid.api.xml.elements.providers.*
-import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
-import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
+import kotlinx.serialization.StringFormat
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.packs.resources.Resource
@@ -26,9 +14,6 @@ import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener
 import net.minecraft.util.profiling.ProfilerFiller
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
-import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
-import nl.adaptivity.xmlutil.serialization.XML
-import nl.adaptivity.xmlutil.serialization.XmlSerializationPolicy
 import java.io.File
 
 abstract class XMLResource<T>(val path: String, private val serializer: () -> KSerializer<T>) :
@@ -37,49 +22,7 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
     @ExperimentalXmlUtilApi
     @ExperimentalSerializationApi
     companion object {
-        val LOADER = XML(SerializersModule {
-            polymorphic(BlockProvider::class) {
-                subclass(BlockList::class)
-                subclass(Fallback::class)
-                subclass(Tag::class)
-                subclass(SingleBlock::class)
-                subclass(Reference::class)
-            }
-
-            polymorphic(Transformer::class) {
-                subclass(SetPropertyTransformer::class)
-                subclass(CyclePropertyTransformer::class)
-            }
-
-            polymorphic(FilterOperator::class) {
-                subclass(ExceptFilter::class)
-            }
-
-            polymorphic(Extra::class) {
-                subclass(Side::class)
-                subclass(Cardinal::class)
-                subclass(Offset::class)
-            }
-
-            polymorphic(Filter::class) {
-                subclass(NameFilter::class)
-                subclass(ModFilter::class)
-                subclass(TagFilter::class)
-            }
-        }) {
-            defaultPolicy {
-                indentString = " ".repeat(3)
-                autoPolymorphic = true
-                encodeDefault = XmlSerializationPolicy.XmlEncodeDefault.NEVER
-                unknownChildHandler = UnknownChildHandler { input, _, descriptor, name, candidates ->
-                    throw DeserializationException(
-                        input.locationInfo,
-                        "${descriptor.tagName}/${name ?: "<CDATA>"}",
-                        candidates
-                    )
-                }
-            }
-        }
+        val LOADER: StringFormat get() = Suppliers.memoize(::createXMLModule).get()
 
         private val RESOURCES = arrayListOf<XMLResource<*>>()
 

@@ -2,9 +2,11 @@ package com.possible_triangle.skygrid
 
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_NAME
+import com.possible_triangle.skygrid.api.events.RegisterElementEvent
 import com.possible_triangle.skygrid.block.StiffAir
 import com.possible_triangle.skygrid.platform.Services
 import com.possible_triangle.skygrid.world.SkygridChunkGenerator
+import com.possible_triangle.skygrid.xml.registerDefaultElements
 import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
 import com.possible_triangle.skygrid.xml.resources.Presets
 import net.minecraft.ChatFormatting
@@ -23,12 +25,18 @@ object SkygridMod {
     val STIFF_AIR by Services.PLATFORM.createBlock("stiff_air") { StiffAir() }
 
     fun init() {
+        registerEvents()
         Presets.register()
         DimensionConfigs.register()
     }
 
+    private fun registerEvents() {
+        RegisterElementEvent.EVENT.addListener {
+            it.registerDefaultElements()
+        }
+    }
+
     fun setup() {
-        LOGGER.info("Skygrid booting")
         Registry.register(Registry.CHUNK_GENERATOR, ResourceLocation(MOD_ID, MOD_ID), SkygridChunkGenerator.CODEC)
     }
 

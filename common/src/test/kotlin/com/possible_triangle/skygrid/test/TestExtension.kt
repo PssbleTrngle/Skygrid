@@ -1,5 +1,6 @@
 package com.possible_triangle.skygrid.test
 
+import com.possible_triangle.skygrid.SkygridMod
 import com.possible_triangle.skygrid.test.mocks.WorldMock
 import net.minecraft.SharedConstants
 import net.minecraft.server.Bootstrap
@@ -20,6 +21,7 @@ class TestExtension : BeforeAllCallback, BeforeEachCallback {
         SharedConstants.tryDetectVersion()
         Bootstrap.bootStrap()
         Bootstrap.validate()
+        SkygridMod.init()
     }
 
     override fun beforeEach(context: ExtensionContext?) {
