@@ -5,6 +5,10 @@ pluginManagement {
         gradlePluginPortal()
         maven { url = uri("https://maven.fabricmc.net/") }
         maven { url = uri("https://repo.spongepowered.org/repository/maven-public/") }
+
+        System.getenv()["LOCAL_MAVEN"]?.let { localMaven ->
+            maven { url = uri(localMaven) }
+        }
     }
 }
 
