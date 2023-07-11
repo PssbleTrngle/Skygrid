@@ -1,20 +1,20 @@
-import com.possible_triangle.gradle.features.curseMaven
-import com.possible_triangle.gradle.features.enableKotlin
-import com.possible_triangle.gradle.features.modrinthMaven
-import com.possible_triangle.gradle.features.publishing.enablePublishing
-import com.possible_triangle.gradle.features.publishing.githubPackages
-
 val mod_id: String by extra
 val mod_version: String by extra
+val xmlutil_version: String by extra
 
 plugins {
     idea
-    id("org.jetbrains.kotlin.plugin.serialization") version ("1.8.21") apply (false)
-    id("org.sonarqube") version "4.2.0.3129"
     id("com.possible_triangle.gradle") version ("0.0.0-dev")
 }
 
-enableKotlin()
+withKotlin()
+
+mod {
+    includedLibraries.set(setOf(
+        "io.github.pdvrieze.xmlutil:core-jvm:${xmlutil_version}",
+        "io.github.pdvrieze.xmlutil:serialization-jvm:${xmlutil_version}",
+    ))
+}
 
 subprojects {
     repositories {
@@ -22,16 +22,16 @@ subprojects {
         curseMaven()
 
         maven {
-            url = uri("https://repo.spongepowered.org/repository/maven-public/")
+            url = uri("https://maven.theillusivec4.top/")
             content {
-                includeGroup("org.spongepowered")
+                includeGroup("top.theillusivec4.curios")
             }
         }
 
         maven {
-            url = uri("https://maven.theillusivec4.top/")
+            url = uri("https://maven.blamejared.com")
             content {
-                includeGroup("top.theillusivec4.curios")
+                includeGroup("vazkii.botania")
             }
         }
     }
@@ -43,20 +43,7 @@ subprojects {
     }
 }
 
-sonarqube {
-    properties {
-        property("sonar.projectVersion", mod_version)
-        property("sonar.projectKey", mod_id)
-    }
-}
-
-subprojects {
-    sonarqube {
-        properties {
-            property("sonar.branch", this@subprojects.name)
-        }
-    }
-}
+enableSonarQube()
 
 idea {
     module.excludeDirs.add(file("web"))
