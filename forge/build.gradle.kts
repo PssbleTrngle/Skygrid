@@ -1,9 +1,7 @@
-val xmlutil_version: String by extra
-val forge_version: String by extra
+import net.fabricmc.loom.task.RemapJarTask
+
 val curios_forge_version: String by extra
 val botania_version: String by extra
-
-withKotlin()
 
 forge {
     enableMixins()
@@ -25,4 +23,9 @@ dependencies {
 
         modRuntimeOnly("vazkii.botania:Botania:${botania_version}")
     }
+}
+
+uploadToCurseforge()
+uploadToModrinth {
+    syncBodyFromReadme()
 }
