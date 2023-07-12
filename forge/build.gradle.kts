@@ -1,5 +1,3 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 val curios_forge_version: String by extra
 val botania_version: String by extra
 
@@ -21,7 +19,7 @@ dependencies {
         //modRuntimeOnly("vazkii.patchouli:Patchouli:${mc_version}-${patchouli_version}")
         //modRuntimeOnly("top.theillusivec4.curios:curios-forge:${mc_version}-${curios_version}")
 
-        modRuntimeOnly("vazkii.botania:Botania:${botania_version}")
+        //modRuntimeOnly("vazkii.botania:Botania:${botania_version}")
     }
 }
 

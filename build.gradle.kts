@@ -4,7 +4,7 @@ val xmlutil_version: String by extra
 
 plugins {
     idea
-    id("com.possible_triangle.gradle") version ("0.0.0-dev")
+    id("com.possible_triangle.gradle") version ("0.0.1")
 }
 
 withKotlin()
