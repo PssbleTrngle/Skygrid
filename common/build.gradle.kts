@@ -1,3 +1,7 @@
+plugins {
+    jacoco
+}
+
 common {
     dependOn(project(":api"))
 }
@@ -13,4 +17,10 @@ tasks.test {
         events("passed", "skipped", "failed")
     }
     workingDir = project.file("run")
+
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
 }
