@@ -4,7 +4,7 @@ val xmlutil_version: String by extra
 
 plugins {
     idea
-    id("net.somethingcatchy.gradle") version ("0.0.5")
+    id("net.somethingcatchy.gradle") version ("0.0.6")
 }
 
 withKotlin()
