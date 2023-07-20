@@ -4,16 +4,18 @@ val xmlutil_version: String by extra
 
 plugins {
     idea
-    id("net.somethingcatchy.gradle") version ("0.0.6")
+    id("net.somethingcatchy.gradle") version ("0.0.7")
 }
 
 withKotlin()
 
 mod {
-    includedLibraries.set(setOf(
-        "io.github.pdvrieze.xmlutil:core-jvm:${xmlutil_version}",
-        "io.github.pdvrieze.xmlutil:serialization-jvm:${xmlutil_version}",
-    ))
+    includedLibraries.set(
+        setOf(
+            "io.github.pdvrieze.xmlutil:core-jvm:${xmlutil_version}",
+            "io.github.pdvrieze.xmlutil:serialization-jvm:${xmlutil_version}",
+        )
+    )
 }
 
 subprojects {
