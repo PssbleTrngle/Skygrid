@@ -1,8 +1,10 @@
 name: Build & Analyze
 on:
+  repository_dispatch:
   push:
     paths:
       - '**/*.kt'
+      - '**/*.kts'
       - '**/*.java'
 
 jobs:
