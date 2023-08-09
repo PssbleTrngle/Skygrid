@@ -1,11 +1,12 @@
 package com.possible_triangle.skygrid.world
 
-import com.google.common.base.Suppliers
 import com.mojang.datafixers.util.Function5
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Lifecycle
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.possible_triangle.skygrid.api.SkygridConstants
+import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
+import com.possible_triangle.skygrid.xml.resources.Presets
 import net.minecraft.core.BlockPos
 import net.minecraft.core.MappedRegistry
 import net.minecraft.core.Registry
@@ -38,8 +39,6 @@ import net.minecraft.world.level.levelgen.WorldGenSettings
 import net.minecraft.world.level.levelgen.blending.Blender
 import net.minecraft.world.level.levelgen.structure.StructureSet
 import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement
-import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
-import com.possible_triangle.skygrid.xml.resources.Presets
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
@@ -161,7 +160,8 @@ class SkygridChunkGenerator(
         )
         else null
 
-    fun endPortalPositions(random: Random): List<ChunkPos> = Suppliers.memoize {
+    private var cachedEndPortalPositions: List<ChunkPos>? = null
+    fun endPortalPositions(random: Random): List<ChunkPos> = cachedEndPortalPositions ?: run {
         val strongholdRandom = Random(random.nextLong())
         strongholdSettings?.let {
             val distance = it.distance()
@@ -195,7 +195,9 @@ class SkygridChunkGenerator(
                 ChunkPos(degX, degZ)
             }
         } ?: emptyList()
-    }.get()
+    }.also {
+        cachedEndPortalPositions = it
+    }
 
     override fun fillFromNoise(
         executor: Executor,
@@ -204,7 +206,7 @@ class SkygridChunkGenerator(
         structures: StructureManager,
         chunk: ChunkAccess,
     ): CompletableFuture<ChunkAccess> {
-        val random = randomState.random()
+        val randomFactory = randomState.getOrCreateRandomFactory(ResourceLocation(SkygridConstants.MOD_ID, "generator"))
 
         val gap = config.gap.map { it.block.defaultBlockState() }
         val createCeiling = false //  TODO region.dimensionType().hasCeiling()
@@ -241,12 +243,13 @@ class SkygridChunkGenerator(
             }
         }
 
-        val hasEndPortal = endPortalPositions(random).contains(chunk.pos)
+        val hasEndPortal = endPortalPositions(randomState.random()).contains(chunk.pos)
 
         var generatedPortal = false
         for (x in 0 until 16) for (z in 0 until 16) for (y in minY..(maxY + 2)) {
 
             mutable.set(x, y, z)
+            val random = randomFactory.at(mutable).nextBoolean()
             val isFloor = y == minY
 
             if (config.distance.isBlock(mutable.offset(origin))) {

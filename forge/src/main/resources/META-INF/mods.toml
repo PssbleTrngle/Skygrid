@@ -1,7 +1,7 @@
 modLoader = "kotlinforforge"
 loaderVersion = "[3.9,)"
-license = 'https://github.com/PssbleTrngle/${repository}/blob/1.19.x/LICENSE.txt'
-issueTrackerURL = "https://github.com/PssbleTrngle/${repository}/issues"
+license = 'https://github.com/${repository}/blob/1.19.x/LICENSE.txt'
+issueTrackerURL = "https://github.com/${repository}/issues"
 showAsResourcePack = false
 
 [[mods]]
@@ -25,10 +25,3 @@ showAsResourcePack = false
     versionRange = "[1.19.2,)"
     ordering = "NONE"
     side = "BOTH"
-
-[[dependencies.${mod_id}]]
-    modId="kotlinforforge"
-    mandatory=true
-    versionRange="[3.9.1,)"
-    ordering="NONE"
-    side="BOTH"

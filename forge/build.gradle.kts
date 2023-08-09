@@ -1,14 +1,29 @@
+val kotlin_forge_version: String by extra
 val curios_forge_version: String by extra
 val botania_version: String by extra
 
 forge {
     enableMixins()
 
+    kotlinForgeVersion = null
+
     dependOn(project(":api"))
     dependOn(project(":common"))
 }
 
+// required because of duplicate package export
+configurations.named("minecraftLibrary") {
+    exclude(group = "org.jetbrains", module = "annotations")
+}
+
 dependencies {
+    // required because of duplicate package export by thedarkcolour:kotlinforforge:all
+    implementation("thedarkcolour:kffmod:${kotlin_forge_version}")
+    implementation("thedarkcolour:kfflang:${kotlin_forge_version}")
+    implementation("thedarkcolour:kfflib:${kotlin_forge_version}")
+
+    add("minecraftLibrary", "org.jetbrains.kotlin:kotlin-reflect:${kotlin.coreLibrariesVersion}")
+
     if (!env.isCI) {
         //modRuntimeOnly("vazkii.autoreglib:AutoRegLib:${arl_version}")
 

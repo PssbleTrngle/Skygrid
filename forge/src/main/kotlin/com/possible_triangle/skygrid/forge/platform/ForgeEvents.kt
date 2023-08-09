@@ -9,12 +9,12 @@ import kotlin.reflect.KClass
 
 class ForgeEvents : IEvents {
 
-    private class ForgeEvent<TEvent>(val event: TEvent) : GenericEvent<TEvent>()
+    private class ForgeEvent<TEvent : Any>(val event: TEvent, type: KClass<TEvent>) : GenericEvent<TEvent>(type.java)
 
     override fun <TEvent : Any> createEvent(clazz: KClass<TEvent>): EventInvoker<TEvent> {
         return object : EventInvoker<TEvent> {
             override fun invoke(event: TEvent) {
-                FORGE_BUS.post(ForgeEvent(event))
+                FORGE_BUS.post(ForgeEvent(event, clazz))
             }
 
             override fun addListener(callback: EventCallback<TEvent>) {

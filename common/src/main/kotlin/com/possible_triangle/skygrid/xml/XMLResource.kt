@@ -1,6 +1,5 @@
 package com.possible_triangle.skygrid.xml
 
-import com.google.common.base.Suppliers
 import com.possible_triangle.skygrid.SkygridMod.LOGGER
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.api.xml.DeserializationException
@@ -22,7 +21,7 @@ abstract class XMLResource<T>(val path: String, private val serializer: () -> KS
     @ExperimentalXmlUtilApi
     @ExperimentalSerializationApi
     companion object {
-        val LOADER: StringFormat get() = Suppliers.memoize(::createXMLModule).get()
+        val LOADER: StringFormat by lazy(::createXMLModule)
 
         private val RESOURCES = arrayListOf<XMLResource<*>>()
 

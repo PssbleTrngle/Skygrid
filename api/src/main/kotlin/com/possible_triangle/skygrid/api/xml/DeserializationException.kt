@@ -1,10 +1,10 @@
 package com.possible_triangle.skygrid.api.xml
 
-import nl.adaptivity.xmlutil.serialization.XmlSerialException
+import kotlinx.serialization.SerializationException
 
 class DeserializationException(
     val location: String?,
     val field: String,
     val candidates: Collection<Any> = emptyList(),
 ) :
-    XmlSerialException("Unknown field $field at $location")
+    SerializationException("Unknown field $field at $location")

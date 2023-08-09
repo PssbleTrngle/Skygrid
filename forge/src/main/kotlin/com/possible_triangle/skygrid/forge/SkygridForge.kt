@@ -32,6 +32,8 @@ object SkygridForge {
     val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID)!!
 
     init {
+        nl.adaptivity.xmlutil.serialization.XML.defaultInstance
+
         ForgeConfig.register()
         SkygridMod.init()
 
