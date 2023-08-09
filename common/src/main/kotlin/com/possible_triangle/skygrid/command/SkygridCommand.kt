@@ -27,9 +27,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
-import kotlin.random.Random
 
 inline fun <T> tryOr(supplier: () -> T, default: () -> T): T {
     return try {
@@ -66,25 +66,36 @@ object SkygridCommand {
             val executor: Command<CommandSourceStack> = Command { generateRange(it, gen(it)) }
             val range = argument("end", BlockPosArgument.blockPos()).executes(executor).then(
 
-                argument("snap", BoolArgumentType.bool()).executes(executor).then(literal("random").executes(executor)
-                    .then(argument("distance", IntegerArgumentType.integer(1)).executes(executor)))
-                    .then(argument("seed", LongArgumentType.longArg()).executes(executor)
-                        .then(argument("distance", IntegerArgumentType.integer(1)).executes(executor)))
+                argument("snap", BoolArgumentType.bool()).executes(executor).then(
+                    literal("random").executes(executor)
+                        .then(argument("distance", IntegerArgumentType.integer(1)).executes(executor))
+                )
+                    .then(
+                        argument("seed", LongArgumentType.longArg()).executes(executor)
+                            .then(argument("distance", IntegerArgumentType.integer(1)).executes(executor))
+                    )
 
             )
             singleBlock(gen).then(range)
         }
 
-        dispatcher.register(literal(SkygridConstants.MOD_ID).then(literal("generate")
-            .then(literal("preset").then(
-                resourceArgument("preset", Presets).then(singleBlock {
-                    val key = ResourceLocationArgument.getId(it, "preset")
-                    Presets[key] ?: throw UNKNOWN_PRESET.create(key)
-                })))
-            .then(resourceArgument("config", DimensionConfigs).then(range {
-                val key = ResourceLocationArgument.getId(it, "config")
-                DimensionConfigs[key] ?: throw UNKNOWN_CONFIG.create(key)
-            }))))
+        dispatcher.register(
+            literal(SkygridConstants.MOD_ID).then(
+                literal("generate")
+                    .then(
+                        literal("preset").then(
+                            resourceArgument("preset", Presets).then(singleBlock {
+                                val key = ResourceLocationArgument.getId(it, "preset")
+                                Presets[key] ?: throw UNKNOWN_PRESET.create(key)
+                            })
+                        )
+                    )
+                    .then(resourceArgument("config", DimensionConfigs).then(range {
+                        val key = ResourceLocationArgument.getId(it, "config")
+                        DimensionConfigs[key] ?: throw UNKNOWN_CONFIG.create(key)
+                    }))
+            )
+        )
     }
 
     private fun access(origin: BlockPos, level: ServerLevel): BlockAccess {
@@ -105,6 +116,9 @@ object SkygridCommand {
         }
     }
 
+    private fun CommandContext<CommandSourceStack>.random() =
+        tryOr({ LongArgumentType.getLong(this, "seed").let(RandomSource::create) }, RandomSource::create)
+
     private fun generateRange(
         ctx: CommandContext<CommandSourceStack>,
         generator: DimensionConfig,
@@ -114,7 +128,7 @@ object SkygridCommand {
         val level = ctx.source.level
 
         val snap = tryOr({ BoolArgumentType.getBool(ctx, "snap") }) { false }
-        val random = tryOr({ LongArgumentType.getLong(ctx, "seed").let(::Random) }, { Random })
+        val random = ctx.random()
         val distance =
             tryOr({ IntegerArgumentType.getInteger(ctx, "distance").let(Distance::of) }) { generator.distance }
 
@@ -132,7 +146,7 @@ object SkygridCommand {
         val generated = BlockPos.betweenClosed(start, end)
             .map { BlockPos(it) }
             .filter { distance.isBlock(it.subtract(origin)) }
-            .onEach { generator.generate(random, access(it, level), ) }
+            .onEach { generator.generate(random, access(it, level)) }
 
         val changed = replaced + generated
         return changed.onEach { level.blockUpdated(it, level.getBlockState(it).block) }.count()
@@ -140,8 +154,8 @@ object SkygridCommand {
 
     private fun generate(ctx: CommandContext<CommandSourceStack>, generator: Generator<IBlockAccess>): Int {
         val pos = BlockPosArgument.getLoadedBlockPos(ctx, "start")
-        val random = tryOr({ LongArgumentType.getLong(ctx, "seed").let(::Random) }, { Random })
-        generator.generate(random, access(pos, ctx.source.level), )
+        val random = ctx.random()
+        generator.generate(random, access(pos, ctx.source.level))
 
         ctx.source.level.blockUpdated(pos, ctx.source.level.getBlockState(pos).block)
 

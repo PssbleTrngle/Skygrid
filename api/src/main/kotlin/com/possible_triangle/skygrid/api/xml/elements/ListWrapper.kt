@@ -3,7 +3,7 @@ package com.possible_triangle.skygrid.api.xml.elements
 import com.possible_triangle.skygrid.api.WeightedList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlin.random.Random
+import net.minecraft.util.RandomSource
 
 @Serializable
 data class ListWrapper<T : WeightedEntry>(
@@ -30,7 +30,7 @@ data class ListWrapper<T : WeightedEntry>(
         return weighted.isNotEmpty()
     }
 
-    fun random(random: Random): T {
+    fun random(random: RandomSource): T {
         return weighted.random(random)
     }
 

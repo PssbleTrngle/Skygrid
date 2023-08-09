@@ -1,7 +1,7 @@
 package com.possible_triangle.skygrid.api.world
 
-import kotlin.random.Random
+import net.minecraft.util.RandomSource
 
 fun interface Generator<B : IBlockAccess> {
-    fun generate(random: Random, access: B): Boolean
+    fun generate(random: RandomSource, access: B): Boolean
 }

@@ -1,6 +1,7 @@
 package com.possible_triangle.skygrid.api.xml.elements.providers
 
 import com.possible_triangle.skygrid.api.extensions.keyFrom
+import com.possible_triangle.skygrid.api.extensions.random
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
 import com.possible_triangle.skygrid.api.xml.elements.Extra
@@ -11,9 +12,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagKey
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
-import kotlin.random.Random
 
 @Serializable
 @SerialName("tag")
@@ -58,7 +59,7 @@ data class Tag(
         return this.blocks.isNotEmpty()
     }
 
-    override fun base(random: Random): Block {
+    override fun base(random: RandomSource): Block {
         return if (this.random) this.blocks.random(random)
         else this.blocks.first()
     }

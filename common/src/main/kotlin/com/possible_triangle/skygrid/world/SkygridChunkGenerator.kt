@@ -2,21 +2,19 @@ package com.possible_triangle.skygrid.world
 
 import com.mojang.datafixers.util.Function5
 import com.mojang.serialization.Codec
-import com.mojang.serialization.Lifecycle
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
 import com.possible_triangle.skygrid.xml.resources.Presets
 import net.minecraft.core.BlockPos
-import net.minecraft.core.MappedRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.SectionPos
 import net.minecraft.data.BuiltinRegistries
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.WorldGenRegion
 import net.minecraft.tags.BiomeTags
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.LevelHeightAccessor
 import net.minecraft.world.level.NoiseColumn
@@ -29,13 +27,10 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
 import net.minecraft.world.level.chunk.ChunkGenerator
-import net.minecraft.world.level.dimension.BuiltinDimensionTypes
-import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.level.dimension.LevelStem
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.RandomState
-import net.minecraft.world.level.levelgen.WorldGenSettings
 import net.minecraft.world.level.levelgen.blending.Blender
 import net.minecraft.world.level.levelgen.structure.StructureSet
 import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement
@@ -43,13 +38,11 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.math.*
-import kotlin.random.Random
 
 class SkygridChunkGenerator(
     biomeSource: BiomeSource,
     structures: Registry<StructureSet>,
     private val configKey: String,
-    private val seed: Long?,
     private val endPortals: Boolean,
 ) : ChunkGenerator(structures, Optional.empty(), biomeSource) {
 
@@ -57,7 +50,6 @@ class SkygridChunkGenerator(
         fun create(
             dimension: ResourceKey<LevelStem>?,
             biomeSource: BiomeSource? = null,
-            seed: Long? = null,
         ): ChunkGenerator {
             val biomes = BuiltinRegistries.BIOME
             val structures = BuiltinRegistries.STRUCTURE_SETS
@@ -66,53 +58,9 @@ class SkygridChunkGenerator(
                 biomeSource ?: FixedBiomeSource(biomes.getHolderOrThrow(Biomes.THE_VOID)),
                 structures,
                 config.toString(),
-                seed,
                 dimension == LevelStem.OVERWORLD
             )
         }
-
-        fun createSettings(
-            seed: Long,
-            bonusChest: Boolean,
-        ): WorldGenSettings {
-            val dimensions = MappedRegistry(Registry.LEVEL_STEM_REGISTRY, Lifecycle.experimental(), null)
-            val biomes = BuiltinRegistries.BIOME
-
-            fun register(
-                stem: ResourceKey<LevelStem>,
-                dimension: ResourceKey<DimensionType>,
-                biomeSource: BiomeSource,
-            ) {
-                val generator = create(stem, biomeSource, seed)
-                dimensions.register(
-                    stem, LevelStem(
-                        BuiltinRegistries.DIMENSION_TYPE.getHolderOrThrow(dimension),
-                        generator
-                    ), Lifecycle.stable()
-                )
-            }
-
-            register(
-                LevelStem.OVERWORLD,
-                BuiltinDimensionTypes.OVERWORLD,
-                FixedBiomeSource(biomes.getHolderOrThrow(Biomes.PLAINS))
-            )
-
-            register(
-                LevelStem.NETHER,
-                BuiltinDimensionTypes.NETHER,
-                FixedBiomeSource(biomes.getHolderOrThrow(Biomes.NETHER_WASTES))
-            )
-
-            register(
-                LevelStem.END,
-                BuiltinDimensionTypes.END,
-                FixedBiomeSource(biomes.getHolderOrThrow(Biomes.THE_END))
-            )
-
-            return WorldGenSettings(seed, true, bonusChest, dimensions)
-        }
-
 
         private val BEDROCK = Blocks.BEDROCK.defaultBlockState()
 
@@ -121,17 +69,16 @@ class SkygridChunkGenerator(
                 builder.group(
                     BiomeSource.CODEC.fieldOf("biome_source").forGetter { it.biomeSource },
                     Codec.STRING.fieldOf("config").forGetter { it.configKey },
-                    Codec.LONG.optionalFieldOf("seed").forGetter { Optional.ofNullable(it.seed) },
+                    Codec.LONG.optionalFieldOf("seed").forGetter { Optional.empty() },
                     Codec.BOOL.optionalFieldOf("endPortals").forGetter { Optional.of(it.endPortals) },
                 )
             ).apply(
                 builder,
-                builder.stable(Function5 { structures, source, key, seed, endPortals ->
+                builder.stable(Function5 { structures, source, key, _, endPortals ->
                     SkygridChunkGenerator(
                         source,
                         structures,
                         key,
-                        seed.orElse(null),
                         endPortals.orElse(false),
                     )
                 }),
@@ -142,10 +89,6 @@ class SkygridChunkGenerator(
     override fun codec(): Codec<out ChunkGenerator> {
         return CODEC
     }
-
-    //private val random = seed?.let { Random(it) } ?: Random
-    //private val strongholdRandom = Random(random.nextLong())
-    private fun RandomState.random() = Random(legacyLevelSeed())
 
     private val config
         get() = DimensionConfigs[ResourceLocation(configKey)] ?: DimensionConfigs.DEFAULT
@@ -161,8 +104,7 @@ class SkygridChunkGenerator(
         else null
 
     private var cachedEndPortalPositions: List<ChunkPos>? = null
-    fun endPortalPositions(random: Random): List<ChunkPos> = cachedEndPortalPositions ?: run {
-        val strongholdRandom = Random(random.nextLong())
+    fun endPortalPositions(random: RandomSource): List<ChunkPos> = cachedEndPortalPositions ?: run {
         strongholdSettings?.let {
             val distance = it.distance()
             val count = it.count()
@@ -170,7 +112,7 @@ class SkygridChunkGenerator(
 
             var k = 0
             var j = 0
-            var baseDegree = strongholdRandom.nextDouble() * Math.PI * 2.0
+            var baseDegree = random.nextDouble() * Math.PI * 2.0
 
             (0 until count).map {
                 val degFactor =
@@ -206,7 +148,10 @@ class SkygridChunkGenerator(
         structures: StructureManager,
         chunk: ChunkAccess,
     ): CompletableFuture<ChunkAccess> {
-        val randomFactory = randomState.getOrCreateRandomFactory(ResourceLocation(SkygridConstants.MOD_ID, "generator"))
+        val positionalRandom =
+            randomState.getOrCreateRandomFactory(ResourceLocation(SkygridConstants.MOD_ID, "generator"))
+        val random = positionalRandom.at(chunk.pos.x, 0, chunk.pos.z)
+        val strongholdRandom = RandomSource.create(randomState.legacyLevelSeed())
 
         val gap = config.gap.map { it.block.defaultBlockState() }
         val createCeiling = false //  TODO region.dimensionType().hasCeiling()
@@ -218,38 +163,14 @@ class SkygridChunkGenerator(
 
         val origin = BlockPos(chunk.pos.minBlockX, -minY, chunk.pos.minBlockZ)
 
-        val access = object : BlockAccess(useBarrier = !gap.isPresent) {
-            override fun setBlock(state: BlockState, pos: BlockPos) {
-                val at = pos.offset(mutable)
-                chunk.setBlockState(at, state, false)
-            }
+        val access = GeneratorBlockAccess(config, chunk, mutable, origin)
 
-            override fun canReplace(pos: BlockPos): Boolean {
-                val state = chunk.getBlockState(pos.offset(mutable))
-                return gap.map {
-                    state.`is`(it.block)
-                }.orElseGet {
-                    state.isAir
-                }
-            }
-
-            override fun setNBT(pos: BlockPos, nbt: CompoundTag) {
-                with(pos.offset(mutable).offset(origin.x, 0, origin.z)) {
-                    nbt.putInt("x", x)
-                    nbt.putInt("y", y)
-                    nbt.putInt("z", z)
-                }
-                chunk.setBlockEntityNbt(nbt)
-            }
-        }
-
-        val hasEndPortal = endPortalPositions(randomState.random()).contains(chunk.pos)
+        val hasEndPortal = endPortalPositions(strongholdRandom).contains(chunk.pos)
 
         var generatedPortal = false
         for (x in 0 until 16) for (z in 0 until 16) for (y in minY..(maxY + 2)) {
 
             mutable.set(x, y, z)
-            val random = randomFactory.at(mutable).nextBoolean()
             val isFloor = y == minY
 
             if (config.distance.isBlock(mutable.offset(origin))) {

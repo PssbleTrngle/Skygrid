@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Registry
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
-import kotlin.random.Random
 
 @Serializable
 @SerialName("side")
@@ -24,7 +24,7 @@ data class Side(
         return Direction.byName(on) != null && offset > 0
     }
 
-    override fun offset(pos: BlockPos, random: Random): BlockPos {
+    override fun offset(pos: BlockPos, random: RandomSource): BlockPos {
         val direction = Direction.byName(on) ?: throw NullPointerException("Unknown direction '$on'")
         return pos.relative(direction, offset)
     }

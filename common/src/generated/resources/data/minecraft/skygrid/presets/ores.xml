@@ -2,8 +2,9 @@
    <list>
       <list weight="20.0" name="ores">
          <except>
-            <tag id="nether_ores" mod="skygrid"/>
+            <tag id="foreign_ores" mod="skygrid"/>
             <name pattern="nether_"/>
+            <name pattern="end_"/>
          </except>
          <tag id="coal_ores" weight="10.0"/>
          <tag id="iron_ores" weight="8.0"/>

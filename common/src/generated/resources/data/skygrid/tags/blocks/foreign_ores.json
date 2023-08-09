@@ -4,6 +4,10 @@
     {
       "id": "#forge:ores_in_ground/netherrack",
       "required": false
+    },
+    {
+      "id": "#forge:ores_in_ground/endstone",
+      "required": false
     }
   ]
 }

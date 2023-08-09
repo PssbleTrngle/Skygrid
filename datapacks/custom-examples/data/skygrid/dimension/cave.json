@@ -1,22 +1,5 @@
 {
-  "type": {
-    "ultrawarm": false,
-    "natural": true,
-    "coordinate_scale": 1.0,
-    "piglin_safe": false,
-    "respawn_anchor_works": true,
-    "bed_works": false,
-    "has_raids": false,
-    "has_skylight": false,
-    "has_ceiling": true,
-    "fixed_time": 18000,
-    "ambient_light": 0.0,
-    "logical_height": 256,
-    "infiniburn": "infiniburn_overworld",
-    "effects": "minecraft:overworld",
-    "min_y": -64,
-    "height": 256
-  },
+  "type": "skygrid:cave",
   "generator": {
     "type": "skygrid:skygrid",
     "config": "skygrid:cave",

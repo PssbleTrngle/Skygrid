@@ -4,13 +4,13 @@ import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.random.Random
+import net.minecraft.util.RandomSource
 
 @Serializable
 @SerialName("preset")
 data class Preset(val provider: BlockProvider) : Generator<IBlockAccess> {
 
-    override fun generate(random: Random, access: IBlockAccess): Boolean {
+    override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
         return provider.generate(random, access, )
     }
 

@@ -1,17 +1,18 @@
 package com.possible_triangle.skygrid.api.xml.elements.extras
 
+import com.possible_triangle.skygrid.api.extensions.random
+import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
+import com.possible_triangle.skygrid.api.xml.elements.Extra
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.*
 import net.minecraft.core.Registry
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
-import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
-import com.possible_triangle.skygrid.api.xml.elements.Extra
-import kotlin.random.Random
 
 @Serializable
 @SerialName("cardinal")
@@ -27,7 +28,7 @@ data class Cardinal(
         val DIRECTIONS = listOf(SOUTH, WEST, NORTH, EAST, )
     }
 
-    private fun getDirection(random: Random): Direction {
+    private fun getDirection(random: RandomSource): Direction {
         return DIRECTIONS.random(random)
     }
 
@@ -35,14 +36,14 @@ data class Cardinal(
         return offset > 0
     }
 
-    override fun transform(state: BlockState, random: Random): BlockState {
+    override fun transform(state: BlockState, random: RandomSource): BlockState {
         if(!rotate) return state
         val direction = getDirection(random)
         val rotations = DIRECTIONS.indexOf(direction)
         return state.rotate(Rotation.values()[rotations % 4])
     }
 
-    override fun offset(pos: BlockPos, random: Random): BlockPos {
+    override fun offset(pos: BlockPos, random: RandomSource): BlockPos {
         val direction = getDirection(random)
         return pos.relative(direction, offset)
     }

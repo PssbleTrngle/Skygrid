@@ -6,8 +6,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
-import kotlin.random.Random
 
 @Serializable
 @SerialName("fallback")
@@ -34,7 +34,7 @@ data class Fallback(
         return true
     }
 
-    override fun get(random: Random): BlockProvider {
+    override fun get(random: RandomSource): BlockProvider {
         return provider
     }
 

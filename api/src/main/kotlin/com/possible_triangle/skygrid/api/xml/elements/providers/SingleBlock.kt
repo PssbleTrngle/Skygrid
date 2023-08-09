@@ -10,8 +10,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
-import kotlin.random.Random
 
 @Serializable
 @SerialName("block")
@@ -33,7 +33,7 @@ data class SingleBlock(
     override val name: String
         get() = key.toString()
 
-    override fun base(random: Random): Block {
+    override fun base(random: RandomSource): Block {
         return block
     }
 

@@ -5,6 +5,10 @@
     {
       "id": "#forge:barrels/wooden",
       "required": false
+    },
+    {
+      "id": "#c:wooden_barrels",
+      "required": false
     }
   ]
 }

@@ -1,21 +1,5 @@
 {
-  "type": {
-    "ultrawarm": false,
-    "natural": true,
-    "coordinate_scale": 1.0,
-    "piglin_safe": false,
-    "respawn_anchor_works": false,
-    "bed_works": true,
-    "has_raids": false,
-    "has_skylight": true,
-    "has_ceiling": false,
-    "ambient_light": 1.0,
-    "logical_height": 256,
-    "infiniburn": "infiniburn_overworld",
-    "effects": "minecraft:overworld",
-    "min_y": -64,
-    "height": 256
-  },
+  "type": "skygrid:aqua",
   "generator": {
     "type": "skygrid:skygrid",
     "config": "skygrid:aqua",

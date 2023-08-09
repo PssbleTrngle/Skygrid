@@ -1,8 +1,8 @@
 package com.possible_triangle.skygrid.api
 
 import com.possible_triangle.skygrid.api.xml.elements.WeightedEntry
+import net.minecraft.util.RandomSource
 import java.util.*
-import kotlin.random.Random
 
 class WeightedList<T : WeightedEntry>(pairs: List<T>): Collection<T> {
 
@@ -21,7 +21,7 @@ class WeightedList<T : WeightedEntry>(pairs: List<T>): Collection<T> {
         map[total] = element
     }
 
-    fun random(random: Random): T {
+    fun random(random: RandomSource): T {
         if (isEmpty()) throw IllegalArgumentException("WeightedList is empty")
         val value = random.nextDouble() * total
         return map.higherEntry(value)?.value ?: throw NullPointerException("No entry found")

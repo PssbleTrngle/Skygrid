@@ -5,6 +5,10 @@
     {
       "id": "#forge:chests/wooden",
       "required": false
+    },
+    {
+      "id": "#c:wooden_chests",
+      "required": false
     }
   ]
 }

@@ -7,9 +7,9 @@ import com.possible_triangle.skygrid.api.xml.Validating
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import kotlin.random.Random
 
 @Serializable
 abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validating {
@@ -43,9 +43,9 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
                 filters: List<FilterOperator>,
             ): Boolean = parent.internalValidate(blocks, references, filters)
 
-            override fun base(random: Random): Block = parent.base(random)
+            override fun base(random: RandomSource): Block = parent.base(random)
 
-            override fun generateBase(random: Random, chunk: IBlockAccess): Boolean = parent.generateBase(random, chunk)
+            override fun generateBase(random: RandomSource, chunk: IBlockAccess): Boolean = parent.generateBase(random, chunk)
         }
 
         stripped.validExtras = emptyList()
@@ -70,24 +70,24 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
         return internalValidate(blocks, references, additionalFilters + filters)
     }
 
-    internal abstract fun base(random: Random): Block
+    internal abstract fun base(random: RandomSource): Block
 
-    private fun getState(random: Random): BlockState {
+    private fun getState(random: RandomSource): BlockState {
         return transformers.fold(base(random).defaultBlockState()) { state, transformer ->
             transformer.apply(state, random)
         }
     }
 
-    protected open fun generateBase(random: Random, chunk: IBlockAccess): Boolean {
+    protected open fun generateBase(random: RandomSource, chunk: IBlockAccess): Boolean {
         val state = getState(random)
         return chunk.set(state)
     }
 
-    final override fun generate(random: Random, access: IBlockAccess): Boolean {
+    final override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
         val sharedSeed = random.nextLong()
         return generateBase(random, access).apply {
             if (this) validExtras.forEach {
-                it.generate(if (it.shared) Random(sharedSeed) else random, access)
+                it.generate(if (it.shared) RandomSource.create(sharedSeed) else random, access)
             }
         }
     }

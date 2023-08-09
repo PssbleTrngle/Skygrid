@@ -9,14 +9,14 @@ import com.possible_triangle.skygrid.xml.ReferenceContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import kotlin.random.Random
 import kotlin.test.assertEquals
 
 object WorldMock {
 
-    private val random = Random
+    private val random = RandomSource.create()
 
     private val blocks = hashMapOf<BlockPos, BlockState>()
     private val nbt = hashMapOf<BlockPos, CompoundTag>()

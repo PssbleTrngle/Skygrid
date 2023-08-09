@@ -4,6 +4,10 @@
     {
       "id": "#forge:glass/silica",
       "required": false
+    },
+    {
+      "id": "#c:glass_blocks",
+      "required": false
     }
   ]
 }

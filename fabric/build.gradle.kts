@@ -10,7 +10,7 @@ fabric {
 }
 
 dependencies {
-    modRuntimeOnly("maven.modrinth:create-fabric:${create_fabric_version}")
+    //modRuntimeOnly("maven.modrinth:create-fabric:${create_fabric_version}")
 }
 
 uploadToCurseforge()

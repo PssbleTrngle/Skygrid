@@ -1,6 +1,7 @@
 package com.possible_triangle.skygrid.api.extensions
 
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 
 fun Collection<BlockProvider>.flat(): List<Pair<Block, Double>> {
@@ -12,4 +13,9 @@ fun Collection<BlockProvider>.flat(): List<Pair<Block, Double>> {
         }
         extras + provider.flat().map { it.first to it.second * probability }
     }
+}
+
+fun <T> Collection<T>.random(random: RandomSource): T {
+    if (isEmpty()) throw NoSuchElementException("Collection is empty.")
+    return elementAt(random.nextInt(size))
 }

@@ -12,6 +12,14 @@
     {
       "id": "#forge:chests",
       "required": false
+    },
+    {
+      "id": "#c:barrels",
+      "required": false
+    },
+    {
+      "id": "#c:chests",
+      "required": false
     }
   ]
 }

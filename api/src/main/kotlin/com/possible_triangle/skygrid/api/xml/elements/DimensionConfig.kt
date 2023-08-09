@@ -13,6 +13,7 @@ import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.tags.TagKey
+import net.minecraft.util.RandomSource
 import net.minecraft.util.random.SimpleWeightedRandomList
 import net.minecraft.world.level.SpawnData
 import net.minecraft.world.level.block.Block
@@ -21,7 +22,6 @@ import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.util.*
-import kotlin.random.Random
 
 
 @Serializable
@@ -40,7 +40,7 @@ data class DimensionConfig(
     @Transient
     lateinit var gap: Optional<SingleBlock>
 
-    override fun generate(random: Random, access: IBlockAccess): Boolean {
+    override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
         val generateLoot = loot.isValid()
         val fillSpawners = mobs.isValid()
 
