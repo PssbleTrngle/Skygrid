@@ -4,7 +4,7 @@
          <block id="lava" weight="0.5"/>
          <block id="blood" mod="biomesoplenty"/>
       </list>
-      <list weight="5.0" name="ground">
+      <list name="ground">
          <block id="netherrack">
             <side on="up" probability="0.1">
                <block id="burning_blossom" mod="biomesoplenty"/>
@@ -58,6 +58,22 @@
                <block id="flesh_tendons" mod="biomesoplenty"/>
             </side>
          </tag>
+         <block id="bone_block" weight="0.1">
+            <cycle key="axis"/>
+         </block>
+         <block id="brimstone" mod="biomesoplenty">
+            <side on="up">
+               <block id="brimstone_bud" mod="biomesoplenty" weight="2.0"/>
+               <block id="brimstone_fumarole" mod="biomesoplenty"/>
+               <block id="brimstone_cluster" mod="biomesoplenty">
+                  <side on="up">
+                     <block id="brimstone_cluster" mod="biomesoplenty"/>
+                  </side>
+                  <set key="half" value="bottom"/>
+                  <set key="half" value="top"/>
+               </block>
+            </side>
+         </block>
       </list>
       <list weight="0.2" name="ores">
          <block id="nether_quartz_ore"/>

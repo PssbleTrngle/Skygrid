@@ -5,6 +5,58 @@
          <block id="prismarine_chest" mod="quark"/>
          <block id="chest"/>
       </fallback>
+      <list weight="0.3" name="tropicraft plants">
+         <list>
+            <side on="up" probability="0.5">
+               <block id="eel_seagrass" mod="tropicraft"/>
+            </side>
+            <block id="matted_eel_seagrass" mod="tropicraft"/>
+            <block id="eel_seagrass_block" mod="tropicraft"/>
+         </list>
+         <list>
+            <side on="up" probability="0.5">
+               <block id="fern_seagrass" mod="tropicraft"/>
+            </side>
+            <block id="matted_fern_seagrass" mod="tropicraft"/>
+            <block id="fern_seagrass_block" mod="tropicraft"/>
+         </list>
+         <list>
+            <side on="up" probability="0.5">
+               <block id="sickle_seagrass" mod="tropicraft"/>
+            </side>
+            <block id="matted_sickle_seagrass" mod="tropicraft"/>
+            <block id="sickle_seagrass_block" mod="tropicraft"/>
+         </list>
+         <list>
+            <side on="up" probability="0.5">
+               <block id="noodle_seagrass" mod="tropicraft"/>
+            </side>
+            <block id="matted_noodle_seagrass" mod="tropicraft"/>
+            <block id="noodle_seagrass_block" mod="tropicraft"/>
+         </list>
+      </list>
+      <list weight="0.1" name="building">
+         <list name="kelpy">
+            <block id="kelpy_cobblestone" mod="upgrade_aquatic"/>
+         </list>
+         <list weight="0.5" name="wood">
+            <cycle key="axis"/>
+            <block id="driftwood_log" mod="upgrade_aquatic"/>
+            <block id="river_log" mod="upgrade_aquatic"/>
+         </list>
+         <list weight="0.5" name="coralstone">
+            <cycle key="axis"/>
+            <block id="coralstone" mod="upgrade_aquatic"/>
+            <block id="chiseled_coralstone" mod="upgrade_aquatic"/>
+         </list>
+      </list>
+      <list weight="0.05" name="compressed">
+         <block id="kelp_block" mod="upgrade_aquatic"/>
+         <block id="blue_pickerelweed_block" mod="upgrade_aquatic"/>
+         <block id="purple_pickerelweed_block" mod="upgrade_aquatic"/>
+         <block id="tooth_block" mod="upgrade_aquatic" weight="0.1"/>
+         <block id="scute_block" mod="upgrade_aquatic" weight="0.2"/>
+      </list>
    </blocks>
    <gap id="water"/>
 </dimension>

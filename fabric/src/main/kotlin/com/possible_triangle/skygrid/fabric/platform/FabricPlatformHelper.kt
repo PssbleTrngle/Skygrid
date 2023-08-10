@@ -7,6 +7,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
+import java.util.stream.Stream
 import kotlin.properties.ReadOnlyProperty
 
 class FabricPlatformHelper : IPlatformHelper {
@@ -26,9 +27,9 @@ class FabricPlatformHelper : IPlatformHelper {
     override val isDevelopmentEnvironment
         get() = FabricLoader.getInstance().isDevelopmentEnvironment
 
-    override fun getTags(block: Block): Collection<ResourceLocation> {
+    override fun getTags(block: Block): Stream<ResourceLocation> {
         // TODO
-        return emptyList()
+        return Stream.empty()
     }
 
     override fun createBlock(id: String, block: () -> Block): ReadOnlyProperty<Any?, Block> {

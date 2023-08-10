@@ -1,5 +1,9 @@
 package com.possible_triangle.skygrid.datagen.dimensions
 
+import com.possible_triangle.skygrid.datagen.CompatMods.BOP
+import com.possible_triangle.skygrid.datagen.CompatMods.BOTANIA
+import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
+import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
@@ -9,9 +13,10 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.SkullBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
@@ -28,17 +33,17 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
             blocks {
                 list("fluids", weight = 0.1) {
                     block(Blocks.LAVA, weight = 0.5)
-                    block("blood", mod = "biomesoplenty")
+                    block("blood", mod = BOP)
                 }
 
-                list("ground", weight = 5.0) {
+                list("ground") {
                     block(Blocks.NETHERRACK) {
                         side(UP, probability = 0.1) {
-                            block("burning_blossom", mod = "biomesoplenty")
-                            block("hellbark_sapling", mod = "biomesoplenty")
+                            block("burning_blossom", mod = BOP)
+                            block("hellbark_sapling", mod = BOP)
                             block(Blocks.CRIMSON_FUNGUS)
                             block(Blocks.WARPED_FUNGUS)
-                            block("bramble", mod = "biomesoplenty") {
+                            block("bramble", mod = BOP) {
                                 property(BlockStateProperties.DOWN, true)
                             }
                         }
@@ -53,7 +58,7 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                     block(Blocks.BASALT, weight = 0.5) { cycle(AXIS) }
                     block(Blocks.BLACKSTONE) {
                         side(UP, probability = 0.2) {
-                            block("blackstone_spines", mod = "biomesoplenty")
+                            block("blackstone_spines", mod = BOP)
                         }
                     }
 
@@ -80,9 +85,27 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                         }
                     }
 
-                    tag("flesh", mod = "biomesoplenty") {
+                    tag("flesh", mod = BOP) {
                         side(DOWN) {
-                            block("flesh_tendons", mod = "biomesoplenty")
+                            block("flesh_tendons", mod = BOP)
+                        }
+                    }
+
+                    block(Blocks.BONE_BLOCK, weight = 0.1) {
+                        cycle(AXIS)
+                    }
+
+                    block("brimstone", mod = BOP, weight = 0.2) {
+                        side(UP) {
+                            block("brimstone_bud", mod = BOP, weight = 2.0)
+                            block("brimstone_fumarole", mod = BOP)
+                            block("brimstone_cluster", mod = BOP) {
+                                property(DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER)
+                                side(UP) {
+                                    property(DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER)
+                                    block("brimstone_cluster", mod = BOP)
+                                }
+                            }
                         }
                     }
                 }
@@ -102,7 +125,7 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                         cycle(AXIS)
                         block(Blocks.WARPED_STEM)
                         block(Blocks.CRIMSON_STEM)
-                        block("hellbark_log", mod = "biomesoplenty")
+                        block("hellbark_log", mod = BOP)
                     }
                     list("leaves") {
                         block(Blocks.NETHER_WART_BLOCK)
@@ -114,25 +137,25 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                 }
 
                 block(Blocks.GLOWSTONE, weight = 0.1)
-                block("rose_quartz_block", mod = "biomesoplenty", weight = 0.05).cluster {
-                    block("rose_quartz_cluster", mod = "biomesoplenty")
+                block("rose_quartz_block", mod = BOP, weight = 0.05).cluster {
+                    block("rose_quartz_cluster", mod = BOP)
                 }
 
-                block(Blocks.SPAWNER, weight = 0.05)
+                block(Blocks.SPAWNER, weight = 0.01)
 
                 list("loot", weight = 0.02) {
-                    block("warped_chest", mod = "quark")
-                    block("crimson_chest", mod = "quark")
+                    block("warped_chest", mod = QUARK)
+                    block("crimson_chest", mod = QUARK)
                     fallback {
-                        block("nether_brick_chest", mod = "quark")
+                        block("nether_brick_chest", mod = QUARK)
                         block(Blocks.CHEST)
                     }
                 }
 
                 list("compressed", weight = 0.01) {
-                    block("nether_wart_sack", mod = "quark")
-                    block("blaze_lantern", mod = "quark")
-                    block("blaze_block", mod = "botania", weight = 0.1)
+                    block("nether_wart_sack", mod = QUARK)
+                    block("blaze_lantern", mod = QUARK)
+                    block("blaze_block", mod = BOTANIA, weight = 0.1)
                 }
 
                 list("building", weight = 0.1) {
@@ -142,7 +165,7 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                     list("workstations", weight = 0.1) {
                         block(Blocks.RESPAWN_ANCHOR, weight = 0.5)
                         block(Blocks.SMITHING_TABLE)
-                        block("blackstone_furnace", mod = "quark")
+                        block("blackstone_furnace", mod = QUARK)
                     }
 
                     list("quartz") {
@@ -162,10 +185,10 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                     }
 
                     list("soul sandstone") {
-                        block("soul_sandstone", mod = "quark")
-                        block("chiseled_soul_sandstone", mod = "quark")
-                        block("cut_soul_sandstone", mod = "quark")
-                        block("soul_sandstone_bricks", mod = "quark")
+                        block("soul_sandstone", mod = QUARK)
+                        block("chiseled_soul_sandstone", mod = QUARK)
+                        block("cut_soul_sandstone", mod = QUARK)
+                        block("soul_sandstone_bricks", mod = QUARK)
                     }
 
                     list("nether bricks") {
@@ -175,7 +198,7 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                             }
                         }
                         block(Blocks.NETHER_BRICKS, weight = 10.0)
-                        block("blue_nether_bricks", mod = "quark")
+                        block("blue_nether_bricks", mod = QUARK)
                         block(Blocks.CRACKED_NETHER_BRICKS)
                         block(Blocks.CHISELED_NETHER_BRICKS)
                         block(Blocks.RED_NETHER_BRICKS)

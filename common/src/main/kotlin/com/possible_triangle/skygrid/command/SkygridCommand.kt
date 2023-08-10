@@ -7,7 +7,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.LongArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
-import com.possible_triangle.skygrid.api.SkygridConstants
+import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
 import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
@@ -16,18 +16,23 @@ import com.possible_triangle.skygrid.world.BlockAccess
 import com.possible_triangle.skygrid.xml.XMLResource
 import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
 import com.possible_triangle.skygrid.xml.resources.Presets
+import net.minecraft.ChatFormatting
+import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.commands.arguments.blocks.BlockInput
+import net.minecraft.commands.arguments.blocks.BlockStateArgument
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 
@@ -47,9 +52,12 @@ object SkygridCommand {
     private val UNKNOWN_PRESET =
         DynamicCommandExceptionType { Component.translatable("commands.skygrid.unknown_preset") }
 
+    private val NOT_A_BLOCK =
+        DynamicCommandExceptionType { Component.translatable("commands.skygrid.not_a_block") }
+
     private val AIR = Blocks.AIR.defaultBlockState()
 
-    fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
+    fun register(dispatcher: CommandDispatcher<CommandSourceStack>, ctx: CommandBuildContext) {
         val resourceArgument = { name: String, resource: XMLResource<*> ->
             argument(name, ResourceLocationArgument.id()).suggests { _, builder ->
                 SharedSuggestionProvider.suggest(resource.keys.map { it.toString().replace("minecraft:", "") }, builder)
@@ -80,7 +88,7 @@ object SkygridCommand {
         }
 
         dispatcher.register(
-            literal(SkygridConstants.MOD_ID).then(
+            literal(MOD_ID).then(
                 literal("generate")
                     .then(
                         literal("preset").then(
@@ -94,6 +102,13 @@ object SkygridCommand {
                         val key = ResourceLocationArgument.getId(it, "config")
                         DimensionConfigs[key] ?: throw UNKNOWN_CONFIG.create(key)
                     }))
+            ).then(
+                literal("probability")
+                    .executes(::showProbability)
+                    .then(
+                        argument("block", BlockStateArgument.block(ctx))
+                            .executes(::showProbability)
+                    )
             )
         )
     }
@@ -160,6 +175,49 @@ object SkygridCommand {
         ctx.source.level.blockUpdated(pos, ctx.source.level.getBlockState(pos).block)
 
         return 1
+    }
+
+    fun Map<ResourceLocation, Double>.readableProbabilities() = map { (config, probability) ->
+        val percentage = Component.literal("${String.format("%.3f", probability * 100)}%")
+        Component.literal("  $config: ").append(percentage.withStyle(ChatFormatting.AQUA))
+    }
+
+    private fun showProbability(ctx: CommandContext<CommandSourceStack>): Int {
+        val block = tryOr({
+            BlockStateArgument.getBlock(ctx, "block").state.block
+        }, {
+            val held = ctx.source.playerOrException.mainHandItem
+            val item = held.item
+            if (item is BlockItem) item.block
+            else throw NOT_A_BLOCK.create(held.displayName)
+        })
+
+        val probabilities = DimensionConfigs.getProbability(block)
+
+        when (probabilities.size) {
+            0 -> ctx.source.sendFailure(
+                Component.translatable("commands.$MOD_ID.no_probability", block.name).withStyle(ChatFormatting.RED)
+            )
+
+            1 -> ctx.source.sendSuccess(
+                Component.translatable("commands.$MOD_ID.found_probability", block.name)
+                    .withStyle(ChatFormatting.GREEN), false
+            )
+
+            else -> ctx.source.sendSuccess(
+                Component.translatable(
+                    "commands.$MOD_ID.found_probabilities",
+                    block.name,
+                    probabilities.size
+                ).withStyle(ChatFormatting.GREEN), false
+            )
+        }
+
+        probabilities.readableProbabilities().forEach { line ->
+            ctx.source.sendSuccess(line, false)
+        }
+
+        return probabilities.size
     }
 
 }

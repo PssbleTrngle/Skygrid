@@ -15,6 +15,8 @@
          <tag id="lapis_ores" weight="4.5"/>
          <tag id="redstone_ores" weight="6.0"/>
          <tag id="ores/zinc" mod="forge" weight="8.0"/>
+         <tag id="ores/lead" mod="forge" weight="4.0"/>
+         <tag id="ores/silver" mod="forge" weight="4.0"/>
       </list>
       <list weight="0.1" name="blocks">
          <block id="coal_block"/>
@@ -26,6 +28,8 @@
          <block id="lapis_block" weight="4.5"/>
          <block id="redstone_block" weight="6.0"/>
          <tag id="storage_blocks/raw_zinc" mod="forge" weight="8.0"/>
+         <tag id="storage_blocks/raw_lead" mod="forge" weight="4.0"/>
+         <tag id="storage_blocks/raw_silver" mod="forge" weight="4.0"/>
       </list>
       <list name="crystals">
          <block id="amethyst_block">

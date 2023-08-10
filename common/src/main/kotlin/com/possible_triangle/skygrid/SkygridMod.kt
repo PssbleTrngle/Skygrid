@@ -4,6 +4,7 @@ import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_NAME
 import com.possible_triangle.skygrid.api.events.RegisterElementEvent
 import com.possible_triangle.skygrid.block.StiffAir
+import com.possible_triangle.skygrid.command.SkygridCommand.readableProbabilities
 import com.possible_triangle.skygrid.platform.Services
 import com.possible_triangle.skygrid.world.SkygridChunkGenerator
 import com.possible_triangle.skygrid.xml.registerDefaultElements
@@ -48,12 +49,7 @@ object SkygridMod {
                 val probabilities = DimensionConfigs.getProbability(item.block)
                 if (probabilities.isNotEmpty()) {
                     tooltip.add(Component.literal("Probabilities:").withStyle(ChatFormatting.GOLD))
-                    probabilities.forEach { (config, probability) ->
-                        tooltip.add(Component.literal("  $config: ")
-                            .append(Component.literal("${String.format("%.3f", probability * 100)}%").withStyle(
-                                ChatFormatting.AQUA))
-                        )
-                    }
+                    tooltip.addAll(probabilities.readableProbabilities())
                 }
             }
 

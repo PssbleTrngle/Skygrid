@@ -37,7 +37,10 @@ import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStr
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import kotlin.math.*
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.roundToInt
+import kotlin.math.sin
 
 class SkygridChunkGenerator(
     biomeSource: BiomeSource,
@@ -48,12 +51,13 @@ class SkygridChunkGenerator(
 
     companion object {
         fun create(
-            dimension: ResourceKey<LevelStem>?,
+            dimension: ResourceKey<LevelStem>,
             biomeSource: BiomeSource? = null,
         ): ChunkGenerator {
             val biomes = BuiltinRegistries.BIOME
             val structures = BuiltinRegistries.STRUCTURE_SETS
-            val config = dimension?.location() ?: ResourceLocation(SkygridConstants.MOD_ID, "default")
+            val config = dimension.location() ?: ResourceLocation(SkygridConstants.MOD_ID, "default")
+
             return SkygridChunkGenerator(
                 biomeSource ?: FixedBiomeSource(biomes.getHolderOrThrow(Biomes.THE_VOID)),
                 structures,
@@ -141,6 +145,11 @@ class SkygridChunkGenerator(
         cachedEndPortalPositions = it
     }
 
+    private fun RandomState.gridRandom() =
+        getOrCreateRandomFactory(ResourceLocation(SkygridConstants.MOD_ID, "generator"))
+
+    private fun RandomState.gridRandom(chunk: ChunkAccess, y: Int = 0) = gridRandom().at(chunk.pos.x, y, chunk.pos.z)
+
     override fun fillFromNoise(
         executor: Executor,
         blender: Blender,
@@ -148,45 +157,62 @@ class SkygridChunkGenerator(
         structures: StructureManager,
         chunk: ChunkAccess,
     ): CompletableFuture<ChunkAccess> {
-        val positionalRandom =
-            randomState.getOrCreateRandomFactory(ResourceLocation(SkygridConstants.MOD_ID, "generator"))
-        val random = positionalRandom.at(chunk.pos.x, 0, chunk.pos.z)
+        val random = randomState.gridRandom(chunk)
         val strongholdRandom = RandomSource.create(randomState.legacyLevelSeed())
 
-        val gap = config.gap.map { it.block.defaultBlockState() }
-        val createCeiling = false //  TODO region.dimensionType().hasCeiling()
-
-        val minY = max(chunk.minBuildHeight, config.minY)
-        val maxY = min(chunk.maxBuildHeight, config.maxY)
-
-        val mutable = BlockPos.MutableBlockPos()
-
-        val origin = BlockPos(chunk.pos.minBlockX, -minY, chunk.pos.minBlockZ)
-
-        val access = GeneratorBlockAccess(config, chunk, mutable, origin)
+        val access = GeneratorBlockAccess(config, chunk)
 
         val hasEndPortal = endPortalPositions(strongholdRandom).contains(chunk.pos)
 
         var generatedPortal = false
-        for (x in 0 until 16) for (z in 0 until 16) for (y in minY..(maxY + 2)) {
+        for (x in 0 until 16) for (z in 0 until 16) for (y in minY until access.maxY) {
 
-            mutable.set(x, y, z)
-            val isFloor = y == minY
+            access.move(x, y, z)
+            val isFloor = y == access.minY
 
-            if (config.distance.isBlock(mutable.offset(origin))) {
+            if (access.shouldPlaceBlock()) {
                 if (isFloor && endPortal != null && hasEndPortal && (x > 3 && z > 3) && !generatedPortal) {
                     endPortal!!.generate(random, access)
                     generatedPortal = true
-                } else if (isFloor || (createCeiling && (y - config.distance.y) > maxY)) {
+                } else if (isFloor) {
                     access.set(BEDROCK)
                 } else config.generate(random, access)
-            } else gap.ifPresent {
-                access.set(it)
+            } else {
+                access.fillGap()
             }
 
         }
 
         return CompletableFuture.completedFuture(chunk)
+    }
+
+    override fun buildSurface(
+        region: WorldGenRegion,
+        structures: StructureManager,
+        randomState: RandomState,
+        chunk: ChunkAccess,
+    ) {
+        val random = randomState.gridRandom(chunk, 1)
+        val createCeiling = region.dimensionType().hasCeiling()
+
+        val access = GeneratorBlockAccess(config, chunk)
+        val startY = access.maxY + (access.maxY % config.distance.y)
+
+        for (x in 0 until 16) for (z in 0 until 16) for (y in startY..startY + config.distance.y) {
+
+            access.move(x, y, z)
+
+            if (y == startY && access.shouldPlaceBlock()) {
+                if (createCeiling) {
+                    access.set(BEDROCK)
+                } else {
+                    config.generate(random, access)
+                }
+            } else {
+                access.fillGap()
+            }
+
+        }
     }
 
     /*
@@ -209,10 +235,6 @@ class SkygridChunkGenerator(
         } else null
     }
     */
-
-    override fun buildSurface(p0: WorldGenRegion, p1: StructureManager, p2: RandomState, p3: ChunkAccess) {
-        // no surface
-    }
 
     override fun applyCarvers(
         p0: WorldGenRegion,

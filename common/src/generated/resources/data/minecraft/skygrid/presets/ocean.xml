@@ -43,6 +43,7 @@
             <block id="prismarine_bricks"/>
             <block id="dark_prismarine"/>
             <block id="sea_lantern"/>
+            <block id="luminous_prismarine" mod="upgrade_aquatic"/>
          </list>
          <list weight="0.1" name="elder prismarine">
             <block id="elder_prismarine" mod="quark"/>

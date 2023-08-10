@@ -1,7 +1,23 @@
 <dimension>
    <blocks>
       <reference id="ores" weight="0.1"/>
-      <reference id="dripstone" weight="0.1"/>
+      <list weight="0.1">
+         <reference id="dripstone"/>
+         <block id="dripstone_block" weight="0.2">
+            <side on="down">
+               <block id="pointed_dripstone">
+                  <side on="down">
+                     <block id="pointed_dripstone">
+                        <set key="thickness" value="tip_merge"/>
+                        <set key="vertical_direction" value="up"/>
+                     </block>
+                  </side>
+                  <set key="thickness" value="tip_merge"/>
+                  <set key="vertical_direction" value="down"/>
+               </block>
+            </side>
+         </block>
+      </list>
       <reference id="moss" weight="0.05"/>
       <block id="obsidian" weight="0.1"/>
       <list weight="0.05" name="fluids">
@@ -16,6 +32,7 @@
             <block id="hanging_cobweb" mod="biomesoplenty"/>
          </side>
       </tag>
+      <reference id="sculk" weight="0.1"/>
    </blocks>
    <distance x="3" y="3" z="3"/>
 </dimension>

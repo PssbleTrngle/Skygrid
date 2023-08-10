@@ -16,6 +16,7 @@ import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
 import com.possible_triangle.skygrid.api.xml.elements.extras.Side
 import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
 import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
+import net.minecraft.world.level.block.state.properties.EnumProperty
 
 abstract class BlockProviderBuilder<T : BlockProvider> {
 
@@ -87,7 +88,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         property(property.name.lowercase(), property.getName(value))
     }
 
-    fun property(key: String, value: String) {
+    fun property(key: EnumProperty<DoubleBlockHalf>, value: String) {
         transformers.add(SetPropertyTransformer(key, value))
     }
 

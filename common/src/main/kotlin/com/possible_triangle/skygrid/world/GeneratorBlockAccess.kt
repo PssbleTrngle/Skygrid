@@ -5,13 +5,21 @@ import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
+import kotlin.math.max
+import kotlin.math.min
 
 class GeneratorBlockAccess(
     private val config: DimensionConfig,
     private val chunk: ChunkAccess,
-    private val at: BlockPos,
-    private val origin: BlockPos,
 ) : BlockAccess(useBarrier = !config.gap.isPresent) {
+
+    private val at = BlockPos.MutableBlockPos()
+    val minY = max(chunk.minBuildHeight, config.minY)
+    val maxY = min(chunk.maxBuildHeight, config.maxY)
+
+    val origin = BlockPos(chunk.pos.minBlockX, -minY, chunk.pos.minBlockZ)
+
+    private val gap = config.gap.map { it.block.defaultBlockState() }
 
     override fun setBlock(state: BlockState, pos: BlockPos) {
         val at = pos.offset(at)
@@ -20,11 +28,8 @@ class GeneratorBlockAccess(
 
     override fun canReplace(pos: BlockPos): Boolean {
         val state = chunk.getBlockState(pos.offset(at))
-        return config.gap.map {
-            state.`is`(it.block)
-        }.orElseGet {
-            state.isAir
-        }
+        val isGap = config.gap.map { state.`is`(it.block) }.orElse(false)
+        return isGap || state.isAir
     }
 
     override fun setNBT(pos: BlockPos, nbt: CompoundTag) {
@@ -35,5 +40,13 @@ class GeneratorBlockAccess(
         }
         chunk.setBlockEntityNbt(nbt)
     }
+
+    fun move(x: Int, y: Int, z: Int) {
+        at.set(x, y, z)
+    }
+
+    fun shouldPlaceBlock() = config.distance.isBlock(origin.offset(at))
+
+    fun fillGap() = gap.ifPresent { set(it) }
 
 }

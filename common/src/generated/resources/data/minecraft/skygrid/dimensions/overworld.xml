@@ -118,6 +118,7 @@
             <block id="blue_ice" weight="0.02"/>
             <block id="permafrost" mod="quark" weight="0.05"/>
          </list>
+         <reference id="sculk" weight="0.05"/>
       </list>
       <list weight="9.0" name="crops">
          <block id="farmland">
@@ -179,6 +180,10 @@
             <mod id="midnight"/>
             <mod id="botania"/>
             <mod id="simplefarming"/>
+            <mod id="twilightforest"/>
+            <mod id="tropicraft"/>
+            <mod id="aether"/>
+            <mod id="aether2"/>
          </except>
          <tag id="logs_that_burn">
             <cycle key="axis"/>
@@ -199,6 +204,10 @@
             <block id="glow_shroom_block" mod="quark" weight="0.1"/>
             <block id="glow_shroom_block" mod="biomesoplenty" weight="0.1"/>
          </list>
+         <list weight="0.05">
+            <block id="mangrove_roots"/>
+            <block id="muddy_mangrove_roots"/>
+         </list>
       </list>
       <list weight="20.0" name="building">
          <list name="bricks">
@@ -208,7 +217,11 @@
             <block id="smooth_stone" weight="0.1"/>
             <list name="bricks">
                <block id="bricks" weight="0.1"/>
-               <block id="mud_bricks" weight="0.1"/>
+               <list weight="0.1" name="mud bricks">
+                  <block id="mud_bricks"/>
+                  <block id="chiseled_mud_bricks" mod="environmental"/>
+                  <block id="carved_mud_bricks" mod="quark"/>
+               </list>
                <list name="stone bricks">
                   <block id="stone_bricks"/>
                   <block id="mossy_stone_bricks" weight="0.5"/>
@@ -324,6 +337,8 @@
             <block id="stonecutter"/>
             <block id="lectern"/>
             <block id="composter"/>
+            <block id="stove" mod="farmersdelight"/>
+            <block id="basket" mod="farmersdelight"/>
          </list>
          <block id="cobweb" weight="0.02"/>
       </list>
@@ -336,6 +351,10 @@
             <mod id="midnight"/>
             <mod id="botania"/>
             <mod id="simplefarming"/>
+            <mod id="twilightforest"/>
+            <mod id="tropicraft"/>
+            <mod id="aether"/>
+            <mod id="aether2"/>
          </except>
          <tag id="barrels" mod="skygrid"/>
          <tag id="chests" mod="skygrid"/>
@@ -425,6 +444,7 @@
       <table id="chests/stronghold_library"/>
       <table id="chests/underwater_ruin_big"/>
       <table id="chests/underwater_ruin_small"/>
+      <table id="chests/ancient_city" weight="0.05"/>
    </loot>
    <mobs>
       <mob id="minecraft:zombie" weight="2.0"/>

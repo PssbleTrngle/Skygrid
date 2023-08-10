@@ -12,22 +12,51 @@
                <block id="chorus_flower"/>
             </side>
          </block>
+         <block id="poismoss" mod="endergetic" weight="0.5">
+            <side on="up" probability="0.8">
+               <block id="poise_bush" mod="endergetic"/>
+               <block id="tall_poise_bush" mod="endergetic" weight="0.5">
+                  <side on="up">
+                     <block id="tall_poise_bush" mod="endergetic">
+                        <set key="half" value="top"/>
+                     </block>
+                  </side>
+                  <set key="half" value="bottom"/>
+               </block>
+            </side>
+         </block>
       </list>
       <list weight="0.2" name="ores">
          <block id="biotite_ore" mod="quark"/>
       </list>
+      <list weight="0.1" name="wood">
+         <block id="poise_planks" mod="endergetic" weight="0.2"/>
+         <block id="poise_stem" mod="endergetic"/>
+         <block id="poise_cluster" mod="endergetic"/>
+         <block id="glowing_poise_stem" mod="endergetic"/>
+      </list>
       <list name="building">
          <cycle key="axis"/>
          <list weight="0.1" name="obsidian">
+            <side on="down" probability="0.5">
+               <block id="acidian_lantern" mod="endergetic">
+                  <set key="facing" value="down"/>
+               </block>
+            </side>
             <block id="obsidian"/>
             <block id="crying_obsidian"/>
          </list>
-         <block id="end_stone_bricks"/>
+         <list name="endstone bricks">
+            <block id="end_stone_bricks"/>
+            <block id="cracked_end_stone_bricks" mod="endergetic" weight="0.5"/>
+            <block id="chiseled_end_stone_bricks" mod="endergetic" weight="0.5"/>
+         </list>
          <list name="purpur">
             <block id="purpur_pillar"/>
             <block id="purpur_block"/>
+            <block id="cracked_purpur_block" mod="endergetic" weight="0.5"/>
          </list>
-         <list name="duskbound">
+         <list weight="0.5" name="duskbound">
             <block id="duskbound_block" mod="quark"/>
             <block id="duskbound_lantern" mod="quark"/>
          </list>
@@ -40,14 +69,18 @@
             <block id="myalite_pillar" mod="quark"/>
          </list>
          <block id="ender_chest" weight="0.01"/>
+         <block id="poise_bookshelf" mod="endergetic" weight="0.01"/>
       </list>
       <list weight="0.05" name="compressed">
          <block id="chorus_fruit_block" mod="quark"/>
+         <block id="bolloom_crate" mod="endergetic"/>
+         <block id="boof_block" mod="endergetic" weight="0.1"/>
       </list>
       <list weight="0.01" name="loot">
          <block id="shulker_box" weight="0.0075"/>
          <fallback>
             <block id="purpur_chest" mod="quark"/>
+            <block id="poise_chest" mod="endergetic"/>
             <block id="chest"/>
          </fallback>
       </list>

@@ -55,3 +55,8 @@ idea {
     module.excludeDirs.add(file("web"))
     module.excludeDirs.add(file("datagen"))
 }
+
+tasks.create<Copy>("copyGeneratedDatapacks") {
+    from(project(":common").file("src/generated/resources/datapacks"))
+    into(file("datapacks"))
+}

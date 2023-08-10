@@ -1,0 +1,12 @@
+<preset>
+   <list>
+      <block id="sculk">
+         <side on="up" probability="0.3">
+            <block id="sculk_sensor"/>
+            <block id="sculk_shrieker"/>
+         </side>
+      </block>
+      <block id="sculk_catalyst" weight="0.1"/>
+      <block id="reinforced_deepslate" weight="0.02"/>
+   </list>
+</preset>

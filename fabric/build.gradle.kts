@@ -15,3 +15,7 @@ dependencies {
 
 uploadToCurseforge()
 uploadToModrinth()
+
+tasks.named("runData") {
+    finalizedBy(rootProject.tasks.getByName("copyGeneratedDatapacks"))
+}

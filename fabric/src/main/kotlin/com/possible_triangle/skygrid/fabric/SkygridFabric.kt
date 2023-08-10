@@ -37,7 +37,7 @@ object SkygridFabric : ModInitializer {
 
         Registry.register(BuiltinRegistries.WORLD_PRESET, ResourceLocation(MOD_ID, MOD_ID), SkygridPreset())
 
-        CommandRegistrationCallback.EVENT.register { it, _, _ -> SkygridCommand.register(it) }
+        CommandRegistrationCallback.EVENT.register { it, ctx, _ -> SkygridCommand.register(it, ctx) }
     }
 
 }

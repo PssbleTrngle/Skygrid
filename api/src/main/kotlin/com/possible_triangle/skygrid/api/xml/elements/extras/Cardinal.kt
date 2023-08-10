@@ -25,7 +25,7 @@ data class Cardinal(
 ) : Extra() {
 
     companion object {
-        val DIRECTIONS = listOf(SOUTH, WEST, NORTH, EAST, )
+        val DIRECTIONS = listOf(SOUTH, WEST, NORTH, EAST)
     }
 
     private fun getDirection(random: RandomSource): Direction {
@@ -37,7 +37,7 @@ data class Cardinal(
     }
 
     override fun transform(state: BlockState, random: RandomSource): BlockState {
-        if(!rotate) return state
+        if (!rotate) return state
         val direction = getDirection(random)
         val rotations = DIRECTIONS.indexOf(direction)
         return state.rotate(Rotation.values()[rotations % 4])

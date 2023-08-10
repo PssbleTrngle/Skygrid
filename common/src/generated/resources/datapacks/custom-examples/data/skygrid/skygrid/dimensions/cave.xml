@@ -32,6 +32,7 @@
             <block id="hanging_cobweb" mod="biomesoplenty"/>
          </side>
       </tag>
+      <reference id="sculk" weight="0.1"/>
    </blocks>
    <distance x="3" y="3" z="3"/>
 </dimension>

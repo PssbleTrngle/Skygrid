@@ -2,6 +2,8 @@ package com.possible_triangle.skygrid.datagen.dimensions
 
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.api.xml.elements.Distance
+import com.possible_triangle.skygrid.datagen.CompatMods.BOP
+import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
 import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
@@ -48,12 +50,13 @@ class Cave(generator: DataGenerator) : DimensionConfigGenerator("cave", generato
                 }
                 tag(BlockTags.BASE_STONE_OVERWORLD) {
                     side(Direction.UP, probability = 0.1) {
-                        block("glow_shroom", "quark")
+                        block("glow_shroom", QUARK)
                     }
                     side(Direction.DOWN, probability = 0.05) {
-                        block("hanging_cobweb", mod = "biomesoplenty")
+                        block("hanging_cobweb", mod = BOP)
                     }
                 }
+                reference("sculk", weight = 0.1)
             }
         }
 

@@ -1,0 +1,67 @@
+<dimension>
+   <blocks>
+      <list name="ground">
+         <block id="grass_block">
+            <side on="up">
+               <block id="grass"/>
+               <block id="fern"/>
+               <block id="fiddlehead" mod="twilightforest"/>
+               <block id="mayapple" mod="twilightforest"/>
+               <list name="saplings">
+                  <block id="twilight_oak_sapling" mod="twilightforest"/>
+                  <block id="canopy_sapling" mod="twilightforest"/>
+                  <block id="dark_sapling" mod="twilightforest"/>
+                  <block id="time_sapling" mod="twilightforest" weight="0.1"/>
+                  <block id="transformation_sapling" mod="twilightforest" weight="0.1"/>
+                  <block id="mining_sapling" mod="twilightforest" weight="0.1"/>
+                  <block id="sorting_sapling" mod="twilightforest" weight="0.1"/>
+               </list>
+            </side>
+         </block>
+         <block id="dirt">
+            <side on="down">
+               <block id="torchberry_plant" mod="twilightforest"/>
+            </side>
+         </block>
+         <block id="stone"/>
+      </list>
+      <list name="wood">
+         <list name="logs">
+            <side on="up" probability="0.5">
+               <block id="moss_patch" mod="twilightforest"/>
+            </side>
+            <cycle key="axis"/>
+            <block id="twilight_oak_log" mod="twilightforest"/>
+            <block id="hollow_twilight_oak_log_horizontal" mod="twilightforest"/>
+            <block id="canopy_log" mod="twilightforest"/>
+            <block id="hollow_canopy_log_horizontal" mod="twilightforest"/>
+            <block id="dark_log" mod="twilightforest"/>
+            <block id="hollow_dark_log_horizontal" mod="twilightforest"/>
+            <block id="time_log" mod="twilightforest" weight="0.1"/>
+            <block id="hollow_time_log_horizontal" mod="twilightforest" weight="0.1"/>
+            <block id="transformation_log" mod="twilightforest" weight="0.1"/>
+            <block id="hollow_transformation_log_horizontal" mod="twilightforest" weight="0.1"/>
+            <block id="mining_log" mod="twilightforest" weight="0.1"/>
+            <block id="hollow_mining_log_horizontal" mod="twilightforest" weight="0.1"/>
+            <block id="sorting_log" mod="twilightforest" weight="0.1"/>
+            <block id="hollow_sorting_log_horizontal" mod="twilightforest" weight="0.1"/>
+         </list>
+         <list name="leaves">
+            <block id="twilight_oak_leaves" mod="twilightforest"/>
+            <block id="canopy_leaves" mod="twilightforest"/>
+            <block id="dark_leaves" mod="twilightforest"/>
+            <block id="time_leaves" mod="twilightforest" weight="0.1"/>
+            <block id="transformation_leaves" mod="twilightforest" weight="0.1"/>
+            <block id="mining_leaves" mod="twilightforest" weight="0.1"/>
+            <block id="sorting_leaves" mod="twilightforest" weight="0.1"/>
+         </list>
+         <list name="roots">
+            <side on="down" probability="0.5">
+               <block id="root_strand" mod="twilightforest"/>
+            </side>
+            <block id="root" mod="twilightforest"/>
+            <block id="liveroot_block" mod="twilightforest" weight="0.1"/>
+         </list>
+      </list>
+   </blocks>
+</dimension>
