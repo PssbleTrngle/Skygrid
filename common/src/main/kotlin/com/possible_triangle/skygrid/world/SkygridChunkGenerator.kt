@@ -165,7 +165,7 @@ class SkygridChunkGenerator(
         val hasEndPortal = endPortalPositions(strongholdRandom).contains(chunk.pos)
 
         var generatedPortal = false
-        for (x in 0 until 16) for (z in 0 until 16) for (y in minY until access.maxY) {
+        for (x in 0 until 16) for (z in 0 until 16) for (y in access.minY until access.maxY) {
 
             access.move(x, y, z)
             val isFloor = y == access.minY
