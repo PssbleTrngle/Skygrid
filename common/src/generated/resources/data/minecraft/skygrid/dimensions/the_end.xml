@@ -18,10 +18,10 @@
                <block id="tall_poise_bush" mod="endergetic" weight="0.5">
                   <side on="up">
                      <block id="tall_poise_bush" mod="endergetic">
-                        <set key="half" value="top"/>
+                        <set key="half" value="upper"/>
                      </block>
                   </side>
-                  <set key="half" value="bottom"/>
+                  <set key="half" value="lower"/>
                </block>
             </side>
          </block>
@@ -79,14 +79,17 @@
       <list weight="0.01" name="loot">
          <block id="shulker_box" weight="0.0075"/>
          <fallback>
-            <block id="purpur_chest" mod="quark"/>
-            <block id="poise_chest" mod="endergetic"/>
+            <cycle key="facing"/>
+            <list>
+               <block id="purpur_chest" mod="quark"/>
+               <block id="poise_chest" mod="endergetic"/>
+            </list>
             <block id="chest"/>
          </fallback>
       </list>
    </blocks>
    <loot>
-      <table id="chests/end_city_treasure"/>
+      <table id="minecraft:chests/end_city_treasure"/>
    </loot>
    <mobs>
       <mob id="minecraft:enderman"/>

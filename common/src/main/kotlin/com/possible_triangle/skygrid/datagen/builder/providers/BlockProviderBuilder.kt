@@ -1,12 +1,5 @@
 package com.possible_triangle.skygrid.datagen.builder.providers
 
-import net.minecraft.core.Direction
-import net.minecraft.core.RegistryAccess
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
-import net.minecraft.world.level.block.state.properties.Property
-import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
-import com.possible_triangle.skygrid.datagen.builder.ExceptFilterBuilder
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
 import com.possible_triangle.skygrid.api.xml.elements.Extra
 import com.possible_triangle.skygrid.api.xml.elements.FilterOperator
@@ -16,18 +9,24 @@ import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
 import com.possible_triangle.skygrid.api.xml.elements.extras.Side
 import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
 import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
-import net.minecraft.world.level.block.state.properties.EnumProperty
+import com.possible_triangle.skygrid.datagen.DatagenContext
+import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
+import com.possible_triangle.skygrid.datagen.builder.ExceptFilterBuilder
+import net.minecraft.core.Direction
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
+import net.minecraft.world.level.block.state.properties.Property
 
 abstract class BlockProviderBuilder<T : BlockProvider> {
 
-    abstract val registries: RegistryAccess
+    abstract val context: DatagenContext
 
     private val extras = arrayListOf<Extra>()
     private val transformers = arrayListOf<Transformer>()
     private val filters = arrayListOf<FilterOperator>()
 
     fun except(builder: ExceptFilterBuilder.() -> Unit) {
-        ExceptFilterBuilder().also {
+        ExceptFilterBuilder(context).also {
             builder(it)
             filters.add(it.build())
         }
@@ -40,7 +39,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         shared: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
-        BasicBlocksBuilder(registries).also {
+        BasicBlocksBuilder(context).also {
             builder(it)
             extras.add(Side(on.name.lowercase(), it.build(), offset, probability, shared))
         }
@@ -53,7 +52,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         shared: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
-        BasicBlocksBuilder(registries).also {
+        BasicBlocksBuilder(context).also {
             builder(it)
             extras.add(Cardinal(it.build(), offset, rotate, probability, shared))
         }
@@ -67,7 +66,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         shared: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
-        BasicBlocksBuilder(registries).also {
+        BasicBlocksBuilder(context).also {
             builder(it)
             extras.add(Offset(x, y, z, it.build(), probability, shared))
         }
@@ -88,7 +87,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         property(property.name.lowercase(), property.getName(value))
     }
 
-    fun property(key: EnumProperty<DoubleBlockHalf>, value: String) {
+    fun property(key: String, value: String) {
         transformers.add(SetPropertyTransformer(key, value))
     }
 
@@ -103,7 +102,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
     protected abstract fun buildWith(
         extras: List<Extra>,
         transformers: List<Transformer>,
-        filters: List<FilterOperator>
+        filters: List<FilterOperator>,
     ): T
 
     fun build(): T {

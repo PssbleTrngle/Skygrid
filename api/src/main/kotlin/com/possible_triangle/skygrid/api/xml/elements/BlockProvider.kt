@@ -1,9 +1,12 @@
 package com.possible_triangle.skygrid.api.xml.elements
 
+import com.possible_triangle.skygrid.api.extensions.serialType
 import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
+import com.possible_triangle.skygrid.api.world.fork
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.Validating
+import com.possible_triangle.skygrid.api.xml.warnInvalid
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
@@ -45,7 +48,8 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
 
             override fun base(random: RandomSource): Block = parent.base(random)
 
-            override fun generateBase(random: RandomSource, chunk: IBlockAccess): Boolean = parent.generateBase(random, chunk)
+            override fun generateBase(random: RandomSource, chunk: IBlockAccess): Boolean =
+                parent.generateBase(random, chunk)
         }
 
         stripped.validExtras = emptyList()
@@ -67,25 +71,31 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
     ): Boolean {
         val referencesWithThis = references.with(this)
         validExtras = extras.filter { it.validate(blocks, referencesWithThis) }
-        return internalValidate(blocks, references, additionalFilters + filters)
+        return internalValidate(blocks, references, additionalFilters + filters).warnInvalid {
+            name?.let {
+                "block provider '$name' with type '${serialType}' is invalid and will be ignored"
+            } ?: run {
+                "unnamed block provider with type '${serialType}' is invalid and will be ignored"
+            }
+        }
     }
 
     internal abstract fun base(random: RandomSource): Block
 
-    private fun getState(random: RandomSource): BlockState {
-        return transformers.fold(base(random).defaultBlockState()) { state, transformer ->
+    private fun BlockState.applyTransformers(random: RandomSource): BlockState {
+        return transformers.fold(this) { state, transformer ->
             transformer.apply(state, random)
         }
     }
 
     protected open fun generateBase(random: RandomSource, chunk: IBlockAccess): Boolean {
-        val state = getState(random)
+        val state = base(random).defaultBlockState()
         return chunk.set(state)
     }
 
     final override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
         val sharedSeed = random.nextLong()
-        return generateBase(random, access).apply {
+        return generateBase(random, access.fork { it.applyTransformers(random) }).apply {
             if (this) validExtras.forEach {
                 it.generate(if (it.shared) RandomSource.create(sharedSeed) else random, access)
             }

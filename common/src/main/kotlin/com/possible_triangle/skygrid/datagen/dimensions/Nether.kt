@@ -10,6 +10,7 @@ import net.minecraft.core.Direction.UP
 import net.minecraft.data.DataGenerator
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.SkullBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
@@ -144,6 +145,7 @@ class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", gene
                 block(Blocks.SPAWNER, weight = 0.01)
 
                 list("loot", weight = 0.02) {
+                    cycle(ChestBlock.FACING)
                     block("warped_chest", mod = QUARK)
                     block("crimson_chest", mod = QUARK)
                     fallback {

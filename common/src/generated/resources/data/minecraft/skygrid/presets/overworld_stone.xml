@@ -1,0 +1,16 @@
+<preset>
+   <list>
+      <tag id="base_stone_overworld" expand="true"/>
+      <block id="deepslate">
+         <side on="up" probability="0.02">
+            <block id="glow_shroom" mod="quark"/>
+         </side>
+      </block>
+      <block id="stone" weight="2.0"/>
+      <block id="limestone" mod="create"/>
+      <block id="ochrum" mod="create"/>
+      <block id="scoria" mod="create"/>
+      <block id="scorchia" mod="create"/>
+      <block id="calcite" weight="0.1"/>
+   </list>
+</preset>

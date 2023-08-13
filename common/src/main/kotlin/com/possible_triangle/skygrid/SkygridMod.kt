@@ -3,9 +3,11 @@ package com.possible_triangle.skygrid
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_NAME
 import com.possible_triangle.skygrid.api.events.RegisterElementEvent
+import com.possible_triangle.skygrid.api.events.RegisterModifiersEvent
 import com.possible_triangle.skygrid.block.StiffAir
 import com.possible_triangle.skygrid.command.SkygridCommand.readableProbabilities
 import com.possible_triangle.skygrid.platform.Services
+import com.possible_triangle.skygrid.world.BlockNbtModifiers.registerDefaultModifiers
 import com.possible_triangle.skygrid.world.SkygridChunkGenerator
 import com.possible_triangle.skygrid.xml.registerDefaultElements
 import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
@@ -35,6 +37,10 @@ object SkygridMod {
         RegisterElementEvent.EVENT.addListener {
             it.registerDefaultElements()
         }
+
+        RegisterModifiersEvent.EVENT.addListener {
+            it.registerDefaultModifiers()
+        }
     }
 
     fun setup() {
@@ -45,7 +51,7 @@ object SkygridMod {
         val item = stack.item
         if (flags.isAdvanced && item is BlockItem) {
 
-            if (Services.CONFIG.showProbabilities) {
+            if (Services.CONFIGS.client.showProbabilities) {
                 val probabilities = DimensionConfigs.getProbability(item.block)
                 if (probabilities.isNotEmpty()) {
                     tooltip.add(Component.literal("Probabilities:").withStyle(ChatFormatting.GOLD))
@@ -53,7 +59,7 @@ object SkygridMod {
                 }
             }
 
-            if (Services.CONFIG.showBlockTags) {
+            if (Services.CONFIGS.client.showBlockTags) {
                 Services.PLATFORM.getTags(item.block).forEach {
                     tooltip.add(Component.literal("#$it"))
                 }

@@ -1,10 +1,10 @@
 package com.possible_triangle.skygrid.datagen.builder
 
-import net.minecraft.core.RegistryAccess
-import com.possible_triangle.skygrid.datagen.builder.providers.BlockProviderBuilder
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
+import com.possible_triangle.skygrid.datagen.DatagenContext
+import com.possible_triangle.skygrid.datagen.builder.providers.BlockProviderBuilder
 
-class BasicBlocksBuilder(override val registries: RegistryAccess) : IBlocksBuilder {
+class BasicBlocksBuilder(override val context: DatagenContext) : IBlocksBuilder {
 
     private val children = arrayListOf<BlockProviderBuilder<*>>()
 

@@ -4,17 +4,17 @@ import com.possible_triangle.skygrid.api.xml.elements.Extra
 import com.possible_triangle.skygrid.api.xml.elements.FilterOperator
 import com.possible_triangle.skygrid.api.xml.elements.Transformer
 import com.possible_triangle.skygrid.api.xml.elements.providers.BlockList
+import com.possible_triangle.skygrid.datagen.DatagenContext
 import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.IBlocksBuilder
-import net.minecraft.core.RegistryAccess
 
 class BlockListBuilder(
+    override val context: DatagenContext,
     private val name: String?,
     private val weight: Double = 1.0,
-    override val registries: RegistryAccess,
 ) : BlockProviderBuilder<BlockList>(), IBlocksBuilder {
 
-    private val children = BasicBlocksBuilder(registries)
+    private val children = BasicBlocksBuilder(context)
 
     override fun add(block: BlockProviderBuilder<*>) = children.add(block)
 

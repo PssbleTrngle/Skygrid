@@ -13,3 +13,9 @@ fun interface IBlockAccess {
     fun setNBT(pos: BlockPos, nbt: CompoundTag) {}
 
 }
+
+fun IBlockAccess.fork(transform: (BlockState) -> BlockState) = object : IBlockAccess {
+    override fun set(state: BlockState, pos: BlockPos) = this@fork.set(transform(state), pos)
+
+    override fun setNBT(pos: BlockPos, nbt: CompoundTag) = this@fork.setNBT(pos, nbt)
+}

@@ -1,25 +1,23 @@
 package com.possible_triangle.skygrid.api.xml.elements
 
-import com.possible_triangle.skygrid.api.SkygridTags
+import com.google.common.base.Predicate
+import com.possible_triangle.skygrid.api.events.BlockNbtModifier
+import com.possible_triangle.skygrid.api.events.RegisterModifiersEvent
 import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
+import com.possible_triangle.skygrid.platform.Services
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
-import net.minecraft.tags.TagKey
 import net.minecraft.util.RandomSource
-import net.minecraft.util.random.SimpleWeightedRandomList
-import net.minecraft.world.level.SpawnData
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.util.*
 
@@ -39,11 +37,12 @@ data class DimensionConfig(
 
     @Transient
     lateinit var gap: Optional<SingleBlock>
+        private set
+
+    @Transient
+    private lateinit var modifier: BlockNbtModifier<Boolean>
 
     override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
-        val generateLoot = loot.isValid()
-        val fillSpawners = mobs.isValid()
-
         return this.blocks.random(random).generate(
             random,
         ) { state, pos ->
@@ -51,32 +50,11 @@ data class DimensionConfig(
                 val block = state.block
 
                 if (block is EntityBlock) {
-                    val nbt = if (generateLoot && state.`is`(SkygridTags.LOOT_CONTAINERS)) {
-                        CompoundTag().apply {
-                            putString("id", "mob_spawner")
-                            val lootTable = loot.random(random)
-                            putString("LootTable", lootTable.id)
-                            putLong("LootTableSeed", random.nextLong())
+                    CompoundTag().takeIf { modifier.modify(random, state, pos, it) }?.also { nbt ->
+                        block.newBlockEntity(pos, state)?.also {
+                            nbt.putString("id", BlockEntityType.getKey(it.type).toString())
+                            access.setNBT(pos, nbt)
                         }
-                    } else if (fillSpawners && state.`is`(Blocks.SPAWNER)) {
-                        CompoundTag().apply {
-                            val mob = mobs.random(random)
-                            val data = mob.createSpawnData()
-                            val potentials = SimpleWeightedRandomList.builder<SpawnData>().add(data, 1).build()
-
-                            SpawnData.CODEC.encodeStart(NbtOps.INSTANCE, data).result().ifPresent {
-                                put("SpawnData", it)
-                            }
-
-                            SpawnData.LIST_CODEC.encodeStart(NbtOps.INSTANCE, potentials).result().ifPresent {
-                                put("SpawnPotentials", it)
-                            }
-                        }
-                    } else null
-
-                    if (nbt != null) block.newBlockEntity(pos, state)?.also {
-                        nbt.putString("id", BlockEntityType.getKey(it.type).toString())
-                        access.setNBT(pos, nbt)
                     }
                 }
 
@@ -87,15 +65,31 @@ data class DimensionConfig(
         }
     }
 
+    private fun buildModifier(): BlockNbtModifier<Boolean> {
+        val modifiers = arrayListOf<BlockNbtModifier.Entry>()
+
+        RegisterModifiersEvent.EVENT.invoke(object : RegisterModifiersEvent {
+            override val config = this@DimensionConfig
+
+            override fun register(predicate: Predicate<BlockState>, modifier: BlockNbtModifier<Unit>) {
+                modifiers.add(BlockNbtModifier.Entry(predicate::test, modifier))
+            }
+        })
+
+        return if (modifiers.isEmpty()) BlockNbtModifier.empty(false)
+        else Services.CONFIGS.server.modifierStrategy.filterAndMerge(modifiers)
+    }
+
     fun validate(registries: RegistryAccess, references: IReferenceContext): Boolean {
         val blockRegistry = registries.registryOrThrow(Registry.BLOCK_REGISTRY)
         val entityRegistry = registries.registryOrThrow(Registry.ENTITY_TYPE_REGISTRY)
 
-        val getTag = { it: TagKey<Block> -> blockRegistry.getTagOrEmpty(it).map { it.value() } }
-
         loot.validate { true }
         mobs.validate { entityRegistry.containsKey(it.key) }
         gap = Optional.ofNullable(unsafeGap).filter { it.validate(blockRegistry, references) }
+
+        modifier = buildModifier()
+
         return blocks.validate { it.validate(blockRegistry, references) }
     }
 

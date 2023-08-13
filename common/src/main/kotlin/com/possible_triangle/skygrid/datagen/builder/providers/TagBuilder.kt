@@ -4,15 +4,15 @@ import com.possible_triangle.skygrid.api.xml.elements.Extra
 import com.possible_triangle.skygrid.api.xml.elements.FilterOperator
 import com.possible_triangle.skygrid.api.xml.elements.Transformer
 import com.possible_triangle.skygrid.api.xml.elements.providers.Tag
-import net.minecraft.core.RegistryAccess
+import com.possible_triangle.skygrid.datagen.DatagenContext
 
 class TagBuilder(
+    override val context: DatagenContext,
     private val id: String,
-    private val mod: String = "minecraft",
+    private val mod: String = context.defaultMod,
     private val weight: Double = 1.0,
     private val random: Boolean,
-    private val expand: Boolean,
-    override val registries: RegistryAccess,
+    private val expand: Boolean
 ) :
     BlockProviderBuilder<Tag>() {
 

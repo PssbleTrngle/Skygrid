@@ -1,6 +1,8 @@
 package com.possible_triangle.skygrid.datagen.dimensions
 
 import com.possible_triangle.skygrid.api.SkygridTags
+import com.possible_triangle.skygrid.datagen.CompatMods.AQUATIC
+import com.possible_triangle.skygrid.datagen.CompatMods.ATMOSPHERIC
 import com.possible_triangle.skygrid.datagen.CompatMods.BOP
 import com.possible_triangle.skygrid.datagen.CompatMods.BOTANIA
 import com.possible_triangle.skygrid.datagen.CompatMods.CREATE
@@ -101,13 +103,14 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                 }
 
                 list("ground", weight = 100.0) {
-                    list("stone", weight = 20.0) {
-                        tag(BlockTags.BASE_STONE_OVERWORLD, expand = true) {
+                    preset("overworld_stone", weight = 20.0) {
+                        tag(BlockTags.BASE_STONE_OVERWORLD, expand = true)
+                        block(Blocks.DEEPSLATE) {
                             side(UP, probability = 0.02) {
                                 block("glow_shroom", QUARK)
                             }
                         }
-                        block(Blocks.STONE)
+                        block(Blocks.STONE, weight = 2.0)
                         block("limestone", mod = CREATE)
                         block("ochrum", mod = CREATE)
                         block("scoria", mod = CREATE)
@@ -240,7 +243,6 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                                 block(Blocks.CACTUS)
                                 block(Blocks.DEAD_BUSH)
                                 block("desert_grass", mod = BOP)
-                                block("", mod = BOP)
                             }
                         }
                     }
@@ -470,6 +472,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
 
                 list("loot") {
                     overworldWood()
+                    cycle(ChestBlock.FACING)
                     tag(SkygridTags.BARRELS)
                     tag(SkygridTags.CHESTS)
                 }
@@ -526,7 +529,7 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                     }
                 }
 
-                preset("ores", weight = 30.0) {
+                preset("overworld_ores", weight = 30.0) {
                     list("ores", weight = 20.0) {
                         tag(BlockTags.COAL_ORES, weight = 10.0)
                         tag(BlockTags.IRON_ORES, weight = 8.0)
@@ -573,25 +576,25 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                     list {
                         block(Blocks.HAY_BLOCK)
                         block("stick_block", QUARK)
-                        block("gunpowder_block", QUARK)
+                        block("gunpowder_sack", QUARK)
                     }
                     list("leather", weight = 0.1) {
-                        block("bonded_leather")
-                        block("bonded_rabbit_hide", weight = 0.1)
-                        block("bonded_ravager_hide", weight = 0.01)
+                        block("bonded_leather", QUARK)
+                        block("bonded_rabbit_hide", QUARK, weight = 0.1)
+                        block("bonded_ravager_hide", QUARK, weight = 0.01)
                     }
                     list("plants") {
                         block("glowberry_sack", QUARK)
                         block("cactus_block", QUARK)
-                        block("sugarcane_block", QUARK)
+                        block("sugar_cane_block", QUARK)
                         block("bamboo_block", QUARK, weight = 0.1)
-                        block("aloe_bundle", "atmospheric")
-                        block("passion_vine_bundle", "atmospheric")
-                        block("yucca_cask", "atmospheric")
-                        block("cattail_seed_sack", "environmental")
+                        block("aloe_bundle", ATMOSPHERIC)
+                        block("passion_vine_bundle", ATMOSPHERIC)
+                        block("yucca_cask", ATMOSPHERIC)
+                        block("cattail_seed_sack", ENVIRONMENTAL)
                         block("thatch", QUARK)
-                        block("beachgrass_thatch", "upgrade_aquatic")
-                        block("cattail_thatch", "environmental")
+                        block("beachgrass_thatch", AQUATIC)
+                        block("cattail_thatch", ENVIRONMENTAL)
                         block(Blocks.DRIED_KELP_BLOCK)
                     }
                     list("crops") {
@@ -603,8 +606,8 @@ class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld"
                         block("cocoa_beans_sack", QUARK, weight = 0.1)
                         block("golden_apple_crate", QUARK, weight = 0.01)
 
-                        block("passionfruit_crate", "atmospheric")
-                        block("shimmering_passionfruit_crate", "atmospheric", weight = 0.01)
+                        block("passionfruit_crate", ATMOSPHERIC)
+                        block("shimmering_passionfruit_crate", ATMOSPHERIC, weight = 0.01)
 
                         block("chocolate_block", mod = NEAPOLITAN, weight = 0.1)
                         block("banana_crate", mod = NEAPOLITAN, weight = 0.5)

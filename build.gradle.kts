@@ -24,7 +24,7 @@ subprojects {
         curseMaven()
 
         maven {
-            url = uri("https://maven.theillusivec4.top/")
+            url = uri("https://maven.theillusivec4.top")
             content {
                 includeGroup("top.theillusivec4.curios")
             }
@@ -33,7 +33,17 @@ subprojects {
         maven {
             url = uri("https://maven.blamejared.com")
             content {
+                includeGroup("mezz.jei")
                 includeGroup("vazkii.botania")
+                includeGroup("vazkii.autoreglib")
+                includeGroup("vazkii.patchouli")
+            }
+        }
+
+        maven {
+            url = uri("https://maven.minecraftforge.net")
+            content {
+                includeGroup("com.github.glitchfiend")
             }
         }
     }

@@ -2,14 +2,12 @@ package com.possible_triangle.skygrid.datagen.dimensions
 
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.api.xml.elements.Distance
-import com.possible_triangle.skygrid.datagen.CompatMods.BOP
-import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
+import com.possible_triangle.skygrid.datagen.CompatMods
 import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.data.DataGenerator
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.PointedDripstoneBlock
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
@@ -24,7 +22,7 @@ class Cave(generator: DataGenerator) : DimensionConfigGenerator("cave", generato
         dimension(ResourceLocation(SkygridConstants.MOD_ID, "cave")) {
             distance = Distance.of(3)
             blocks {
-                reference("ores", weight = 0.1)
+                reference("overworld_ores", weight = 0.1)
                 list(weight = 0.1) {
                     reference("dripstone")
                     block(Blocks.DRIPSTONE_BLOCK, weight = 0.2) {
@@ -48,14 +46,13 @@ class Cave(generator: DataGenerator) : DimensionConfigGenerator("cave", generato
                     block(Blocks.LAVA)
                     block(Blocks.WATER)
                 }
-                tag(BlockTags.BASE_STONE_OVERWORLD) {
-                    side(Direction.UP, probability = 0.1) {
-                        block("glow_shroom", QUARK)
-                    }
+
+                reference("overworld_stone") {
                     side(Direction.DOWN, probability = 0.05) {
-                        block("hanging_cobweb", mod = BOP)
+                        block("hanging_cobweb", mod = CompatMods.BOP)
                     }
                 }
+
                 reference("sculk", weight = 0.1)
             }
         }

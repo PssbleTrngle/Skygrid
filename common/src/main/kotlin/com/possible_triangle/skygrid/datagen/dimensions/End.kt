@@ -10,6 +10,7 @@ import net.minecraft.core.Direction.UP
 import net.minecraft.data.DataGenerator
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.EndRodBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF
@@ -125,8 +126,11 @@ class End(generator: DataGenerator) : DimensionConfigGenerator("end", generator)
                 list("loot", weight = 0.01) {
                     block(Blocks.SHULKER_BOX, weight = 0.0075)
                     fallback {
-                        block("purpur_chest", mod = QUARK)
-                        block("poise_chest", mod = ENDERGETIC)
+                        cycle(ChestBlock.FACING)
+                        list {
+                            block("purpur_chest", mod = QUARK)
+                            block("poise_chest", mod = ENDERGETIC)
+                        }
                         block(Blocks.CHEST)
                     }
                 }

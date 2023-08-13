@@ -5,28 +5,28 @@ import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
 import com.possible_triangle.skygrid.api.xml.elements.Distance
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
 import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
+import com.possible_triangle.skygrid.datagen.DatagenContext
 import com.possible_triangle.skygrid.datagen.builder.providers.BlockBuilder
 import com.possible_triangle.skygrid.xml.ReferenceContext
-import net.minecraft.core.RegistryAccess
 
-class DimensionConfigBuilder(private val registries: RegistryAccess) {
+class DimensionConfigBuilder(private val context: DatagenContext) {
 
     companion object {
         fun create(
-            registries: RegistryAccess,
+            context: DatagenContext,
             references: IReferenceContext = ReferenceContext(),
             builder: DimensionConfigBuilder.() -> Unit,
         ): DimensionConfig {
-            return DimensionConfigBuilder(registries).apply(builder).build().also {
-                it.validate(registries, references)
+            return DimensionConfigBuilder(context).apply(builder).build().also {
+                it.validate(context.registries, references)
             }
         }
     }
 
     var distance: Distance = Distance.DEFAULT
-    private val blocks = BasicBlocksBuilder(registries)
-    private val loot = LootBuilder()
-    private val mobs = MobsBuilder(registries)
+    private val blocks = BasicBlocksBuilder(context)
+    private val loot = LootBuilder(context)
+    private val mobs = MobsBuilder(context)
     private var gap: SingleBlock? = null
 
     fun blocks(builder: IBlocksBuilder.() -> Unit) {
@@ -41,8 +41,8 @@ class DimensionConfigBuilder(private val registries: RegistryAccess) {
         builder(mobs)
     }
 
-    fun gap(id: String, mod: String = "minecraft") {
-        gap = BlockBuilder(id, mod, registries = registries).build()
+    fun gap(id: String, mod: String = context.defaultMod) {
+        gap = BlockBuilder(context, id, mod).build()
     }
 
     fun build(): DimensionConfig {

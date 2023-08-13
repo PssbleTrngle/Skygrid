@@ -21,27 +21,38 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-abstract class DimensionConfigGenerator(private val name: String, private val generator: DataGenerator) : DataProvider {
+abstract class DimensionConfigGenerator(
+    private val name: String,
+    private val generator: DataGenerator,
+) : DataProvider {
 
     private val configs = hashMapOf<ResourceLocation, DimensionConfig>()
     private val presets = hashMapOf<ResourceLocation, Preset>()
     private val registries = RegistryAccess.BUILTIN.get()
 
+    private fun createContext(defaultMod: String?): DatagenContext {
+        return defaultMod?.let {
+            DatagenContext(registries, defaultMod)
+        } ?: DatagenContext(registries)
+    }
+
     var datapack: String? = null
 
-    fun dimension(key: ResourceKey<LevelStem>, builder: DimensionConfigBuilder.() -> Unit) =
-        dimension(key.location(), builder)
+    fun dimension(key: ResourceKey<LevelStem>, defaultMod: String? = null, builder: DimensionConfigBuilder.() -> Unit) =
+        dimension(key.location(), defaultMod, builder)
 
-    fun dimension(key: ResourceLocation, builder: DimensionConfigBuilder.() -> Unit) {
-        DimensionConfigBuilder(registries).apply {
+    fun dimension(key: ResourceLocation, defaultMod: String? = null, builder: DimensionConfigBuilder.() -> Unit) {
+        DimensionConfigBuilder(createContext(defaultMod)).apply {
             builder(this)
             configs[key] = build()
         }
     }
 
-    fun preset(key: String, builder: IBlocksBuilder.() -> Unit) = preset(ResourceLocation(key), builder)
-    fun preset(key: ResourceLocation, builder: IBlocksBuilder.() -> Unit) {
-        val providers = BasicBlocksBuilder(registries).also(builder).build()
+    fun preset(key: String, defaultMod: String? = null, builder: IBlocksBuilder.() -> Unit) =
+        preset(ResourceLocation(key), defaultMod, builder)
+
+    fun preset(key: ResourceLocation, defaultMod: String? = null, builder: IBlocksBuilder.() -> Unit) {
+        val providers = BasicBlocksBuilder(createContext(defaultMod)).also(builder).build()
         require(providers.isNotEmpty())
         val provider = when (providers.size) {
             1 -> providers.first()
@@ -50,8 +61,8 @@ abstract class DimensionConfigGenerator(private val name: String, private val ge
         presets[key] = Preset(provider)
     }
 
-    fun IBlocksBuilder.preset(id: String, weight: Double = 1.0, builder: IBlocksBuilder.() -> Unit) {
-        preset(id, builder)
+    fun IBlocksBuilder.preset(id: String, weight: Double = 1.0, defaultMod: String? = null, builder: IBlocksBuilder.() -> Unit) {
+        preset(id, defaultMod, builder)
         this.reference(id, weight)
     }
 

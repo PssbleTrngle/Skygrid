@@ -1,30 +1,30 @@
 package com.possible_triangle.skygrid.datagen.builder
 
+import com.possible_triangle.skygrid.datagen.DatagenContext
 import com.possible_triangle.skygrid.datagen.builder.providers.*
 import net.minecraft.core.Registry
-import net.minecraft.core.RegistryAccess
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 
 interface IBlocksBuilder {
 
-    val registries: RegistryAccess
+    val context: DatagenContext
 
     fun add(block: BlockProviderBuilder<*>)
 
     fun block(block: Block, weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}): BlockBuilder {
-        val blocks = registries.registryOrThrow(Registry.BLOCK_REGISTRY)
+        val blocks = context.registries.registryOrThrow(Registry.BLOCK_REGISTRY)
         val key = requireNotNull(blocks.getKey(block))
         return block(key.path, key.namespace, weight, builder)
     }
 
     fun block(
         id: String,
-        mod: String = "minecraft",
+        mod: String = context.defaultMod,
         weight: Double = 1.0,
         builder: BlockBuilder.() -> Unit = {},
     ): BlockBuilder {
-        return BlockBuilder(id, mod, weight, registries).also {
+        return BlockBuilder(context, id, mod, weight).also {
             builder(it)
             add(it)
         }
@@ -42,20 +42,20 @@ interface IBlocksBuilder {
 
     fun tag(
         id: String,
-        mod: String = "minecraft",
+        mod: String = context.defaultMod,
         weight: Double = 1.0,
         expand: Boolean = false,
         random: Boolean = true,
         builder: TagBuilder.() -> Unit = {},
     ): TagBuilder {
-        return TagBuilder(id, mod, weight, random, expand, registries).also {
+        return TagBuilder(context, id, mod, weight, random, expand).also {
             builder(it)
             add(it)
         }
     }
 
     fun list(name: String? = null, weight: Double = 1.0, builder: BlockListBuilder.() -> Unit = {}): BlockListBuilder {
-        return BlockListBuilder(name, weight, registries).also {
+        return BlockListBuilder(context, name, weight).also {
             builder(it)
             add(it)
         }
@@ -66,14 +66,14 @@ interface IBlocksBuilder {
         weight: Double = 1.0,
         builder: FallbackBuilder.() -> Unit = {},
     ): FallbackBuilder {
-        return FallbackBuilder(name, weight, registries).also {
+        return FallbackBuilder(context, name, weight).also {
             builder(it)
             add(it)
         }
     }
 
     fun reference(id: String, weight: Double = 1.0, builder: ReferenceBuilder.() -> Unit = {}): ReferenceBuilder {
-        return ReferenceBuilder(id, weight, registries).also {
+        return ReferenceBuilder(context, id, weight).also {
             builder(it)
             add(it)
         }

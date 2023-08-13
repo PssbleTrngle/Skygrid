@@ -3,6 +3,7 @@ package com.possible_triangle.skygrid.datagen
 object CompatMods {
 
     const val AQUATIC = "upgrade_aquatic"
+    const val ATMOSPHERIC = "atmospheric"
     const val BOTANIA = "botania"
     const val BOP = "biomesoplenty"
     const val CREATE = "create"

@@ -1,10 +1,12 @@
 package com.possible_triangle.skygrid.api.xml.elements
 
 import com.possible_triangle.skygrid.api.WeightedList
+import com.possible_triangle.skygrid.api.extensions.serialType
 import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.Validating
+import com.possible_triangle.skygrid.api.xml.warnInvalid
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.BlockPos
@@ -33,7 +35,9 @@ abstract class Extra : Generator<IBlockAccess>, Validating {
         additionalFilters: List<FilterOperator>,
     ): Boolean {
         validProviders = WeightedList(providers.filter { it.validate(blocks, references) })
-        return internalValidate(blocks) && validProviders.isNotEmpty()
+        return internalValidate(blocks).warnInvalid {
+            "block extra with type '$serialType' is invalid"
+        } && validProviders.isNotEmpty()
     }
 
     protected open fun transform(state: BlockState, random: RandomSource): BlockState {

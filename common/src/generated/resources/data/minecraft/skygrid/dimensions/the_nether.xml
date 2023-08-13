@@ -61,7 +61,7 @@
          <block id="bone_block" weight="0.1">
             <cycle key="axis"/>
          </block>
-         <block id="brimstone" mod="biomesoplenty">
+         <block id="brimstone" mod="biomesoplenty" weight="0.2">
             <side on="up">
                <block id="brimstone_bud" mod="biomesoplenty" weight="2.0"/>
                <block id="brimstone_fumarole" mod="biomesoplenty"/>
@@ -69,8 +69,8 @@
                   <side on="up">
                      <block id="brimstone_cluster" mod="biomesoplenty"/>
                   </side>
-                  <set key="half" value="bottom"/>
-                  <set key="half" value="top"/>
+                  <set key="half" value="lower"/>
+                  <set key="half" value="upper"/>
                </block>
             </side>
          </block>
@@ -132,8 +132,9 @@
             </block>
          </side>
       </block>
-      <block id="spawner" weight="0.05"/>
+      <block id="spawner" weight="0.01"/>
       <list weight="0.02" name="loot">
+         <cycle key="facing"/>
          <block id="warped_chest" mod="quark"/>
          <block id="crimson_chest" mod="quark"/>
          <fallback>

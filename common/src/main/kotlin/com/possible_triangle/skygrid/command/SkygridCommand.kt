@@ -72,16 +72,12 @@ object SkygridCommand {
 
         val range = { gen: (CommandContext<CommandSourceStack>) -> DimensionConfig ->
             val executor: Command<CommandSourceStack> = Command { generateRange(it, gen(it)) }
+            val tail = { argument("distance", IntegerArgumentType.integer(1)).executes(executor) }
             val range = argument("end", BlockPosArgument.blockPos()).executes(executor).then(
 
-                argument("snap", BoolArgumentType.bool()).executes(executor).then(
-                    literal("random").executes(executor)
-                        .then(argument("distance", IntegerArgumentType.integer(1)).executes(executor))
-                )
-                    .then(
-                        argument("seed", LongArgumentType.longArg()).executes(executor)
-                            .then(argument("distance", IntegerArgumentType.integer(1)).executes(executor))
-                    )
+                argument("snap", BoolArgumentType.bool()).executes(executor)
+                    .then(literal("random").executes(executor).then(tail()))
+                    .then(argument("seed", LongArgumentType.longArg()).executes(executor).then(tail()))
 
             )
             singleBlock(gen).then(range)

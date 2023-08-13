@@ -11,7 +11,7 @@ import net.minecraft.util.RandomSource
 data class Preset(val provider: BlockProvider) : Generator<IBlockAccess> {
 
     override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
-        return provider.generate(random, access, )
+        return provider.generate(random, access)
     }
 
 }

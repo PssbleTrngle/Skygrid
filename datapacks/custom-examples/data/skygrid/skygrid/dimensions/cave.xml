@@ -1,6 +1,6 @@
 <dimension>
    <blocks>
-      <reference id="ores" weight="0.1"/>
+      <reference id="overworld_ores" weight="0.1"/>
       <list weight="0.1">
          <reference id="dripstone"/>
          <block id="dripstone_block" weight="0.2">
@@ -24,14 +24,11 @@
          <block id="lava"/>
          <block id="water"/>
       </list>
-      <tag id="base_stone_overworld">
-         <side on="up" probability="0.1">
-            <block id="glow_shroom" mod="quark"/>
-         </side>
+      <reference id="overworld_stone">
          <side on="down" probability="0.05">
             <block id="hanging_cobweb" mod="biomesoplenty"/>
          </side>
-      </tag>
+      </reference>
       <reference id="sculk" weight="0.1"/>
    </blocks>
    <distance x="3" y="3" z="3"/>

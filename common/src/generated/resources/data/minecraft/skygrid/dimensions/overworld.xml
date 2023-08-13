@@ -9,19 +9,7 @@
          </block>
       </list>
       <list weight="100.0" name="ground">
-         <list weight="20.0" name="stone">
-            <tag id="base_stone_overworld" expand="true">
-               <side on="up" probability="0.02">
-                  <block id="glow_shroom" mod="quark"/>
-               </side>
-            </tag>
-            <block id="stone"/>
-            <block id="limestone" mod="create"/>
-            <block id="ochrum" mod="create"/>
-            <block id="scoria" mod="create"/>
-            <block id="scorchia" mod="create"/>
-            <block id="calcite" weight="0.1"/>
-         </list>
+         <reference id="overworld_stone" weight="20.0"/>
          <block id="gravel" weight="10.0"/>
          <block id="clay" weight="8.0"/>
          <reference id="moss" weight="0.3"/>
@@ -105,7 +93,6 @@
                   <block id="cactus"/>
                   <block id="dead_bush"/>
                   <block id="desert_grass" mod="biomesoplenty"/>
-                  <block id="" mod="biomesoplenty"/>
                </side>
                <block id="sand"/>
                <block id="red_sand" weight="0.2"/>
@@ -343,6 +330,7 @@
          <block id="cobweb" weight="0.02"/>
       </list>
       <list name="loot">
+         <cycle key="facing"/>
          <except>
             <name pattern="crimson"/>
             <name pattern="warped"/>
@@ -361,23 +349,23 @@
       </list>
       <block id="spawner"/>
       <reference id="ocean" weight="0.1"/>
-      <reference id="ores" weight="30.0"/>
+      <reference id="overworld_ores" weight="30.0"/>
       <list weight="6.0" name="compressed">
          <cycle key="axis"/>
          <list>
             <block id="hay_block"/>
             <block id="stick_block" mod="quark"/>
-            <block id="gunpowder_block" mod="quark"/>
+            <block id="gunpowder_sack" mod="quark"/>
          </list>
          <list weight="0.1" name="leather">
-            <block id="bonded_leather"/>
-            <block id="bonded_rabbit_hide" weight="0.1"/>
-            <block id="bonded_ravager_hide" weight="0.01"/>
+            <block id="bonded_leather" mod="quark"/>
+            <block id="bonded_rabbit_hide" mod="quark" weight="0.1"/>
+            <block id="bonded_ravager_hide" mod="quark" weight="0.01"/>
          </list>
          <list name="plants">
             <block id="glowberry_sack" mod="quark"/>
             <block id="cactus_block" mod="quark"/>
-            <block id="sugarcane_block" mod="quark"/>
+            <block id="sugar_cane_block" mod="quark"/>
             <block id="bamboo_block" mod="quark" weight="0.1"/>
             <block id="aloe_bundle" mod="atmospheric"/>
             <block id="passion_vine_bundle" mod="atmospheric"/>
@@ -427,24 +415,24 @@
       </list>
    </blocks>
    <loot>
-      <table id="chests/spawn_bonus_chest" weight="20.0"/>
-      <table id="chests/desert_pyramid" weight="2.0"/>
-      <table id="chests/woodland_mansion" weight="2.0"/>
-      <table id="chests/simple_dungeon"/>
-      <table id="chests/abandoned_mineshaft"/>
-      <table id="chests/buried_treasure"/>
-      <table id="chests/igloo_chest"/>
-      <table id="chests/jungle_temple"/>
-      <table id="chests/pillager_outpost"/>
-      <table id="chests/shipwreck_map"/>
-      <table id="chests/shipwreck_supply"/>
-      <table id="chests/shipwreck_treasure"/>
-      <table id="chests/stronghold_corridor"/>
-      <table id="chests/stronghold_crossing"/>
-      <table id="chests/stronghold_library"/>
-      <table id="chests/underwater_ruin_big"/>
-      <table id="chests/underwater_ruin_small"/>
-      <table id="chests/ancient_city" weight="0.05"/>
+      <table id="minecraft:chests/spawn_bonus_chest" weight="20.0"/>
+      <table id="minecraft:chests/desert_pyramid" weight="2.0"/>
+      <table id="minecraft:chests/woodland_mansion" weight="2.0"/>
+      <table id="minecraft:chests/simple_dungeon"/>
+      <table id="minecraft:chests/abandoned_mineshaft"/>
+      <table id="minecraft:chests/buried_treasure"/>
+      <table id="minecraft:chests/igloo_chest"/>
+      <table id="minecraft:chests/jungle_temple"/>
+      <table id="minecraft:chests/pillager_outpost"/>
+      <table id="minecraft:chests/shipwreck_map"/>
+      <table id="minecraft:chests/shipwreck_supply"/>
+      <table id="minecraft:chests/shipwreck_treasure"/>
+      <table id="minecraft:chests/stronghold_corridor"/>
+      <table id="minecraft:chests/stronghold_crossing"/>
+      <table id="minecraft:chests/stronghold_library"/>
+      <table id="minecraft:chests/underwater_ruin_big"/>
+      <table id="minecraft:chests/underwater_ruin_small"/>
+      <table id="minecraft:chests/ancient_city" weight="0.05"/>
    </loot>
    <mobs>
       <mob id="minecraft:zombie" weight="2.0"/>

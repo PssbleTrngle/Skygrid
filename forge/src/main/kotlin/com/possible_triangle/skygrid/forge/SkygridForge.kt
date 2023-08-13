@@ -3,7 +3,7 @@ package com.possible_triangle.skygrid.forge
 import com.possible_triangle.skygrid.SkygridMod
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.command.SkygridCommand
-import com.possible_triangle.skygrid.forge.platform.ForgeConfig
+import com.possible_triangle.skygrid.forge.platform.ForgeConfigs
 import com.possible_triangle.skygrid.world.SkygridPreset
 import com.possible_triangle.skygrid.xml.XMLResource
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -32,7 +32,7 @@ object SkygridForge {
     val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID)!!
 
     init {
-        ForgeConfig.register()
+        ForgeConfigs.register()
         SkygridMod.init()
 
         FORGE_BUS.addListener(EventPriority.HIGH) { event: AddReloadListenerEvent -> XMLResource.register(event::addListener) }
