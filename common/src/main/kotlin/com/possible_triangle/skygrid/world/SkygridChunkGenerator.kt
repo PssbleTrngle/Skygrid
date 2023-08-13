@@ -279,7 +279,7 @@ class SkygridChunkGenerator(
     }
 
     override fun addDebugScreenInfo(info: MutableList<String>, randomState: RandomState, pos: BlockPos) {
-        // No debug screen info for now
+        info.add("Skygrid Config: $configKey")
     }
 
 }
