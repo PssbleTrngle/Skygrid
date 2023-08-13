@@ -1,47 +1,18 @@
 {
-   "name": "web",
-   "version": "0.1.0",
-   "private": true,
-   "scripts": {
-      "dev": "next dev",
-      "build": "next build",
-      "start": "next start",
-      "lint": "next lint",
-      "type-check": "tsc --noEmit",
-      "jest": "jest --watch",
-      "test": "yarn type-check && yarn lint && jest --watch=false",
-      "clean": "rimraf data lang public/blocks"
-   },
-   "dependencies": {
-      "@styled-icons/boxicons-regular": "^10.38.0",
-      "@types/wicg-file-system-access": "^2020.9.5",
-      "idb-keyval": "^6.1.0",
-      "lodash": "^4.17.21",
-      "nanoid": "^3.3.1",
-      "next": "12",
-      "polished": "^4.1.4",
-      "react": "^18.2.0",
-      "react-dom": "^18.2.0",
-      "react-select": "^5.2.2",
-      "sharp": "^0.30.2",
-      "styled-components": "^5.3.5",
-      "styled-icons": "^10.45.0",
-      "typescript": "^4.7.3",
-      "xml2js": "^0.4.23"
-   },
-   "devDependencies": {
-      "@testing-library/jest-dom": "^5.16.2",
-      "@testing-library/react": "^12.1.4",
-      "@types/jest": "^27.4.1",
-      "@types/lodash": "^4.14.178",
-      "@types/nanoid": "^3.0.0",
-      "@types/node": "17.0.18",
-      "@types/react": "17.0.39",
-      "@types/styled-components": "^5.1.25",
-      "@types/xml2js": "^0.4.9",
-      "eslint": "^8.11.0",
-      "eslint-config-next": "12.1.0",
-      "jest": "^27.5.1",
-      "prettier": "^2.6.0"
-   }
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.9.7",
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "^2.5.1",
+    "turbo": "latest"
+  },
+  "packageManager": "pnpm@8.6.10",
+  "name": "web"
 }
