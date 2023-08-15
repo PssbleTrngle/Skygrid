@@ -9,6 +9,11 @@ const BaseStyle = css`
 
   margin: 0 auto;
   display: block;
+
+  &:disabled {
+    color: ${(p) => mix(0.8, "#AAA", p.theme.text)};
+    cursor: not-allowed;
+  }
 `;
 
 export const ButtonStyle = css`

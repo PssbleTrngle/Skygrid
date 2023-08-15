@@ -19,7 +19,9 @@ const TagPanel: FC<Tag & { size: number }> = ({ size, ...tag }) => {
     <>
       <BlockIcon {...block} size={size} />
       <p>{tag.mod ?? "minecraft"}</p>
-      <p>#{tag.id}</p>
+      <p>
+        <i>#{tag.id}</i>
+      </p>
       <p>{tag.matches.length} matches</p>
     </>
   );

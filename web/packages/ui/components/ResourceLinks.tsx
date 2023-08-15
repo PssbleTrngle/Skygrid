@@ -33,7 +33,6 @@ const ResourceLinks: FC<{ keys: Named[] }> = ({ keys }) => {
 
 const Group = styled.div`
   padding: 2em;
-  //border: 1px solid ${(p) => p.theme.text};
 
   h3 {
     margin-bottom: 1.5em;
@@ -67,13 +66,13 @@ const Group = styled.div`
         height: 25%;
         border: 1px solid transparent;
         border-bottom-color: ${(p) => p.theme.text};
-        //transform: rotate(45deg);
       }
     }
 
     & > :first-child {
       li::before {
         top: -0.5em;
+        height: calc(100% - 0.55em);
       }
     }
   }

@@ -13,7 +13,6 @@ const Panels = styled.div`
 
   & > div {
     padding: 2em;
-    //backdrop-filter: blur(1rem) brightness(0.75);
     transition: background 0.3s ease,
       box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: grid;

@@ -23,9 +23,8 @@ const recurseStep: Mapper<
   BlockList: recurseList,
   Fallback: recurseList,
   Reference: (it) => (rest) => {
-    const children = [it.provider].filter(exists);
-    if (rest.length === 0) return children;
-    return findRecursive(rest, children);
+    if (!it.provider) return [];
+    return findRecursive([createId(it.provider), ...rest], [it.provider]);
   },
 };
 

@@ -3,6 +3,7 @@ import {
   BlockProvider,
   DimensionConfig,
   Extra,
+  Filter,
   Named,
   Preset,
   Reference,
@@ -16,6 +17,7 @@ import DataResolver from "./DataResolver";
 import { uniq } from "lodash-es";
 import Polymorpher from "./Polymorpher";
 import getConfig from "next/config";
+import * as console from "console";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -71,6 +73,22 @@ const ExtrasType: Record<string, Typename<Extra>> = {
   offset: "OffsetExtra",
 };
 
+const FiltersType: Record<string, Typename<Filter>> = {
+  mod: "ModFilter",
+  tag: "TagFilter",
+  name: "NameFilter",
+};
+
+type RawDimensionConfig = Omit<DimensionConfig, "blocks"> & {
+  blocks: {
+    children: DimensionConfig["blocks"];
+  };
+};
+
+type RawPreset = {
+  children: [BlockProvider];
+};
+
 export default class XMLParser {
   private polymorpher = new Polymorpher();
 
@@ -100,6 +118,8 @@ export default class XMLParser {
       ...e,
       probability: e.probability ?? 1,
     }));
+
+    this.polymorpher.register<Filter>(["except"], FiltersType);
   }
 
   async getResources(type: ResourceType) {
@@ -124,9 +144,11 @@ export default class XMLParser {
     return resources.flat();
   }
 
-  async getConfig(key: Named) {
+  async getConfig(key: Named): Promise<DimensionConfig | null> {
     const path = this.getDataPath(key, `skygrid/${ResourceType.CONFIG}`, "xml");
-    return this.parseFile<DimensionConfig>(...path);
+    const raw = await this.parseFile<RawDimensionConfig>(...path);
+    if (!raw) return null;
+    return { ...raw, blocks: raw.blocks.children };
   }
 
   async getPreset(reference: Reference): Promise<BlockProvider | null> {
@@ -135,13 +157,13 @@ export default class XMLParser {
       `skygrid/${ResourceType.PRESET}`,
       "xml"
     );
-    const parsed = await this.parseFile<Preset>(...path);
-    return parsed?.provider ?? null;
+    const parsed = await this.parseFile<RawPreset>(...path);
+    return parsed?.children[0] ?? null;
   }
 
   async getIcon(block: Named) {
     const mod = block.mod ?? "minecraft";
-    const icon = `blocks/${mod}/${block.id}.png`;
+    const icon = `icons/${mod}/${block.id}.png`;
     if (await this.resolver.exists("file", "public", icon)) {
       return `${publicRuntimeConfig.basePath}/${icon}`;
     }
@@ -161,7 +183,7 @@ export default class XMLParser {
   }
 
   async tagDefinition(tag: Pick<Tag, "id" | "mod" | "except">) {
-    const path = this.getDataPath(tag, "tags", "json");
+    const path = this.getDataPath(tag, "tags/blocks", "json");
     const content = await this.resolver.getContent(...path);
     if (!content) return null;
     try {
@@ -175,11 +197,19 @@ export default class XMLParser {
     tag: Pick<Tag, "id" | "mod" | "except">
   ): Promise<Block[]> {
     const definition = await this.tagDefinition(tag);
-    if (!definition) return [];
+    if (!definition) {
+      console.warn(
+        `Missing tag definition for #${tag.mod ?? "minecraft"}:${tag.id}`
+      );
+      return [];
+    }
 
     const filters: Array<(block: Block) => boolean> = [];
 
     if (tag.except) {
+      // TODO why does this even happen?
+      if (!Array.isArray(tag.except)) return [];
+
       const tagFilters = await Promise.all(
         tag.except
           .filter((it) => it.__typename === "TagFilter")

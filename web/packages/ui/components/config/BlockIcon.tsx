@@ -21,8 +21,8 @@ const BlockIcon: FC<BlockProvider & Named & { size: number }> = ({
 
 const Style = styled.img<{ size: number }>`
   object-fit: contain;
-  height: ${(p) => p.size};
-  width: ${(p) => p.size};
+  height: ${(p) => `${p.size}px`};
+  width: ${(p) => `${p.size}px`};
 `;
 
 export default BlockIcon;

@@ -2,8 +2,9 @@ import Page from "layout/Page";
 import ConfigVisualizer from "ui/components/config/ConfigVisualizer";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import serverParser from "parser/serverParser";
-import { DimensionConfig, Named } from "graphql/generated/types";
+import { DimensionConfig, Named } from "schema/generated/types";
 import { ResourceType } from "parser/XMLParser";
+import HomeIcon from "../../layout/HomeIcon";
 
 interface Props {
   configs: Named[];
@@ -39,7 +40,9 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 const Config: NextPage<Props> = ({ parsed, configs }) => {
   return (
     <Page>
-      <ConfigVisualizer config={parsed} options={configs} />
+      <ConfigVisualizer config={parsed} options={configs}>
+        <HomeIcon />
+      </ConfigVisualizer>
     </Page>
   );
 };

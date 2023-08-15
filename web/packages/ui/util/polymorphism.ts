@@ -20,5 +20,7 @@ export function forPolymorph<TObject extends Polymorphic, TOut>(
   value: TObject,
   mapper: Mapper<TObject, TOut>
 ): TOut | undefined {
-  return undefined;
+  if (!value.__typename) return undefined;
+  const map = mapper[value.__typename as Typename<TObject>];
+  return map?.(value as ResolvedPolymorph<TObject, Typename<TObject>>);
 }

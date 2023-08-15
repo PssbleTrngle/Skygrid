@@ -31,8 +31,8 @@ const ProviderPanel: FC<{
   return (
     <Style
       {...props}
-      reference={provider.__typename === "Reference"}
-      size={size}
+      $reference={provider.__typename === "Reference"}
+      $size={size}
     >
       {createElement(component, { ...provider, size })}
       <p key="weight">{(provider.weight * 100).toFixed(4)}%</p>
@@ -44,10 +44,10 @@ const ProviderPanel: FC<{
   );
 };
 
-const Style = styled(Panel)<{ size: number; reference?: boolean }>`
+const Style = styled(Panel)<{ $size: number; $reference?: boolean }>`
   grid-template-rows: ${(p) => p.size}px repeat(auto-fit, 1.2em);
   ${(p) =>
-    p.reference &&
+    p.$reference &&
     css`
       border: ${p.theme.accent} 1px solid;
     `}

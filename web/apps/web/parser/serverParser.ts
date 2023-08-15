@@ -5,6 +5,7 @@ import DataResolver from "../parser/DataResolver";
 import XMLParser from "../parser/XMLParser";
 
 const DATA_DIR = resolve("data");
+const BASE_DIR = resolve(".");
 
 function isType(file: string, type: FileSystemHandleKind) {
   if (type === "directory") return statSync(file).isDirectory();
@@ -14,18 +15,18 @@ function isType(file: string, type: FileSystemHandleKind) {
 
 export const serverResolver: DataResolver = {
   exists: async (type, ...path) => {
-    const file = resolve(...path);
+    const file = resolve(BASE_DIR, ...path);
     if (!existsSync(file)) return false;
     return isType(file, type);
   },
   getContent: async (...path) => {
-    const file = resolve(...path);
+    const file = resolve(BASE_DIR, ...path);
     if (!existsSync(file)) return null;
     return readFileSync(file).toString();
   },
   getName: async (block) => nameOf(block),
   list: async (type, ...path) => {
-    const file = resolve(...path);
+    const file = resolve(BASE_DIR, ...path);
     if (!existsSync(file)) return [];
     return readdirSync(file).filter((it) => isType(join(file, it), type));
   },

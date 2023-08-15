@@ -7,7 +7,7 @@ import { UnderlineHover } from "../../styles/mixins";
 export interface LinkProps {
   underline?: "always" | "none" | "hover";
   children?: ReactNode;
-  href: string;
+  href?: string;
 }
 
 export const LinkStyle = css<LinkProps>`
@@ -28,14 +28,16 @@ const Style = styled.a<LinkProps>`
   ${LinkStyle}
 `;
 
-export const IconLink: FC<{
-  href: string;
+export interface IconLinkProps {
   icon: StyledIcon;
   hoverIcon?: StyledIcon;
   size?: string | number;
   tooltip?: string;
+  href?: string;
   children?: ReactNode;
-}> = ({
+}
+
+export const IconLink: FC<IconLinkProps> = ({
   children,
   tooltip,
   icon,
