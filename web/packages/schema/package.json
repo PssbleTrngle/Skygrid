@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "graphql-codegen"
+    "gen": "graphql-codegen"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^5.0.0",
