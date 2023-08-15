@@ -1,7 +1,7 @@
 import Background from "layout/Background";
 import Button from "ui/components/basic/Button";
 import Page from "layout/Page";
-import { Subtitle, Title } from "ui/components/basic/Text";
+import { Subtitle } from "ui/components/basic/Text";
 import LinkBar from "ui/components/LinkBar";
 import ResourceLinks from "ui/components/ResourceLinks";
 import type { GetStaticProps, NextPage } from "next";
@@ -11,7 +11,7 @@ import { Named } from "schema/generated/types";
 import { ResourceType } from "parser/XMLParser";
 import Panels from "ui/components/Panels";
 import Main from "ui/components/Main";
-import StyledLink from "../layout/StyledLink";
+import Link from "ui/components/basic/Link";
 
 interface Props {
   configs: Named[];
@@ -33,12 +33,12 @@ const Home: NextPage<Props> = ({ configs }) => {
           <li>
             Skygrid provides a new world type which generates an infinite grid
             of blocks in the void, inspired by{" "}
-            <StyledLink
+            <Link
               underline="always"
               href="https://www.youtube.com/watch?v=5dhs3ithXDA"
             >
               Sethblings version
-            </StyledLink>{" "}
+            </Link>{" "}
             from 2012.
           </li>
           <li>
@@ -78,9 +78,10 @@ const Style = styled(Page)`
   padding: 0;
 `;
 
-const ModTitle = styled(Title)`
-  text-transform: uppercase;
+const ModTitle = styled.h1`
   font-size: 8rem;
+  text-align: center;
+  text-transform: uppercase;
   padding: 4rem 0;
   margin-bottom: 3rem;
   letter-spacing: 0.5ch;

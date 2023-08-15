@@ -74,6 +74,11 @@
     "file": "8mxk6Cye"
   },
   {
+    "name": "emi",
+    "type": "modrinth",
+    "file": "fRiHVvU7"
+  },
+  {
     "name": "vanilla",
     "url": "$VANILLA_DATA"
   },

@@ -1,6 +1,6 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { BlockProvider, Named } from "schema/generated/types";
-import styled from "styled-components";
+import { useElementFactory } from "../../context/elements";
 
 const FALLBACK = `/unknown_block.png`;
 
@@ -11,18 +11,19 @@ const BlockIcon: FC<BlockProvider & Named & { size: number }> = ({
 }) => {
   const defaultSrc = useMemo(() => icon ?? FALLBACK, [icon]);
   const [src, setSrc] = useState<string>(defaultSrc);
+  const onError = useCallback(() => setSrc(FALLBACK), [setSrc]);
 
   useEffect(() => setSrc(defaultSrc), [defaultSrc]);
 
-  return (
-    <Style alt={id} src={src} size={size} onError={() => setSrc(FALLBACK)} />
-  );
-};
+  const { createImg } = useElementFactory();
 
-const Style = styled.img<{ size: number }>`
-  object-fit: contain;
-  height: ${(p) => `${p.size}px`};
-  width: ${(p) => `${p.size}px`};
-`;
+  return createImg({
+    src,
+    size,
+    objectFit: "contain",
+    onError,
+    alt: id,
+  });
+};
 
 export default BlockIcon;

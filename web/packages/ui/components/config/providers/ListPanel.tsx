@@ -4,11 +4,16 @@ import styled from "styled-components";
 import { BlockList, BlockProvider } from "schema/generated/types";
 import BlockIcon from "../BlockIcon";
 import { unwrap } from "../UnwrappedBlocks";
+import { PanelName } from "./NamedLines";
 
-const Previewed = styled.div`
+const Previewed = styled.div<{ $size: number; $columns: number }>`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(${(p) => p.$columns}, 1fr);
+  align-content: flex-start;
+  min-height: ${(p) => p.$size}px;
 `;
+
+const MAX_SHOWN = 16;
 
 const ListPanel: FC<
   BlockProvider &
@@ -21,18 +26,22 @@ const ListPanel: FC<
       orderBy(
         unwrap(children).filter((p) => !p.extra),
         (p) => !p.icon
-      )?.slice(0, 20),
+      )?.slice(0, MAX_SHOWN),
     [children]
   );
 
+  const blocksPerColumn = useMemo(() => {
+    return Math.ceil(Math.sqrt(blocks.length));
+  }, [blocks]);
+
   return (
     <>
-      <Previewed>
+      <Previewed $size={size} $columns={blocksPerColumn}>
         {blocks.map((block, i) => (
-          <BlockIcon {...block} key={i} size={size / 5} />
+          <BlockIcon {...block} key={i} size={size / blocksPerColumn} />
         ))}
       </Previewed>
-      <p>{name ?? <i>{__typename}</i>}</p>
+      <PanelName>{name ?? <i>{__typename}</i>}</PanelName>
       <p>({children.length} entries)</p>
     </>
   );

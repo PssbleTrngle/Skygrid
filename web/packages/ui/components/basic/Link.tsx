@@ -3,6 +3,7 @@ import { Underlined } from "./Text";
 import { createElement, FC, HTMLAttributes, ReactNode, useState } from "react";
 import styled, { css } from "styled-components";
 import { UnderlineHover } from "../../styles/mixins";
+import { useElementFactory } from "../../context/elements";
 
 export interface LinkProps {
   underline?: "always" | "none" | "hover";
@@ -21,7 +22,10 @@ const Link: FC<LinkProps & HTMLAttributes<HTMLAnchorElement>> = ({
   children,
   ...props
 }) => {
-  return <Style {...props}>{children}</Style>;
+  const { createLink } = useElementFactory();
+  const component = <Style {...props}>{children}</Style>;
+  if (createLink && props.href) return createLink(props.href, component);
+  return component;
 };
 
 const Style = styled.a<LinkProps>`

@@ -16,10 +16,7 @@ import { forPolymorph, Typename } from "ui/util/polymorphism";
 import DataResolver from "./DataResolver";
 import { uniq } from "lodash-es";
 import Polymorpher from "./Polymorpher";
-import getConfig from "next/config";
 import * as console from "console";
-
-const { publicRuntimeConfig } = getConfig();
 
 const NUMERICS = ["weight", "probability", "offset", "x", "y", "z"];
 
@@ -104,6 +101,7 @@ export default class XMLParser {
 
         const extra = await forPolymorph<BlockProvider, Promise<{}>>(provider, {
           Tag: async (p) => ({
+            name: await this.resolver.getName(p),
             matches: await this.getBlocksFor({ ...p, except }),
           }),
           Block: (b) => this.extendBlock(b),
@@ -165,7 +163,7 @@ export default class XMLParser {
     const mod = block.mod ?? "minecraft";
     const icon = `icons/${mod}/${block.id}.png`;
     if (await this.resolver.exists("file", "public", icon)) {
-      return `${publicRuntimeConfig.basePath}/${icon}`;
+      return `/${icon}`;
     }
     return null;
   }

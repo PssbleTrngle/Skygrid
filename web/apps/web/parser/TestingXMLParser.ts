@@ -1,6 +1,6 @@
 import { basename, dirname, join } from "path";
 import DataResolver from "parser/DataResolver";
-import { Block } from "schema/generated/types";
+import { Block, Tag } from "schema/generated/types";
 import XMLParser from "parser/XMLParser";
 
 class FakeFileSystem implements DataResolver {
@@ -36,7 +36,7 @@ class FakeFileSystem implements DataResolver {
     return keys.filter((it) => dirname(it) === dir).map((it) => basename(it));
   }
 
-  async getName(_block: Block) {
+  async getName(_block: Block | Tag) {
     return null;
   }
 }

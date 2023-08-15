@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FC } from "react";
 import styled from "styled-components";
-import StyledLink from "./StyledLink";
+import Link from "ui/components/basic/Link";
 
 const HomeLink: FC = () => (
   <Container underline="none" href="/">
@@ -40,7 +40,7 @@ const Backdrop = styled.div`
   clip-path: circle(0%);
 `;
 
-const Container = styled(StyledLink)`
+const Container = styled(Link)`
   position: relative;
   height: 1.5em;
   width: 1.5em;

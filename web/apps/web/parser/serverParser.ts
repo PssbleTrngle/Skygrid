@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join, parse, resolve } from "path";
-import { Block, Named } from "schema/generated/types";
+import { Block, Named, Tag } from "schema/generated/types";
 import DataResolver from "../parser/DataResolver";
 import XMLParser from "../parser/XMLParser";
 
@@ -65,8 +65,15 @@ const translations = existsSync(langFile)
   ? JSON.parse(readFileSync(langFile).toString())
   : {};
 
-export function nameOf(block: Block): string | null {
-  return translations[`block.${block.mod ?? "minecraft"}.${block.id}`] ?? null;
+export function nameOf(block: Block | Tag): string | null {
+  if (block.__typename === "Tag")
+    return (
+      translations[`tag.item.${block.mod ?? "minecraft"}.${block.id}`] ?? null
+    );
+  else
+    return (
+      translations[`block.${block.mod ?? "minecraft"}.${block.id}`] ?? null
+    );
 }
 
 export default serverParser;

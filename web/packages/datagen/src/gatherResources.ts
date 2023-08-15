@@ -4,6 +4,7 @@ import fetchSources from "./sourcesFetcher.js";
 import { renderUsing } from "@pssbletrngle/assets-renderer";
 import { resolve } from "path";
 import { cpSync, existsSync } from "fs";
+import mergeLangFiles from "./langMerger.js";
 
 async function run() {
   await fetchSources();
@@ -12,6 +13,7 @@ async function run() {
     "data/*/tags/**/*.json",
     "data/*/skygrid/**/*.xml",
     "assets/*/blockstates/**/*.json",
+    "assets/*/lang/en_us.json",
     "assets/*/models/**/*.json",
     "assets/*/textures/**/*.png",
     "assets/*/textures/**/*.png.mcmeta",
@@ -28,6 +30,9 @@ async function run() {
   await mergers.run(resolver);
 
   cpSync(resolve(tmpDir, "data"), resolve(appDir, "data"), { recursive: true });
+
+  mergeLangFiles(resolve(tmpDir, "assets"), resolve(appDir, "lang"));
+
   await renderUsing(tmpDir, { output: resolve(appDir, "public", "icons") }, {});
 }
 

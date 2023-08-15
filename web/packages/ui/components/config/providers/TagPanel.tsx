@@ -1,6 +1,7 @@
 import { FC, useEffect, useMemo, useReducer } from "react";
 import { Tag } from "schema/generated/types";
 import BlockIcon from "../BlockIcon";
+import NamedLines from "./NamedLines";
 
 const TagPanel: FC<Tag & { size: number }> = ({ size, ...tag }) => {
   const displayed = useMemo(() => tag.matches.filter((it) => !!it.icon), [tag]);
@@ -18,10 +19,7 @@ const TagPanel: FC<Tag & { size: number }> = ({ size, ...tag }) => {
   return (
     <>
       <BlockIcon {...block} size={size} />
-      <p>{tag.mod ?? "minecraft"}</p>
-      <p>
-        <i>#{tag.id}</i>
-      </p>
+      <NamedLines {...tag} prefix="#" />
       <p>{tag.matches.length} matches</p>
     </>
   );
