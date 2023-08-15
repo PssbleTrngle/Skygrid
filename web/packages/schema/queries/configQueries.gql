@@ -1,0 +1,53 @@
+fragment RawProviderFragment on BlockProvider {
+    ...on BaseBlockProvider {
+        name
+        icon
+        weight
+        extra
+    }
+    ...on Named {
+        id
+        mod
+    }
+}
+
+fragment BlockProviderFragment on BlockProvider {
+    ...RawProviderFragment
+    ...on BlockList {
+        children {
+            ...RawProviderFragment
+        }
+    }
+    ...on Fallback {
+        children {
+            ...RawProviderFragment
+        }
+    }
+    ...on Reference {
+        provider {
+            ...RawProviderFragment
+        }
+    }
+}
+
+fragment DimensionConfigFragment on DimensionConfig {
+    blocks {
+        ...BlockProviderFragment
+    }
+    loot {
+        weight
+        id
+    }
+}
+
+query getConfigs {
+    configs {
+        id
+    }
+}
+
+query getConfig($id: String!) {
+    config(id: $id) {
+        ...DimensionConfigFragment
+    }
+}

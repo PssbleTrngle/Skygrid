@@ -1,0 +1,64 @@
+interface BaseBlockProvider implements WeightedEntry {
+  weight: Float!
+  name: String
+  extra: Boolean
+  icon: String
+  extras: [Extra!]
+  except: [Filter!]
+}
+
+type Block implements WeightedEntry & BaseBlockProvider & Named {
+  mod: String
+  id: String!
+  except: [Filter!]
+  extra: Boolean
+  extras: [Extra!]
+  icon: String
+  name: String
+  weight: Float!
+}
+
+type Tag implements WeightedEntry & BaseBlockProvider & Named {
+  matches: [Block!]!
+  mod: String
+  id: String!
+  except: [Filter!]
+  extra: Boolean
+  extras: [Extra!]
+  icon: String
+  name: String
+  weight: Float!
+}
+
+type Reference implements WeightedEntry & BaseBlockProvider {
+  id: String!
+  provider: BlockProvider!
+  weight: Float!
+  name: String
+  icon: String
+  extras: [Extra!]
+  extra: Boolean
+  except: [Filter!]
+}
+
+type BlockList implements WeightedEntry & BaseBlockProvider {
+  weight: Float!
+  name: String
+  icon: String
+  extras: [Extra!]
+  extra: Boolean
+  except: [Filter!]
+  children: [BlockProvider!]!
+}
+
+type Fallback implements WeightedEntry & BaseBlockProvider {
+  weight: Float!
+  name: String
+  icon: String
+  extras: [Extra!]
+  extra: Boolean
+  except: [Filter!]
+  children: [BlockProvider!]!
+}
+
+union BlockProvider = Block | Tag | Reference | BlockList | Fallback

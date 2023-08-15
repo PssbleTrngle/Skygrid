@@ -1,0 +1,25 @@
+documents: queries/**/*.gql
+schema:
+   - schema/*.gql
+
+extensions:
+   codegen:
+      generates:
+         ./generated/logic.ts:
+            plugins:
+               - typescript
+               - typescript-operations
+               - typed-document-node
+               - fragment-matcher
+               - add:
+                    content: /* eslint-disable */
+
+         ./generated/types.ts:
+            plugins:
+               - typescript
+               - add:
+                    content: /* eslint-disable */
+      config:
+         dedupeFragments: true
+         scalars:
+            DateTime: number

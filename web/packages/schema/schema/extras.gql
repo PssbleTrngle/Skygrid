@@ -1,0 +1,36 @@
+interface BaseExtra {
+  probability: Float!
+  children: [BlockProvider!]!
+}
+
+enum Direction {
+  UP
+  DOWN
+  NORTH
+  SOUTH
+  EAST
+  WEST
+}
+
+type SideExtra implements BaseExtra {
+  children: [BlockProvider!]!
+  probability: Float!
+  offset: Int
+  on: Direction
+}
+
+type OffsetExtra implements BaseExtra {
+  children: [BlockProvider!]!
+  probability: Float!
+  x: Int
+  y: Int
+  z: Int
+}
+
+type CardinalExtra implements BaseExtra {
+  children: [BlockProvider!]!
+  probability: Float!
+  offset: Int!
+}
+
+union Extra = CardinalExtra | OffsetExtra | SideExtra
