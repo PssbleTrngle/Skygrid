@@ -2,6 +2,8 @@ FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
+ENV CI=true
 
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
@@ -21,8 +23,8 @@ WORKDIR /app
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/pnpm-lock.yml ./pnpm-lock.yml
-RUN pnpm install
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install -r --workspace-root
 
 # Build the project
 COPY --from=builder /app/out/full/ .
@@ -47,11 +49,6 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/publ
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/data ./apps/web/data
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/lang ./apps/web/lang
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-RUN chown -R nextjs:nodejs /app/.next
-USER nextjs
-
 EXPOSE 3000
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -59,4 +56,4 @@ EXPOSE 3000
 # Uncomment the following line in case you want to disable telemetry.
 # RUN npx next telemetry disable
 
-CMD ["pnpm", "start"]
+CMD ["node", "apps/web/server.js"]

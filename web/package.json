@@ -15,6 +15,6 @@
     "prettier": "^2.5.1",
     "turbo": "latest"
   },
-  "packageManager": "pnpm@8.6.10",
+  "packageManager": "pnpm@8.6.12",
   "name": "skygrid-web"
 }

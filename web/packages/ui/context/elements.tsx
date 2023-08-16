@@ -8,18 +8,19 @@ const CTX = createContext<ElementsContext>({
   ),
 });
 
-const DefaultImg = styled.img<{ $size: number; $objectFit?: string }>`
-  object-fit: ${(p) => p.$objectFit};
-  height: ${(p) => `${p.$size}px`};
-  width: ${(p) => `${p.$size}px`};
+const DefaultImg = styled.img<{ $size?: number; $objectFit?: string }>`
+  ${(p) => p.$objectFit && `object-fit: ${p.$objectFit}`};
+  ${(p) => p.$size && `height: ${p.$size}px`};
+  ${(p) => p.$size && `width: ${p.$size}px`};
 `;
 
 type ImgElementStyle = NonNullable<JSX.IntrinsicElements["img"]["style"]>;
 
-type ImgFactoryProps = {
+export type ImgFactoryProps = {
   src: string;
-  size: number;
+  size?: number;
   objectFit?: ImgElementStyle["objectFit"];
+  layout?: "fill" | "fixed";
   alt?: string;
 } & Omit<HTMLAttributes<HTMLImageElement>, "src" | "size" | "placeholder">;
 

@@ -1,7 +1,10 @@
-import Image from "next/image";
+import getConfig from "next/config";
 import { FC } from "react";
 import styled from "styled-components";
+import Image from "ui/components/basic/Image";
 import Link from "ui/components/basic/Link";
+
+const { publicRuntimeConfig } = getConfig();
 
 const HomeLink: FC = () => (
   <Container underline="none" href="/">

@@ -104,6 +104,9 @@ async function fetchSource(
   }
 
   console.log(`Successfully fetched ${source.name}`);
+
+  // wait because of a race condition
+  await new Promise((res) => setTimeout(res, 500));
 }
 
 export default async function fetchSources() {

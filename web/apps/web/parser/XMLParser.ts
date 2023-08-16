@@ -1,3 +1,5 @@
+import * as console from "console";
+import { uniq } from "lodash-es";
 import {
   Block,
   BlockProvider,
@@ -10,13 +12,11 @@ import {
   Tag,
   TagFilter,
 } from "schema/generated/types";
-import { Parser } from "xml2js";
 import { exists } from "ui/util";
-import { forPolymorph, Typename } from "ui/util/polymorphism";
+import { Typename, forPolymorph } from "ui/util/polymorphism";
+import { Parser } from "xml2js";
 import DataResolver from "./DataResolver";
-import { uniq } from "lodash-es";
 import Polymorpher from "./Polymorpher";
-import * as console from "console";
 
 const NUMERICS = ["weight", "probability", "offset", "x", "y", "z"];
 

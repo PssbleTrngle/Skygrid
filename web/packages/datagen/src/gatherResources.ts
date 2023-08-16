@@ -1,10 +1,10 @@
+import { renderUsing } from "@pssbletrngle/assets-renderer";
 import { createResolver } from "@pssbletrngle/pack-resolver";
 import { createDefaultMergers } from "@pssbletrngle/resource-merger";
-import fetchSources from "./sourcesFetcher.js";
-import { renderUsing } from "@pssbletrngle/assets-renderer";
-import { resolve } from "path";
 import { cpSync, existsSync } from "fs";
+import { resolve } from "path";
 import mergeLangFiles from "./langMerger.js";
+import fetchSources from "./sourcesFetcher.js";
 
 async function run() {
   await fetchSources();
@@ -36,4 +36,7 @@ async function run() {
   await renderUsing(tmpDir, { output: resolve(appDir, "public", "icons") }, {});
 }
 
-run().catch(console.error);
+run().catch((e) => {
+  console.error(e);
+  process.exit(-1);
+});

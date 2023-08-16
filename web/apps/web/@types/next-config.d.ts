@@ -1,14 +1,14 @@
-import 'next/config'
+import "next/config";
 
 interface Config {
-   mcVersion: string
-   basePath: string
+  mcVersion: string;
+  basePath: string;
 }
 
 type getConfig = () => {
-   publicRuntimeConfig: Config
-}
+  publicRuntimeConfig: Config;
+};
 
-declare module 'next/config' {
-   export default getConfig
+declare module "next/config" {
+  export default getConfig;
 }

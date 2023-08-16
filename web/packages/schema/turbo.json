@@ -1,0 +1,10 @@
+{
+  "extends": ["//"],
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "gen": {
+      "outputs": ["generated/**"],
+      "dependsOn": ["^gen"]
+    }
+  }
+}

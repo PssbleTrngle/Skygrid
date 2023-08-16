@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { FC } from "react";
 import styled from "styled-components";
+import Image from "ui/components/basic/Image";
 
 const Background: FC = () => (
   <Style>

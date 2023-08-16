@@ -1,13 +1,13 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { BlockProvider, Named } from "schema/generated/types";
-import { useElementFactory } from "../../context/elements";
+import Image from "../basic/Image";
 
 const FALLBACK = `/unknown_block.png`;
 
 const BlockIcon: FC<BlockProvider & Named & { size: number }> = ({
-  size,
   id,
   icon,
+  size,
 }) => {
   const defaultSrc = useMemo(() => icon ?? FALLBACK, [icon]);
   const [src, setSrc] = useState<string>(defaultSrc);
@@ -15,15 +15,15 @@ const BlockIcon: FC<BlockProvider & Named & { size: number }> = ({
 
   useEffect(() => setSrc(defaultSrc), [defaultSrc]);
 
-  const { createImg } = useElementFactory();
-
-  return createImg({
-    src,
-    size,
-    objectFit: "contain",
-    onError,
-    alt: id,
-  });
+  return (
+    <Image
+      src={src}
+      size={size}
+      objectFit="contain"
+      onError={onError}
+      alt={id}
+    />
+  );
 };
 
 export default BlockIcon;
