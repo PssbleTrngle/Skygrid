@@ -38,7 +38,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile, --strict-peer-dependencies
+        run: pnpm install --frozen-lockfile --strict-peer-dependencies
         working-directory: web
 
       - name: Test & Lint
