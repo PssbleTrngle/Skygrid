@@ -11,13 +11,13 @@ const ActionBar: FC<{
     <Style {...props}>
       {children}
       <Button
-        active={view === View.HIERARCHICAL}
+        $active={view === View.HIERARCHICAL}
         onClick={() => onView(View.HIERARCHICAL)}
       >
-        Hierachical
+        Hierarchical
       </Button>
       <Button
-        active={view === View.UNWRAPPED}
+        $active={view === View.UNWRAPPED}
         onClick={() => onView(View.UNWRAPPED)}
       >
         Unwrapped
@@ -26,12 +26,12 @@ const ActionBar: FC<{
   );
 };
 
-const Button = styled.button<{ active?: boolean }>`
+const Button = styled.button<{ $active?: boolean }>`
   margin-right: 1em;
   padding: 1em;
 
   ${(p) =>
-    p.active &&
+    p.$active &&
     css`
       outline: 2px solid ${p.theme.accent};
     `}

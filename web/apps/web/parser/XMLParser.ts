@@ -1,5 +1,4 @@
 import * as console from "console";
-import { uniq } from "lodash-es";
 import {
   Block,
   BlockProvider,
@@ -13,7 +12,7 @@ import {
   TagFilter,
 } from "schema/generated/types";
 import { exists } from "ui/util";
-import { Typename, forPolymorph } from "ui/util/polymorphism";
+import { forPolymorph, Typename } from "ui/util/polymorphism";
 import { Parser } from "xml2js";
 import DataResolver from "./DataResolver";
 import Polymorpher from "./Polymorpher";
@@ -46,14 +45,6 @@ export type TagValue =
 export interface TagDefinition {
   replace?: boolean;
   values: TagValue[];
-}
-
-function merge<T>(a: T, b: T): T {
-  if (!a) return b;
-  if (!b) return a;
-  const keys = uniq([...Object.keys(a), ...Object.keys(b)]) as (keyof T)[];
-  const entries = keys.map((key) => [key, [a[key], b[key]].filter(exists)]);
-  return Object.fromEntries(entries) as T;
 }
 
 const ProviderType: Record<string, Typename<BlockProvider>> = {
@@ -97,7 +88,7 @@ export default class XMLParser {
         const weight = provider.weight ?? 1;
         //const uuid = provider.type === ProviderType.BLOCK ? nanoid(8) : `${provider.type}-${index + 1}`
 
-        const except = merge(provider.except, parent?.except);
+        const except = [...(parent?.except ?? []), ...(provider.except ?? [])];
 
         const extra = await forPolymorph<BlockProvider, Promise<{}>>(provider, {
           Tag: async (p) => ({
@@ -183,10 +174,18 @@ export default class XMLParser {
   async tagDefinition(tag: Pick<Tag, "id" | "mod" | "except">) {
     const path = this.getDataPath(tag, "tags/blocks", "json");
     const content = await this.resolver.getContent(...path);
-    if (!content) return null;
+    if (!content) {
+      console.warn(
+        `Missing tag definition for #${tag.mod ?? "minecraft"}:${tag.id}`
+      );
+      return null;
+    }
     try {
       return JSON.parse(content) as TagDefinition;
     } catch {
+      console.warn(
+        `Failed to parse tag for #${tag.mod ?? "minecraft"}:${tag.id}`
+      );
       return null;
     }
   }
@@ -195,19 +194,11 @@ export default class XMLParser {
     tag: Pick<Tag, "id" | "mod" | "except">
   ): Promise<Block[]> {
     const definition = await this.tagDefinition(tag);
-    if (!definition) {
-      console.warn(
-        `Missing tag definition for #${tag.mod ?? "minecraft"}:${tag.id}`
-      );
-      return [];
-    }
+    if (!definition) return [];
 
     const filters: Array<(block: Block) => boolean> = [];
 
-    if (tag.except) {
-      // TODO why does this even happen?
-      if (!Array.isArray(tag.except)) return [];
-
+    if (tag.except?.length) {
       const tagFilters = await Promise.all(
         tag.except
           .filter((it) => it.__typename === "TagFilter")
@@ -218,7 +209,9 @@ export default class XMLParser {
         if (it.__typename === "NameFilter") {
           filters.push((b) => `${b.mod}${b.id}`.includes(it.pattern));
         } else if (it.__typename === "ModFilter") {
-          filters.push((b) => b.mod === it.id);
+          filters.push((b) => {
+            return b.mod === it.id;
+          });
         }
       });
 

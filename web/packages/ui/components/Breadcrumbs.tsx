@@ -11,7 +11,7 @@ const Breadcrumbs: FC<{
     {root && (
       <>
         <Crumb
-          clickable={!!onClick && crumbs.length > 0}
+          $clickable={!!onClick && crumbs.length > 0}
           onClick={() => onClick?.([])}
         >
           {root}
@@ -23,7 +23,7 @@ const Breadcrumbs: FC<{
       <Fragment key={`${crumb}-${i}`}>
         {i > 0 && <span>/</span>}
         <Crumb
-          clickable={!!onClick && i < crumbs.length - 1}
+          $clickable={!!onClick && i < crumbs.length - 1}
           onClick={() => onClick?.(crumbs.slice(0, i + 1))}
         >
           {crumb}
@@ -33,11 +33,11 @@ const Breadcrumbs: FC<{
   </Style>
 );
 
-const Crumb = styled.span<{ clickable: boolean }>`
+const Crumb = styled.span<{ $clickable: boolean }>`
   font-style: italic;
 
   ${(p) =>
-    p.clickable &&
+    p.$clickable &&
     css`
       cursor: pointer;
       &:hover {

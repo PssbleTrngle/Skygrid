@@ -2,8 +2,9 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "dotenv -- turbo run dev",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "gen": "dotenv -- turbo run gen",
     "format": "prettier --write \"**/*.{ts,ts,gql}\""
   },

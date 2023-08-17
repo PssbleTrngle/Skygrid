@@ -25,7 +25,7 @@ async function run() {
   if (!existsSync(appDir)) throw new Error(`incorrect app dir '${appDir}'`);
 
   const resolver = createResolver({ from: "resources", include });
-  const mergers = createDefaultMergers({ output: tmpDir });
+  const mergers = createDefaultMergers({ output: tmpDir, overwrite: true });
 
   await mergers.run(resolver);
 

@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { BlockProvider, Named } from "schema/generated/types";
 import styled from "styled-components";
+import { mix } from "polished";
 
 const NamedLines: FC<
   Named &
@@ -13,20 +14,30 @@ const NamedLines: FC<
     <>
       <PanelName title={`${prefix}${resolvedMod}:${id}`}>
         {name ?? (
-          <i>
+          <Id>
             {prefix}
             {id}
-          </i>
+          </Id>
         )}
       </PanelName>
-      <p>{resolvedMod}</p>
+      <ModName>{resolvedMod}</ModName>
     </>
   );
 };
 
 export const PanelName = styled.p`
-  font-size: 1.2em;
-  margin-bottom: 0.5em;
+  text-wrap: wrap;
+  max-height: 3em;
+`;
+
+const Id = styled.i`
+  line-break: anywhere;
+`;
+
+const ModName = styled.p`
+  color: ${(p) => mix(0.4, p.theme.bg, p.theme.text)};
+  margin: 0.5em 0;
+  font-size: 0.8em;
 `;
 
 export default NamedLines;

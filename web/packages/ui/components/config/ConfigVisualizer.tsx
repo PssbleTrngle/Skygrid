@@ -6,6 +6,12 @@ import { DimensionConfig, Named } from "schema/generated/types";
 import ActionBar from "./ActionBar";
 import HierarchicalBlocks from "./HierachicalBlocks";
 import UnwrappedBlocks from "./UnwrappedBlocks";
+import {
+  useNavigateToPath,
+  useProviderPath,
+  useShownFilter,
+} from "../../util/findRecursive";
+import Breadcrumbs from "../Breadcrumbs";
 
 export enum View {
   HIERARCHICAL = "hierarchical",
@@ -23,6 +29,7 @@ const ConfigVisualizer: FC<{
     () => (query.view as View) ?? View.HIERARCHICAL,
     [query]
   );
+
   const setView = useCallback(
     (v: View) => replace({ query: { ...query, view: v } }),
     [query, replace]
@@ -39,6 +46,10 @@ const ConfigVisualizer: FC<{
       options?.map((value) => ({ value, label: `${value.mod}:${value.id}` })),
     [options]
   );
+
+  const path = useProviderPath();
+  const shown = useShownFilter(config.blocks, path);
+  const navigate = useNavigateToPath();
 
   return (
     <Style {...props}>
@@ -65,10 +76,15 @@ const ConfigVisualizer: FC<{
           />
         )}
       </ActionBar>
-      {view === View.HIERARCHICAL && (
-        <HierarchicalBlocks blocks={config.blocks} />
+      {path && (
+        <Breadcrumbs
+          root={query.config as string}
+          crumbs={path}
+          onClick={navigate}
+        />
       )}
-      {view === View.UNWRAPPED && <UnwrappedBlocks blocks={config.blocks} />}
+      {view === View.HIERARCHICAL && <HierarchicalBlocks blocks={shown} />}
+      {view === View.UNWRAPPED && <UnwrappedBlocks blocks={shown} />}
     </Style>
   );
 };

@@ -35,7 +35,7 @@ export default function parseSources(from: string): Source[] {
     if (info.isFile()) {
       return parseFile(from);
     } else {
-      throw new Error("Directory sources not yet supported");
+      throw new Error("Directory fetchers not yet supported");
     }
   } else {
     throw new Error(`sources at ${from} could not be found`);

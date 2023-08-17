@@ -4,7 +4,6 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "help": "render --help",
     "gen": "tsc && node dist/gatherResources.js"
   },
   "devDependencies": {
