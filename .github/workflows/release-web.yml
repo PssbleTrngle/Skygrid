@@ -1,66 +1,41 @@
 name: Deploy Website
 on:
   workflow_dispatch:
-  push:
-    branches: [1.19.x]
-    paths: [web/**]
+
+env:
+  REGISTRY: ghcr.io
+  GITHUB_REPO: ${{ github.repository }}
 
 jobs:
-  generate:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.x
-
-      - run: yarn install --frozen-lockfile
-        working-directory: datagen
-
-      - name: Cache generated data
-        uses: actions/cache@v1
-        with:
-          path: datagen/generated
-          key: ${{ runner.os }}-data-${{ hashFiles('datagen/sources.json') }}
-          restore-keys: ${{ runner.os }}-data
-
-      - name: Generate Data & Assets
-        run: yarn generate --from sources.json --data generated/data --icons generated/public/blocks --lang generated/lang
-        working-directory: datagen
-        env:
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
-          VANILLA_DATA: ${{ secrets.VANILLA_DATA }}
-          FORGE_DATA: ${{ secrets.FORGE_DATA }}
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: data
-          path: datagen/generated
-          retention-days: 1
-
-  deploy:
-    needs: generate
+  docker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v3
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
         with:
-          name: data
-          path: web
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
-      - name: Build & Publish Container
-        uses: whoan/docker-build-with-cache-action@v5
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          image_name: ${{ secrets.DOCKER_USERNAME }}/skygrid-web
-          image_tag: ${{ steps.extract_branch.outputs.branch }}
-          context: web
+          images: ${{ env.REGISTRY }}/${{ env.GITHUB_REPO }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: apps/next/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: github_token=${{ secrets.GITHUB_TOKEN }}

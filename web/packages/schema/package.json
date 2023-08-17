@@ -1,0 +1,25 @@
+{
+  "name": "schema",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "gen": "graphql-codegen"
+  },
+  "dependencies": {
+    "@graphql-codegen/add": "^5.0.0",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/fragment-matcher": "^5.0.0",
+    "@graphql-codegen/typed-document-node": "^5.0.1",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-eslint/eslint-plugin": "^3.20.1",
+    "graphql": "^16.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.12",
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.5.2"
+  }
+}

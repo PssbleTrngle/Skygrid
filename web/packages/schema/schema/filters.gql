@@ -1,0 +1,14 @@
+type ModFilter {
+  id: String!
+}
+
+type NameFilter {
+  pattern: String!
+}
+
+type TagFilter implements Named {
+  id: String!
+  mod: String
+}
+
+union Filter = ModFilter | NameFilter | TagFilter

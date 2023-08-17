@@ -1,0 +1,8 @@
+interface Named {
+  id: String!
+  mod: String
+}
+
+interface WeightedEntry {
+  weight: Float!
+}

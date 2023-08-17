@@ -1,0 +1,23 @@
+{
+  "name": "datagen",
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "gen": "tsc && node dist/gatherResources.js"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@pssbletrngle/assets-renderer": "~1.3.2",
+    "@pssbletrngle/pack-resolver": "~1.2.0",
+    "@pssbletrngle/resource-merger": "~1.2.4",
+    "axios": "^1.4.0",
+    "json5": "^2.2.3",
+    "node-curseforge": "^1.3.2"
+  }
+}

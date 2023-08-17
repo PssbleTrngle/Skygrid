@@ -1,0 +1,16 @@
+type LootTable implements WeightedEntry {
+  weight: Float!
+  id: String
+}
+
+type DimensionConfig {
+  id: String!
+  loot: [LootTable!]!
+  blocks: [BlockProvider!]!
+}
+
+type Query {
+  configs: [DimensionConfig!]!
+  config(id: String): DimensionConfig!
+  preset(id: String): Preset!
+}
