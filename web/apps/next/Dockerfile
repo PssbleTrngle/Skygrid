@@ -2,7 +2,6 @@ FROM node:20-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-ENV GITHUB_TOKEN=$GITHUB_TOKEN
 ENV CI=true
 
 FROM base AS builder
@@ -16,6 +15,7 @@ RUN turbo prune --scope=next --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
 RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
