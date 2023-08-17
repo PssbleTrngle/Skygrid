@@ -3,7 +3,7 @@ import { FC, useMemo } from "react";
 import styled from "styled-components";
 import { BlockList, BlockProvider } from "schema/generated/types";
 import BlockIcon from "../BlockIcon";
-import { unwrap } from "../UnwrappedBlocks";
+import unwrapBlocks from "../../../util/unwrapBlocks";
 import { PanelName } from "./NamedLines";
 
 const Previewed = styled.div<{ $size: number; $columns: number }>`
@@ -24,7 +24,7 @@ const ListPanel: FC<
   const blocks = useMemo(
     () =>
       orderBy(
-        unwrap(children).filter((p) => !p.extra),
+        unwrapBlocks(children).filter((p) => !p.extra),
         (p) => !p.icon
       )?.slice(0, MAX_SHOWN),
     [children]

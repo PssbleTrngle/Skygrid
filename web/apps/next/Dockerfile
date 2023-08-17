@@ -12,7 +12,7 @@ RUN apk update
 WORKDIR /app
 RUN pnpm add -g turbo
 COPY . .
-RUN turbo prune --scope=web --docker
+RUN turbo prune --scope=next --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
@@ -28,7 +28,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install -r --workspace-ro
 
 # Build the project
 COPY --from=builder /app/out/full/ .
-RUN pnpm turbo run build --filter=web...
+RUN pnpm turbo run build --filter=next...
 
 FROM base AS runner
 WORKDIR /app
@@ -38,16 +38,16 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
-COPY --from=installer /app/apps/web/next.config.js .
-COPY --from=installer /app/apps/web/package.json .
+COPY --from=installer /app/apps/next/next.config.js .
+COPY --from=installer /app/apps/next/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/data ./apps/web/data
-COPY --from=installer --chown=nextjs:nodejs /app/apps/web/lang ./apps/web/lang
+COPY --from=installer --chown=nextjs:nodejs /app/apps/next/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/next/.next/static ./apps/next/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/next/public ./apps/next/public
+COPY --from=installer --chown=nextjs:nodejs /app/apps/next/data ./apps/next/data
+COPY --from=installer --chown=nextjs:nodejs /app/apps/next/lang ./apps/next/lang
 
 EXPOSE 3000
 
@@ -56,4 +56,4 @@ EXPOSE 3000
 # Uncomment the following line in case you want to disable telemetry.
 # RUN npx next telemetry disable
 
-CMD ["node", "apps/web/server.js"]
+CMD ["node", "apps/next/server.js"]

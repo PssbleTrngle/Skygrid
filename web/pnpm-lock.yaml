@@ -27,7 +27,7 @@ importers:
         specifier: latest
         version: 1.10.12
 
-  apps/web:
+  apps/next:
     dependencies:
       '@next/bundle-analyzer':
         specifier: ^13.4.17

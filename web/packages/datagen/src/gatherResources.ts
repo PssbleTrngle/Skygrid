@@ -20,7 +20,7 @@ async function run() {
   ];
 
   const tmpDir = "tmp";
-  const appDir = resolve("..", "..", "apps", "web");
+  const appDir = resolve("..", "..", "apps", "next");
 
   if (!existsSync(appDir)) throw new Error(`incorrect app dir '${appDir}'`);
 
