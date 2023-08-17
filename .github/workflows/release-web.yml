@@ -38,4 +38,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: github_token=${{ secrets.GITHUB_TOKEN }}
+          build-args: |
+            GITHUB_TOKEN_ARG=${{ secrets.GITHUB_TOKEN }}
+            VANILLA_DATA_ARG=${{ secrets.VANILLA_DATA }}
+            FORGE_DATA_ARG=${{ secrets.FORGE_DATA }}
+            CURSEFORGE_TOKEN_ARG=${{ secrets.CURSEFORGE_TOKEN }}
+            MODRINTH_TOKEN_ARG=${{ secrets.MODRINTH_TOKEN }}

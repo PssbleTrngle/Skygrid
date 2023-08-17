@@ -15,7 +15,13 @@ RUN turbo prune --scope=next --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-ENV GITHUB_TOKEN=$GITHUB_TOKEN
+
+ENV GITHUB_TOKEN=$GITHUB_TOKEN_ARG
+ENV VANILLA_DATA=$VANILLA_DATA_ARG
+ENV FORGE_DATA=$FORGE_DATA_ARG
+ENV CURSEFORGE_TOKEN=$CURSEFORGE_TOKEN_ARG
+ENV MODRINTH_TOKEN=$MODRINTH_TOKEN_ARG
+
 RUN apk add --no-cache libc6-compat
 RUN apk update
 WORKDIR /app
