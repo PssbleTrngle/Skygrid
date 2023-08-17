@@ -24,7 +24,6 @@ export default class ModrinthFetcher extends UrlFetcher {
   }
 
   async getUrl(source: Source) {
-    if (!source.project) throw new Error("Project id missing");
     if (!source.file) throw new Error("File id missing");
 
     const version = await this.api.get<ModrinthVersion>(

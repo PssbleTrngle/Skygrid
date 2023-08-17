@@ -6,17 +6,6 @@ import CurseforgeFetcher from "./fetchers/curseforge.js";
 import FileFetcher from "./fetchers/file.js";
 import Fetcher from "./fetchers/index.js";
 import AnyUrlFetcher from "./fetchers/url.js";
-import getEnv from "./env.js";
-
-function replaceEnv(string: string) {
-  const matches = string.match(/(\$\w+)($|\s)/g) ?? [];
-  return matches
-    .map((it) => it.slice(1))
-    .reduce((s, key) => {
-      const env = getEnv(key);
-      return s.replace(s, env);
-    }, string);
-}
 
 function createFetchers() {
   const fetchers: Record<string, new () => Fetcher> = {
@@ -66,10 +55,9 @@ async function fetchSource(
     throw e;
   }
 
-  console.log(`Successfully fetched ${source.name}`);
-
   // wait because of a race condition
-  await new Promise((res) => setTimeout(res, 500));
+  await new Promise((res) => setTimeout(res, 3000));
+  console.log(`Successfully fetched ${source.name}`);
 }
 
 export default async function fetchSources() {

@@ -39,8 +39,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            GITHUB_TOKEN_ARG=${{ secrets.GITHUB_TOKEN }}
-            VANILLA_DATA_ARG=${{ secrets.VANILLA_DATA }}
-            FORGE_DATA_ARG=${{ secrets.FORGE_DATA }}
-            CURSEFORGE_TOKEN_ARG=${{ secrets.CURSEFORGE_TOKEN }}
-            MODRINTH_TOKEN_ARG=${{ secrets.MODRINTH_TOKEN }}
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+            VANILLA_DATA=${{ secrets.VANILLA_DATA }}
+            FORGE_DATA=${{ secrets.FORGE_DATA }}
+            CURSEFORGE_TOKEN=${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
+            MODRINTH_TOKEN=${{ secrets.MODRINTH_TOKEN }}
