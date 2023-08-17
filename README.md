@@ -1,4 +1,4 @@
-![Banner](https://github.com/PssbleTrngle/Skygrid/raw/1.19.x/web/public/banner.png)
+![Banner](https://github.com/PssbleTrngle/Skygrid/raw/1.19.x/web/apps/next/public/banner.png)
 
 [issues]: https://github.com/PssbleTrngle/Skygrid/issues
 [forge]: https://www.curseforge.com/minecraft/mc-mods/skygrid/files/all?filter-status=1&filter-game-version=2020709689%3A7498
