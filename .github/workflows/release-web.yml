@@ -7,11 +7,11 @@ env:
   GITHUB_REPO: ${{ github.repository }}
 
 jobs:
-  docker:
+  datagen:
     runs-on: windows-2022
     permissions:
       contents: read
-      packages: write
+      packages: read
 
     steps:
       - name: Checkout repository
@@ -47,6 +47,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: actions/cache@v3
+        name: Setup resources cache
+        with:
+          path: web/packages/datagen/resources/*.jar
+          key: ${{ runner.os }}-resources-${{ hashFiles('web/packages/datagen/sources.json') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - uses: actions/cache@v3
+        name: Setup generated data cache
+        with:
+          path: web/apps/next/public/icons
+          key: ${{ runner.os }}-icons-${{ hashFiles('web/packages/resources/*.jar') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Generate Data
         run: pnpm gen
         working-directory: web
@@ -55,6 +71,29 @@ jobs:
           FORGE_DATA: ${{ secrets.FORGE_DATA }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+
+      - name: Upload generated data as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: generated-data
+          path: |
+            web/apps/next/icons
+            web/apps/next/data
+            web/apps/next/lang
+
+  docker:
+    runs-on: windows-2022
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download generated data from artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: generated-data
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
