@@ -1,12 +1,12 @@
-FROM node:20-alpine AS base
+FROM node:20 AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 ENV CI=true
 
 FROM base AS builder
-RUN apk add --no-cache libc6-compat
-RUN apk update
+#RUN apk add --no-cache libc6-compat
+#RUN apk update
 # Set working directory
 WORKDIR /app
 RUN pnpm add -g turbo
@@ -16,11 +16,30 @@ RUN turbo prune --scope=next --docker
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
 
-ARG GITHUB_TOKEN
-ENV GITHUB_TOKEN=$GITHUB_TOKEN
+ENV NODE_GYP_FORCE_PYTHON=/usr/local/bin/python3.9
 
-RUN apk add --no-cache libc6-compat
-RUN apk update
+# required dependencies for node-canvas
+RUN apt-get update
+RUN apt-get install -y software-properties-common build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev pkg-config python3-launchpadlib
+
+RUN add-apt-repository -y ppa:deadsnakes/ppa
+RUN apt-get update
+RUN apt-get install -y python3.9
+RUN ls /usr/local/bin
+RUN whereis python3.9
+RUN /usr/local/bin/python3.9 -v
+
+ARG GITHUB_TOKEN
+ARG VANILLA_DATA
+ARG FORGE_DATA
+ARG CURSEFORGE_TOKEN
+ARG MODRINTH_TOKEN
+
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
+ENV VANILLA_DATA=$VANILLA_DATA
+ENV FORGE_DATA=$FORGE_DATA
+ENV CURSEFORGE_TOKEN=$CURSEFORGE_TOKEN
+ENV MODRINTH_TOKEN=$MODRINTH_TOKEN
 WORKDIR /app
 
 # First install the dependencies (as they change less often)
@@ -33,7 +52,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install -r --workspace-ro
 COPY --from=builder /app/out/full/ .
 RUN pnpm turbo run build --filter=next...
 
-FROM base AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Don't run production as root

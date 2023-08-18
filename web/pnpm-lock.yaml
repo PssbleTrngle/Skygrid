@@ -90,9 +90,6 @@ importers:
       '@types/xml2js':
         specifier: ^0.4.11
         version: 0.4.11
-      datagen:
-        specifier: workspace:*
-        version: link:../../packages/datagen
       eslint-config-custom:
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
