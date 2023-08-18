@@ -56,10 +56,10 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - uses: actions/cache@v3
-        name: Setup generated data cache
+        name: Setup icons cache
         with:
           path: web/apps/next/public/icons
-          key: ${{ runner.os }}-icons-${{ hashFiles('web/packages/resources/*.jar') }}
+          key: ${{ runner.os }}-icons-${{ hashFiles('web/packages/datagen/resources/*.jar') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
@@ -75,6 +75,7 @@ jobs:
       - name: Upload generated data as artifact
         uses: actions/upload-artifact@v3
         with:
+          retention-days: 1
           name: generated-data
           path: |
             web/apps/next/icons
