@@ -78,7 +78,7 @@ jobs:
           retention-days: 1
           name: generated-data
           path: |
-            web/apps/next/icons
+            web/apps/next/public/icons
             web/apps/next/data
             web/apps/next/lang
 
@@ -96,6 +96,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: generated-data
+          path: web/apps/next
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
