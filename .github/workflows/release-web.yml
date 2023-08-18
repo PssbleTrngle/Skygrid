@@ -83,6 +83,7 @@ jobs:
 
   docker:
     runs-on: windows-2022
+    needs: datagen
     permissions:
       contents: read
       packages: write
