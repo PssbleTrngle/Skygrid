@@ -31,6 +31,15 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install -r --workspace-ro
 
 # Build the project
 COPY --from=builder /app/out/full/ .
+
+ARG REPOSITORY
+ARG SHA
+ARG VERSION
+
+ENV NEXT_PUBLIC_GIT_REPOSITORY=$REPOSITORY
+ENV NEXT_PUBLIC_GIT_SHA=$SHA
+ENV NEXT_PUBLIC_GIT_VERSION=$VERSION
+
 RUN pnpm turbo run build --filter=next...
 
 FROM base AS runner

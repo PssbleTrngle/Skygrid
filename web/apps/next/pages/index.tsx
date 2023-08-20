@@ -12,6 +12,7 @@ import { ResourceType } from "parser/XMLParser";
 import Panels from "ui/components/Panels";
 import Main from "ui/components/Main";
 import Link from "ui/components/basic/Link";
+import { BIG } from "ui/styles/media";
 
 interface Props {
   configs: Named[];
@@ -84,15 +85,20 @@ const ModTitle = styled.h1`
   text-transform: uppercase;
   padding: 4rem 0;
   margin-bottom: 3rem;
-  letter-spacing: 0.5ch;
+
+  letter-spacing: 0.3ch;
+  @media ${BIG} {
+    letter-spacing: 0.5ch;
+  }
 `;
 
 const Description = styled.ul`
   list-style: disc;
   margin: 0 auto;
   font-size: 1.5rem;
-  width: max-content;
   max-width: 1000px;
+  padding-left: 3rem;
+  padding-right: 1rem;
 
   li {
     margin: 0.5em 0;

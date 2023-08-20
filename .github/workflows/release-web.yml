@@ -121,3 +121,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+            REPOSITORY=${{ env.GITHUB_REPO }}
+            SHA=${{ github.sha }}
+            VERSION=${{ github.ref_name }}

@@ -17,8 +17,8 @@ const Style = styled.section`
   top: 0;
   left: 0;
   position: fixed;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   filter: blur(0.5rem) brightness(0.75);
 `;
 

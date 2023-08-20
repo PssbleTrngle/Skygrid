@@ -1,14 +1,13 @@
 import { Github } from "@styled-icons/boxicons-logos/Github";
 import { Curseforge } from "@styled-icons/simple-icons/Curseforge";
 import Link, { IconLink } from "./basic/Link";
-import { Centered } from "./basic/Text";
 import { darken } from "polished";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import styled from "styled-components";
 
 export const FOOTER_HEIGHT = "4rem";
 
-const Footer: FC = () => (
+const Footer: FC<{ children?: ReactNode }> = ({ children }) => (
   <Style>
     <FooterLinks $area-label="Footer Navigation">
       <IconLink
@@ -29,9 +28,14 @@ const Footer: FC = () => (
         <ImageIcon src="https://raw.githubusercontent.com/modrinth/knossos/master/assets/images/logo.svg" />
       </Link>
     </FooterLinks>
-    <Centered>© all rights reserved</Centered>
+
+    {children}
   </Style>
 );
+
+const RefLink = styled(Link).attrs({ underline: "always" })`
+  color: ${(p) => p.theme.accent};
+`;
 
 const ImageIcon = styled.img`
   height: 100%;

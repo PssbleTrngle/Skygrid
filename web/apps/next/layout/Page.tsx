@@ -18,6 +18,7 @@ const Style = styled.section`
   position: relative;
   padding: 2rem;
   min-height: calc(100vh - ${FOOTER_HEIGHT});
+  min-height: calc(100dvh - ${FOOTER_HEIGHT});
 `;
 
 export default Page;

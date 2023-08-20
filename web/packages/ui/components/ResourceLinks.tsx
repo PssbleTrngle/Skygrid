@@ -53,10 +53,10 @@ const Group = styled.div`
       }
 
       &::before {
-        height: calc(100% + 1em);
         left: -0.75em;
-        top: calc(-50% - 1em);
-        border-left: 1px solid ${(p) => p.theme.text};
+        top: calc(-50% - 0.6em);
+        height: calc(100% + 0.6em);
+        border-left: 2px solid ${(p) => p.theme.text};
       }
 
       &::after {
@@ -64,7 +64,7 @@ const Group = styled.div`
         left: -0.75em;
         top: 25%;
         height: 25%;
-        border: 1px solid transparent;
+        border: 2px solid transparent;
         border-bottom-color: ${(p) => p.theme.text};
       }
     }
@@ -72,7 +72,7 @@ const Group = styled.div`
     & > :first-child {
       li::before {
         top: -0.5em;
-        height: calc(100% - 0.55em);
+        height: calc(100% - 0.6em);
       }
     }
   }

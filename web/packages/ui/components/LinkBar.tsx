@@ -7,6 +7,7 @@ import { Download } from "@styled-icons/boxicons-solid/Download";
 import { FC } from "react";
 import styled from "styled-components";
 import { IconLink } from "./basic/Link";
+import { BIG } from "../styles/media";
 
 const LinkBar: FC = () => (
   <Style>
@@ -42,7 +43,7 @@ const LinkBar: FC = () => (
 const Style = styled.nav`
   font-size: 3rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   margin: 3rem auto;
   width: max-content;
   gap: 0.5em 2em;
@@ -50,6 +51,10 @@ const Style = styled.nav`
 
   svg + span {
     margin-left: 0.5em;
+  }
+
+  @media ${BIG} {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
