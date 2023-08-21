@@ -4,6 +4,7 @@ import Link, { IconLink } from "./basic/Link";
 import { darken } from "polished";
 import { FC, ReactNode } from "react";
 import styled from "styled-components";
+import { useAnimationPreference } from "../util/localPreferences";
 
 export const FOOTER_HEIGHT = "4rem";
 
@@ -30,12 +31,23 @@ const Footer: FC<{ children?: ReactNode }> = ({ children }) => (
     </FooterLinks>
 
     {children}
+
+    <Preferences />
   </Style>
 );
 
-const RefLink = styled(Link).attrs({ underline: "always" })`
-  color: ${(p) => p.theme.accent};
-`;
+const Preferences: FC = () => {
+  const [animationsEnabled, setAnimationsEnabled] = useAnimationPreference();
+
+  return (
+    <input
+      type="checkbox"
+      value="Disable Animations"
+      checked={!animationsEnabled}
+      onChange={(e) => setAnimationsEnabled(!e.target.checked)}
+    />
+  );
+};
 
 const ImageIcon = styled.img`
   height: 100%;

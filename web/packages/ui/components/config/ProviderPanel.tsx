@@ -28,6 +28,8 @@ const ProviderPanel: FC<{
 }> = ({ provider, size, ...props }) => {
   const component = panelComponent(provider);
 
+  console.log("provider render");
+
   return (
     <Style {...props} $reference={provider.__typename === "Reference"}>
       {createElement(component, { ...provider, size })}

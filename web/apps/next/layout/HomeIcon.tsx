@@ -1,24 +1,27 @@
-import getConfig from "next/config";
 import { FC } from "react";
 import styled from "styled-components";
 import Image from "ui/components/basic/Image";
 import Link from "ui/components/basic/Link";
+import { useAnimationPreference } from "ui/util/localPreferences";
 
-const { publicRuntimeConfig } = getConfig();
-
-const HomeLink: FC = () => (
-  <Container underline="none" href="/">
-    <Backdrop>
-      <Image
-        src="/screenshot.png"
-        alt="Link to the Homepage"
-        layout="fill"
-        objectFit="cover"
-      />
-    </Backdrop>
-    <Icon />
-  </Container>
-);
+const HomeLink: FC = () => {
+  const [shouldAnimate] = useAnimationPreference();
+  return (
+    <Container underline="none" href="/">
+      {shouldAnimate && (
+        <Backdrop>
+          <Image
+            src="/screenshot.png"
+            alt="Link to the Homepage"
+            layout="fill"
+            objectFit="cover"
+          />
+        </Backdrop>
+      )}
+      <Icon />
+    </Container>
+  );
+};
 
 const Icon = () => (
   <svg style={{ height: "100%", width: "100%" }}>
