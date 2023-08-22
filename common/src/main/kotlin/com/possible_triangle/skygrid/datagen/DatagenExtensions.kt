@@ -2,17 +2,12 @@ package com.possible_triangle.skygrid.datagen
 
 import net.minecraft.data.DataGenerator
 import net.minecraft.data.DataProvider
-
-fun DataGenerator.addProvider(factory: (DataGenerator) -> DataProvider) {
-    addProvider(true, factory(this))
-}
+import java.nio.file.Path
 
 fun DataGenerator.addProvider(
-    factory: (DataGenerator) -> DimensionConfigGenerator,
-    datapack: String?,
+    factory: (Path) -> DataProvider,
+    datapack: String? = null,
 ) {
-    factory(this).also {
-        it.datapack = datapack
-        addProvider(true, it)
-    }
+    val output = datapack?.let { outputFolder.resolve("datapacks/${it}") } ?: outputFolder
+    addProvider(true, factory(output))
 }

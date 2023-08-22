@@ -10,11 +10,11 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.Distance
 import com.possible_triangle.skygrid.world.BlockAccess
 import com.possible_triangle.skygrid.xml.XMLResource
-import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
+import com.possible_triangle.skygrid.xml.resources.GridConfigs
 import com.possible_triangle.skygrid.xml.resources.Presets
 import net.minecraft.ChatFormatting
 import net.minecraft.commands.CommandBuildContext
@@ -70,7 +70,7 @@ object SkygridCommand {
                 .then(argument("seed", LongArgumentType.longArg()).executes(executor))
         }
 
-        val range = { gen: (CommandContext<CommandSourceStack>) -> DimensionConfig ->
+        val range = { gen: (CommandContext<CommandSourceStack>) -> GridConfig ->
             val executor: Command<CommandSourceStack> = Command { generateRange(it, gen(it)) }
             val tail = { argument("distance", IntegerArgumentType.integer(1)).executes(executor) }
             val range = argument("end", BlockPosArgument.blockPos()).executes(executor).then(
@@ -94,9 +94,9 @@ object SkygridCommand {
                             })
                         )
                     )
-                    .then(resourceArgument("config", DimensionConfigs).then(range {
+                    .then(resourceArgument("config", GridConfigs).then(range {
                         val key = ResourceLocationArgument.getId(it, "config")
-                        DimensionConfigs[key] ?: throw UNKNOWN_CONFIG.create(key)
+                        GridConfigs[key] ?: throw UNKNOWN_CONFIG.create(key)
                     }))
             ).then(
                 literal("probability")
@@ -132,7 +132,7 @@ object SkygridCommand {
 
     private fun generateRange(
         ctx: CommandContext<CommandSourceStack>,
-        generator: DimensionConfig,
+        generator: GridConfig,
     ): Int {
         val start = BlockPosArgument.getLoadedBlockPos(ctx, "start")
         val end = BlockPosArgument.getLoadedBlockPos(ctx, "end")
@@ -188,7 +188,7 @@ object SkygridCommand {
             else throw NOT_A_BLOCK.create(held.displayName)
         })
 
-        val probabilities = DimensionConfigs.getProbability(block)
+        val probabilities = GridConfigs.getProbability(block)
 
         when (probabilities.size) {
             0 -> ctx.source.sendFailure(

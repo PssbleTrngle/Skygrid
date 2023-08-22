@@ -3,11 +3,10 @@ package com.possible_triangle.skygrid.datagen.dimensions
 import com.possible_triangle.skygrid.datagen.CompatMods.BOP
 import com.possible_triangle.skygrid.datagen.CompatMods.BOTANIA
 import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
+import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
-import net.minecraft.data.DataGenerator
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
@@ -18,14 +17,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOU
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import java.nio.file.Path
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Nether(generator: DataGenerator) : DimensionConfigGenerator("nether", generator) {
+class Nether(output: Path) : GridConfigGenerator("nether", output) {
 
     override fun generate() {
 
-        dimension(LevelStem.NETHER) {
+        gridConfig(LevelStem.NETHER) {
             mobs {
                 mob(EntityType.BLAZE)
                 mob(EntityType.MAGMA_CUBE, weight = 0.3)

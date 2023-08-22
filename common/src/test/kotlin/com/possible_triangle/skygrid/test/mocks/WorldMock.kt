@@ -2,7 +2,7 @@ package com.possible_triangle.skygrid.test.mocks
 
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
 import com.possible_triangle.skygrid.world.BlockAccess
 import com.possible_triangle.skygrid.xml.ReferenceContext
@@ -25,8 +25,8 @@ object WorldMock {
     fun getBlock(pos: BlockPos) = blocks[pos]
     fun getNBT(pos: BlockPos) = nbt[pos]
 
-    fun generate(vararg blocks: BlockProvider) = generate(DimensionConfig(blocks = ListWrapper(*blocks)))
-    fun generate(config: DimensionConfig, references: IReferenceContext = ReferenceContext()) {
+    fun generate(vararg blocks: BlockProvider) = generate(GridConfig(blocks = ListWrapper(*blocks)))
+    fun generate(config: GridConfig, references: IReferenceContext = ReferenceContext()) {
         config.validate(registryAccess, references)
         config.generate(random, access)
     }

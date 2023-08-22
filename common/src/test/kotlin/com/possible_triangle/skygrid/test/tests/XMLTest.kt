@@ -9,7 +9,7 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import com.possible_triangle.skygrid.xml.XMLResource
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
 import com.possible_triangle.skygrid.api.xml.elements.extras.Side
 import com.possible_triangle.skygrid.api.xml.elements.filters.ExceptFilter
@@ -29,7 +29,7 @@ class XMLTest {
 
     @Test
     fun encodesCorrectly() {
-        val config = DimensionConfig(
+        val config = GridConfig(
             blocks = ListWrapper(
                 SingleBlock(
                     "some_block", "some_mod", extras = listOf(

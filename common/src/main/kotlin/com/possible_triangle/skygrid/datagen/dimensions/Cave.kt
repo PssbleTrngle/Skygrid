@@ -3,23 +3,34 @@ package com.possible_triangle.skygrid.datagen.dimensions
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.api.xml.elements.Distance
 import com.possible_triangle.skygrid.datagen.CompatMods
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
+import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
-import net.minecraft.data.DataGenerator
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.PointedDripstoneBlock
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import java.nio.file.Path
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Cave(generator: DataGenerator) : DimensionConfigGenerator("cave", generator) {
+class Cave(output: Path) : GridConfigGenerator("cave", output) {
 
     override fun generate() {
 
-        dimension(ResourceLocation(SkygridConstants.MOD_ID, "cave")) {
+        gridConfig(ResourceLocation(SkygridConstants.MOD_ID, "cave")) {
+            withDimension {
+                type {
+                    respawnAnchorWorks = true
+                    bedWorks = false
+                    hasSkyLight = false
+                    hasCeiling = true
+                    fixedTime = 18000
+                    height = 256
+                }
+            }
+
             distance = Distance.of(3)
             blocks {
                 reference("overworld_ores", weight = 0.1)

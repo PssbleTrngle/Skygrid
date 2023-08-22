@@ -1,7 +1,7 @@
 package com.possible_triangle.skygrid.xml.resources
 
 import com.possible_triangle.skygrid.api.extensions.flat
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
 import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
 import com.possible_triangle.skygrid.xml.ReferenceContext
@@ -10,9 +10,9 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.level.block.Block
 
-object DimensionConfigs : XMLResource<DimensionConfig>("dimensions", { DimensionConfig.serializer() }) {
+object GridConfigs : XMLResource<GridConfig>("dimensions", { GridConfig.serializer() }) {
 
-    val DEFAULT = DimensionConfig(ListWrapper(SingleBlock("bedrock")))
+    val DEFAULT = GridConfig(ListWrapper(SingleBlock("bedrock")))
 
     private val WEIGHT_MAP = hashMapOf<Block, HashMap<ResourceLocation, Double>>()
 
@@ -20,7 +20,7 @@ object DimensionConfigs : XMLResource<DimensionConfig>("dimensions", { Dimension
         return WEIGHT_MAP[block] ?: emptyMap()
     }
 
-    override fun merge(a: DimensionConfig, b: DimensionConfig): DimensionConfig {
+    override fun merge(a: GridConfig, b: GridConfig): GridConfig {
         return if (b.replace) b
         else b.copy(
             replace = false,
@@ -41,7 +41,7 @@ object DimensionConfigs : XMLResource<DimensionConfig>("dimensions", { Dimension
         }
     }
 
-    override fun validate(value: DimensionConfig, server: MinecraftServer): Boolean {
+    override fun validate(value: GridConfig, server: MinecraftServer): Boolean {
         val registries = server.registryAccess()
         val references = ReferenceContext()
         return value.validate(registries, references)
