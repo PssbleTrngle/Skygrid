@@ -48,6 +48,7 @@
                   <block id="firefly" mod="twilightforest"/>
                   <block id="cicada" mod="twilightforest"/>
                </cardinal>
+               <set key="facing" value="north"/>
                <block id="twilight_oak_log" mod="twilightforest"/>
                <block id="canopy_log" mod="twilightforest"/>
                <block id="dark_log" mod="twilightforest"/>
@@ -89,7 +90,7 @@
             <block id="root" mod="twilightforest"/>
             <block id="liveroot_block" mod="twilightforest" weight="0.1"/>
          </list>
-         <list name="thorns">
+         <list weight="0.1" name="thorns">
             <block id="brown_thorns" mod="twilightforest">
                <side on="down" probability="0.2">
                   <block id="brown_thorns" mod="twilightforest"/>

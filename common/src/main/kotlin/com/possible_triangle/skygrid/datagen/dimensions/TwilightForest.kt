@@ -178,8 +178,6 @@ class TwilightForest(generator: DataGenerator) : DimensionConfigGenerator("twili
                     list("bookshelves") {
                         block("canopy_bookshelf")
                     }
-
-
                 }
 
                 list("storage", weight = 0.01) {

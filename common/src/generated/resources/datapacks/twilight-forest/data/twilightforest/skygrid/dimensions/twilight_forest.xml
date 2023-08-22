@@ -1,0 +1,197 @@
+<dimension>
+   <blocks>
+      <list name="ground">
+         <block id="grass_block">
+            <side on="up">
+               <block id="grass"/>
+               <block id="fern"/>
+               <block id="fiddlehead" mod="twilightforest"/>
+               <block id="mayapple" mod="twilightforest"/>
+               <list name="saplings">
+                  <block id="twilight_oak_sapling" mod="twilightforest"/>
+                  <block id="canopy_sapling" mod="twilightforest"/>
+                  <block id="dark_sapling" mod="twilightforest"/>
+                  <block id="time_sapling" mod="twilightforest" weight="0.1"/>
+                  <block id="transformation_sapling" mod="twilightforest" weight="0.1"/>
+                  <block id="mining_sapling" mod="twilightforest" weight="0.1"/>
+                  <block id="sorting_sapling" mod="twilightforest" weight="0.1"/>
+               </list>
+            </side>
+         </block>
+         <block id="dirt" weight="0.1">
+            <side on="down" probability="0.8">
+               <block id="torchberry_plant" mod="twilightforest"/>
+            </side>
+         </block>
+         <block id="mycelium" weight="0.1">
+            <side on="up" probability="0.5">
+               <block id="brown_mushroom"/>
+               <block id="red_mushroom"/>
+            </side>
+         </block>
+         <block id="stone">
+            <side on="up" probability="0.2">
+               <block id="mushgloom" mod="twilightforest"/>
+            </side>
+         </block>
+         <reference id="overworld_ores" weight="0.2">
+            <except>
+               <name pattern="deepslate_"/>
+            </except>
+         </reference>
+      </list>
+      <list weight="0.5" name="wood">
+         <cycle key="axis"/>
+         <list name="logs">
+            <list name="full logs">
+               <cardinal probability="0.1">
+                  <block id="firefly" mod="twilightforest"/>
+                  <block id="cicada" mod="twilightforest"/>
+               </cardinal>
+               <set key="facing" value="north"/>
+               <block id="twilight_oak_log" mod="twilightforest"/>
+               <block id="canopy_log" mod="twilightforest"/>
+               <block id="dark_log" mod="twilightforest"/>
+               <block id="time_log" mod="twilightforest" weight="0.1"/>
+               <block id="transformation_log" mod="twilightforest" weight="0.1"/>
+               <block id="mining_log" mod="twilightforest" weight="0.1"/>
+               <block id="sorting_log" mod="twilightforest" weight="0.1"/>
+            </list>
+            <list weight="0.2" name="hollow logs">
+               <side on="up" probability="0.5">
+                  <block id="moss_patch" mod="twilightforest"/>
+               </side>
+               <block id="hollow_twilight_oak_log_horizontal" mod="twilightforest"/>
+               <block id="hollow_canopy_log_horizontal" mod="twilightforest"/>
+               <block id="hollow_dark_log_horizontal" mod="twilightforest"/>
+               <block id="hollow_time_log_horizontal" mod="twilightforest" weight="0.1"/>
+               <block id="hollow_transformation_log_horizontal" mod="twilightforest" weight="0.1"/>
+               <block id="hollow_mining_log_horizontal" mod="twilightforest" weight="0.1"/>
+               <block id="hollow_sorting_log_horizontal" mod="twilightforest" weight="0.1"/>
+            </list>
+         </list>
+         <list name="leaves">
+            <block id="twilight_oak_leaves" mod="twilightforest"/>
+            <block id="canopy_leaves" mod="twilightforest"/>
+            <block id="dark_leaves" mod="twilightforest"/>
+            <block id="time_leaves" mod="twilightforest" weight="0.1"/>
+            <block id="transformation_leaves" mod="twilightforest" weight="0.1"/>
+            <block id="mining_leaves" mod="twilightforest" weight="0.1"/>
+            <block id="sorting_leaves" mod="twilightforest" weight="0.1"/>
+         </list>
+         <list weight="0.1" name="mushroom blocks">
+            <block id="brown_mushroom_block"/>
+            <block id="red_mushroom_block"/>
+         </list>
+         <list weight="0.25" name="roots">
+            <side on="down" probability="0.5">
+               <block id="root_strand" mod="twilightforest"/>
+            </side>
+            <block id="root" mod="twilightforest"/>
+            <block id="liveroot_block" mod="twilightforest" weight="0.1"/>
+         </list>
+         <list weight="0.1" name="thorns">
+            <block id="brown_thorns" mod="twilightforest">
+               <side on="down" probability="0.2">
+                  <block id="brown_thorns" mod="twilightforest"/>
+               </side>
+               <side on="up" probability="0.2">
+                  <block id="brown_thorns" mod="twilightforest"/>
+               </side>
+               <side on="north" probability="0.2">
+                  <block id="brown_thorns" mod="twilightforest"/>
+               </side>
+               <side on="south" probability="0.2">
+                  <block id="brown_thorns" mod="twilightforest"/>
+               </side>
+               <side on="west" probability="0.2">
+                  <block id="brown_thorns" mod="twilightforest"/>
+               </side>
+               <side on="east" probability="0.2">
+                  <block id="brown_thorns" mod="twilightforest"/>
+               </side>
+            </block>
+            <block id="green_thorns" mod="twilightforest">
+               <side on="down" probability="0.2">
+                  <block id="green_thorns" mod="twilightforest"/>
+               </side>
+               <side on="up" probability="0.2">
+                  <block id="thorn_rose" mod="twilightforest"/>
+                  <block id="green_thorns" mod="twilightforest"/>
+               </side>
+               <side on="north" probability="0.2">
+                  <block id="green_thorns" mod="twilightforest"/>
+               </side>
+               <side on="south" probability="0.2">
+                  <block id="green_thorns" mod="twilightforest"/>
+               </side>
+               <side on="west" probability="0.2">
+                  <block id="green_thorns" mod="twilightforest"/>
+               </side>
+               <side on="east" probability="0.2">
+                  <block id="green_thorns" mod="twilightforest"/>
+               </side>
+            </block>
+         </list>
+      </list>
+      <list weight="0.1" name="building">
+         <list name="bookshelves">
+            <block id="canopy_bookshelf" mod="twilightforest"/>
+         </list>
+      </list>
+      <list weight="0.01" name="storage">
+         <block id="steeleaf_block" mod="twilightforest"/>
+         <block id="ironwood_block" mod="twilightforest"/>
+         <block id="fiery_block" mod="twilightforest" weight="0.1"/>
+         <block id="knightmetal_block" mod="twilightforest" weight="0.1"/>
+         <block id="carminite_block" mod="twilightforest" weight="0.05"/>
+         <block id="arctic_fur_block" mod="twilightforest" weight="0.05"/>
+      </list>
+      <list weight="0.1" name="fluids">
+         <block id="water">
+            <side on="up" probability="0.3">
+               <block id="lily_pad"/>
+            </side>
+         </block>
+      </list>
+      <list weight="0.05" name="loot">
+         <list name="chests">
+            <cycle key="facing"/>
+            <block id="twilight_oak_chest" mod="twilightforest"/>
+            <block id="canopy_chest" mod="twilightforest"/>
+            <block id="dark_chest" mod="twilightforest"/>
+            <block id="time_chest" mod="twilightforest" weight="0.1"/>
+            <block id="transformation_chest" mod="twilightforest" weight="0.1"/>
+            <block id="mining_chest" mod="twilightforest" weight="0.1"/>
+            <block id="sorting_chest" mod="twilightforest" weight="0.1"/>
+         </list>
+      </list>
+   </blocks>
+   <loot>
+      <table id="twilightforest:structures/basement"/>
+      <table id="twilightforest:structures/foundation_basement"/>
+      <table id="twilightforest:structures/tree_cache"/>
+      <table id="twilightforest:structures/graveyard" weight="0.1"/>
+      <table id="twilightforest:structures/hedge_maze"/>
+      <table id="twilightforest:structures/tower_library" weight="0.5"/>
+      <table id="twilightforest:structures/tower_room" weight="0.25"/>
+      <table id="twilightforest:structures/hill_1" weight="0.5"/>
+      <table id="twilightforest:structures/hill_2" weight="0.375"/>
+      <table id="twilightforest:structures/hill_3" weight="0.25"/>
+      <table id="twilightforest:structures/troll_garden" weight="0.2"/>
+      <table id="twilightforest:structures/troll_vault" weight="0.05"/>
+      <table id="twilightforest:structures/troll_vault_with_lamp" weight="0.02"/>
+      <table id="twilightforest:structures/labyrinth_dead_end" weight="0.2"/>
+      <table id="twilightforest:structures/labyrinth_room" weight="0.1"/>
+      <table id="twilightforest:structures/labyrinth_vault" weight="0.05"/>
+      <table id="twilightforest:structures/labyrinth_vault_jackport" weight="0.01"/>
+      <table id="twilightforest:structures/stronghold_room" weight="0.1"/>
+      <table id="twilightforest:structures/stronghold_cache" weight="0.05"/>
+      <table id="twilightforest:structures/darktower_cache" weight="0.1"/>
+      <table id="twilightforest:structures/darktower_key" weight="0.05"/>
+      <table id="twilightforest:structures/aurora_room" weight="0.01"/>
+      <table id="twilightforest:structures/aurora_cache" weight="0.005"/>
+      <table id="twilightforest:structures/well"/>
+      <table id="twilightforest:structures/fance_well" weight="0.1"/>
+   </loot>
+</dimension>

@@ -15,7 +15,7 @@ fun DataGenerator.addSkygridProviders() {
     addProvider(::Nether)
     addProvider(::End)
 
-    addProvider(::TwilightForest)
+    addProvider(::TwilightForest, "twilight-forest")
 
     addProvider(::Cave, "custom-examples")
     addProvider(::Aqua, "custom-examples")
