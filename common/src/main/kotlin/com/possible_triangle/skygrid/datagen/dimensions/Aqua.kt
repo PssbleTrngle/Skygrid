@@ -8,6 +8,7 @@ import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
@@ -20,6 +21,7 @@ class Aqua(output: Path) : GridConfigGenerator("aqua", output) {
     override fun generate() {
         gridConfig(ResourceLocation(SkygridConstants.MOD_ID, "aqua")) {
             withDimension {
+                fixedBiomeSource(Biomes.OCEAN)
                 type {
                     ambientLight = 1.0F
                     height = 256

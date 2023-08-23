@@ -7,6 +7,7 @@ import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.PointedDripstoneBlock
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
@@ -21,6 +22,11 @@ class Cave(output: Path) : GridConfigGenerator("cave", output) {
 
         gridConfig(ResourceLocation(SkygridConstants.MOD_ID, "cave")) {
             withDimension {
+                multipleBiomeSource(
+                    Biomes.DRIPSTONE_CAVES,
+                    Biomes.LUSH_CAVES,
+                )
+
                 type {
                     respawnAnchorWorks = true
                     bedWorks = false

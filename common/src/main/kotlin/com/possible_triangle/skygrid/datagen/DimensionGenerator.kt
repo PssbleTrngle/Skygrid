@@ -3,7 +3,6 @@ package com.possible_triangle.skygrid.datagen
 import com.google.common.hash.HashCode
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import com.mojang.serialization.JsonOps
 import com.possible_triangle.skygrid.SkygridMod
 import com.possible_triangle.skygrid.datagen.builder.DimensionBuilder
 import net.minecraft.data.CachedOutput
@@ -21,7 +20,7 @@ class DimensionGenerator(
     private val context: DatagenContext,
 ) : DataProvider {
 
-    private val typeGenerator = DimensionTypeGenerator(name, output)
+    private val typeGenerator = DimensionTypeGenerator(name, output, context)
 
     private val VALUES = hashMapOf<ResourceLocation, DimensionBuilder.Result>()
     private val GSON = GsonBuilder().setPrettyPrinting().create()
@@ -43,7 +42,7 @@ class DimensionGenerator(
                     addProperty("config", entry.config ?: id)
 
                     val biomeSourceJson =
-                        BiomeSource.CODEC.encodeStart(JsonOps.INSTANCE, entry.biomeSource).result().orElseThrow()
+                        BiomeSource.CODEC.encodeStart(context.jsonOps, entry.biomeSource).result().orElseThrow()
                     add("biome_source", biomeSourceJson)
                 })
             }

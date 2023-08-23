@@ -8,6 +8,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.*
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -42,7 +43,9 @@ class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", outp
 
     override fun generate() {
         gridConfig(ResourceLocation(TWILIGHT, "twilight_forest"), defaultMod = TWILIGHT) {
-            withDimension()
+            withDimension {
+                fixedBiomeSource(Biomes.FOREST)
+            }
 
             loot {
                 table("structures/basement")
