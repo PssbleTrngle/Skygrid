@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}-minigame",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "Skygrid Minigame",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "sources": "https://github.com/PssbleTrngle/${repository}",
+    "issues": "https://github.com/PssbleTrngle/${repository}/issues"
+  },
+  "license": "https://github.com/PssbleTrngle/${repository}/blob/1.19.x/LICENSE.txt",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "com.possible_triangle.skygrid.minigame.MinigameEntrypoint"
+      }
+    ]
+  },
+  "mixins": [
+    "${mod_id}.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": ">=1.19.2",
+    "fabric-language-kotlin": "^1.9.0",
+    "java": ">=17"
+  }
+}
