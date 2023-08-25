@@ -24,7 +24,7 @@ import java.util.*
 
 @Serializable
 @SerialName("dimension")
-data class DimensionConfig(
+data class GridConfig(
     @XmlSerialName("blocks", "", "") val blocks: ListWrapper<BlockProvider>,
     @XmlSerialName("loot", "", "") val loot: ListWrapper<LootTable> = ListWrapper(),
     @XmlSerialName("mobs", "", "") val mobs: ListWrapper<SpawnerEntry> = ListWrapper(),
@@ -69,7 +69,7 @@ data class DimensionConfig(
         val modifiers = arrayListOf<BlockNbtModifier.Entry>()
 
         RegisterModifiersEvent.EVENT.invoke(object : RegisterModifiersEvent {
-            override val config = this@DimensionConfig
+            override val config = this@GridConfig
 
             override fun register(predicate: Predicate<BlockState>, modifier: BlockNbtModifier<Unit>) {
                 modifiers.add(BlockNbtModifier.Entry(predicate::test, modifier))

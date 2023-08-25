@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Function5
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.possible_triangle.skygrid.api.SkygridConstants
-import com.possible_triangle.skygrid.xml.resources.DimensionConfigs
+import com.possible_triangle.skygrid.xml.resources.GridConfigs
 import com.possible_triangle.skygrid.xml.resources.Presets
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
@@ -95,7 +95,7 @@ class SkygridChunkGenerator(
     }
 
     private val config
-        get() = DimensionConfigs[ResourceLocation(configKey)] ?: DimensionConfigs.DEFAULT
+        get() = GridConfigs[ResourceLocation(configKey)] ?: GridConfigs.DEFAULT
 
     private val endPortal
         get() = Presets[ResourceLocation("end_portal")]

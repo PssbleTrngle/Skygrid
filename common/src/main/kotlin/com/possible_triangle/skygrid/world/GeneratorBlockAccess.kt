@@ -1,6 +1,6 @@
 package com.possible_triangle.skygrid.world
 
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.level.block.state.BlockState
@@ -9,7 +9,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class GeneratorBlockAccess(
-    private val config: DimensionConfig,
+    private val config: GridConfig,
     private val chunk: ChunkAccess,
 ) : BlockAccess(useBarrier = !config.gap.isPresent) {
 

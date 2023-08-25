@@ -1,7 +1,7 @@
 package com.possible_triangle.skygrid.test.tests
 
 import com.possible_triangle.skygrid.datagen.DatagenContext
-import com.possible_triangle.skygrid.datagen.builder.DimensionConfigBuilder
+import com.possible_triangle.skygrid.datagen.builder.GridConfigBuilder
 import com.possible_triangle.skygrid.extensions.weights
 import com.possible_triangle.skygrid.test.TestExtension
 import com.possible_triangle.skygrid.test.assertApproximately
@@ -17,7 +17,7 @@ class WeightTest {
 
     @Test
     fun flattensCorrectly() {
-        val config = DimensionConfigBuilder.create(context) {
+        val config = GridConfigBuilder.create(context) {
             blocks {
                 block(Blocks.AMETHYST_BLOCK)
                 block(Blocks.HONEYCOMB_BLOCK, weight = 0.5)

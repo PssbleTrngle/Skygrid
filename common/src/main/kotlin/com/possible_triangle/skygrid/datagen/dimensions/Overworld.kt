@@ -11,14 +11,13 @@ import com.possible_triangle.skygrid.datagen.CompatMods.FARMERSDELIGHT
 import com.possible_triangle.skygrid.datagen.CompatMods.FORGE
 import com.possible_triangle.skygrid.datagen.CompatMods.NEAPOLITAN
 import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
+import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import com.possible_triangle.skygrid.datagen.builder.IBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.providers.BlockProviderBuilder
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
-import net.minecraft.data.DataGenerator
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.EntityType
@@ -28,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import java.nio.file.Path
 
 fun BlockProviderBuilder<*>.overworldWood() {
     except {
@@ -57,11 +57,11 @@ fun BlockProviderBuilder<*>.cluster(crystals: IBlocksBuilder.() -> BlockProvider
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Overworld(generator: DataGenerator) : DimensionConfigGenerator("overworld", generator) {
+class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
 
     override fun generate() {
 
-        dimension(LevelStem.OVERWORLD) {
+        gridConfig(LevelStem.OVERWORLD) {
             loot {
                 table("chests/spawn_bonus_chest", weight = 20.0)
                 table("chests/desert_pyramid", weight = 2.0)

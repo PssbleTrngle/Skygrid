@@ -1,23 +1,24 @@
 package com.possible_triangle.skygrid.datagen.dimensions
 
 import com.possible_triangle.skygrid.datagen.CompatMods.TWILIGHT
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
+import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import com.possible_triangle.skygrid.datagen.builder.IBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.providers.BlockBuilder
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.*
-import net.minecraft.data.DataGenerator
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import java.nio.file.Path
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class TwilightForest(generator: DataGenerator) : DimensionConfigGenerator("twilight_forest", generator) {
+class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", output) {
 
     private val woods = mapOf(
         "twilight_oak" to 1.0,
@@ -41,8 +42,11 @@ class TwilightForest(generator: DataGenerator) : DimensionConfigGenerator("twili
     }
 
     override fun generate() {
+        gridConfig(ResourceLocation(TWILIGHT, "twilight_forest"), defaultMod = TWILIGHT) {
+            withDimension {
+                fixedBiomeSource(Biomes.FOREST)
+            }
 
-        dimension(ResourceLocation(TWILIGHT, "twilight_forest"), defaultMod = TWILIGHT) {
             loot {
                 table("structures/basement")
                 table("structures/foundation_basement")

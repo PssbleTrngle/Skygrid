@@ -1,16 +1,16 @@
 package com.possible_triangle.skygrid.datagen.dimensions
 
+import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
-import net.minecraft.data.DataGenerator
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.EndPortalFrameBlock
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
+import java.nio.file.Path
 
 @ExperimentalSerializationApi
 @ExperimentalXmlUtilApi
-class Presets(generator: DataGenerator) : DimensionConfigGenerator("presets", generator) {
+class Presets(output: Path) : GridConfigGenerator("presets", output) {
 
     override fun generate() {
 

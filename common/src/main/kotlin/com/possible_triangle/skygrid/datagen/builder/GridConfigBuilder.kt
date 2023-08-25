@@ -1,23 +1,26 @@
 package com.possible_triangle.skygrid.datagen.builder
 
 import com.possible_triangle.skygrid.api.xml.IReferenceContext
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
 import com.possible_triangle.skygrid.api.xml.elements.Distance
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
 import com.possible_triangle.skygrid.api.xml.elements.providers.SingleBlock
 import com.possible_triangle.skygrid.datagen.DatagenContext
 import com.possible_triangle.skygrid.datagen.builder.providers.BlockBuilder
 import com.possible_triangle.skygrid.xml.ReferenceContext
 
-class DimensionConfigBuilder(private val context: DatagenContext) {
+class GridConfigBuilder(
+    private val context: DatagenContext,
+    private val buildDimension: (DimensionBuilder.() -> Unit) -> Unit = {},
+) {
 
     companion object {
         fun create(
             context: DatagenContext,
             references: IReferenceContext = ReferenceContext(),
-            builder: DimensionConfigBuilder.() -> Unit,
-        ): DimensionConfig {
-            return DimensionConfigBuilder(context).apply(builder).build().also {
+            builder: GridConfigBuilder.() -> Unit,
+        ): GridConfig {
+            return GridConfigBuilder(context).apply(builder).build().also {
                 it.validate(context.registries, references)
             }
         }
@@ -45,8 +48,12 @@ class DimensionConfigBuilder(private val context: DatagenContext) {
         gap = BlockBuilder(context, id, mod).build()
     }
 
-    fun build(): DimensionConfig {
-        return DimensionConfig(
+    fun withDimension(builder: DimensionBuilder.() -> Unit = {}) {
+        buildDimension(builder)
+    }
+
+    fun build(): GridConfig {
+        return GridConfig(
             blocks = ListWrapper(blocks.build()),
             loot = loot.build(),
             mobs = mobs.build(),

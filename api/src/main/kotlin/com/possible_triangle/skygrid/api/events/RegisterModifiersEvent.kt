@@ -1,7 +1,7 @@
 package com.possible_triangle.skygrid.api.events
 
 import com.google.common.base.Predicate
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.platform.Services
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
@@ -14,7 +14,7 @@ interface RegisterModifiersEvent {
         val EVENT = Services.EVENTS.createEvent(RegisterModifiersEvent::class)
     }
 
-    val config: DimensionConfig
+    val config: GridConfig
 
     fun register(predicate: Predicate<BlockState>, modifier: BlockNbtModifier<Unit>)
 

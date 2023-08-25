@@ -4,22 +4,30 @@ import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.datagen.CompatMods.AQUATIC
 import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
 import com.possible_triangle.skygrid.datagen.CompatMods.TROPICRAFT
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
+import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
-import net.minecraft.data.DataGenerator
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import java.nio.file.Path
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Aqua(generator: DataGenerator) : DimensionConfigGenerator("aqua", generator) {
+class Aqua(output: Path) : GridConfigGenerator("aqua", output) {
 
     override fun generate() {
+        gridConfig(ResourceLocation(SkygridConstants.MOD_ID, "aqua")) {
+            withDimension {
+                fixedBiomeSource(Biomes.OCEAN)
+                type {
+                    ambientLight = 1.0F
+                    height = 256
+                }
+            }
 
-        dimension(ResourceLocation(SkygridConstants.MOD_ID, "aqua")) {
             gap("water")
 
             blocks {

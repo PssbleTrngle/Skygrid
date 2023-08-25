@@ -3,11 +3,10 @@ package com.possible_triangle.skygrid.datagen.dimensions
 import com.possible_triangle.skygrid.api.xml.elements.Distance
 import com.possible_triangle.skygrid.datagen.CompatMods.ENDERGETIC
 import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
-import com.possible_triangle.skygrid.datagen.DimensionConfigGenerator
+import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
-import net.minecraft.data.DataGenerator
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
@@ -17,14 +16,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOU
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import java.nio.file.Path
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class End(generator: DataGenerator) : DimensionConfigGenerator("end", generator) {
+class End(output: Path) : GridConfigGenerator("end", output) {
 
     override fun generate() {
 
-        dimension(LevelStem.END) {
+        gridConfig(LevelStem.END) {
             distance = Distance.of(5)
 
             mobs {

@@ -1,34 +1,37 @@
 package com.possible_triangle.skygrid.datagen
 
 import com.google.common.hash.HashCode
-import com.possible_triangle.skygrid.api.xml.elements.DimensionConfig
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.Preset
 import com.possible_triangle.skygrid.api.xml.elements.providers.BlockList
 import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
-import com.possible_triangle.skygrid.datagen.builder.DimensionConfigBuilder
+import com.possible_triangle.skygrid.datagen.builder.DimensionBuilder
+import com.possible_triangle.skygrid.datagen.builder.GridConfigBuilder
 import com.possible_triangle.skygrid.datagen.builder.IBlocksBuilder
 import com.possible_triangle.skygrid.xml.XMLResource
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import net.minecraft.core.RegistryAccess
 import net.minecraft.data.CachedOutput
-import net.minecraft.data.DataGenerator
 import net.minecraft.data.DataProvider
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
+import java.nio.file.Path
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-abstract class DimensionConfigGenerator(
+abstract class GridConfigGenerator(
     private val name: String,
-    private val generator: DataGenerator,
+    private val output: Path,
 ) : DataProvider {
 
-    private val configs = hashMapOf<ResourceLocation, DimensionConfig>()
+    private val configs = hashMapOf<ResourceLocation, GridConfig>()
     private val presets = hashMapOf<ResourceLocation, Preset>()
     private val registries = RegistryAccess.BUILTIN.get()
+
+    private val dimensionGenerator = DimensionGenerator(name, output, createContext("minecraft"))
 
     private fun createContext(defaultMod: String?): DatagenContext {
         return defaultMod?.let {
@@ -36,13 +39,15 @@ abstract class DimensionConfigGenerator(
         } ?: DatagenContext(registries)
     }
 
-    var datapack: String? = null
+    fun gridConfig(key: ResourceKey<LevelStem>, defaultMod: String? = null, builder: GridConfigBuilder.() -> Unit) =
+        gridConfig(key.location(), defaultMod, builder)
 
-    fun dimension(key: ResourceKey<LevelStem>, defaultMod: String? = null, builder: DimensionConfigBuilder.() -> Unit) =
-        dimension(key.location(), defaultMod, builder)
+    fun gridConfig(key: ResourceLocation, defaultMod: String? = null, builder: GridConfigBuilder.() -> Unit) {
+        val buildDimension = { builder: DimensionBuilder.() -> Unit ->
+            dimensionGenerator.register(key, builder)
+        }
 
-    fun dimension(key: ResourceLocation, defaultMod: String? = null, builder: DimensionConfigBuilder.() -> Unit) {
-        DimensionConfigBuilder(createContext(defaultMod)).apply {
+        GridConfigBuilder(createContext(defaultMod), buildDimension).apply {
             builder(this)
             configs[key] = build()
         }
@@ -61,7 +66,12 @@ abstract class DimensionConfigGenerator(
         presets[key] = Preset(provider)
     }
 
-    fun IBlocksBuilder.preset(id: String, weight: Double = 1.0, defaultMod: String? = null, builder: IBlocksBuilder.() -> Unit) {
+    fun IBlocksBuilder.preset(
+        id: String,
+        weight: Double = 1.0,
+        defaultMod: String? = null,
+        builder: IBlocksBuilder.() -> Unit,
+    ) {
         preset(id, defaultMod, builder)
         this.reference(id, weight)
     }
@@ -71,13 +81,8 @@ abstract class DimensionConfigGenerator(
     final override fun run(cache: CachedOutput) {
         generate()
 
-        val directory = if (datapack == null)
-            generator.outputFolder
-        else
-            generator.outputFolder.resolve("datapacks/${datapack}")
-
         fun write(type: String, key: ResourceLocation, content: String) {
-            val file = directory.resolve("data/" + key.namespace + "/skygrid/$type/" + key.path + ".xml")
+            val file = output.resolve("data/${key.namespace}/skygrid/$type/${key.path}.xml")
             val data = content.encodeToByteArray()
             val hash = HashCode.fromBytes(data)
             cache.writeIfNeeded(file, data, hash)
@@ -92,10 +97,10 @@ abstract class DimensionConfigGenerator(
             val serialized = XMLResource.LOADER.encodeToString(config)
             write("presets", key, serialized)
         }
+
+        dimensionGenerator.run(cache)
     }
 
-    final override fun getName(): String {
-        return name
-    }
+    final override fun getName() = "Skygrid Config: $name"
 
 }
