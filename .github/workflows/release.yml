@@ -25,7 +25,7 @@ jobs:
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: 'gradle.properties'
-          property: 'version'
+          property: 'mod_version'
           value: ${{ github.event.release.tag_name }}
 
       - name: Build and upload
