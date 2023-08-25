@@ -1,5 +1,5 @@
 {
-  "type": "twilightforest:twilight_forest",
+  "type": "twilightforest:twilight_forest_type",
   "generator": {
     "type": "skygrid:skygrid",
     "config": "twilightforest:twilight_forest",

@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
+import net.minecraft.world.level.block.PipeBlock.PROPERTY_BY_DIRECTION
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
@@ -35,7 +36,10 @@ class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", outp
             Direction.values().forEach {
                 side(it, probability = 0.2) {
                     if (withRose && it == UP) block("thorn_rose")
-                    block(id)
+                    block(id) {
+                        property(AXIS, it.axis)
+                        property(PROPERTY_BY_DIRECTION[it.opposite]!!, true)
+                    }
                 }
             }
         }
@@ -44,6 +48,7 @@ class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", outp
     override fun generate() {
         gridConfig(ResourceLocation(TWILIGHT, "twilight_forest"), defaultMod = TWILIGHT) {
             withDimension {
+                type = ResourceLocation(TWILIGHT, "twilight_forest_type")
                 fixedBiomeSource(Biomes.FOREST)
             }
 
