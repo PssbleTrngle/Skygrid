@@ -1,19 +1,20 @@
 package com.possible_triangle.skygrid.world
 
 import com.mojang.datafixers.util.Function5
+import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.xml.resources.GridConfigs
 import com.possible_triangle.skygrid.xml.resources.Presets
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Registry
-import net.minecraft.core.SectionPos
+import net.minecraft.core.*
 import net.minecraft.data.BuiltinRegistries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.WorldGenRegion
 import net.minecraft.tags.BiomeTags
+import net.minecraft.tags.StructureTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.LevelHeightAccessor
@@ -32,6 +33,7 @@ import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.RandomState
 import net.minecraft.world.level.levelgen.blending.Blender
+import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.levelgen.structure.StructureSet
 import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement
 import java.util.*
@@ -47,7 +49,7 @@ class SkygridChunkGenerator(
     structures: Registry<StructureSet>,
     private val configKey: String,
     private val endPortals: Boolean,
-) : ChunkGenerator(structures, Optional.empty(), biomeSource) {
+) : ChunkGenerator(structures, Optional.of(HolderSet.direct()), biomeSource) {
 
     companion object {
         fun create(
@@ -215,26 +217,25 @@ class SkygridChunkGenerator(
         }
     }
 
-    /*
-    override fun findNearestMapFeature(
+    override fun findNearestMapStructure(
         level: ServerLevel,
-        structures: HolderSet<ConfiguredStructureFeature<*, *>?>,
+        structures: HolderSet<Structure>,
         pos: BlockPos,
-        something: Int,
-        somethingElse: Boolean,
-    ): Pair<BlockPos, Holder<ConfiguredStructureFeature<*, *>>>? {
+        attempts: Int,
+        something: Boolean,
+    ): Pair<BlockPos, Holder<Structure>>? {
+        val match = structures.find { it.`is`(StructureTags.EYE_OF_ENDER_LOCATED) }
         val distance = config.distance
-        val structureTag = structures.unwrap().left().orElse(null)
-        return if (structureTag == ConfiguredStructureTags.EYE_OF_ENDER_LOCATED) {
-            val pos = endPortalPositions.map {
-                BlockPos(it.minBlockX + distance.x,
+        return if (match != null && cachedEndPortalPositions != null) {
+            Pair(cachedEndPortalPositions!!.map {
+                BlockPos(
+                    it.minBlockX + distance.x,
                     level.minBuildHeight,
-                    it.minBlockZ + distance.z)
-            }.minByOrNull { it.distSqr(pos) }
-            Pair(pos, null)
+                    it.minBlockZ + distance.z
+                )
+            }.minByOrNull { it.distSqr(pos) }, match)
         } else null
     }
-    */
 
     override fun applyCarvers(
         p0: WorldGenRegion,

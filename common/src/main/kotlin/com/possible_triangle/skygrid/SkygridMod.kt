@@ -4,7 +4,6 @@ import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_NAME
 import com.possible_triangle.skygrid.api.events.RegisterElementEvent
 import com.possible_triangle.skygrid.api.events.RegisterModifiersEvent
-import com.possible_triangle.skygrid.block.StiffAir
 import com.possible_triangle.skygrid.command.SkygridCommand.readableProbabilities
 import com.possible_triangle.skygrid.platform.Services
 import com.possible_triangle.skygrid.world.BlockNbtModifiers.registerDefaultModifiers
@@ -20,13 +19,15 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.block.Blocks
 import org.apache.logging.log4j.LogManager
 
 object SkygridMod {
 
     val LOGGER = LogManager.getLogger(MOD_NAME)!!
 
-    val STIFF_AIR by Services.PLATFORM.createBlock("stiff_air") { StiffAir() }
+    val STIFF_AIR = Blocks.AIR
+    //val STIFF_AIR by Services.PLATFORM.createBlock("stiff_air") { StiffAir() }
 
     val GENERATOR_KEY = ResourceKey.create(Registry.CHUNK_GENERATOR_REGISTRY, ResourceLocation(MOD_ID, MOD_ID))
 
