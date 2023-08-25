@@ -9,3 +9,5 @@ val Player.participantTeam get(): PlayerTeam? = team.takeIf { it is PlayerTeam }
 val Player.isParticipant get() = participantTeam != null
 
 val MinecraftServer.participantTeams: Collection<PlayerTeam> get() = scoreboard.playerTeams
+
+val MinecraftServer.data get() = overworld().dataStorage
