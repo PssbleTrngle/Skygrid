@@ -10,8 +10,8 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.api.world.Generator
 import com.possible_triangle.skygrid.api.world.IBlockAccess
-import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.Distance
+import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.world.BlockAccess
 import com.possible_triangle.skygrid.xml.XMLResource
 import com.possible_triangle.skygrid.xml.resources.GridConfigs
@@ -85,7 +85,7 @@ object SkygridCommand {
 
         dispatcher.register(
             literal(MOD_ID).then(
-                literal("generate")
+                literal("generate").requires { it.hasPermission(2) }
                     .then(
                         literal("preset").then(
                             resourceArgument("preset", Presets).then(singleBlock {
