@@ -10,5 +10,5 @@ fun DataGenerator.addProvider(
 ) {
     val outputFolder = Path.of("generated")
     val output = datapack?.let { outputFolder.resolve("datapacks/${it}") } ?: outputFolder
-    addProvider(factory)
+    this.getBuiltinDatapack(true, output.toString()).addProvider { factory(it.outputFolder) }
 }
