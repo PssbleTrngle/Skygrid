@@ -11,6 +11,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.TagKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
@@ -36,7 +37,7 @@ data class Tag(
     private val location = keyFrom(id, mod)
 
     @Transient
-    private val key = TagKey.create(Registry.BLOCK_REGISTRY, location)
+    private val key = TagKey.create(BuiltInRegistries.BLOCK.key(), location)
 
     override val weight: Double
         get() = if (expand)

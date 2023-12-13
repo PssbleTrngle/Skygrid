@@ -6,6 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 
@@ -42,7 +43,7 @@ data class TagFilter(val id: String, val mod: String = "minecraft") : Filter() {
     private val location = keyFrom(id, mod)
 
     @Transient
-    private val key = TagKey.create(Registry.BLOCK_REGISTRY, location)
+    private val key = TagKey.create(BuiltInRegistries.BLOCK.key(), location)
 
     override fun test(block: Block, blocks: Registry<Block>): Boolean {
         return blocks.getTagOrEmpty(key).map { it.value() }.contains(block)

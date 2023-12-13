@@ -8,7 +8,9 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
 fun DataGenerator.addSkygridProviders() {
-    addProvider(true, SkygridTagGenerator(this))
+
+    // TODO: I have no idea how to make this work.
+    // addProvider({ path: Path -> SkygridTagGenerator(PackOutput(path), ) })
 
     addProvider(::Presets)
     addProvider(::Overworld)

@@ -1,15 +1,25 @@
 package com.possible_triangle.skygrid.datagen
 
 import com.possible_triangle.skygrid.api.SkygridTags
-import net.minecraft.data.DataGenerator
-import net.minecraft.data.tags.BlockTagsProvider
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.data.PackOutput
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider
+import net.minecraft.data.tags.VanillaBlockTagsProvider
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import java.util.concurrent.CompletableFuture
 
-class SkygridTagGenerator(generator: DataGenerator) :
-    BlockTagsProvider(generator) {
+class SkygridTagGenerator(packOutput: PackOutput, provider: CompletableFuture<HolderLookup.Provider>) :
+    VanillaBlockTagsProvider(
+        packOutput,
+        provider
+    ) {
 
-    override fun addTags() {
+    override fun addTags(provider: HolderLookup.Provider) {
         fun forge(path: String) = ResourceLocation("forge", path)
         fun fabric(path: String) = ResourceLocation("c", path)
 

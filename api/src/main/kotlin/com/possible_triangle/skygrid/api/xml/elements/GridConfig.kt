@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.EntityBlock
@@ -81,8 +82,8 @@ data class GridConfig(
     }
 
     fun validate(registries: RegistryAccess, references: IReferenceContext): Boolean {
-        val blockRegistry = registries.registryOrThrow(Registry.BLOCK_REGISTRY)
-        val entityRegistry = registries.registryOrThrow(Registry.ENTITY_TYPE_REGISTRY)
+        val blockRegistry = registries.registryOrThrow(BuiltInRegistries.BLOCK.key())
+        val entityRegistry = registries.registryOrThrow(BuiltInRegistries.ENTITY_TYPE.key())
 
         loot.validate { true }
         mobs.validate { entityRegistry.containsKey(it.key) }

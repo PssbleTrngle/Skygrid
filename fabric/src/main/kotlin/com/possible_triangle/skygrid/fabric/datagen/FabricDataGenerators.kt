@@ -11,6 +11,7 @@ import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 object FabricDataGenerators : DataGeneratorEntrypoint {
 
     override fun onInitializeDataGenerator(dataGenerator: FabricDataGenerator) {
+
         dataGenerator.addSkygridProviders()
     }
 
