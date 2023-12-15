@@ -196,21 +196,21 @@ object SkygridCommand {
             )
 
             1 -> ctx.source.sendSuccess(
-                Component.translatable("commands.$MOD_ID.found_probability", block.name)
-                    .withStyle(ChatFormatting.GREEN), false
+                { Component.translatable("commands.$MOD_ID.found_probability", block.name)
+                    .withStyle(ChatFormatting.GREEN) }, false
             )
 
             else -> ctx.source.sendSuccess(
-                Component.translatable(
+                { Component.translatable(
                     "commands.$MOD_ID.found_probabilities",
                     block.name,
                     probabilities.size
-                ).withStyle(ChatFormatting.GREEN), false
+                ).withStyle(ChatFormatting.GREEN) }, false
             )
         }
 
         probabilities.readableProbabilities().forEach { line ->
-            ctx.source.sendSuccess(line, false)
+            ctx.source.sendSuccess({ line }, false)
         }
 
         return probabilities.size
