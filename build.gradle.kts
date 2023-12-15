@@ -4,7 +4,7 @@ val xmlutil_version: String by extra
 
 plugins {
     idea
-    id("com.possible-triangle.gradle") version ("0.1.0")
+    id("com.possible-triangle.gradle") version ("0.1.4")
 }
 
 withKotlin()
@@ -49,9 +49,7 @@ subprojects {
     }
 
     enablePublishing {
-        repositories {
-            githubPackages(this@subprojects)
-        }
+        githubPackages()
     }
 
     tasks.withType<Jar> {

@@ -189,6 +189,14 @@
          </list>
       </list>
    </blocks>
+   <loot>
+      <table id="minecraft:chests/ruined_portal" weight="20.0"/>
+      <table id="minecraft:chests/nether_bridge" weight="10.0"/>
+      <table id="minecraft:chests/bastion_bridge" weight="5.0"/>
+      <table id="minecraft:chests/bastion_other" weight="2.0"/>
+      <table id="minecraft:chests/bastion_hoglin_stable"/>
+      <table id="minecraft:chests/bastion_treasure" weight="0.5"/>
+   </loot>
    <mobs>
       <mob id="minecraft:blaze"/>
       <mob id="minecraft:magma_cube" weight="0.3"/>
