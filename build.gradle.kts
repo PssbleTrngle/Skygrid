@@ -65,6 +65,6 @@ idea {
 }
 
 tasks.create<Copy>("copyGeneratedDatapacks") {
-    from(project(":common").file("src/generated/resources/datapacks"))
+    from(project(":common").file("src/generated/resources/resourcepacks"))
     into(file("datapacks"))
 }

@@ -5,8 +5,8 @@ import com.possible_triangle.skygrid.api.xml.elements.Filter
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 
@@ -17,8 +17,8 @@ data class NameFilter(val pattern: String) : Filter() {
     @Transient
     private val regex = pattern.toRegex()
 
-    override fun test(block: Block, blocks: Registry<Block>): Boolean {
-        val key = blocks.getKey(block) ?: return false
+    override fun test(block: Block, blocks: HolderLookup.RegistryLookup<Block>): Boolean {
+        val key = block.builtInRegistryHolder().key().location()
         return regex.containsMatchIn(key.toString())
     }
 
@@ -28,8 +28,8 @@ data class NameFilter(val pattern: String) : Filter() {
 @SerialName("mod")
 data class ModFilter(val id: String) : Filter() {
 
-    override fun test(block: Block, blocks: Registry<Block>): Boolean {
-        val key = blocks.getKey(block) ?: return false
+    override fun test(block: Block, blocks: HolderLookup.RegistryLookup<Block>): Boolean {
+        val key = block.builtInRegistryHolder().key().location()
         return key.namespace == id
     }
 
@@ -43,10 +43,12 @@ data class TagFilter(val id: String, val mod: String = "minecraft") : Filter() {
     private val location = keyFrom(id, mod)
 
     @Transient
-    private val key = TagKey.create(BuiltInRegistries.BLOCK.key(), location)
+    private val key = TagKey.create(Registries.BLOCK, location)
 
-    override fun test(block: Block, blocks: Registry<Block>): Boolean {
-        return blocks.getTagOrEmpty(key).map { it.value() }.contains(block)
+    override fun test(block: Block, blocks: HolderLookup.RegistryLookup<Block>): Boolean {
+        return blocks.get(key)
+            .map { list -> list.map { it.value() } }
+            .filter { it.contains(block) }.isPresent
     }
 
 }

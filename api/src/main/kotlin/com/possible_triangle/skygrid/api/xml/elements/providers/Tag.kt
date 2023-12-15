@@ -10,8 +10,8 @@ import com.possible_triangle.skygrid.api.xml.elements.Transformer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
@@ -37,7 +37,7 @@ data class Tag(
     private val location = keyFrom(id, mod)
 
     @Transient
-    private val key = TagKey.create(BuiltInRegistries.BLOCK.key(), location)
+    private val key = TagKey.create(Registries.BLOCK, location)
 
     override val weight: Double
         get() = if (expand)
@@ -50,13 +50,15 @@ data class Tag(
     override fun flat(): List<Pair<Block, Double>> = blocks.map { it to 1.0 }
 
     override fun internalValidate(
-        blocks: Registry<Block>,
+        blocks: HolderLookup.RegistryLookup<Block>,
         references: IReferenceContext,
         filters: List<FilterOperator>,
     ): Boolean {
-        this.blocks = blocks.getTagOrEmpty(key).map { it.value() }.filter {
-            filters.all { filter -> filter.test(it, blocks) }
-        }
+        this.blocks = blocks.get(key).map {
+            it.map { it.value() }.filter {
+                filters.all { filter -> filter.test(it, blocks) }
+            }
+        }.orElseGet(::emptyList)
         return this.blocks.isNotEmpty()
     }
 

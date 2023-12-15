@@ -5,11 +5,13 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.possible_triangle.skygrid.SkygridMod
 import com.possible_triangle.skygrid.datagen.builder.DimensionBuilder
+import com.possible_triangle.skygrid.extensions.supplyAsync
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.DataProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.biome.BiomeSource
 import java.nio.file.Path
+import java.util.concurrent.CompletableFuture
 
 private fun JsonObject.addProperty(key: String, value: ResourceLocation) =
     addProperty(key, value.toString())
@@ -31,28 +33,32 @@ class DimensionGenerator(
         }, context).apply(builder).build()
     }
 
-    override fun run(cache: CachedOutput) {
-        VALUES.forEach { (id, entry) ->
-            val file = output.resolve("data/${id.namespace}/dimension/${id.path}.json")
+    override fun run(cache: CachedOutput): CompletableFuture<*> {
+        return CompletableFuture.allOf(
+            context.jsonOps.thenApply { lookup ->
+                VALUES.supplyAsync { (id, entry) ->
+                    val file = output.resolve("data/${id.namespace}/dimension/${id.path}.json")
 
-            val json = JsonObject().apply {
-                addProperty("type", entry.type ?: id)
-                add("generator", JsonObject().apply {
-                    addProperty("type", SkygridMod.GENERATOR_KEY.location())
-                    addProperty("config", entry.config ?: id)
+                    val json = JsonObject().apply {
+                        addProperty("type", entry.type ?: id)
+                        add("generator", JsonObject().apply {
+                            addProperty("type", SkygridMod.GENERATOR_KEY.location())
+                            addProperty("config", entry.config ?: id)
 
-                    val biomeSourceJson =
-                        BiomeSource.CODEC.encodeStart(context.jsonOps, entry.biomeSource).result().orElseThrow()
-                    add("biome_source", biomeSourceJson)
-                })
-            }
+                            val biomeSourceJson =
+                                BiomeSource.CODEC.encodeStart(lookup, entry.biomeSource).result().orElseThrow()
+                            add("biome_source", biomeSourceJson)
+                        })
+                    }
 
-            val data = GSON.toJson(json).encodeToByteArray()
-            val hash = HashCode.fromBytes(data)
-            cache.writeIfNeeded(file, data, hash)
-        }
+                    val data = GSON.toJson(json).encodeToByteArray()
+                    val hash = HashCode.fromBytes(data)
+                    cache.writeIfNeeded(file, data, hash)
+                }
+            },
 
-        typeGenerator.run(cache)
+            typeGenerator.run(cache)
+        )
     }
 
     override fun getName() = "Dimension $name"
