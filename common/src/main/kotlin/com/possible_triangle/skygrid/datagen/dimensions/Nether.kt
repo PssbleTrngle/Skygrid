@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXI
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
+import net.minecraft.world.level.storage.loot.BuiltInLootTables
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
 
@@ -29,6 +30,15 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
             mobs {
                 mob(EntityType.BLAZE)
                 mob(EntityType.MAGMA_CUBE, weight = 0.3)
+            }
+
+            loot {
+                table(BuiltInLootTables.RUINED_PORTAL, weight = 20.0)
+                table(BuiltInLootTables.NETHER_BRIDGE, weight = 10.0)
+                table(BuiltInLootTables.BASTION_BRIDGE, weight = 5.0)
+                table(BuiltInLootTables.BASTION_OTHER, weight = 2.0)
+                table(BuiltInLootTables.BASTION_HOGLIN_STABLE)
+                table(BuiltInLootTables.BASTION_TREASURE, weight = 0.5)
             }
 
             blocks {
