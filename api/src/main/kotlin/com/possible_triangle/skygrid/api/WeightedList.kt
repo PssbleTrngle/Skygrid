@@ -30,9 +30,7 @@ class WeightedList<T : WeightedEntry>(pairs: List<T>): Collection<T> {
     override  val size: Int
         get() = map.size
 
-   override fun isEmpty(): Boolean {
-        return map.isEmpty() || total == 0.0
-    }
+    override fun isEmpty(): Boolean = map.isEmpty() || total == 0.0
 
     override fun contains(element: T): Boolean = map.values.contains(element)
 
