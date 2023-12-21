@@ -1,0 +1,28 @@
+<preset>
+   <block id="redstone_lamp">
+      <side on="up" probability="0.2">
+         <block id="redstone_wire"/>
+         <tag id="pressure_plates">
+            <except>
+               <name pattern="polished_blackstone_pressure_plate"/>
+               <name pattern="crimson_pressure_plate"/>
+               <name pattern="warped_pressure_plate"/>
+            </except>
+         </tag>
+      </side>
+      <surround probability="0.2">
+         <block id="lever"/>
+         <tag id="buttons">
+            <except>
+               <name pattern="polished_blackstone_button"/>
+               <name pattern="crimson_button"/>
+               <name pattern="warped_button"/>
+            </except>
+         </tag>
+         <Direction>SOUTH</Direction>
+         <Direction>WEST</Direction>
+         <Direction>NORTH</Direction>
+         <Direction>EAST</Direction>
+      </surround>
+   </block>
+</preset>

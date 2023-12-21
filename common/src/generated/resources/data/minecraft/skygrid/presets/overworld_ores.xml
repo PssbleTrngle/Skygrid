@@ -33,36 +33,13 @@
       </list>
       <list name="crystals">
          <block id="amethyst_block">
-            <side on="down" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="down"/>
-               </tag>
-            </side>
-            <side on="up" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="up"/>
-               </tag>
-            </side>
-            <side on="north" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="north"/>
-               </tag>
-            </side>
-            <side on="south" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="south"/>
-               </tag>
-            </side>
-            <side on="west" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="west"/>
-               </tag>
-            </side>
-            <side on="east" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="east"/>
-               </tag>
-            </side>
+            <surround probability="0.5">
+               <tag id="amethyst_clusters" mod="skygrid"/>
+               <Direction>SOUTH</Direction>
+               <Direction>WEST</Direction>
+               <Direction>NORTH</Direction>
+               <Direction>EAST</Direction>
+            </surround>
          </block>
          <tag id="corundum" mod="quark"/>
       </list>

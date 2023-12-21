@@ -90,11 +90,11 @@ class SkygridChunkGenerator(
                 }),
             )
         }
+
+        private val RANGE = 0 until 16
     }
 
-    override fun codec(): Codec<out ChunkGenerator> {
-        return CODEC
-    }
+    override fun codec(): Codec<out ChunkGenerator> = CODEC
 
     private val config
         get() = GridConfigs[ResourceLocation(configKey)] ?: GridConfigs.DEFAULT
@@ -106,8 +106,7 @@ class SkygridChunkGenerator(
         if (endPortals) ConcentricRingsStructurePlacement(
             32, 3, 128,
             BuiltinRegistries.BIOME.getOrCreateTag(BiomeTags.STRONGHOLD_BIASED_TO)
-        )
-        else null
+        ) else null
 
     private var cachedEndPortalPositions: List<ChunkPos>? = null
     fun endPortalPositions(random: RandomSource): List<ChunkPos> = cachedEndPortalPositions ?: run {
@@ -167,7 +166,7 @@ class SkygridChunkGenerator(
         val hasEndPortal = endPortalPositions(strongholdRandom).contains(chunk.pos)
 
         var generatedPortal = false
-        for (x in 0 until 16) for (z in 0 until 16) for (y in access.minY until access.maxY) {
+        for (x in RANGE) for (z in RANGE) for (y in access.minY until access.maxY) {
 
             access.move(x, y, z)
             val isFloor = y == access.minY
@@ -176,12 +175,9 @@ class SkygridChunkGenerator(
                 if (isFloor && endPortal != null && hasEndPortal && (x > 3 && z > 3) && !generatedPortal) {
                     endPortal!!.generate(random, access)
                     generatedPortal = true
-                } else if (isFloor) {
-                    access.set(BEDROCK)
-                } else config.generate(random, access)
-            } else {
-                access.fillGap()
-            }
+                } else if (isFloor) access.set(BEDROCK)
+                else config.generate(random, access)
+            } else access.fillGap()
 
         }
 
@@ -200,19 +196,14 @@ class SkygridChunkGenerator(
         val access = GeneratorBlockAccess(config, chunk)
         val startY = access.maxY + (access.maxY % config.distance.y)
 
-        for (x in 0 until 16) for (z in 0 until 16) for (y in startY..startY + config.distance.y) {
+        for (x in RANGE) for (z in RANGE) for (y in startY..startY + config.distance.y) {
 
             access.move(x, y, z)
 
             if (y == startY && access.shouldPlaceBlock()) {
-                if (createCeiling) {
-                    access.set(BEDROCK)
-                } else {
-                    config.generate(random, access)
-                }
-            } else {
-                access.fillGap()
-            }
+                if (createCeiling) access.set(BEDROCK)
+                else config.generate(random, access)
+            } else access.fillGap()
 
         }
     }
@@ -245,25 +236,17 @@ class SkygridChunkGenerator(
         p4: StructureManager,
         p5: ChunkAccess,
         p6: GenerationStep.Carving,
-    ) {
-        // no carving
-    }
+    ) { /* No Carving */ }
 
     override fun spawnOriginalMobs(region: WorldGenRegion) {
-        //TODO maybe?
+        // TODO: Maybe?
     }
 
-    override fun getGenDepth(): Int {
-        return 384
-    }
+    override fun getGenDepth(): Int = 384
 
-    override fun getSeaLevel(): Int {
-        return -63
-    }
+    override fun getSeaLevel(): Int = -63
 
-    override fun getMinY(): Int {
-        return 0
-    }
+    override fun getMinY(): Int = 0
 
     override fun getBaseHeight(
         x: Int,
@@ -271,13 +254,10 @@ class SkygridChunkGenerator(
         type: Heightmap.Types,
         accessor: LevelHeightAccessor,
         randomState: RandomState,
-    ): Int {
-        return min(config.maxY, accessor.maxBuildHeight)
-    }
+    ): Int = min(config.maxY, accessor.maxBuildHeight)
 
-    override fun getBaseColumn(x: Int, z: Int, accessor: LevelHeightAccessor, randomState: RandomState): NoiseColumn {
-        return NoiseColumn(minY, emptyArray<BlockState>())
-    }
+    override fun getBaseColumn(x: Int, z: Int, accessor: LevelHeightAccessor, randomState: RandomState): NoiseColumn
+        = NoiseColumn(minY, emptyArray<BlockState>())
 
     override fun addDebugScreenInfo(info: MutableList<String>, randomState: RandomState, pos: BlockPos) {
         info.add("Skygrid Config: $configKey")

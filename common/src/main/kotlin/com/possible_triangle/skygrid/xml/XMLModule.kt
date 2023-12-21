@@ -5,9 +5,9 @@ import com.possible_triangle.skygrid.api.events.register
 import com.possible_triangle.skygrid.api.events.subclass
 import com.possible_triangle.skygrid.api.xml.DeserializationException
 import com.possible_triangle.skygrid.api.xml.elements.*
-import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
 import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
 import com.possible_triangle.skygrid.api.xml.elements.extras.Side
+import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
 import com.possible_triangle.skygrid.api.xml.elements.filters.ExceptFilter
 import com.possible_triangle.skygrid.api.xml.elements.filters.ModFilter
 import com.possible_triangle.skygrid.api.xml.elements.filters.NameFilter

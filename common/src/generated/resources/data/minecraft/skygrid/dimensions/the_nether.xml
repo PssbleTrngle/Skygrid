@@ -1,8 +1,70 @@
 <dimension>
    <blocks>
       <list weight="0.1" name="fluids">
-         <block id="lava" weight="0.5"/>
-         <block id="blood" mod="biomesoplenty"/>
+         <block id="lava" weight="0.5">
+            <side on="down" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="up" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="north" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="south" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="west" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="east" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+         </block>
+         <block id="blood" mod="biomesoplenty">
+            <side on="down" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="up" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="north" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="south" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="west" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="east" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+         </block>
       </list>
       <list name="ground">
          <block id="netherrack">
@@ -101,38 +163,15 @@
       </list>
       <block id="glowstone" weight="0.1"/>
       <block id="rose_quartz_block" mod="biomesoplenty" weight="0.05">
-         <side on="down" probability="0.5">
-            <block id="rose_quartz_cluster" mod="biomesoplenty">
-               <set key="facing" value="down"/>
-            </block>
-         </side>
-         <side on="up" probability="0.5">
-            <block id="rose_quartz_cluster" mod="biomesoplenty">
-               <set key="facing" value="up"/>
-            </block>
-         </side>
-         <side on="north" probability="0.5">
-            <block id="rose_quartz_cluster" mod="biomesoplenty">
-               <set key="facing" value="north"/>
-            </block>
-         </side>
-         <side on="south" probability="0.5">
-            <block id="rose_quartz_cluster" mod="biomesoplenty">
-               <set key="facing" value="south"/>
-            </block>
-         </side>
-         <side on="west" probability="0.5">
-            <block id="rose_quartz_cluster" mod="biomesoplenty">
-               <set key="facing" value="west"/>
-            </block>
-         </side>
-         <side on="east" probability="0.5">
-            <block id="rose_quartz_cluster" mod="biomesoplenty">
-               <set key="facing" value="east"/>
-            </block>
-         </side>
+         <surround probability="0.5">
+            <block id="rose_quartz_cluster" mod="biomesoplenty"/>
+            <Direction>SOUTH</Direction>
+            <Direction>WEST</Direction>
+            <Direction>NORTH</Direction>
+            <Direction>EAST</Direction>
+         </surround>
       </block>
-      <block id="spawner" weight="0.01"/>
+      <reference id="spawner" weight="0.01"/>
       <list weight="0.02" name="loot">
          <cycle key="facing"/>
          <block id="warped_chest" mod="quark"/>

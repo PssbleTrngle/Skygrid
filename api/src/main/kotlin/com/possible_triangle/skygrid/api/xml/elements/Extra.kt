@@ -50,11 +50,10 @@ abstract class Extra : Generator<IBlockAccess>, Validating {
         val transformRandom = random.fork()
 
         if (random.nextDouble() > probability) return false
-        val at = offset(BlockPos(0, 0, 0), offsetRandom)
 
         return validProviders.random(random).generate(providerRandom) { state, pos ->
             val transformed = transform(state, transformRandom)
-            access.set(transformed, pos.offset(at))
+            access.set(transformed, offset(pos, offsetRandom))
         }
     }
 

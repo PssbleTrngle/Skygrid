@@ -20,13 +20,13 @@ data class Side(
     override val shared: Boolean = false,
 ) : Extra() {
 
-    override fun internalValidate(blocks: Registry<Block>): Boolean {
-        return Direction.byName(on) != null && offset > 0
-    }
+    override fun internalValidate(blocks: Registry<Block>): Boolean =
+        Direction.byName(on) != null && offset > 0
 
-    override fun offset(pos: BlockPos, random: RandomSource): BlockPos {
-        val direction = Direction.byName(on) ?: throw NullPointerException("Unknown direction '$on'")
-        return pos.relative(direction, offset)
-    }
+    override fun offset(pos: BlockPos, random: RandomSource): BlockPos =
+        pos.relative(
+            Direction.byName(on) ?: throw NullPointerException("Unknown direction '$on'"),
+            offset
+        )
 
 }

@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.PipeBlock.PROPERTY_BY_DIRECTION
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
+import net.minecraft.world.level.material.Fluids
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
 
@@ -141,7 +142,7 @@ class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", outp
                             woods.forEach { (wood, weight) ->
                                 block("${wood}_log", weight = weight)
                             }
-                            cardinal(probability = 0.1) {
+                            cardinal2D(probability = 0.1) {
                                 property(BlockStateProperties.FACING, NORTH)
                                 block("firefly")
                                 block("cicada")
@@ -199,7 +200,7 @@ class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", outp
                 }
 
                 list("fluids", weight = 0.1) {
-                    block(Blocks.WATER) {
+                    fluid(Fluids.WATER) {
                         side(UP, probability = 0.3) {
                             block(Blocks.LILY_PAD)
                         }

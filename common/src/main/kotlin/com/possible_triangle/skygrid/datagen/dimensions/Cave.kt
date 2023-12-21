@@ -11,6 +11,7 @@ import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.PointedDripstoneBlock
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
+import net.minecraft.world.level.material.Fluids
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
 
@@ -60,8 +61,8 @@ class Cave(output: Path) : GridConfigGenerator("cave", output) {
                 reference("moss", weight = 0.05)
                 block(Blocks.OBSIDIAN, weight = 0.1)
                 list("fluids", weight = 0.05) {
-                    block(Blocks.LAVA)
-                    block(Blocks.WATER)
+                    fluid(Fluids.LAVA)
+                    fluid(Fluids.WATER)
                 }
 
                 reference("overworld_stone") {

@@ -1,0 +1,52 @@
+<preset>
+   <block id="spawner">
+      <offset x="-1" y="-1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset x="-1" z="-1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset x="-1" z="1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset x="-1" y="1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset y="-1" z="-1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset y="-1" z="1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset y="1" z="-1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset y="1" z="1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset x="1" y="-1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset x="1" z="-1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset x="1" z="1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+      <offset x="1" y="1">
+         <block id="cobblestone"/>
+         <block id="mossy_cobblestone"/>
+      </offset>
+   </block>
+</preset>

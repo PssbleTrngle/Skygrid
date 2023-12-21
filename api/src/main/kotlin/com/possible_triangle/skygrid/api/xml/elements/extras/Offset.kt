@@ -12,20 +12,16 @@ import net.minecraft.util.RandomSource
 @Serializable
 @SerialName("offset")
 data class Offset(
-    val x: Int  = 0,
-    val y: Int  = 0,
-    val z: Int  = 0,
+    val x: Int = 0,
+    val y: Int = 0,
+    val z: Int = 0,
     override val providers: List<BlockProvider>,
     override val probability: Double = 1.0,
     override val shared: Boolean = false,
 ) : Extra() {
 
-    override fun internalValidate(blocks: Registry<Block>): Boolean {
-        return true
-    }
+    override fun internalValidate(blocks: Registry<Block>): Boolean = true
 
-    override fun offset(pos: BlockPos, random: RandomSource): BlockPos {
-        return pos.offset(x, y, z)
-    }
+    override fun offset(pos: BlockPos, random: RandomSource): BlockPos = pos.offset(x, y, z)
 
 }

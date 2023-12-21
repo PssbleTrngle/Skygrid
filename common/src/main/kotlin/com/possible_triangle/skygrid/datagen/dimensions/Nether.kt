@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXI
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
+import net.minecraft.world.level.material.Fluids
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
 
@@ -33,8 +34,8 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
 
             blocks {
                 list("fluids", weight = 0.1) {
-                    block(Blocks.LAVA, weight = 0.5)
-                    block("blood", mod = BOP)
+                    fluid(Fluids.LAVA, weight = 0.5)
+                    fluid("blood", mod = BOP)
                 }
 
                 list("ground") {
@@ -138,11 +139,13 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                 }
 
                 block(Blocks.GLOWSTONE, weight = 0.1)
-                block("rose_quartz_block", mod = BOP, weight = 0.05).cluster {
-                    block("rose_quartz_cluster", mod = BOP)
+                block("rose_quartz_block", mod = BOP, weight = 0.05) {
+                    cardinal3D(probability = 0.5) {
+                        block("rose_quartz_cluster", mod = BOP)
+                    }
                 }
 
-                block(Blocks.SPAWNER, weight = 0.01)
+                reference("spawner", weight = 0.01)
 
                 list("loot", weight = 0.02) {
                     cycle(ChestBlock.FACING)

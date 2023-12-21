@@ -44,10 +44,16 @@
          <cycle key="axis"/>
          <list name="logs">
             <list name="full logs">
-               <cardinal probability="0.1">
+               <surround probability="0.1">
                   <block id="firefly" mod="twilightforest"/>
                   <block id="cicada" mod="twilightforest"/>
-               </cardinal>
+                  <Direction>DOWN</Direction>
+                  <Direction>UP</Direction>
+                  <Direction>NORTH</Direction>
+                  <Direction>SOUTH</Direction>
+                  <Direction>WEST</Direction>
+                  <Direction>EAST</Direction>
+               </surround>
                <set key="facing" value="north"/>
                <block id="twilight_oak_log" mod="twilightforest"/>
                <block id="canopy_log" mod="twilightforest"/>
@@ -93,43 +99,79 @@
          <list weight="0.1" name="thorns">
             <block id="brown_thorns" mod="twilightforest">
                <side on="down" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest"/>
+                  <block id="brown_thorns" mod="twilightforest">
+                     <set key="axis" value="y"/>
+                     <set key="up" value="true"/>
+                  </block>
                </side>
                <side on="up" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest"/>
+                  <block id="brown_thorns" mod="twilightforest">
+                     <set key="axis" value="y"/>
+                     <set key="down" value="true"/>
+                  </block>
                </side>
                <side on="north" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest"/>
+                  <block id="brown_thorns" mod="twilightforest">
+                     <set key="axis" value="z"/>
+                     <set key="south" value="true"/>
+                  </block>
                </side>
                <side on="south" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest"/>
+                  <block id="brown_thorns" mod="twilightforest">
+                     <set key="axis" value="z"/>
+                     <set key="north" value="true"/>
+                  </block>
                </side>
                <side on="west" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest"/>
+                  <block id="brown_thorns" mod="twilightforest">
+                     <set key="axis" value="x"/>
+                     <set key="east" value="true"/>
+                  </block>
                </side>
                <side on="east" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest"/>
+                  <block id="brown_thorns" mod="twilightforest">
+                     <set key="axis" value="x"/>
+                     <set key="west" value="true"/>
+                  </block>
                </side>
             </block>
             <block id="green_thorns" mod="twilightforest">
                <side on="down" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest"/>
+                  <block id="green_thorns" mod="twilightforest">
+                     <set key="axis" value="y"/>
+                     <set key="up" value="true"/>
+                  </block>
                </side>
                <side on="up" probability="0.2">
                   <block id="thorn_rose" mod="twilightforest"/>
-                  <block id="green_thorns" mod="twilightforest"/>
+                  <block id="green_thorns" mod="twilightforest">
+                     <set key="axis" value="y"/>
+                     <set key="down" value="true"/>
+                  </block>
                </side>
                <side on="north" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest"/>
+                  <block id="green_thorns" mod="twilightforest">
+                     <set key="axis" value="z"/>
+                     <set key="south" value="true"/>
+                  </block>
                </side>
                <side on="south" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest"/>
+                  <block id="green_thorns" mod="twilightforest">
+                     <set key="axis" value="z"/>
+                     <set key="north" value="true"/>
+                  </block>
                </side>
                <side on="west" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest"/>
+                  <block id="green_thorns" mod="twilightforest">
+                     <set key="axis" value="x"/>
+                     <set key="east" value="true"/>
+                  </block>
                </side>
                <side on="east" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest"/>
+                  <block id="green_thorns" mod="twilightforest">
+                     <set key="axis" value="x"/>
+                     <set key="west" value="true"/>
+                  </block>
                </side>
             </block>
          </list>
@@ -149,6 +191,36 @@
       </list>
       <list weight="0.1" name="fluids">
          <block id="water">
+            <side on="down" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="up" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="north" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="south" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="west" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
+            <side on="east" shared="true">
+               <block id="light">
+                  <set key="level" value="0"/>
+               </block>
+            </side>
             <side on="up" probability="0.3">
                <block id="lily_pad"/>
             </side>

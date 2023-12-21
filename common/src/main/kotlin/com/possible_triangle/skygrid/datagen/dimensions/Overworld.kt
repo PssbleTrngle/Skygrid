@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
 import net.minecraft.world.level.dimension.LevelStem
+import net.minecraft.world.level.material.Fluids
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
 
@@ -94,12 +95,12 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
 
             blocks {
                 list("fluids", weight = 2.0) {
-                    block(Blocks.LAVA)
-                    block(Blocks.WATER, weight = 3.0) {
+                    fluid(Fluids.WATER, weight = 3.0) {
                         side(UP, probability = 0.05) {
                             block(Blocks.LILY_PAD)
                         }
                     }
+                    fluid(Fluids.LAVA)
                 }
 
                 list("ground", weight = 100.0) {
@@ -282,13 +283,13 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                     }
 
                     block(Blocks.JUNGLE_WOOD, weight = 0.01) {
-                        cardinal {
+                        cardinal2D {
                             block(Blocks.COCOA)
                         }
                     }
 
                     block(Blocks.SAND, weight = 0.5) {
-                        cardinal { block(Blocks.WATER) }
+                        cardinal2D { fluid(Fluids.WATER) }
                         double {
                             block(Blocks.SUGAR_CANE)
                         }
@@ -337,6 +338,9 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                     }
                     list(weight = 0.05) {
                         block(Blocks.MANGROVE_ROOTS)
+                        block(Blocks.MANGROVE_ROOTS, weight = 0.1) {
+                            property(MangroveRootsBlock.WATERLOGGED, true)
+                        }
                         block(Blocks.MUDDY_MANGROVE_ROOTS)
                     }
                 }
@@ -435,7 +439,7 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                         block(Blocks.TARGET, weight = 0.5)
                         block(Blocks.STICKY_PISTON, weight = 0.2)
                         block(Blocks.HOPPER)
-                        block(Blocks.REDSTONE_LAMP)
+                        reference("redstone_lamp")
                         block(Blocks.TNT)
                         block(Blocks.SLIME_BLOCK, weight = 2.0)
                         block(Blocks.HONEY_BLOCK)
@@ -477,7 +481,7 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                     tag(SkygridTags.CHESTS)
                 }
 
-                block(Blocks.SPAWNER)
+                reference("spawner")
 
                 preset("ocean", weight = 0.1) {
                     tag(BlockTags.CORAL_BLOCKS) {
@@ -564,8 +568,10 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                     }
 
                     list("crystals") {
-                        block(Blocks.AMETHYST_BLOCK).cluster {
-                            tag(SkygridTags.AMETHYST_CLUSTERS)
+                        block(Blocks.AMETHYST_BLOCK) {
+                            cardinal3D(probability = 0.5) {
+                                tag(SkygridTags.AMETHYST_CLUSTERS)
+                            }
                         }
                         tag("corundum", QUARK)
                     }

@@ -13,6 +13,8 @@ import com.possible_triangle.skygrid.datagen.DatagenContext
 import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.ExceptFilterBuilder
 import net.minecraft.core.Direction
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.LightBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.Property
@@ -45,7 +47,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         }
     }
 
-    fun cardinal(
+    fun cardinal2D(
         offset: Int = 1,
         rotate: Boolean = true,
         probability: Double = 1.0,
@@ -54,7 +56,33 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
     ) {
         BasicBlocksBuilder(context).also {
             builder(it)
-            extras.add(Cardinal(it.build(), offset, rotate, probability, shared))
+            extras.add(Cardinal(
+                it.build(),
+                offset,
+                rotate,
+                probability,
+                shared
+            ))
+        }
+    }
+
+    fun cardinal3D(
+        offset: Int = 1,
+        transform: Boolean = true,
+        probability: Double = 1.0,
+        shared: Boolean = false,
+        builder: BasicBlocksBuilder.() -> Unit,
+    ) {
+        BasicBlocksBuilder(context).also {
+            builder(it)
+            extras.add(Cardinal(
+                it.build(),
+                offset,
+                transform,
+                probability,
+                shared,
+                Direction.values().toList()
+            ))
         }
     }
 
@@ -69,6 +97,17 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         BasicBlocksBuilder(context).also {
             builder(it)
             extras.add(Offset(x, y, z, it.build(), probability, shared))
+        }
+    }
+
+    fun shell(builder: BasicBlocksBuilder.() -> Unit) {
+        BasicBlocksBuilder(context).also { basicBlocksBuilder ->
+            builder(basicBlocksBuilder)
+            Direction.values().forEach {
+                side(it, 1, 1.0, shared = true) {
+                    block(Blocks.LIGHT).property(LightBlock.LEVEL, 0)
+                }
+            }
         }
     }
 
@@ -105,8 +144,6 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         filters: List<FilterOperator>,
     ): T
 
-    fun build(): T {
-        return buildWith(extras.toList(), transformers.toList(), filters.toList())
-    }
+    fun build(): T = buildWith(extras.toList(), transformers.toList(), filters.toList())
 
 }
