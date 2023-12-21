@@ -1,10 +1,10 @@
 package com.possible_triangle.skygrid.xml.resources
 
 import com.possible_triangle.skygrid.api.xml.elements.Preset
-import net.minecraft.core.Registry
-import net.minecraft.server.MinecraftServer
 import com.possible_triangle.skygrid.xml.ReferenceContext
 import com.possible_triangle.skygrid.xml.XMLResource
+import net.minecraft.core.registries.Registries
+import net.minecraft.server.MinecraftServer
 
 object Presets : XMLResource<Preset>("presets", { Preset.serializer() }) {
 
@@ -14,8 +14,8 @@ object Presets : XMLResource<Preset>("presets", { Preset.serializer() }) {
 
     override fun validate(value: Preset, server: MinecraftServer): Boolean {
         val references = ReferenceContext()
-        val blocks = server.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY)
-        return value.provider.validate(blocks, references, )
+        val blocks = server.registryAccess().registryOrThrow(Registries.BLOCK)
+        return value.provider.validate(blocks.asLookup(), references)
     }
 
 }

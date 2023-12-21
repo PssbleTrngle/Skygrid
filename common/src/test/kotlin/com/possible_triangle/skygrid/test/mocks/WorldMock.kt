@@ -4,6 +4,7 @@ import com.possible_triangle.skygrid.api.xml.IReferenceContext
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
 import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import com.possible_triangle.skygrid.api.xml.elements.ListWrapper
+import com.possible_triangle.skygrid.test.createBuiltinLookup
 import com.possible_triangle.skygrid.world.BlockAccess
 import com.possible_triangle.skygrid.xml.ReferenceContext
 import net.minecraft.core.BlockPos
@@ -20,14 +21,13 @@ object WorldMock {
 
     private val blocks = hashMapOf<BlockPos, BlockState>()
     private val nbt = hashMapOf<BlockPos, CompoundTag>()
-    private val registryAccess = RegistryAccess.BUILTIN.get()
 
     fun getBlock(pos: BlockPos) = blocks[pos]
     fun getNBT(pos: BlockPos) = nbt[pos]
 
     fun generate(vararg blocks: BlockProvider) = generate(GridConfig(blocks = ListWrapper(*blocks)))
     fun generate(config: GridConfig, references: IReferenceContext = ReferenceContext()) {
-        config.validate(registryAccess, references)
+        config.validate(createBuiltinLookup(), references)
         config.generate(random, access)
     }
 

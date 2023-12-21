@@ -9,7 +9,9 @@ import com.possible_triangle.skygrid.api.xml.elements.Transformer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import net.minecraft.core.Registry
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 
@@ -42,12 +44,12 @@ data class SingleBlock(
     }
 
     override fun internalValidate(
-        blocks: Registry<Block>,
+        blocks: HolderLookup.RegistryLookup<Block>,
         references: IReferenceContext,
         filters: List<FilterOperator>,
     ): Boolean {
-        return blocks.getOptional(key).map {
-            block = it
+        return blocks.get(ResourceKey.create(Registries.BLOCK, key)).map {
+            block = it.value()
         }.isPresent
     }
 }

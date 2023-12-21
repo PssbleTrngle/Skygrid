@@ -21,7 +21,7 @@ class GridConfigBuilder(
             builder: GridConfigBuilder.() -> Unit,
         ): GridConfig {
             return GridConfigBuilder(context).apply(builder).build().also {
-                it.validate(context.registries, references)
+                it.validate(context.lookup.get(), references)
             }
         }
     }

@@ -13,6 +13,8 @@ import com.possible_triangle.skygrid.xml.resources.GridConfigs
 import com.possible_triangle.skygrid.xml.resources.Presets
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -29,7 +31,7 @@ object SkygridMod {
     val STIFF_AIR = Blocks.AIR
     //val STIFF_AIR by Services.PLATFORM.createBlock("stiff_air") { StiffAir() }
 
-    val GENERATOR_KEY = ResourceKey.create(Registry.CHUNK_GENERATOR_REGISTRY, ResourceLocation(MOD_ID, MOD_ID))
+    val GENERATOR_KEY = ResourceKey.create(Registries.CHUNK_GENERATOR, ResourceLocation(MOD_ID, MOD_ID))
 
     fun init() {
         registerEvents()
@@ -48,7 +50,7 @@ object SkygridMod {
     }
 
     fun setup() {
-        Registry.register(Registry.CHUNK_GENERATOR, GENERATOR_KEY, SkygridChunkGenerator.CODEC)
+        Registry.register(BuiltInRegistries.CHUNK_GENERATOR, GENERATOR_KEY, SkygridChunkGenerator.CODEC)
     }
 
     fun onItemTooltip(stack: ItemStack, flags: TooltipFlag, tooltip: MutableList<Component>) {

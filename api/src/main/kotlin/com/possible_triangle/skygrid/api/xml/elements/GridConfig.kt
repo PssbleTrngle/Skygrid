@@ -11,9 +11,10 @@ import com.possible_triangle.skygrid.platform.Services
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import net.minecraft.core.Registry
-import net.minecraft.core.RegistryAccess
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.resources.ResourceKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -80,12 +81,12 @@ data class GridConfig(
         else Services.CONFIGS.server.modifierStrategy.filterAndMerge(modifiers)
     }
 
-    fun validate(registries: RegistryAccess, references: IReferenceContext): Boolean {
-        val blockRegistry = registries.registryOrThrow(Registry.BLOCK_REGISTRY)
-        val entityRegistry = registries.registryOrThrow(Registry.ENTITY_TYPE_REGISTRY)
+    fun validate(registries: HolderLookup.Provider, references: IReferenceContext): Boolean {
+        val blockRegistry = registries.lookupOrThrow(Registries.BLOCK)
+        val entityRegistry = registries.lookupOrThrow(Registries.ENTITY_TYPE)
 
         loot.validate { true }
-        mobs.validate { entityRegistry.containsKey(it.key) }
+        mobs.validate { entityRegistry.get(ResourceKey.create(Registries.ENTITY_TYPE, it.key)).isPresent }
         gap = Optional.ofNullable(unsafeGap).filter { it.validate(blockRegistry, references) }
 
         modifier = buildModifier()

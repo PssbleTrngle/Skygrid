@@ -5,6 +5,7 @@ import com.possible_triangle.skygrid.api.SkygridConstants
 import com.possible_triangle.skygrid.platform.services.IPlatformHelper
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import java.util.stream.Stream
@@ -17,7 +18,7 @@ class FabricPlatformHelper : IPlatformHelper {
 
         fun register() {
             BLOCKS.forEach { (key: String?, value: Block) ->
-                Registry.register(Registry.BLOCK,
+                Registry.register(BuiltInRegistries.BLOCK,
                     ResourceLocation(SkygridConstants.MOD_ID, key),
                     value)
             }

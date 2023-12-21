@@ -7,6 +7,7 @@ import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
+import net.minecraft.core.HolderLookup
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
@@ -16,12 +17,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXI
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
+import net.minecraft.world.level.storage.loot.BuiltInLootTables
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
+import java.util.concurrent.CompletableFuture
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Nether(output: Path) : GridConfigGenerator("nether", output) {
+class Nether(output: Path, lookup: CompletableFuture<HolderLookup.Provider>) :
+    GridConfigGenerator("nether", output, lookup) {
 
     override fun generate() {
 
@@ -29,6 +33,15 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
             mobs {
                 mob(EntityType.BLAZE)
                 mob(EntityType.MAGMA_CUBE, weight = 0.3)
+            }
+
+            loot {
+                table(BuiltInLootTables.RUINED_PORTAL, weight = 20.0)
+                table(BuiltInLootTables.NETHER_BRIDGE, weight = 10.0)
+                table(BuiltInLootTables.BASTION_BRIDGE, weight = 5.0)
+                table(BuiltInLootTables.BASTION_OTHER, weight = 2.0)
+                table(BuiltInLootTables.BASTION_HOGLIN_STABLE)
+                table(BuiltInLootTables.BASTION_TREASURE, weight = 0.5)
             }
 
             blocks {

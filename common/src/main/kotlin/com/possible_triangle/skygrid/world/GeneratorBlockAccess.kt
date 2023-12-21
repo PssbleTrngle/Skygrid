@@ -3,6 +3,8 @@ package com.possible_triangle.skygrid.world
 import com.possible_triangle.skygrid.api.xml.elements.GridConfig
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.server.level.WorldGenRegion
+import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
 import kotlin.math.max
@@ -10,35 +12,42 @@ import kotlin.math.min
 
 class GeneratorBlockAccess(
     private val config: GridConfig,
-    private val chunk: ChunkAccess,
+    val chunkPos: ChunkPos,
+    private val region: WorldGenRegion,
 ) : BlockAccess(useBarrier = !config.gap.isPresent) {
 
     private val at = BlockPos.MutableBlockPos()
-    val minY = max(chunk.minBuildHeight, config.minY)
-    val maxY = min(chunk.maxBuildHeight, config.maxY)
+    val minY = max(region.minBuildHeight, config.minY)
+    val maxY = min(region.maxBuildHeight, config.maxY)
 
-    val origin = BlockPos(chunk.pos.minBlockX, -minY, chunk.pos.minBlockZ)
+    val origin = BlockPos(chunkPos.minBlockX, -minY, chunkPos.minBlockZ)
 
     private val gap = config.gap.map { it.block.defaultBlockState() }
 
+    private fun chunkAt(pos: BlockPos): ChunkAccess {
+        return region.getChunk(pos.offset(origin))
+    }
+
     override fun setBlock(state: BlockState, pos: BlockPos) {
         val at = pos.offset(at)
-        chunk.setBlockState(at, state, false)
+        chunkAt(at).setBlockState(at, state, false)
     }
 
     override fun canReplace(pos: BlockPos): Boolean {
-        val state = chunk.getBlockState(pos.offset(at))
+        val at = pos.offset(at)
+        val state = chunkAt(at).getBlockState(at)
         val isGap = config.gap.map { state.`is`(it.block) }.orElse(false)
         return isGap || state.isAir
     }
 
     override fun setNBT(pos: BlockPos, nbt: CompoundTag) {
-        with(pos.offset(at).offset(origin.x, 0, origin.z)) {
+        val at = pos.offset(at)
+        with(at.offset(origin.x, 0, origin.z)) {
             nbt.putInt("x", x)
             nbt.putInt("y", y)
             nbt.putInt("z", z)
         }
-        chunk.setBlockEntityNbt(nbt)
+        chunkAt(at).setBlockEntityNbt(nbt)
     }
 
     fun move(x: Int, y: Int, z: Int) {

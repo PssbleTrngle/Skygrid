@@ -10,7 +10,7 @@ import com.possible_triangle.skygrid.api.xml.warnInvalid
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Registry
+import net.minecraft.core.HolderLookup
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
@@ -25,12 +25,12 @@ abstract class Extra : Generator<IBlockAccess>, Validating {
     @Transient
     lateinit var validProviders: WeightedList<BlockProvider>
 
-    abstract fun internalValidate(blocks: Registry<Block>): Boolean
+    abstract fun internalValidate(blocks: HolderLookup.RegistryLookup<Block>): Boolean
 
     abstract fun offset(pos: BlockPos, random: RandomSource): BlockPos
 
     override fun validate(
-        blocks: Registry<Block>,
+        blocks: HolderLookup.RegistryLookup<Block>,
         references: IReferenceContext,
         additionalFilters: List<FilterOperator>,
     ): Boolean {
