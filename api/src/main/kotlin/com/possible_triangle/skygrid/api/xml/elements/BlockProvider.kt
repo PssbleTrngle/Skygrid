@@ -9,7 +9,7 @@ import com.possible_triangle.skygrid.api.xml.Validating
 import com.possible_triangle.skygrid.api.xml.warnInvalid
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
@@ -41,7 +41,7 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
             override fun flat(): List<Pair<Block, Double>> = parent.flat()
 
             override fun internalValidate(
-                blocks: HolderLookup.RegistryLookup<Block>,
+                blocks: Registry<Block>,
                 references: IReferenceContext,
                 filters: List<FilterOperator>,
             ): Boolean = parent.internalValidate(blocks, references, filters)
@@ -59,13 +59,13 @@ abstract class BlockProvider : WeightedEntry(), Generator<IBlockAccess>, Validat
     abstract fun flat(): List<Pair<Block, Double>>
 
     protected abstract fun internalValidate(
-        blocks: HolderLookup.RegistryLookup<Block>,
+        blocks: Registry<Block>,
         references: IReferenceContext,
         filters: List<FilterOperator>,
     ): Boolean
 
     final override fun validate(
-        blocks: HolderLookup.RegistryLookup<Block>,
+        blocks: Registry<Block>,
         references: IReferenceContext,
         additionalFilters: List<FilterOperator>,
     ): Boolean {

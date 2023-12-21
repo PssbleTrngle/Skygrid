@@ -4,6 +4,7 @@ import com.possible_triangle.skygrid.SkygridMod
 import com.possible_triangle.skygrid.api.SkygridConstants.MOD_ID
 import com.possible_triangle.skygrid.command.SkygridCommand
 import com.possible_triangle.skygrid.forge.platform.ForgeConfigs
+import com.possible_triangle.skygrid.world.SkygridPreset
 import com.possible_triangle.skygrid.xml.XMLResource
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Registry
@@ -27,6 +28,7 @@ import thedarkcolour.kotlinforforge.forge.registerObject
 @Mod(MOD_ID)
 object SkygridForge {
 
+    private val WORLD_TYPES = DeferredRegister.create(Registry.WORLD_PRESET_REGISTRY, MOD_ID)!!
     val BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID)!!
 
     init {
@@ -37,6 +39,9 @@ object SkygridForge {
         FORGE_BUS.addListener { _: ServerStoppingEvent -> XMLResource.clear() }
         FORGE_BUS.addListener { event: ServerAboutToStartEvent -> XMLResource.reload(event.server) }
 
+        WORLD_TYPES.registerObject(MOD_ID) { SkygridPreset() }
+
+        WORLD_TYPES.register(MOD_BUS)
         BLOCKS.register(MOD_BUS)
 
         MOD_BUS.addListener { _: FMLCommonSetupEvent ->

@@ -3,10 +3,10 @@ package com.possible_triangle.skygrid.api.xml.elements.extras
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Registry
 import net.minecraft.world.level.block.Block
 import com.possible_triangle.skygrid.api.xml.elements.BlockProvider
 import com.possible_triangle.skygrid.api.xml.elements.Extra
-import net.minecraft.core.HolderLookup
 import net.minecraft.util.RandomSource
 
 @Serializable
@@ -20,7 +20,7 @@ data class Offset(
     override val shared: Boolean = false,
 ) : Extra() {
 
-    override fun internalValidate(blocks: HolderLookup.RegistryLookup<Block>): Boolean {
+    override fun internalValidate(blocks: Registry<Block>): Boolean {
         return true
     }
 

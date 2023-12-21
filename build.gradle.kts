@@ -4,7 +4,7 @@ val xmlutil_version: String by extra
 
 plugins {
     idea
-    id("com.possible-triangle.gradle") version ("0.1.4")
+    id("com.possible-triangle.gradle") version ("0.1.0")
 }
 
 withKotlin()
@@ -49,7 +49,9 @@ subprojects {
     }
 
     enablePublishing {
-        githubPackages()
+        repositories {
+            githubPackages(this@subprojects)
+        }
     }
 
     tasks.withType<Jar> {
@@ -65,6 +67,6 @@ idea {
 }
 
 tasks.create<Copy>("copyGeneratedDatapacks") {
-    from(project(":common").file("src/generated/resources/resourcepacks"))
+    from(project(":common").file("src/generated/resources/datapacks"))
     into(file("datapacks"))
 }

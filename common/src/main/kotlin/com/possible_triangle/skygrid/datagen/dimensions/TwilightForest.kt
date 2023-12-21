@@ -7,7 +7,6 @@ import com.possible_triangle.skygrid.datagen.builder.providers.BlockBuilder
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.*
-import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
@@ -17,12 +16,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class TwilightForest(output: Path, lookup: CompletableFuture<HolderLookup.Provider>) :
-    GridConfigGenerator("twilight_forest", output, lookup) {
+class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", output) {
 
     private val woods = mapOf(
         "twilight_oak" to 1.0,

@@ -6,7 +6,6 @@ import com.possible_triangle.skygrid.datagen.CompatMods
 import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
-import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
@@ -14,11 +13,10 @@ import net.minecraft.world.level.block.PointedDripstoneBlock
 import net.minecraft.world.level.block.state.properties.DripstoneThickness
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Cave(output: Path, lookup: CompletableFuture<HolderLookup.Provider>) : GridConfigGenerator("cave", output, lookup) {
+class Cave(output: Path) : GridConfigGenerator("cave", output) {
 
     override fun generate() {
 

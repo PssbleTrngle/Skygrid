@@ -1,0 +1,11 @@
+{
+  "type": "twilightforest:twilight_forest_type",
+  "generator": {
+    "type": "skygrid:skygrid",
+    "config": "twilightforest:twilight_forest",
+    "biome_source": {
+      "biome": "minecraft:forest",
+      "type": "minecraft:fixed"
+    }
+  }
+}

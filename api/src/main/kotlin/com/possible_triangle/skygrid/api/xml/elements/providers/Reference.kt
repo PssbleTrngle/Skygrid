@@ -5,7 +5,7 @@ import com.possible_triangle.skygrid.api.xml.elements.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 
@@ -29,7 +29,7 @@ class Reference(
     override fun flat(): List<Pair<Block, Double>> = this.provider.flat()
 
     override fun internalValidate(
-        blocks: HolderLookup.RegistryLookup<Block>,
+        blocks: Registry<Block>,
         references: IReferenceContext,
         filters: List<FilterOperator>
     ): Boolean {

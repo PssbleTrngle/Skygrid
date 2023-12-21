@@ -2,6 +2,7 @@ package com.possible_triangle.skygrid.datagen.builder
 
 import com.possible_triangle.skygrid.datagen.DatagenContext
 import com.possible_triangle.skygrid.datagen.builder.providers.*
+import net.minecraft.core.Registry
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
 
@@ -12,7 +13,8 @@ interface IBlocksBuilder {
     fun add(block: BlockProviderBuilder<*>)
 
     fun block(block: Block, weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}): BlockBuilder {
-        val key = block.builtInRegistryHolder().key().location()
+        val blocks = context.registries.registryOrThrow(Registry.BLOCK_REGISTRY)
+        val key = requireNotNull(blocks.getKey(block))
         return block(key.path, key.namespace, weight, builder)
     }
 

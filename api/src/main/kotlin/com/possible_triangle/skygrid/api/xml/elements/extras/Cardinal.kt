@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.*
-import net.minecraft.core.HolderLookup
+import net.minecraft.core.Registry
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Rotation
@@ -32,7 +32,7 @@ data class Cardinal(
         return DIRECTIONS.random(random)
     }
 
-    override fun internalValidate(blocks: HolderLookup.RegistryLookup<Block>): Boolean {
+    override fun internalValidate(blocks: Registry<Block>): Boolean {
         return offset > 0
     }
 

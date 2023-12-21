@@ -3,18 +3,14 @@ package com.possible_triangle.skygrid.datagen.dimensions
 import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
-import net.minecraft.core.HolderLookup
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.EndPortalFrameBlock
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 
 @ExperimentalSerializationApi
 @ExperimentalXmlUtilApi
-class Presets(
-    output: Path, lookup: CompletableFuture<HolderLookup.Provider>
-) : GridConfigGenerator("presets", output, lookup) {
+class Presets(output: Path) : GridConfigGenerator("presets", output) {
 
     override fun generate() {
 

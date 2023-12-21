@@ -93,79 +93,43 @@
          <list weight="0.1" name="thorns">
             <block id="brown_thorns" mod="twilightforest">
                <side on="down" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest">
-                     <set key="axis" value="y"/>
-                     <set key="up" value="true"/>
-                  </block>
+                  <block id="brown_thorns" mod="twilightforest"/>
                </side>
                <side on="up" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest">
-                     <set key="axis" value="y"/>
-                     <set key="down" value="true"/>
-                  </block>
+                  <block id="brown_thorns" mod="twilightforest"/>
                </side>
                <side on="north" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest">
-                     <set key="axis" value="z"/>
-                     <set key="south" value="true"/>
-                  </block>
+                  <block id="brown_thorns" mod="twilightforest"/>
                </side>
                <side on="south" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest">
-                     <set key="axis" value="z"/>
-                     <set key="north" value="true"/>
-                  </block>
+                  <block id="brown_thorns" mod="twilightforest"/>
                </side>
                <side on="west" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest">
-                     <set key="axis" value="x"/>
-                     <set key="east" value="true"/>
-                  </block>
+                  <block id="brown_thorns" mod="twilightforest"/>
                </side>
                <side on="east" probability="0.2">
-                  <block id="brown_thorns" mod="twilightforest">
-                     <set key="axis" value="x"/>
-                     <set key="west" value="true"/>
-                  </block>
+                  <block id="brown_thorns" mod="twilightforest"/>
                </side>
             </block>
             <block id="green_thorns" mod="twilightforest">
                <side on="down" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest">
-                     <set key="axis" value="y"/>
-                     <set key="up" value="true"/>
-                  </block>
+                  <block id="green_thorns" mod="twilightforest"/>
                </side>
                <side on="up" probability="0.2">
                   <block id="thorn_rose" mod="twilightforest"/>
-                  <block id="green_thorns" mod="twilightforest">
-                     <set key="axis" value="y"/>
-                     <set key="down" value="true"/>
-                  </block>
+                  <block id="green_thorns" mod="twilightforest"/>
                </side>
                <side on="north" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest">
-                     <set key="axis" value="z"/>
-                     <set key="south" value="true"/>
-                  </block>
+                  <block id="green_thorns" mod="twilightforest"/>
                </side>
                <side on="south" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest">
-                     <set key="axis" value="z"/>
-                     <set key="north" value="true"/>
-                  </block>
+                  <block id="green_thorns" mod="twilightforest"/>
                </side>
                <side on="west" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest">
-                     <set key="axis" value="x"/>
-                     <set key="east" value="true"/>
-                  </block>
+                  <block id="green_thorns" mod="twilightforest"/>
                </side>
                <side on="east" probability="0.2">
-                  <block id="green_thorns" mod="twilightforest">
-                     <set key="axis" value="x"/>
-                     <set key="west" value="true"/>
-                  </block>
+                  <block id="green_thorns" mod="twilightforest"/>
                </side>
             </block>
          </list>

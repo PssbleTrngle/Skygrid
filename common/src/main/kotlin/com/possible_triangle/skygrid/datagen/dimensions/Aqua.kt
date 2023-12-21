@@ -7,18 +7,16 @@ import com.possible_triangle.skygrid.datagen.CompatMods.TROPICRAFT
 import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
-import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Aqua(output: Path, lookup: CompletableFuture<HolderLookup.Provider>) : GridConfigGenerator("aqua", output, lookup) {
+class Aqua(output: Path) : GridConfigGenerator("aqua", output) {
 
     override fun generate() {
         gridConfig(ResourceLocation(SkygridConstants.MOD_ID, "aqua")) {

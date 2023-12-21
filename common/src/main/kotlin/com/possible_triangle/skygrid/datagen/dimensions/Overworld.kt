@@ -18,7 +18,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
-import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.entity.EntityType
@@ -29,7 +28,6 @@ import net.minecraft.world.level.block.state.properties.DripstoneThickness
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 
 fun BlockProviderBuilder<*>.overworldWood() {
     except {
@@ -59,8 +57,7 @@ fun BlockProviderBuilder<*>.cluster(crystals: IBlocksBuilder.() -> BlockProvider
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class Overworld(output: Path, lookup: CompletableFuture<HolderLookup.Provider>) :
-    GridConfigGenerator("overworld", output, lookup) {
+class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
 
     override fun generate() {
 

@@ -7,7 +7,6 @@ import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
-import net.minecraft.core.HolderLookup
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ChestBlock
@@ -18,11 +17,10 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
-class End(output: Path, lookup: CompletableFuture<HolderLookup.Provider>) : GridConfigGenerator("end", output, lookup) {
+class End(output: Path) : GridConfigGenerator("end", output) {
 
     override fun generate() {
 

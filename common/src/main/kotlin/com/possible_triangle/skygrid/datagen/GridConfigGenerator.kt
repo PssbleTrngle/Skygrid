@@ -8,11 +8,10 @@ import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.DimensionBuilder
 import com.possible_triangle.skygrid.datagen.builder.GridConfigBuilder
 import com.possible_triangle.skygrid.datagen.builder.IBlocksBuilder
-import com.possible_triangle.skygrid.extensions.supplyAsync
 import com.possible_triangle.skygrid.xml.XMLResource
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
-import net.minecraft.core.HolderLookup
+import net.minecraft.core.RegistryAccess
 import net.minecraft.data.CachedOutput
 import net.minecraft.data.DataProvider
 import net.minecraft.resources.ResourceKey
@@ -20,25 +19,24 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.dimension.LevelStem
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
-import java.util.concurrent.CompletableFuture
 
 @ExperimentalXmlUtilApi
 @ExperimentalSerializationApi
 abstract class GridConfigGenerator(
     private val name: String,
     private val output: Path,
-    private val lookup: CompletableFuture<HolderLookup.Provider>
 ) : DataProvider {
 
     private val configs = hashMapOf<ResourceLocation, GridConfig>()
     private val presets = hashMapOf<ResourceLocation, Preset>()
+    private val registries = RegistryAccess.BUILTIN.get()
 
     private val dimensionGenerator = DimensionGenerator(name, output, createContext("minecraft"))
 
     private fun createContext(defaultMod: String?): DatagenContext {
         return defaultMod?.let {
-            DatagenContext(lookup, defaultMod)
-        } ?: DatagenContext(lookup)
+            DatagenContext(registries, defaultMod)
+        } ?: DatagenContext(registries)
     }
 
     fun gridConfig(key: ResourceKey<LevelStem>, defaultMod: String? = null, builder: GridConfigBuilder.() -> Unit) =
@@ -80,7 +78,7 @@ abstract class GridConfigGenerator(
 
     abstract fun generate()
 
-    final override fun run(cache: CachedOutput): CompletableFuture<*> {
+    final override fun run(cache: CachedOutput) {
         generate()
 
         fun write(type: String, key: ResourceLocation, content: String) {
@@ -90,19 +88,17 @@ abstract class GridConfigGenerator(
             cache.writeIfNeeded(file, data, hash)
         }
 
-        return CompletableFuture.allOf(
-            configs.supplyAsync { (key, config) ->
-                val serialized = XMLResource.LOADER.encodeToString(config)
-                write("dimensions", key, serialized)
-            },
+        configs.forEach { (key, config) ->
+            val serialized = XMLResource.LOADER.encodeToString(config)
+            write("dimensions", key, serialized)
+        }
 
-            presets.supplyAsync { (key, config) ->
-                val serialized = XMLResource.LOADER.encodeToString(config)
-                write("presets", key, serialized)
-            },
+        presets.forEach { (key, config) ->
+            val serialized = XMLResource.LOADER.encodeToString(config)
+            write("presets", key, serialized)
+        }
 
-            dimensionGenerator.run(cache)
-        )
+        dimensionGenerator.run(cache)
     }
 
     final override fun getName() = "Skygrid Config: $name"
