@@ -149,21 +149,16 @@ class SkygridChunkGenerator(
     private fun RandomState.gridRandom() =
         getOrCreateRandomFactory(ResourceLocation(SkygridConstants.MOD_ID, "generator"))
 
-    private fun RandomState.gridRandom(chunk: ChunkAccess, y: Int = 0) = gridRandom().at(chunk.pos.x, y, chunk.pos.z)
+    private fun RandomState.gridRandom(chunk: ChunkPos, y: Int = 0) = gridRandom().at(chunk.x, y, chunk.z)
 
-    override fun fillFromNoise(
-        executor: Executor,
-        blender: Blender,
+    private fun placeGrid(
         randomState: RandomState,
-        structures: StructureManager,
-        chunk: ChunkAccess,
-    ): CompletableFuture<ChunkAccess> {
-        val random = randomState.gridRandom(chunk)
-        val strongholdRandom = RandomSource.create(randomState.legacyLevelSeed())
+        access: GeneratorBlockAccess,
+    ) {
+        val random = randomState.gridRandom(access.chunkPos)
+        val strongholdRandom = randomState.gridRandom().at(0, 0, 0)
 
-        val access = GeneratorBlockAccess(config, chunk)
-
-        val hasEndPortal = endPortalPositions(strongholdRandom).contains(chunk.pos)
+        val hasEndPortal = endPortalPositions(strongholdRandom).contains(access.chunkPos)
 
         var generatedPortal = false
         for (x in RANGE) for (z in RANGE) for (y in access.minY until access.maxY) {
@@ -180,7 +175,15 @@ class SkygridChunkGenerator(
             } else access.fillGap()
 
         }
+    }
 
+    override fun fillFromNoise(
+        executor: Executor,
+        blender: Blender,
+        randomState: RandomState,
+        structures: StructureManager,
+        chunk: ChunkAccess,
+    ): CompletableFuture<ChunkAccess> {
         return CompletableFuture.completedFuture(chunk)
     }
 
@@ -190,11 +193,13 @@ class SkygridChunkGenerator(
         randomState: RandomState,
         chunk: ChunkAccess,
     ) {
-        val random = randomState.gridRandom(chunk, 1)
+        val random = randomState.gridRandom(chunk.pos, 1)
         val createCeiling = region.dimensionType().hasCeiling()
 
-        val access = GeneratorBlockAccess(config, chunk)
+        val access = GeneratorBlockAccess(config, chunk.pos, region)
         val startY = access.maxY + (access.maxY % config.distance.y)
+
+        placeGrid(randomState, access)
 
         for (x in RANGE) for (z in RANGE) for (y in startY..startY + config.distance.y) {
 
