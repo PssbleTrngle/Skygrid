@@ -19,9 +19,11 @@
                <name pattern="warped_button"/>
             </except>
          </tag>
+         <Direction>DOWN</Direction>
+         <Direction>UP</Direction>
+         <Direction>NORTH</Direction>
          <Direction>SOUTH</Direction>
          <Direction>WEST</Direction>
-         <Direction>NORTH</Direction>
          <Direction>EAST</Direction>
       </surround>
    </block>

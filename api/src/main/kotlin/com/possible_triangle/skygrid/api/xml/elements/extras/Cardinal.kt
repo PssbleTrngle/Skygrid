@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.AttachFace.*
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 
 @Serializable
 @SerialName("surround")
@@ -25,8 +26,12 @@ class Cardinal(
     val transform: Boolean = true,
     override val probability: Double = 1.0,
     override val shared: Boolean = false,
-    val directions: List<Direction> = listOf(NORTH, SOUTH, EAST, WEST)
+    val directions: List<Direction> = HORIZONTAL_CARDINALS
 ) : Extra() {
+
+    companion object {
+        val HORIZONTAL_CARDINALS = listOf(SOUTH, WEST, NORTH, EAST)
+    }
 
     private fun getDirection(random: RandomSource): Direction = directions.random(random)
 
@@ -34,17 +39,29 @@ class Cardinal(
 
     override fun transform(state: BlockState, random: RandomSource): BlockState {
         if (!transform) return state
+
         val direction = getDirection(random)
+        var finalState = state
+
+        if (HORIZONTAL_CARDINALS.contains(direction))
+            finalState = finalState.rotate(
+                Rotation.values()[HORIZONTAL_CARDINALS.indexOf(direction) % 4]
+            )
+        else if (state.hasProperty(BlockStateProperties.FACING))
+            finalState = finalState.setValue(
+                DirectionalBlock.FACING,
+                direction
+            )
+
         if (state.hasProperty(FaceAttachedHorizontalDirectionalBlock.FACE))
-            state.setValue(FaceAttachedHorizontalDirectionalBlock.FACE, when(direction) {
-                UP -> CEILING
-                DOWN -> FLOOR
-                else -> WALL
-            })
-        if (state.hasProperty(DirectionalBlock.FACING))
-            state.setValue(DirectionalBlock.FACING, direction)
-        if (direction.axis.isVertical) state.rotate(Rotation.values()[random.nextInt(4)])
-        return state
+            finalState = finalState.setValue(
+                FaceAttachedHorizontalDirectionalBlock.FACE,
+                when (direction) {
+                    UP -> CEILING; DOWN -> FLOOR; else -> WALL
+                }
+            )
+
+        return finalState
     }
 
     override fun offset(pos: BlockPos, random: RandomSource): BlockPos =

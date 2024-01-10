@@ -28,7 +28,8 @@ interface IBlocksBuilder {
         builder: BlockBuilder.() -> Unit = {},
     ): BlockBuilder {
         return BlockBuilder(context, id, mod, weight).also {
-            it.shell { block(Blocks.LIGHT).property(LightBlock.LEVEL, 0) }
+            // FIXME: A shell of light blocks doesn't actually work how it should in-game.
+            it.shell { block(Blocks.VOID_AIR) }
             builder(it)
             add(it)
         }

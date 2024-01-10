@@ -103,10 +103,9 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
     fun shell(builder: BasicBlocksBuilder.() -> Unit) {
         BasicBlocksBuilder(context).also { basicBlocksBuilder ->
             builder(basicBlocksBuilder)
+            val built = basicBlocksBuilder.build()
             Direction.values().forEach {
-                side(it, 1, 1.0, shared = true) {
-                    block(Blocks.LIGHT).property(LightBlock.LEVEL, 0)
-                }
+                extras.add(Side(it.name.lowercase(), built, shared = true))
             }
         }
     }

@@ -3,34 +3,22 @@
       <list weight="2.0" name="fluids">
          <block id="water" weight="3.0">
             <side on="down" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="up" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="north" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="south" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="west" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="east" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="up" probability="0.05">
                <block id="lily_pad"/>
@@ -38,34 +26,22 @@
          </block>
          <block id="lava">
             <side on="down" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="up" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="north" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="south" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="west" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
             <side on="east" shared="true">
-               <block id="light">
-                  <set key="level" value="0"/>
-               </block>
+               <block id="void_air"/>
             </side>
          </block>
       </list>
@@ -185,54 +161,30 @@
          <block id="jungle_wood" weight="0.01">
             <surround>
                <block id="cocoa"/>
-               <Direction>DOWN</Direction>
-               <Direction>UP</Direction>
-               <Direction>NORTH</Direction>
-               <Direction>SOUTH</Direction>
-               <Direction>WEST</Direction>
-               <Direction>EAST</Direction>
             </surround>
          </block>
          <block id="sand" weight="0.5">
             <surround>
                <block id="water">
                   <side on="down" shared="true">
-                     <block id="light">
-                        <set key="level" value="0"/>
-                     </block>
+                     <block id="void_air"/>
                   </side>
                   <side on="up" shared="true">
-                     <block id="light">
-                        <set key="level" value="0"/>
-                     </block>
+                     <block id="void_air"/>
                   </side>
                   <side on="north" shared="true">
-                     <block id="light">
-                        <set key="level" value="0"/>
-                     </block>
+                     <block id="void_air"/>
                   </side>
                   <side on="south" shared="true">
-                     <block id="light">
-                        <set key="level" value="0"/>
-                     </block>
+                     <block id="void_air"/>
                   </side>
                   <side on="west" shared="true">
-                     <block id="light">
-                        <set key="level" value="0"/>
-                     </block>
+                     <block id="void_air"/>
                   </side>
                   <side on="east" shared="true">
-                     <block id="light">
-                        <set key="level" value="0"/>
-                     </block>
+                     <block id="void_air"/>
                   </side>
                </block>
-               <Direction>DOWN</Direction>
-               <Direction>UP</Direction>
-               <Direction>NORTH</Direction>
-               <Direction>SOUTH</Direction>
-               <Direction>WEST</Direction>
-               <Direction>EAST</Direction>
             </surround>
             <side on="up" shared="true">
                <block id="sugar_cane">
