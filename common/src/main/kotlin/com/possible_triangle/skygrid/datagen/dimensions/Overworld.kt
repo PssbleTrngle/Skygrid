@@ -206,8 +206,9 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
 
                             block(Blocks.GRASS_BLOCK, weight = 0.5) {
                                 side(UP, probability = 0.6) {
-                                    overworldWood()
-                                    tag(BlockTags.SAPLINGS)
+                                    tag(BlockTags.SAPLINGS) {
+                                        overworldWood()
+                                    }
                                 }
                             }
                         }
@@ -283,13 +284,13 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                     }
 
                     block(Blocks.JUNGLE_WOOD, weight = 0.01) {
-                        cardinal2D {
+                        cardinal {
                             block(Blocks.COCOA)
                         }
                     }
 
                     block(Blocks.SAND, weight = 0.5) {
-                        cardinal2D { fluid(Fluids.WATER) }
+                        cardinal { fluid(Fluids.WATER) }
                         double {
                             block(Blocks.SUGAR_CANE)
                         }
@@ -569,7 +570,7 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
 
                     list("crystals") {
                         block(Blocks.AMETHYST_BLOCK) {
-                            cardinal3D(probability = 0.5) {
+                            cluster {
                                 tag(SkygridTags.AMETHYST_CLUSTERS)
                             }
                         }

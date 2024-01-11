@@ -1,6 +1,6 @@
 <preset>
    <block id="redstone_lamp">
-      <side on="up" probability="0.2">
+      <side on="up" probability="1">
          <block id="redstone_wire"/>
          <tag id="pressure_plates">
             <except>
@@ -10,7 +10,7 @@
             </except>
          </tag>
       </side>
-      <surround probability="0.2">
+      <surround probability="1">
          <block id="lever"/>
          <tag id="buttons">
             <except>
@@ -19,12 +19,12 @@
                <name pattern="warped_button"/>
             </except>
          </tag>
-         <Direction>DOWN</Direction>
-         <Direction>UP</Direction>
-         <Direction>NORTH</Direction>
-         <Direction>SOUTH</Direction>
-         <Direction>WEST</Direction>
-         <Direction>EAST</Direction>
+         <direction>down</direction>
+         <direction>up</direction>
+         <direction>north</direction>
+         <direction>south</direction>
+         <direction>west</direction>
+         <direction>east</direction>
       </surround>
    </block>
 </preset>

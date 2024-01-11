@@ -35,12 +35,12 @@
          <block id="amethyst_block">
             <surround probability="0.5">
                <tag id="amethyst_clusters" mod="skygrid"/>
-               <Direction>DOWN</Direction>
-               <Direction>UP</Direction>
-               <Direction>NORTH</Direction>
-               <Direction>SOUTH</Direction>
-               <Direction>WEST</Direction>
-               <Direction>EAST</Direction>
+               <direction>down</direction>
+               <direction>up</direction>
+               <direction>north</direction>
+               <direction>south</direction>
+               <direction>west</direction>
+               <direction>east</direction>
             </surround>
          </block>
          <tag id="corundum" mod="quark"/>

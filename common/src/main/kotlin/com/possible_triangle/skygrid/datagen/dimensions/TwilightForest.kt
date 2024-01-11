@@ -142,7 +142,7 @@ class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", outp
                             woods.forEach { (wood, weight) ->
                                 block("${wood}_log", weight = weight)
                             }
-                            cardinal2D(probability = 0.1) {
+                            cardinal(probability = 0.1) {
                                 property(BlockStateProperties.FACING, NORTH)
                                 block("firefly")
                                 block("cicada")

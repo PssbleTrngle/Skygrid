@@ -45,9 +45,10 @@ abstract class Extra : Generator<IBlockAccess>, Validating {
     }
 
     override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
-        val providerRandom = random.fork()
-        val offsetRandom = random.fork()
-        val transformRandom = random.fork()
+        val sharedSeed = random.nextLong()
+        val providerRandom = RandomSource.create(sharedSeed)
+        val offsetRandom = RandomSource.create(sharedSeed)
+        val transformRandom = RandomSource.create(sharedSeed)
 
         if (random.nextDouble() > probability) return false
 

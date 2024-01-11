@@ -44,10 +44,10 @@
          <cycle key="axis"/>
          <list name="logs">
             <list name="full logs">
-               <surround probability="0.1">
+               <cardinal probability="0.1">
                   <block id="firefly" mod="twilightforest"/>
                   <block id="cicada" mod="twilightforest"/>
-               </surround>
+               </cardinal>
                <set key="facing" value="north"/>
                <block id="twilight_oak_log" mod="twilightforest"/>
                <block id="canopy_log" mod="twilightforest"/>

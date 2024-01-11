@@ -98,7 +98,21 @@
                <reference id="flowers"/>
                <block id="grass_block" weight="0.5">
                   <side on="up" probability="0.6">
-                     <tag id="saplings"/>
+                     <tag id="saplings">
+                        <except>
+                           <name pattern="crimson"/>
+                           <name pattern="warped"/>
+                           <name pattern="hellbark"/>
+                           <mod id="endergetic"/>
+                           <mod id="midnight"/>
+                           <mod id="botania"/>
+                           <mod id="simplefarming"/>
+                           <mod id="twilightforest"/>
+                           <mod id="tropicraft"/>
+                           <mod id="aether"/>
+                           <mod id="aether2"/>
+                        </except>
+                     </tag>
                   </side>
                </block>
             </list>
@@ -159,12 +173,12 @@
             </side>
          </block>
          <block id="jungle_wood" weight="0.01">
-            <surround>
+            <cardinal>
                <block id="cocoa"/>
-            </surround>
+            </cardinal>
          </block>
          <block id="sand" weight="0.5">
-            <surround>
+            <cardinal>
                <block id="water">
                   <side on="down" shared="true">
                      <block id="void_air"/>
@@ -185,7 +199,7 @@
                      <block id="void_air"/>
                   </side>
                </block>
-            </surround>
+            </cardinal>
             <side on="up" shared="true">
                <block id="sugar_cane">
                   <set key="half" value="lower"/>

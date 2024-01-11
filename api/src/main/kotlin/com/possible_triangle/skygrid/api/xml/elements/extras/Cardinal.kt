@@ -11,59 +11,42 @@ import net.minecraft.core.Direction.*
 import net.minecraft.core.Registry
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.DirectionalBlock
-import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.AttachFace.*
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
 
+@Deprecated("use surround instead")
 @Serializable
-@SerialName("surround")
-class Cardinal(
+@SerialName("cardinal")
+data class Cardinal(
     override val providers: List<BlockProvider>,
     val offset: Int = 1,
-    val transform: Boolean = true,
+    val rotate: Boolean = true,
     override val probability: Double = 1.0,
     override val shared: Boolean = false,
-    val directions: List<Direction> = HORIZONTAL_CARDINALS
 ) : Extra() {
 
     companion object {
-        val HORIZONTAL_CARDINALS = listOf(SOUTH, WEST, NORTH, EAST)
+        val DIRECTIONS = listOf(SOUTH, WEST, NORTH, EAST)
     }
 
-    private fun getDirection(random: RandomSource): Direction = directions.random(random)
+    private fun getDirection(random: RandomSource): Direction {
+        return DIRECTIONS.random(random)
+    }
 
-    override fun internalValidate(blocks: Registry<Block>): Boolean = offset > 0
+    override fun internalValidate(blocks: Registry<Block>): Boolean {
+        return offset > 0
+    }
 
     override fun transform(state: BlockState, random: RandomSource): BlockState {
-        if (!transform) return state
-
+        if (!rotate) return state
         val direction = getDirection(random)
-        var finalState = state
-
-        if (HORIZONTAL_CARDINALS.contains(direction))
-            finalState = finalState.rotate(
-                Rotation.values()[HORIZONTAL_CARDINALS.indexOf(direction) % 4]
-            )
-        else if (state.hasProperty(BlockStateProperties.FACING))
-            finalState = finalState.setValue(
-                DirectionalBlock.FACING,
-                direction
-            )
-
-        if (state.hasProperty(FaceAttachedHorizontalDirectionalBlock.FACE))
-            finalState = finalState.setValue(
-                FaceAttachedHorizontalDirectionalBlock.FACE,
-                when (direction) {
-                    UP -> CEILING; DOWN -> FLOOR; else -> WALL
-                }
-            )
-
-        return finalState
+        val rotations = DIRECTIONS.indexOf(direction)
+        return state.rotate(Rotation.values()[rotations % 4])
     }
 
-    override fun offset(pos: BlockPos, random: RandomSource): BlockPos =
-        pos.relative(getDirection(random), offset)
+    override fun offset(pos: BlockPos, random: RandomSource): BlockPos {
+        val direction = getDirection(random)
+        return pos.relative(direction, offset)
+    }
+
 }

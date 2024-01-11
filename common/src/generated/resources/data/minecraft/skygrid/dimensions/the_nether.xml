@@ -141,12 +141,12 @@
       <block id="rose_quartz_block" mod="biomesoplenty" weight="0.05">
          <surround probability="0.5">
             <block id="rose_quartz_cluster" mod="biomesoplenty"/>
-            <Direction>DOWN</Direction>
-            <Direction>UP</Direction>
-            <Direction>NORTH</Direction>
-            <Direction>SOUTH</Direction>
-            <Direction>WEST</Direction>
-            <Direction>EAST</Direction>
+            <direction>down</direction>
+            <direction>up</direction>
+            <direction>north</direction>
+            <direction>south</direction>
+            <direction>west</direction>
+            <direction>east</direction>
          </surround>
       </block>
       <reference id="spawner" weight="0.01"/>

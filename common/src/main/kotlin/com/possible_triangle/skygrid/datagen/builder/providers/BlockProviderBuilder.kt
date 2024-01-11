@@ -7,14 +7,13 @@ import com.possible_triangle.skygrid.api.xml.elements.Transformer
 import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
 import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
 import com.possible_triangle.skygrid.api.xml.elements.extras.Side
+import com.possible_triangle.skygrid.api.xml.elements.extras.Surround
 import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
 import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
 import com.possible_triangle.skygrid.datagen.DatagenContext
 import com.possible_triangle.skygrid.datagen.builder.BasicBlocksBuilder
 import com.possible_triangle.skygrid.datagen.builder.ExceptFilterBuilder
 import net.minecraft.core.Direction
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.LightBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.Property
@@ -47,7 +46,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         }
     }
 
-    fun cardinal2D(
+    fun cardinal(
         offset: Int = 1,
         rotate: Boolean = true,
         probability: Double = 1.0,
@@ -66,7 +65,7 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         }
     }
 
-    fun cardinal3D(
+    fun surround(
         offset: Int = 1,
         transform: Boolean = true,
         probability: Double = 1.0,
@@ -75,13 +74,12 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
     ) {
         BasicBlocksBuilder(context).also {
             builder(it)
-            extras.add(Cardinal(
+            extras.add(Surround(
                 it.build(),
                 offset,
                 transform,
                 probability,
-                shared,
-                Direction.values().toList()
+                shared
             ))
         }
     }

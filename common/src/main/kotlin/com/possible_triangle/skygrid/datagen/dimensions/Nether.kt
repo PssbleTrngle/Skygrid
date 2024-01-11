@@ -140,7 +140,7 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
 
                 block(Blocks.GLOWSTONE, weight = 0.1)
                 block("rose_quartz_block", mod = BOP, weight = 0.05) {
-                    cardinal3D(probability = 0.5) {
+                    surround(probability = 0.5) {
                         block("rose_quartz_cluster", mod = BOP)
                     }
                 }

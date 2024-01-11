@@ -57,18 +57,16 @@ class Presets(output: Path) : GridConfigGenerator("presets", output) {
                     tag(BlockTags.PRESSURE_PLATES) {
                         except {
                             pattern("polished_blackstone_pressure_plate")
-                            pattern("crimson_pressure_plate")
-                            pattern("warped_pressure_plate")
+                            overworldWood()
                         }
                     }
                 }
-                cardinal3D(probability = 0.2) {
+                surround(probability = 0.2) {
                     block(Blocks.LEVER)
                     tag(BlockTags.BUTTONS) {
                         except {
                             pattern("polished_blackstone_button")
-                            pattern("crimson_button")
-                            pattern("warped_button")
+                            overworldWood()
                         }
                     }
                 }
