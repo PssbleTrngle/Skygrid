@@ -26,7 +26,7 @@ data class Cardinal(
 ) : Extra() {
 
     companion object {
-        val DIRECTIONS = listOf(SOUTH, WEST, NORTH, EAST)
+        val DIRECTIONS = listOf(NORTH, EAST, SOUTH, WEST)
     }
 
     private fun getDirection(random: RandomSource): Direction {

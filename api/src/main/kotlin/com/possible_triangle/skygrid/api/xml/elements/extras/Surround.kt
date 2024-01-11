@@ -62,7 +62,7 @@ class Surround(
         if (state.hasProperty(BlockStateProperties.FACING))
             finalState = finalState.setValue(
                 DirectionalBlock.FACING,
-                direction
+                direction.opposite
             )
         else if (direction.axis.isHorizontal)
             finalState = finalState.rotate(
