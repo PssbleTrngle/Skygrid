@@ -61,8 +61,8 @@ class Cave(output: Path) : GridConfigGenerator("cave", output) {
                 reference("moss", weight = 0.05)
                 block(Blocks.OBSIDIAN, weight = 0.1)
                 list("fluids", weight = 0.05) {
-                    fluid(Fluids.LAVA)
-                    fluid(Fluids.WATER)
+                    block(Blocks.LAVA)
+                    block(Blocks.WATER)
                 }
 
                 reference("overworld_stone") {

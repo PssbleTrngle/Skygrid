@@ -98,16 +98,6 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         }
     }
 
-    fun shell(builder: BasicBlocksBuilder.() -> Unit) {
-        BasicBlocksBuilder(context).also { basicBlocksBuilder ->
-            builder(basicBlocksBuilder)
-            val built = basicBlocksBuilder.build()
-            Direction.values().forEach {
-                extras.add(Side(it.name.lowercase(), built, shared = true))
-            }
-        }
-    }
-
     fun double(probability: Double = 1.0, on: Direction = Direction.UP, builder: BasicBlocksBuilder.() -> Unit) {
         listOf(DoubleBlockHalf.LOWER, DoubleBlockHalf.UPPER).forEachIndexed { i, half ->
             side(on, offset = i + 1, probability, shared = true) {

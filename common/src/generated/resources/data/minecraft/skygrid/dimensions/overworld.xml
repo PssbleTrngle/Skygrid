@@ -2,48 +2,11 @@
    <blocks>
       <list weight="2.0" name="fluids">
          <block id="water" weight="3.0">
-            <side on="down" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="up" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="north" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="south" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="west" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="east" shared="true">
-               <block id="void_air"/>
-            </side>
             <side on="up" probability="0.05">
                <block id="lily_pad"/>
             </side>
          </block>
-         <block id="lava">
-            <side on="down" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="up" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="north" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="south" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="west" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="east" shared="true">
-               <block id="void_air"/>
-            </side>
-         </block>
+         <block id="lava"/>
       </list>
       <list weight="100.0" name="ground">
          <reference id="overworld_stone" weight="20.0"/>
@@ -179,26 +142,7 @@
          </block>
          <block id="sand" weight="0.5">
             <cardinal>
-               <block id="water">
-                  <side on="down" shared="true">
-                     <block id="void_air"/>
-                  </side>
-                  <side on="up" shared="true">
-                     <block id="void_air"/>
-                  </side>
-                  <side on="north" shared="true">
-                     <block id="void_air"/>
-                  </side>
-                  <side on="south" shared="true">
-                     <block id="void_air"/>
-                  </side>
-                  <side on="west" shared="true">
-                     <block id="void_air"/>
-                  </side>
-                  <side on="east" shared="true">
-                     <block id="void_air"/>
-                  </side>
-               </block>
+               <block id="water"/>
             </cardinal>
             <side on="up" shared="true">
                <block id="sugar_cane">

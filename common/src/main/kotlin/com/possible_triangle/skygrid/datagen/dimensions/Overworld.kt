@@ -95,12 +95,12 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
 
             blocks {
                 list("fluids", weight = 2.0) {
-                    fluid(Fluids.WATER, weight = 3.0) {
+                    block(Blocks.WATER, weight = 3.0) {
                         side(UP, probability = 0.05) {
                             block(Blocks.LILY_PAD)
                         }
                     }
-                    fluid(Fluids.LAVA)
+                    block(Blocks.LAVA)
                 }
 
                 list("ground", weight = 100.0) {
@@ -290,7 +290,7 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                     }
 
                     block(Blocks.SAND, weight = 0.5) {
-                        cardinal { fluid(Fluids.WATER) }
+                        cardinal { block(Blocks.WATER) }
                         double {
                             block(Blocks.SUGAR_CANE)
                         }

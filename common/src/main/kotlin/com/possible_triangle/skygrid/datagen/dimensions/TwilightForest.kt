@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.ChestBlock
 import net.minecraft.world.level.block.PipeBlock.PROPERTY_BY_DIRECTION
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS
-import net.minecraft.world.level.material.Fluids
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
 
@@ -200,7 +199,7 @@ class TwilightForest(output: Path) : GridConfigGenerator("twilight_forest", outp
                 }
 
                 list("fluids", weight = 0.1) {
-                    fluid(Fluids.WATER) {
+                    block(Blocks.WATER) {
                         side(UP, probability = 0.3) {
                             block(Blocks.LILY_PAD)
                         }

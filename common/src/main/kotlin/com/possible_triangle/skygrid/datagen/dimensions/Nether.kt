@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.AXI
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.dimension.LevelStem
-import net.minecraft.world.level.material.Fluids
 import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import java.nio.file.Path
 
@@ -34,8 +33,8 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
 
             blocks {
                 list("fluids", weight = 0.1) {
-                    fluid(Fluids.LAVA, weight = 0.5)
-                    fluid("blood", mod = BOP)
+                    block(Blocks.LAVA, weight = 0.5)
+                    block("blood", mod = BOP)
                 }
 
                 list("ground") {

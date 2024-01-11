@@ -21,46 +21,8 @@
       <reference id="moss" weight="0.05"/>
       <block id="obsidian" weight="0.1"/>
       <list weight="0.05" name="fluids">
-         <block id="lava">
-            <side on="down" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="up" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="north" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="south" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="west" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="east" shared="true">
-               <block id="void_air"/>
-            </side>
-         </block>
-         <block id="water">
-            <side on="down" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="up" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="north" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="south" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="west" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="east" shared="true">
-               <block id="void_air"/>
-            </side>
-         </block>
+         <block id="lava"/>
+         <block id="water"/>
       </list>
       <reference id="overworld_stone">
          <side on="down" probability="0.05">

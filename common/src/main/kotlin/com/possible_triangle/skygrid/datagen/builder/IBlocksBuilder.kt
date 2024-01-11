@@ -5,35 +5,12 @@ import com.possible_triangle.skygrid.datagen.builder.providers.*
 import net.minecraft.core.Registry
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.LightBlock
-import net.minecraft.world.level.material.Fluid
 
 interface IBlocksBuilder {
 
     val context: DatagenContext
 
     fun add(block: BlockProviderBuilder<*>)
-
-    fun fluid(fluid: Fluid, weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}): BlockBuilder {
-        val fluids = context.registries.registryOrThrow(Registry.FLUID_REGISTRY)
-        val key = requireNotNull(fluids.getKey(fluid))
-        return fluid(key.path, key.namespace, weight, builder)
-    }
-
-    fun fluid(
-        id: String,
-        mod: String = context.defaultMod,
-        weight: Double = 1.0,
-        builder: BlockBuilder.() -> Unit = {},
-    ): BlockBuilder {
-        return BlockBuilder(context, id, mod, weight).also {
-            // FIXME: A shell of light blocks doesn't actually work how it should in-game.
-            it.shell { block(Blocks.VOID_AIR) }
-            builder(it)
-            add(it)
-        }
-    }
 
     fun block(block: Block, weight: Double = 1.0, builder: BlockBuilder.() -> Unit = {}): BlockBuilder {
         val blocks = context.registries.registryOrThrow(Registry.BLOCK_REGISTRY)

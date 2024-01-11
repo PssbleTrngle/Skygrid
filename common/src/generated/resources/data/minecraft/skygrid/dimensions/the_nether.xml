@@ -1,46 +1,8 @@
 <dimension>
    <blocks>
       <list weight="0.1" name="fluids">
-         <block id="lava" weight="0.5">
-            <side on="down" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="up" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="north" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="south" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="west" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="east" shared="true">
-               <block id="void_air"/>
-            </side>
-         </block>
-         <block id="blood" mod="biomesoplenty">
-            <side on="down" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="up" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="north" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="south" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="west" shared="true">
-               <block id="void_air"/>
-            </side>
-            <side on="east" shared="true">
-               <block id="void_air"/>
-            </side>
-         </block>
+         <block id="lava" weight="0.5"/>
+         <block id="blood" mod="biomesoplenty"/>
       </list>
       <list name="ground">
          <block id="netherrack">
@@ -141,12 +103,6 @@
       <block id="rose_quartz_block" mod="biomesoplenty" weight="0.05">
          <surround probability="0.5">
             <block id="rose_quartz_cluster" mod="biomesoplenty"/>
-            <direction>down</direction>
-            <direction>up</direction>
-            <direction>north</direction>
-            <direction>south</direction>
-            <direction>west</direction>
-            <direction>east</direction>
          </surround>
       </block>
       <reference id="spawner" weight="0.01"/>
