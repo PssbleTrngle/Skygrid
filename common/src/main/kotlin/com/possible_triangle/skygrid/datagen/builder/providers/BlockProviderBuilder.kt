@@ -77,8 +77,8 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
             extras.add(Surround(
                 it.build(),
                 offset,
-                transform,
                 probability,
+                transform,
                 shared
             ))
         }

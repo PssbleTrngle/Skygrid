@@ -14,7 +14,13 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
 
-@Deprecated("use surround instead")
+@Deprecated(
+    "Superseded by Surround.",
+    ReplaceWith(
+        "Surround(providers, offset, probability, shared, transform = rotate)",
+        "com.possible_triangle.skygrid.api.xml.elements.extras.Surround"
+    )
+)
 @Serializable
 @SerialName("cardinal")
 data class Cardinal(

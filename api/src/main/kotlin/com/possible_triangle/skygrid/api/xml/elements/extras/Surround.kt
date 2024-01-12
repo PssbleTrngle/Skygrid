@@ -24,9 +24,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 class Surround(
     override val providers: List<BlockProvider>,
     val offset: Int = 1,
-    val transform: Boolean = true,
     override val probability: Double = 1.0,
     override val shared: Boolean = false,
+    val transform: Boolean = true,
     @SerialName("direction")
     val directionNames: List<String> = emptyList(),
 ) : Extra() {
