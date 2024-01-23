@@ -571,7 +571,15 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                                 tag(SkygridTags.AMETHYST_CLUSTERS)
                             }
                         }
-                        tag("corundum", QUARK)
+
+                        // TODO: Currently can't think of a way to make use of Quark's corundum tag for this, and there is no tag for the clusters...
+                        listOf("red", "orange", "yellow", "green", "blue", "indigo", "violet", "white", "black").forEach {
+                            block("${it}_corundum", QUARK) {
+                                surround(Direction.values().associateWith { 0.5 }) {
+                                    block("${it}_corundum_cluster", QUARK)
+                                }
+                            }
+                        }
                     }
                 }
 

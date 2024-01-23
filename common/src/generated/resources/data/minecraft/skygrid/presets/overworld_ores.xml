@@ -52,7 +52,186 @@
                <tag id="amethyst_clusters" mod="skygrid"/>
             </side>
          </block>
-         <tag id="corundum" mod="quark"/>
+         <block id="red_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="red_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="red_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="red_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="red_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="red_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="red_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="orange_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="orange_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="orange_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="orange_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="orange_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="orange_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="orange_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="yellow_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="yellow_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="yellow_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="yellow_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="yellow_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="yellow_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="yellow_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="green_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="green_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="green_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="green_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="green_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="green_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="green_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="blue_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="blue_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="blue_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="blue_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="blue_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="blue_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="blue_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="indigo_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="indigo_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="indigo_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="indigo_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="indigo_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="indigo_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="indigo_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="violet_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="violet_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="violet_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="violet_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="violet_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="violet_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="violet_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="white_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="white_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="white_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="white_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="white_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="white_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="white_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
+         <block id="black_corundum" mod="quark">
+            <side on="down" probability="0.5" doTransform="true">
+               <block id="black_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="up" probability="0.5" doTransform="true">
+               <block id="black_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="north" probability="0.5" doTransform="true">
+               <block id="black_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="south" probability="0.5" doTransform="true">
+               <block id="black_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="west" probability="0.5" doTransform="true">
+               <block id="black_corundum_cluster" mod="quark"/>
+            </side>
+            <side on="east" probability="0.5" doTransform="true">
+               <block id="black_corundum_cluster" mod="quark"/>
+            </side>
+         </block>
       </list>
    </list>
 </preset>

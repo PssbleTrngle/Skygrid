@@ -330,20 +330,41 @@
          <list weight="0.06" name="workstations">
             <block id="crafting_table" weight="20.0"/>
             <list weight="3.0">
-               <block id="furnace"/>
-               <block id="deepslate_furnace" mod="quark"/>
+               <block id="furnace">
+                  <cycle key="facing"/>
+               </block>
+               <block id="deepslate_furnace" mod="quark">
+                  <cycle key="facing"/>
+               </block>
             </list>
-            <block id="smoker"/>
-            <block id="blast_furnace"/>
-            <block id="loom"/>
-            <block id="water_cauldron"/>
+            <block id="smoker">
+               <cycle key="facing"/>
+            </block>
+            <block id="blast_furnace">
+               <cycle key="facing"/>
+            </block>
+            <block id="loom">
+               <cycle key="facing"/>
+            </block>
+            <block id="water_cauldron">
+               <cycle key="level"/>
+            </block>
+            <block id="lava_cauldron">
+               <cycle key="level"/>
+            </block>
             <block id="cartography_table"/>
             <block id="fletching_table"/>
             <block id="smithing_table"/>
-            <block id="stonecutter"/>
-            <block id="lectern"/>
+            <block id="stonecutter">
+               <cycle key="facing"/>
+            </block>
+            <block id="lectern">
+               <cycle key="facing"/>
+            </block>
             <block id="composter"/>
-            <block id="stove" mod="farmersdelight"/>
+            <block id="stove" mod="farmersdelight">
+               <cycle key="facing"/>
+            </block>
             <block id="basket" mod="farmersdelight"/>
          </list>
          <block id="cobweb" weight="0.02"/>
