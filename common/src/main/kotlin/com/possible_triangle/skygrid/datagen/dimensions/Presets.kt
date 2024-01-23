@@ -40,12 +40,10 @@ class Presets(output: Path) : GridConfigGenerator("presets", output) {
 
         preset("spawner") {
             block(Blocks.SPAWNER) {
-                for (x in rangeNP1) for (y in rangeNP1) for (z in rangeNP1)
-                    if (intArrayOf(x, y, z).count { it == 0 } == 1) {
-                        offset(x = x, y = y, z = z) {
-                            block(Blocks.COBBLESTONE)
-                            block(Blocks.MOSSY_COBBLESTONE)
-                        }
+                for (x in rangeNP1) for (z in rangeNP1)
+                    if (x != 0 || z != 0) offset(x = x, z = z) {
+                        block(Blocks.COBBLESTONE)
+                        block(Blocks.MOSSY_COBBLESTONE)
                     }
             }
         }
