@@ -447,20 +447,25 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                     list("workstations", weight = 0.06) {
                         block(Blocks.CRAFTING_TABLE, weight = 20.0)
                         list(weight = 3.0) {
-                            block(Blocks.FURNACE)
-                            block("deepslate_furnace", QUARK)
+                            block(Blocks.FURNACE) {
+                                cycle(FurnaceBlock.FACING)
+                            }
+                            block("deepslate_furnace", QUARK) {
+                                cycle(FurnaceBlock.FACING)
+                            }
                         }
-                        block(Blocks.SMOKER)
-                        block(Blocks.BLAST_FURNACE)
-                        block(Blocks.LOOM)
-                        block(Blocks.WATER_CAULDRON)
+                        block(Blocks.SMOKER) { cycle(SmokerBlock.FACING) }
+                        block(Blocks.BLAST_FURNACE) { cycle(BlastFurnaceBlock.FACING) }
+                        block(Blocks.LOOM) { cycle(LoomBlock.FACING) }
+                        block(Blocks.WATER_CAULDRON) { cycle(LayeredCauldronBlock.LEVEL) }
+                        block(Blocks.LAVA_CAULDRON) { cycle(LayeredCauldronBlock.LEVEL) }
                         block(Blocks.CARTOGRAPHY_TABLE)
                         block(Blocks.FLETCHING_TABLE)
                         block(Blocks.SMITHING_TABLE)
-                        block(Blocks.STONECUTTER)
-                        block(Blocks.LECTERN)
+                        block(Blocks.STONECUTTER) { cycle(StonecutterBlock.FACING) }
+                        block(Blocks.LECTERN) { cycle(LecternBlock.FACING) }
                         block(Blocks.COMPOSTER)
-                        block("stove", FARMERSDELIGHT)
+                        block("stove", FARMERSDELIGHT) { cycle(HorizontalDirectionalBlock.FACING) }
                         block("basket", FARMERSDELIGHT)
                     }
 
@@ -566,7 +571,7 @@ class Overworld(output: Path) : GridConfigGenerator("overworld", output) {
                                 tag(SkygridTags.AMETHYST_CLUSTERS)
                             }
                         }
-                        tag("corundum", QUARK)  // TODO: Why is this outside of surround?
+                        tag("corundum", QUARK)
                     }
                 }
 
