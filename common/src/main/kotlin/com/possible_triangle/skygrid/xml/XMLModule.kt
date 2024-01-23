@@ -8,7 +8,6 @@ import com.possible_triangle.skygrid.api.xml.elements.*
 import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
 import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
 import com.possible_triangle.skygrid.api.xml.elements.extras.Side
-import com.possible_triangle.skygrid.api.xml.elements.extras.Surround
 import com.possible_triangle.skygrid.api.xml.elements.filters.ExceptFilter
 import com.possible_triangle.skygrid.api.xml.elements.filters.ModFilter
 import com.possible_triangle.skygrid.api.xml.elements.filters.NameFilter
@@ -81,7 +80,6 @@ fun RegisterElementEvent.registerDefaultElements() {
         subclass(Side::class)
         subclass(Cardinal::class)
         subclass(Offset::class)
-        subclass(Surround::class)
     }
 
     register(Filter::class) {

@@ -7,7 +7,6 @@ import com.possible_triangle.skygrid.api.xml.elements.Transformer
 import com.possible_triangle.skygrid.api.xml.elements.extras.Cardinal
 import com.possible_triangle.skygrid.api.xml.elements.extras.Offset
 import com.possible_triangle.skygrid.api.xml.elements.extras.Side
-import com.possible_triangle.skygrid.api.xml.elements.extras.Surround
 import com.possible_triangle.skygrid.api.xml.elements.transformers.CyclePropertyTransformer
 import com.possible_triangle.skygrid.api.xml.elements.transformers.SetPropertyTransformer
 import com.possible_triangle.skygrid.datagen.DatagenContext
@@ -67,20 +66,17 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
 
     fun surround(
         offset: Int = 1,
-        transform: Boolean = true,
-        probability: Double = 1.0,
+        directions: Map<Direction, Double> = Cardinal.CARDINAL_DIRECTIONS.associateWith { 1.0 },
         shared: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
         BasicBlocksBuilder(context).also {
             builder(it)
-            extras.add(Surround(
-                it.build(),
-                offset,
-                probability,
-                transform,
-                shared
-            ))
+            directions.forEach { (dir, chance) ->
+                side(dir, offset, chance, shared) {
+                    builder(this)
+                }
+            }
         }
     }
 
