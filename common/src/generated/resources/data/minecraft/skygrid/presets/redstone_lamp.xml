@@ -21,7 +21,7 @@
             </except>
          </tag>
       </side>
-      <surround probability="0.2">
+      <side on="down" probability="0.2" doTransform="true">
          <block id="lever"/>
          <tag id="buttons">
             <except>
@@ -41,6 +41,111 @@
                <name pattern="polished_blackstone_button"/>
             </except>
          </tag>
-      </surround>
+      </side>
+      <side on="up" probability="0.2" doTransform="true">
+         <block id="lever"/>
+         <tag id="buttons">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+               <mod id="botania"/>
+               <mod id="simplefarming"/>
+               <mod id="twilightforest"/>
+               <mod id="tropicraft"/>
+               <mod id="aether"/>
+               <mod id="aether2"/>
+            </except>
+            <except>
+               <name pattern="polished_blackstone_button"/>
+            </except>
+         </tag>
+      </side>
+      <side on="north" probability="0.2" doTransform="true">
+         <block id="lever"/>
+         <tag id="buttons">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+               <mod id="botania"/>
+               <mod id="simplefarming"/>
+               <mod id="twilightforest"/>
+               <mod id="tropicraft"/>
+               <mod id="aether"/>
+               <mod id="aether2"/>
+            </except>
+            <except>
+               <name pattern="polished_blackstone_button"/>
+            </except>
+         </tag>
+      </side>
+      <side on="south" probability="0.2" doTransform="true">
+         <block id="lever"/>
+         <tag id="buttons">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+               <mod id="botania"/>
+               <mod id="simplefarming"/>
+               <mod id="twilightforest"/>
+               <mod id="tropicraft"/>
+               <mod id="aether"/>
+               <mod id="aether2"/>
+            </except>
+            <except>
+               <name pattern="polished_blackstone_button"/>
+            </except>
+         </tag>
+      </side>
+      <side on="west" probability="0.2" doTransform="true">
+         <block id="lever"/>
+         <tag id="buttons">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+               <mod id="botania"/>
+               <mod id="simplefarming"/>
+               <mod id="twilightforest"/>
+               <mod id="tropicraft"/>
+               <mod id="aether"/>
+               <mod id="aether2"/>
+            </except>
+            <except>
+               <name pattern="polished_blackstone_button"/>
+            </except>
+         </tag>
+      </side>
+      <side on="east" probability="0.2" doTransform="true">
+         <block id="lever"/>
+         <tag id="buttons">
+            <except>
+               <name pattern="crimson"/>
+               <name pattern="warped"/>
+               <name pattern="hellbark"/>
+               <mod id="endergetic"/>
+               <mod id="midnight"/>
+               <mod id="botania"/>
+               <mod id="simplefarming"/>
+               <mod id="twilightforest"/>
+               <mod id="tropicraft"/>
+               <mod id="aether"/>
+               <mod id="aether2"/>
+            </except>
+            <except>
+               <name pattern="polished_blackstone_button"/>
+            </except>
+         </tag>
+      </side>
    </block>
 </preset>

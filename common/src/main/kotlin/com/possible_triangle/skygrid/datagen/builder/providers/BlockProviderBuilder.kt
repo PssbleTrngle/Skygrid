@@ -37,11 +37,12 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
         offset: Int = 1,
         probability: Double = 1.0,
         shared: Boolean = false,
+        doTransform: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
         BasicBlocksBuilder(context).also {
             builder(it)
-            extras.add(Side(on.name.lowercase(), it.build(), offset, probability, shared))
+            extras.add(Side(on.name.lowercase(), it.build(), offset, probability, shared, doTransform))
         }
     }
 
@@ -65,15 +66,16 @@ abstract class BlockProviderBuilder<T : BlockProvider> {
     }
 
     fun surround(
+        directions: Map<Direction, Double> = Direction.values().associateWith { 1.0 },
+        doTransform: Boolean = true,
         offset: Int = 1,
-        directions: Map<Direction, Double> = Cardinal.CARDINAL_DIRECTIONS.associateWith { 1.0 },
         shared: Boolean = false,
         builder: BasicBlocksBuilder.() -> Unit,
     ) {
         BasicBlocksBuilder(context).also {
             builder(it)
             directions.forEach { (dir, chance) ->
-                side(dir, offset, chance, shared) {
+                side(dir, offset, chance, shared, doTransform) {
                     builder(this)
                 }
             }

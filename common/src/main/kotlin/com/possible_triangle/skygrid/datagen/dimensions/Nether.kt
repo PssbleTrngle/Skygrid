@@ -5,6 +5,7 @@ import com.possible_triangle.skygrid.datagen.CompatMods.BOTANIA
 import com.possible_triangle.skygrid.datagen.CompatMods.QUARK
 import com.possible_triangle.skygrid.datagen.GridConfigGenerator
 import kotlinx.serialization.ExperimentalSerializationApi
+import net.minecraft.core.Direction
 import net.minecraft.core.Direction.DOWN
 import net.minecraft.core.Direction.UP
 import net.minecraft.world.entity.EntityType
@@ -34,17 +35,17 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
             blocks {
                 list("fluids", weight = 0.1) {
                     block(Blocks.LAVA, weight = 0.5)
-                    block("blood", mod = BOP)
+                    block("blood", BOP)
                 }
 
                 list("ground") {
                     block(Blocks.NETHERRACK) {
                         side(UP, probability = 0.1) {
-                            block("burning_blossom", mod = BOP)
-                            block("hellbark_sapling", mod = BOP)
+                            block("burning_blossom", BOP)
+                            block("hellbark_sapling", BOP)
                             block(Blocks.CRIMSON_FUNGUS)
                             block(Blocks.WARPED_FUNGUS)
-                            block("bramble", mod = BOP) {
+                            block("bramble", BOP) {
                                 property(BlockStateProperties.DOWN, true)
                             }
                         }
@@ -59,7 +60,7 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                     block(Blocks.BASALT, weight = 0.5) { cycle(AXIS) }
                     block(Blocks.BLACKSTONE) {
                         side(UP, probability = 0.2) {
-                            block("blackstone_spines", mod = BOP)
+                            block("blackstone_spines", BOP)
                         }
                     }
 
@@ -86,9 +87,9 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                         }
                     }
 
-                    tag("flesh", mod = BOP) {
+                    tag("flesh", BOP) {
                         side(DOWN) {
-                            block("flesh_tendons", mod = BOP)
+                            block("flesh_tendons", BOP)
                         }
                     }
 
@@ -96,15 +97,15 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                         cycle(AXIS)
                     }
 
-                    block("brimstone", mod = BOP, weight = 0.2) {
+                    block("brimstone", BOP, weight = 0.2) {
                         side(UP) {
-                            block("brimstone_bud", mod = BOP, weight = 2.0)
-                            block("brimstone_fumarole", mod = BOP)
-                            block("brimstone_cluster", mod = BOP) {
+                            block("brimstone_bud", BOP, weight = 2.0)
+                            block("brimstone_fumarole", BOP)
+                            block("brimstone_cluster", BOP) {
                                 property(DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER)
                                 side(UP) {
                                     property(DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER)
-                                    block("brimstone_cluster", mod = BOP)
+                                    block("brimstone_cluster", BOP)
                                 }
                             }
                         }
@@ -126,7 +127,7 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                         cycle(AXIS)
                         block(Blocks.WARPED_STEM)
                         block(Blocks.CRIMSON_STEM)
-                        block("hellbark_log", mod = BOP)
+                        block("hellbark_log", BOP)
                     }
                     list("leaves") {
                         block(Blocks.NETHER_WART_BLOCK)
@@ -138,9 +139,9 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                 }
 
                 block(Blocks.GLOWSTONE, weight = 0.1)
-                block("rose_quartz_block", mod = BOP, weight = 0.05) {
-                    surround(probability = 0.5) {
-                        block("rose_quartz_cluster", mod = BOP)
+                block("rose_quartz_block", BOP, weight = 0.05) {
+                    surround(Direction.values().associateWith { 0.5 }) {
+                        block("rose_quartz_cluster", BOP)
                     }
                 }
 
@@ -148,18 +149,18 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
 
                 list("loot", weight = 0.02) {
                     cycle(ChestBlock.FACING)
-                    block("warped_chest", mod = QUARK)
-                    block("crimson_chest", mod = QUARK)
+                    block("warped_chest", QUARK)
+                    block("crimson_chest", QUARK)
                     fallback {
-                        block("nether_brick_chest", mod = QUARK)
+                        block("nether_brick_chest", QUARK)
                         block(Blocks.CHEST)
                     }
                 }
 
                 list("compressed", weight = 0.01) {
-                    block("nether_wart_sack", mod = QUARK)
-                    block("blaze_lantern", mod = QUARK)
-                    block("blaze_block", mod = BOTANIA, weight = 0.1)
+                    block("nether_wart_sack", QUARK)
+                    block("blaze_lantern", QUARK)
+                    block("blaze_block", BOTANIA, weight = 0.1)
                 }
 
                 list("building", weight = 0.1) {
@@ -169,7 +170,7 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                     list("workstations", weight = 0.1) {
                         block(Blocks.RESPAWN_ANCHOR, weight = 0.5)
                         block(Blocks.SMITHING_TABLE)
-                        block("blackstone_furnace", mod = QUARK)
+                        block("blackstone_furnace", QUARK)
                     }
 
                     list("quartz") {
@@ -189,10 +190,10 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                     }
 
                     list("soul sandstone") {
-                        block("soul_sandstone", mod = QUARK)
-                        block("chiseled_soul_sandstone", mod = QUARK)
-                        block("cut_soul_sandstone", mod = QUARK)
-                        block("soul_sandstone_bricks", mod = QUARK)
+                        block("soul_sandstone", QUARK)
+                        block("chiseled_soul_sandstone", QUARK)
+                        block("cut_soul_sandstone", QUARK)
+                        block("soul_sandstone_bricks", QUARK)
                     }
 
                     list("nether bricks") {
@@ -202,7 +203,7 @@ class Nether(output: Path) : GridConfigGenerator("nether", output) {
                             }
                         }
                         block(Blocks.NETHER_BRICKS, weight = 10.0)
-                        block("blue_nether_bricks", mod = QUARK)
+                        block("blue_nether_bricks", QUARK)
                         block(Blocks.CRACKED_NETHER_BRICKS)
                         block(Blocks.CHISELED_NETHER_BRICKS)
                         block(Blocks.RED_NETHER_BRICKS)

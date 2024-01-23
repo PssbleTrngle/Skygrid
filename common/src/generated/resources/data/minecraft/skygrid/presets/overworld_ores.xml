@@ -33,35 +33,23 @@
       </list>
       <list name="crystals">
          <block id="amethyst_block">
-            <side on="down" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="down"/>
-               </tag>
+            <side on="down" probability="0.5" doTransform="true">
+               <tag id="amethyst_clusters" mod="skygrid"/>
             </side>
-            <side on="up" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="up"/>
-               </tag>
+            <side on="up" probability="0.5" doTransform="true">
+               <tag id="amethyst_clusters" mod="skygrid"/>
             </side>
-            <side on="north" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="north"/>
-               </tag>
+            <side on="north" probability="0.5" doTransform="true">
+               <tag id="amethyst_clusters" mod="skygrid"/>
             </side>
-            <side on="south" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="south"/>
-               </tag>
+            <side on="south" probability="0.5" doTransform="true">
+               <tag id="amethyst_clusters" mod="skygrid"/>
             </side>
-            <side on="west" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="west"/>
-               </tag>
+            <side on="west" probability="0.5" doTransform="true">
+               <tag id="amethyst_clusters" mod="skygrid"/>
             </side>
-            <side on="east" probability="0.5">
-               <tag id="amethyst_clusters" mod="skygrid">
-                  <set key="facing" value="east"/>
-               </tag>
+            <side on="east" probability="0.5" doTransform="true">
+               <tag id="amethyst_clusters" mod="skygrid"/>
             </side>
          </block>
          <tag id="corundum" mod="quark"/>

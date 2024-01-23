@@ -137,7 +137,9 @@
          </block>
          <block id="jungle_wood" weight="0.01">
             <cardinal>
-               <block id="cocoa"/>
+               <block id="cocoa">
+                  <cycle key="age"/>
+               </block>
             </cardinal>
          </block>
          <block id="sand" weight="0.5">

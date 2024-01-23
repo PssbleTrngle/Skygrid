@@ -61,7 +61,7 @@ class Presets(output: Path) : GridConfigGenerator("presets", output) {
                         }
                     }
                 }
-                surround(probability = 0.2) {
+                surround(Direction.values().associateWith { 0.2 }) {
                     block(Blocks.LEVER)
                     tag(BlockTags.BUTTONS) {
                         except {

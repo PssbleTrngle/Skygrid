@@ -101,9 +101,24 @@
       </list>
       <block id="glowstone" weight="0.1"/>
       <block id="rose_quartz_block" mod="biomesoplenty" weight="0.05">
-         <surround probability="0.5">
+         <side on="down" probability="0.5" doTransform="true">
             <block id="rose_quartz_cluster" mod="biomesoplenty"/>
-         </surround>
+         </side>
+         <side on="up" probability="0.5" doTransform="true">
+            <block id="rose_quartz_cluster" mod="biomesoplenty"/>
+         </side>
+         <side on="north" probability="0.5" doTransform="true">
+            <block id="rose_quartz_cluster" mod="biomesoplenty"/>
+         </side>
+         <side on="south" probability="0.5" doTransform="true">
+            <block id="rose_quartz_cluster" mod="biomesoplenty"/>
+         </side>
+         <side on="west" probability="0.5" doTransform="true">
+            <block id="rose_quartz_cluster" mod="biomesoplenty"/>
+         </side>
+         <side on="east" probability="0.5" doTransform="true">
+            <block id="rose_quartz_cluster" mod="biomesoplenty"/>
+         </side>
       </block>
       <reference id="spawner" weight="0.01"/>
       <list weight="0.02" name="loot">

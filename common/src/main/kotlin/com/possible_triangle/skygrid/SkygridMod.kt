@@ -26,7 +26,7 @@ object SkygridMod {
 
     val LOGGER = LogManager.getLogger(MOD_NAME)!!
 
-    val STIFF_AIR = Blocks.LIGHT
+    val STIFF_AIR = Blocks.VOID_AIR
     //val STIFF_AIR by Services.PLATFORM.createBlock("stiff_air") { StiffAir() }
 
     val GENERATOR_KEY = ResourceKey.create(Registry.CHUNK_GENERATOR_REGISTRY, ResourceLocation(MOD_ID, MOD_ID))

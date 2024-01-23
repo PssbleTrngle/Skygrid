@@ -67,7 +67,7 @@ class Cave(output: Path) : GridConfigGenerator("cave", output) {
 
                 reference("overworld_stone") {
                     side(Direction.DOWN, probability = 0.05) {
-                        block("hanging_cobweb", mod = CompatMods.BOP)
+                        block("hanging_cobweb", CompatMods.BOP)
                     }
                 }
 

@@ -5,7 +5,6 @@ import com.possible_triangle.skygrid.api.world.IBlockAccess
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.block.Fallable
-import net.minecraft.world.level.block.LightBlock
 import net.minecraft.world.level.block.state.BlockState
 
 abstract class BlockAccess(private val useBarrier: Boolean = true) : IBlockAccess {
@@ -14,7 +13,7 @@ abstract class BlockAccess(private val useBarrier: Boolean = true) : IBlockAcces
     protected abstract fun canReplace(pos: BlockPos): Boolean
 
     companion object {
-        private val BARRIER = SkygridMod.STIFF_AIR.defaultBlockState().setValue(LightBlock.LEVEL, 0)
+        private val BARRIER = SkygridMod.STIFF_AIR.defaultBlockState()
     }
 
     private fun attemptSet(state: BlockState, pos: BlockPos) = canReplace(pos).also {
