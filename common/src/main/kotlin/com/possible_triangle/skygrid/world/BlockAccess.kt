@@ -17,22 +17,18 @@ abstract class BlockAccess(private val useBarrier: Boolean = true) : IBlockAcces
         private val BARRIER = SkygridMod.STIFF_AIR.defaultBlockState().setValue(LightBlock.LEVEL, 0)
     }
 
-    private fun attemptSet(state: BlockState, pos: BlockPos): Boolean {
-        return canReplace(pos).also {
-            if (it) setBlock(state, pos)
-        }
+    private fun attemptSet(state: BlockState, pos: BlockPos) = canReplace(pos).also {
+        if (it) setBlock(state, pos)
     }
 
-    final override fun set(state: BlockState, pos: BlockPos): Boolean {
-        return attemptSet(state, pos).also { generated ->
-            if (generated && useBarrier) {
-                if (!state.fluidState.isEmpty) {
-                    Direction.values().forEach {
-                        attemptSet(BARRIER, pos.relative(it))
-                    }
-                } else if (state.block is Fallable) {
-                    attemptSet(BARRIER, pos.below())
+    final override fun set(state: BlockState, pos: BlockPos) = attemptSet(state, pos).also { generated ->
+        if (generated && useBarrier) {
+            if (!state.fluidState.isEmpty) {
+                Direction.values().forEach {
+                    attemptSet(BARRIER, pos.relative(it))
                 }
+            } else if (state.block is Fallable) {
+                attemptSet(BARRIER, pos.below())
             }
         }
     }

@@ -40,9 +40,7 @@ abstract class Extra : Generator<IBlockAccess>, Validating {
         } && validProviders.isNotEmpty()
     }
 
-    protected open fun transform(state: BlockState, random: RandomSource): BlockState {
-        return state
-    }
+    protected open fun transform(state: BlockState, random: RandomSource) = state
 
     override fun generate(random: RandomSource, access: IBlockAccess): Boolean {
         val sharedSeed = random.nextLong()
