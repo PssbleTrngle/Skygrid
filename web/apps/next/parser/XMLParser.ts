@@ -152,11 +152,7 @@ export default class XMLParser {
 
   async getIcon(block: Named) {
     const mod = block.mod ?? "minecraft";
-    const icon = `icons/${mod}/${block.id}.png`;
-    if (await this.resolver.exists("file", "public", icon)) {
-      return `/${icon}`;
-    }
-    return null;
+    return `https://icons.macarena.ceo/icons/${mod}/${block.id}.png`;
   }
 
   async extendBlock(block: Block) {
