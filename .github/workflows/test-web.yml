@@ -30,6 +30,7 @@ jobs:
         with:
           node-version: 18
           cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
 
       - name: Test & Lint
         run: pnpm test
