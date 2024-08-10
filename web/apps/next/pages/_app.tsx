@@ -4,15 +4,16 @@ import Head from "next/head";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { Centered } from "ui/components/basic/Text";
 import Footer from "ui/components/Footer";
+import DefaultImg from "ui/components/Image";
+import SourceDisplay, { CIProps } from "ui/components/SourceDisplay";
 import { ElementsContext, ElementsProvider } from "ui/context/elements";
 import { RouterProvider } from "ui/context/router";
 import Global from "ui/styles/global";
 import "ui/styles/reset.css";
 import ThemeProvider from "ui/styles/theme";
 import dark from "ui/styles/theme/dark";
-import { Centered } from "ui/components/basic/Text";
-import SourceDisplay, { CIProps } from "ui/components/SourceDisplay";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -22,7 +23,18 @@ const createLink: ElementsContext["createLink"] = (href, link) => (
   </NextLink>
 );
 
-const createImg: ElementsContext["createImg"] = ({ size, src, ...props }) => {
+const createImg: ElementsContext["createImg"] = ({
+  size,
+  src,
+  objectFit,
+  ...props
+}) => {
+  if (src.startsWith("https://")) {
+    return (
+      <DefaultImg {...props} $size={size} $objectFit={objectFit} src={src} />
+    );
+  }
+
   const realSrc = src.startsWith("/")
     ? publicRuntimeConfig.basePath + src
     : src;

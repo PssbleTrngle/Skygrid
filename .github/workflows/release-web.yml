@@ -1,4 +1,4 @@
-name: Deploy Website
+name: Release Website
 on:
   workflow_dispatch:
 
@@ -7,99 +7,17 @@ env:
   GITHUB_REPO: ${{ github.repository }}
 
 jobs:
-  datagen:
-    runs-on: windows-2022
-    permissions:
-      contents: read
-      packages: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        with:
-          version: 8
-          run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('web/**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --strict-peer-dependencies
-        working-directory: web
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/cache@v3
-        name: Setup resources cache
-        with:
-          path: web/packages/datagen/resources/*.jar
-          key: ${{ runner.os }}-resources-${{ hashFiles('web/packages/datagen/sources.json') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - uses: actions/cache@v3
-        name: Setup icons cache
-        with:
-          path: web/apps/next/public/icons
-          key: ${{ runner.os }}-icons-${{ hashFiles('web/packages/datagen/resources/*.jar') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Generate Data
-        run: pnpm gen
-        working-directory: web
-        env:
-          VANILLA_DATA: ${{ secrets.VANILLA_DATA }}
-          FORGE_DATA: ${{ secrets.FORGE_DATA }}
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_DOWNLOAD_TOKEN }}
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-
-      - name: Upload generated data as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          retention-days: 1
-          name: generated-data
-          path: |
-            web/apps/next/public/icons
-            web/apps/next/data
-            web/apps/next/lang
-
   docker:
     runs-on: ubuntu-latest
-    needs: datagen
     permissions:
       contents: read
       packages: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Download generated data from artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: generated-data
-          path: web/apps/next
+        uses: actions/checkout@v4
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -107,7 +25,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.GITHUB_REPO }}
 

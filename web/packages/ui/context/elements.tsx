@@ -1,18 +1,12 @@
 import { createContext, HTMLAttributes, useContext } from "react";
-import styled from "styled-components";
+import Image from "../components/Image";
 
 const CTX = createContext<ElementsContext>({
   createLink: (_, p) => p,
   createImg: ({ src, size, objectFit, ...props }) => (
-    <DefaultImg {...props} $size={size} $objectFit={objectFit} src={src} />
+    <Image {...props} $size={size} $objectFit={objectFit} src={src} />
   ),
 });
-
-const DefaultImg = styled.img<{ $size?: number; $objectFit?: string }>`
-  ${(p) => p.$objectFit && `object-fit: ${p.$objectFit}`};
-  ${(p) => p.$size && `height: ${p.$size}px`};
-  ${(p) => p.$size && `width: ${p.$size}px`};
-`;
 
 type ImgElementStyle = NonNullable<JSX.IntrinsicElements["img"]["style"]>;
 

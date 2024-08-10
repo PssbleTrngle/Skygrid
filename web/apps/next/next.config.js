@@ -6,21 +6,24 @@ const analyze = require("@next/bundle-analyzer");
 const mcVersion = "1.19";
 const basePath = "/" + mcVersion;
 
+/** @type {import('next').NextConfig} */
+const config = {
+  reactStrictMode: true,
+  output: "standalone",
+  experimental: {
+    outputFileTracingRoot: path.join(__dirname, "../../"),
+  },
+  basePath,
+  publicRuntimeConfig: { basePath, mc_version: mcVersion },
+  compiler: {
+    styledComponents: true,
+  },
+};
+
 module.exports = withPlugins(
   [
     transpile(["ui", "schema"]),
     analyze({ enabled: process.env.ANALYZE === "true" }),
   ],
-  {
-    reactStrictMode: true,
-    output: "standalone",
-    experimental: {
-      outputFileTracingRoot: path.join(__dirname, "../../"),
-    },
-    basePath,
-    publicRuntimeConfig: { basePath, mc_version: mcVersion },
-    compiler: {
-      styledComponents: true,
-    },
-  }
+  config
 );

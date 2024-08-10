@@ -1,7 +1,7 @@
 {
-  "extends": ["//"],
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "extends": ["//"],
+  "tasks": {
     "gen": {
       "outputs": ["generated/**"],
       "dependsOn": ["^gen"]
