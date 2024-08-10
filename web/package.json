@@ -9,12 +9,12 @@
     "format": "prettier --write \"**/*.{ts,ts,gql}\""
   },
   "devDependencies": {
-    "@turbo/gen": "^1.9.7",
+    "@turbo/gen": "^2.0.12",
     "dotenv-cli": "^7.2.1",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "^2.5.1",
-    "turbo": "latest"
+    "turbo": "^2.0.12"
   },
   "packageManager": "pnpm@9.6.0",
   "name": "skygrid-web"
